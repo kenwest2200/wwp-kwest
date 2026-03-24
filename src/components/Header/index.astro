@@ -1,0 +1,625 @@
+---
+import type { HeaderLayoutData } from "../../lib/queries/layout-header";
+import IconFacebook from "../icons/facebook.astro";
+import IconInstagram from "../icons/instagram.astro";
+import HeaderLogo from "../icons/headerLogo.astro";
+import IconArrowRight from "../icons/IconArrowRight.astro";
+import IconSearch from "../icons/searchIcon.astro";
+import IconBurger from "../icons/burgerIcon.astro";
+import IconClose from "../icons/closeButtonIcon.astro";
+import IconTailArrowRight from "../icons/IconTailArrowRight.astro";
+
+interface Props {
+  data: HeaderLayoutData | null | undefined;
+}
+
+function menuNodesFromHeaderData(data: HeaderLayoutData | null | undefined) {
+  const nodes = data?.menuItems?.nodes;
+  return Array.isArray(nodes) ? nodes : [];
+}
+
+const { data } = Astro.props;
+const items = menuNodesFromHeaderData(data);
+
+const mockMenu = {
+  home: {
+    label: "Home",
+    href: "/",
+  },
+  products: {
+    label: "Products",
+    href: "/products",
+    submenu: {
+      pool: [
+        {
+          label: "Pool",
+          href: "#",
+        },
+        {
+          label: "Air Systems",
+          href: "#",
+        },
+        {
+          label: "SCA",
+          href: "#",
+        },
+        {
+          label: "Drains & Suctions",
+          href: "#",
+        },
+      ],
+      spa: [
+        {
+          label: "Spa",
+          href: "#",
+        },
+        {
+          label: "Air Controls",
+          href: "#",
+        },
+        {
+          label: "Air Systems",
+          href: "#",
+        },
+        {
+          label: "Lighting",
+          href: "#",
+        },
+      ],
+      bath: [
+        {
+          label: "Bath",
+          href: "#",
+        },
+        {
+          label: "Air Controls",
+          href: "#",
+        },
+        {
+          label: "Air Systems",
+          href: "#",
+        },
+        {
+          label: "Lighting",
+          href: "#",
+        },
+      ],
+    },
+  },
+  resources: {
+    label: "Resources",
+    href: "#",
+    submenu: [
+      {
+        label: "Technical Guides",
+        href: "#",
+      },
+      {
+        label: "Apps & Tools",
+        href: "#",
+      },
+      {
+        label: "Certification of Compliance",
+        href: "#",
+      },
+      {
+        label: "Manuals & Specs",
+        href: "#",
+      },
+      {
+        label: "Videos",
+        href: "#",
+      },
+      {
+        label: "Rebates",
+        href: "#",
+      },
+      {
+        label: "FAQ",
+        href: "#",
+      },
+    ],
+  },
+  support: {
+    label: "Support",
+    href: "#",
+    submenu: [
+      {
+        label: "Warranty",
+        href: "#",
+      },
+      {
+        label: "Recall",
+        href: "#",
+      },
+      {
+        label: "Help",
+        href: "#",
+      },
+    ],
+  },
+  company: {
+    label: "Company",
+    href: "#",
+    submenu: [
+      {
+        label: "About us",
+        href: "#",
+      },
+      {
+        label: "Find Sales Representatives",
+        href: "#",
+      },
+      {
+        label: "Contact us",
+        href: "#",
+      },
+      {
+        label: "Carrer",
+        href: "#",
+      },
+    ],
+  },
+  news: {
+    label: "For Homeowners",
+    href: "#",
+    submenu: [
+      {
+        label: "Find a Dealer",
+        href: "#",
+      },
+      {
+        label: "Warranty",
+        href: "#",
+      },
+      {
+        label: "Safety & Recalls",
+        href: "#",
+      },
+    ],
+  },
+};
+
+type MenuLink = { label: string; href: string };
+
+/** Раскладка плоского подменю в несколько колонок (как в макете Resources). */
+function splitMenuIntoColumns(
+  links: MenuLink[],
+  columnCount: number,
+): MenuLink[][] {
+  if (links.length === 0) return [];
+  const per = Math.ceil(links.length / columnCount);
+  const out: MenuLink[][] = [];
+  for (let c = 0; c < columnCount; c++) {
+    const slice = links.slice(c * per, (c + 1) * per);
+    if (slice.length > 0) out.push(slice);
+  }
+  return out.length > 0 ? out : [links];
+}
+
+const topMenuItems = {
+  "call-us": [
+    {
+      label: "CALL US  805-981-0262",
+      href: "tel:+18059810262",
+    },
+    {
+      label: "Support",
+      href: "#",
+    },
+  ],
+  "help-us": [
+    {
+      label: "Warranty",
+      href: "#",
+    },
+    {
+      label: "Find a Store",
+      href: "#",
+    },
+    {
+      label: "Find Sales Rep",
+      href: "#",
+    },
+  ],
+  social: [
+    {
+      label: "Instagram",
+      icon: "instagram",
+      href: "#",
+    },
+    {
+      label: "Facebook",
+      icon: "facebook",
+      href: "#",
+    },
+  ],
+};
+---
+
+<header class="header">
+  <div class="header__top">
+    <div class="header__top-container">
+      <ul class="header__top-menu header__top-menu--call-us">
+        {
+          topMenuItems["call-us"].map((item) => (
+            <li class="header__top-item">
+              <a
+                class="header__top-link"
+                href="#"
+                aria-label={`go to ${item.label}`}
+              >
+                <span>{item.label}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="header__top-menu-right">
+        <ul class="header__top-menu header__top-menu--help-us">
+          {
+            topMenuItems["help-us"].map((item) => (
+              <li class="header__top-item">
+                <a
+                  class="header__top-link"
+                  href="#"
+                  aria-label={`go to ${item.label}`}
+                >
+                  <span>{item.label}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <ul class="header__top-menu header__top-menu--social">
+          {
+            topMenuItems["social"].map((item) => (
+              <li class="header__top-item">
+                <a
+                  class="header__top-link"
+                  href={item.href}
+                  aria-label={`go to ${item.label}`}
+                >
+                  <span class="visually-hidden">{item.label}</span>
+                  {item.icon === "facebook" ? (
+                    <IconFacebook />
+                  ) : item.icon === "instagram" ? (
+                    <IconInstagram />
+                  ) : null}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container header__container">
+    <div class="header__logo">
+      <button
+        type="button"
+        class="header__burger"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="header-mobile"
+        data-open-mobile
+      >
+        <span class="visually-hidden">Open menu</span>
+        <IconBurger />
+      </button>
+      <HeaderLogo class="header__logo-icon" />
+    </div>
+    <nav class="header__nav" aria-label="Main">
+      <ul class="header__menu">
+        {
+          Object.entries(mockMenu).map(([_, item]) => {
+            const submenu = "submenu" in item ? item.submenu : undefined;
+            const hasSubmenu =
+              submenu != null &&
+              (Array.isArray(submenu)
+                ? submenu.length > 0
+                : Object.keys(submenu).length > 0);
+            const submenuIsGrid = submenu != null && !Array.isArray(submenu);
+
+            return (
+              <li
+                class:list={[
+                  "header__item",
+                  hasSubmenu && "header__item--has-submenu",
+                ]}
+              >
+                <a class="header__link" href={item.href}>
+                  {item.label}
+                </a>
+                {hasSubmenu && submenu && (
+                  <div class="header__submenu">
+                    {submenuIsGrid ? (
+                      <div class="header__submenu-grid">
+                        {Object.values(submenu).map((column) => (
+                          <ul class="header__submenu-list">
+                            {(column as MenuLink[]).map((link) => (
+                              <li class="header__submenu-item">
+                                <a
+                                  class="header__submenu-link"
+                                  href={link.href}
+                                >
+                                  {link.label}
+                                </a>
+                              </li>
+                            ))}
+                            <li class="header__submenu-item header__submenu-item--find-more">
+                              <a class="header__submenu-link" href="#">
+                                Find more
+                                <IconArrowRight />
+                              </a>
+                            </li>
+                          </ul>
+                        ))}
+                      </div>
+                    ) : (
+                      <ul class="header__submenu-list">
+                        {(submenu as MenuLink[]).map((link) => (
+                          <li class="header__submenu-item">
+                            <a class="header__submenu-link" href={link.href}>
+                              {link.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                )}
+              </li>
+            );
+          })
+        }
+      </ul>
+    </nav>
+    <div class="header__search">
+      <form action="#">
+        <label class="header__search-label">
+          <IconSearch class="header__search-icon" />
+          <input
+            class="header__search-input"
+            type="text"
+            placeholder="Search for parts"
+          />
+        </label>
+      </form>
+    </div>
+  </div>
+
+  <div
+    class="header__mobile"
+    id="header-mobile"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Main navigation"
+    aria-hidden="true"
+  >
+    <div class="header__mobile-backdrop" tabindex="-1" data-close-mobile></div>
+    <div class="header__mobile-sheet">
+      <div class="header__mobile-sheet-inner">
+        <div class="header__mobile-head">
+          <button
+            type="button"
+            class="header__mobile-close"
+            aria-label="Close menu"
+            data-close-mobile
+          >
+            <IconClose />
+          </button>
+        </div>
+
+        <div class="header__mobile-mega-narrow">
+          {
+            Object.entries(mockMenu).map(([navKey, item]) => {
+              if (navKey === "home") return null;
+              if (!("submenu" in item)) return null;
+              const submenu = item.submenu;
+              const hasSubmenu =
+                submenu != null &&
+                (Array.isArray(submenu)
+                  ? submenu.length > 0
+                  : Object.keys(submenu).length > 0);
+              if (!hasSubmenu) return null;
+
+              const submenuIsGrid = !Array.isArray(submenu);
+
+              return (
+                <section class="header__mega-narrow-section">
+                  <h2 class="header__mega-narrow-cat">
+                    {item.label.toUpperCase()}
+                  </h2>
+                  <div class="header__mega-narrow-body">
+                    {submenuIsGrid ? (
+                      <div class="header__mega-narrow-grid">
+                        {Object.values(submenu).map((column) => (
+                          <div class="header__mega-narrow-col">
+                            <p class="header__mega-narrow-col-title">
+                              {(column[0]?.label ?? "").toUpperCase()}
+                            </p>
+                            <ul
+                              class="header__mega-narrow-col-list"
+                              role="list"
+                            >
+                              {(column as MenuLink[]).slice(1).map((link) => (
+                                <li>
+                                  <a
+                                    class="header__mega-narrow-link"
+                                    href={link.href}
+                                  >
+                                    {link.label}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                            <a class="header__mega-narrow-more" href="#">
+                              Find more
+                              <IconArrowRight />
+                            </a>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div class="header__mega-narrow-flat">
+                        {splitMenuIntoColumns(submenu as MenuLink[], 3).map(
+                          (col) => (
+                            <ul
+                              class="header__mega-narrow-flat-col"
+                              role="list"
+                            >
+                              {col.map((link) => (
+                                <li>
+                                  <a
+                                    class="header__mega-narrow-link header__mega-narrow-link--flat"
+                                    href={link.href}
+                                  >
+                                    {link.label}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          ),
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </section>
+              );
+            })
+          }
+        </div>
+
+        <div class="header__mobile-stage">
+          <div class="header__mobile-root" data-mobile-root>
+            <ul class="header__mobile-list" role="list">
+              {
+                Object.entries(mockMenu).map(([navKey, item]) => {
+                  const submenu = "submenu" in item ? item.submenu : undefined;
+                  const hasSubmenu =
+                    submenu != null &&
+                    (Array.isArray(submenu)
+                      ? submenu.length > 0
+                      : Object.keys(submenu).length > 0);
+
+                  return (
+                    <li class="header__mobile-list-item">
+                      {hasSubmenu ? (
+                        <button
+                          type="button"
+                          class="header__mobile-row header__mobile-row--parent"
+                          data-open-sub={navKey}
+                          data-sub-label={item.label}
+                        >
+                          <span class="header__mobile-row-label">
+                            {item.label}
+                          </span>
+                          <span
+                            class="header__mobile-row-arrow"
+                            aria-hidden="true"
+                          >
+                            <IconTailArrowRight />
+                          </span>
+                        </button>
+                      ) : (
+                        <a class="header__mobile-row" href={item.href}>
+                          {item.label}
+                        </a>
+                      )}
+                    </li>
+                  );
+                })
+              }
+            </ul>
+          </div>
+
+          <div class="header__mobile-sub" data-mobile-sub hidden>
+            <div class="header__mobile-sub-bar">
+              <button
+                type="button"
+                class="header__mobile-back"
+                data-mobile-back
+              >
+                <IconArrowRight class="header__mobile-back-icon" />
+                <span>Back to menu</span>
+              </button>
+              <span class="header__mobile-sub-heading" data-mobile-sub-title>
+              </span>
+            </div>
+            <div class="header__mobile-sub-panels">
+              {
+                Object.entries(mockMenu).map(([navKey, item]) => {
+                  if (!("submenu" in item)) return null;
+                  const submenu = item.submenu;
+                  const hasSubmenu =
+                    submenu != null &&
+                    (Array.isArray(submenu)
+                      ? submenu.length > 0
+                      : Object.keys(submenu).length > 0);
+                  if (!hasSubmenu) return null;
+
+                  const submenuIsGrid = !Array.isArray(submenu);
+
+                  return (
+                    <div
+                      class="header__mobile-sub-panel"
+                      data-mobile-sub-panel={navKey}
+                      hidden
+                    >
+                      {submenuIsGrid ? (
+                        <div class="header__mobile-cols">
+                          {Object.values(submenu).map((column) => (
+                            <div class="header__mobile-col">
+                              <p class="header__mobile-col-title">
+                                {(column[0]?.label ?? "").toUpperCase()}
+                              </p>
+                              <ul class="header__mobile-col-list" role="list">
+                                {(column as MenuLink[]).slice(1).map((link) => (
+                                  <li>
+                                    <a
+                                      class="header__mobile-col-link"
+                                      href={link.href}
+                                    >
+                                      {link.label}
+                                    </a>
+                                  </li>
+                                ))}
+                              </ul>
+                              <a class="header__mobile-find-more" href="#">
+                                Find more
+                                <IconArrowRight />
+                              </a>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <ul class="header__mobile-flat" role="list">
+                          {(submenu as MenuLink[]).map((link) => (
+                            <li>
+                              <a
+                                class="header__mobile-flat-link"
+                                href={link.href}
+                              >
+                                {link.label}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  );
+                })
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  import { initHeaderMobile } from "./header-mobile";
+  initHeaderMobile();
+</script>

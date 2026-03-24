@@ -2,4 +2,7 @@
 @use "variables" as *;
 @use "base.scss";
 
+@use "Elements/Button/btn.scss";
+
 @use "Components/Header/header.scss";
+@use "Components/Hero/hero.scss";

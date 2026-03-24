@@ -1,0 +1,12 @@
+/// <reference path="../.astro/types.d.ts" />
+/// <reference types="astro/client" />
+
+interface ImportMetaEnv {
+  readonly PUBLIC_GRAPHQL_URL: string;
+  readonly GRAPHQL_BASIC_USER?: string;
+  readonly GRAPHQL_BASIC_PASSWORD?: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}

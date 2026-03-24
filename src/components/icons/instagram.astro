@@ -1,0 +1,31 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  class={className}
+  aria-hidden="true"
+>
+  <rect
+    x="2.75"
+    y="2.75"
+    width="18.5"
+    height="18.5"
+    rx="3.75"
+    stroke="white"
+    stroke-opacity="0.9"
+    stroke-width="1.5"></rect>
+  <path
+    d="M10.7109 8.32376V9.97595H9.5V11.9961H10.7109V18H13.1964V11.9967H14.8648C14.8648 11.9967 15.0211 11.0281 15.0969 9.96874H13.2066V8.5871C13.2066 8.38088 13.4772 8.10311 13.7453 8.10311H15.1005V6H13.2583C10.649 6 10.7109 8.02194 10.7109 8.32376Z"
+    fill="white"
+    fill-opacity="0.9"></path>
+</svg>

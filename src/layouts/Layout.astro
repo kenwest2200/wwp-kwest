@@ -1,5 +1,21 @@
 ---
 import "../styles/global.scss";
+import Header from "../components/Header/index.astro";
+import { getGraphQLClient, requestGraphql } from "../lib/graphql";
+import {
+  HEADER_LAYOUT_QUERY,
+  type HeaderLayoutData,
+} from "../lib/queries/layout-header";
+
+let headerData: HeaderLayoutData | null = null;
+
+if (getGraphQLClient()) {
+  try {
+    headerData = await requestGraphql<HeaderLayoutData>(HEADER_LAYOUT_QUERY);
+  } catch {
+    headerData = null;
+  }
+}
 ---
 
 <!doctype html>
@@ -12,6 +28,7 @@ import "../styles/global.scss";
     <title>Waterway Plastics - Pool & Spa Supplies</title>
   </head>
   <body>
+    <Header data={headerData} />
     <slot />
   </body>
 </html>

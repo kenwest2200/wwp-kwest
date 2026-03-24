@@ -1,0 +1,92 @@
+---
+import type { HomeHeroData } from "../../lib/queries/home-hero";
+import IconArrowRight from "../../components/icons/IconArrowRight.astro";
+import img1 from "../../assets/images/1.png";
+import img2 from "../../assets/images/2.png";
+import img3 from "../../assets/images/3.png";
+
+interface Props {
+  data: HomeHeroData | null;
+}
+
+const { data } = Astro.props;
+
+const node = data?.nodeByUri ?? null;
+const title = node?.title ?? null;
+const excerpt = node?.excerpt ?? null;
+const uri = node?.uri ?? null;
+const imageUrl = node?.images?.node?.images?.nodes[0]?.url ?? null;
+const imageAlt = node?.images?.node?.images?.nodes[0]?.title ?? title ?? "";
+
+const ctaHref = uri ? `/${uri.replace(/^\/+/, "")}` : "#";
+const ctaDownloadUrl = node?.ctaDownloadUrl ?? "#";
+
+const fallbackTitle = "Engineered for Pool, Spa & Bath";
+const fallbackDescription =
+  "Cross-compatible components designed in USA for distributors, installers, and inspectors.";
+
+const mockImages = [
+  {
+    url: img1,
+    title: "Image 1",
+  },
+  {
+    url: img2,
+    title: "Image 2",
+  },
+  {
+    url: img3,
+    title: "Image 3",
+  },
+];
+---
+
+<section class="hero">
+  <div class="container hero__container">
+    <div class="hero__content">
+      <div class="hero__content-inner">
+        <h1 class="hero__title">{title || fallbackTitle}</h1>
+        {
+          excerpt ? (
+            <div class="hero__description" set:html={excerpt} />
+          ) : (
+            <p class="hero__description">{fallbackDescription}</p>
+          )
+        }
+      </div>
+      <div class="hero__buttons">
+        <a
+          href={ctaHref}
+          class="btn btn--primary hero__button hero__button--primary"
+        >
+          Browse catalog
+          <IconArrowRight />
+        </a>
+        <a
+          href={ctaDownloadUrl}
+          class="btn btn--secondary hero__button hero__button--secondary"
+          >Download Applications</a
+        >
+      </div>
+    </div>
+
+    {
+      (
+        // imageUrl && (
+        <div class="hero__image-container">
+          {/* {node?.images?.node?.images?.nodes.map((image) => (
+              <img class="hero__image" src={image.url} alt={image.title} />
+            ))} */}
+          {mockImages.map((image, index) => (
+            <img
+              class={`hero__image hero__image--${index}`}
+              src={image.url.src ?? ""}
+              alt={image.title}
+            />
+          ))}
+        </div>
+        // )
+      )
+    }
+  </div>
+</section>

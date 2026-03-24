@@ -1,8 +1,28 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Header from "../components/Header/Header.astro";
+import Hero from "../sections/Hero/index.astro";
+import { getGraphQLClient, requestGraphql } from "../lib/graphql";
+import { HOME_HERO_QUERY, type HomeHeroData } from "../lib/queries/home-hero";
+
+let heroData: HomeHeroData | null = null;
+
+if (getGraphQLClient()) {
+  try {
+    heroData = await requestGraphql<HomeHeroData>(HOME_HERO_QUERY);
+  } catch {
+    heroData = null;
+  }
+}
 ---
 
 <Layout>
-  <Header />
+  <main class="home-main">
+    <Hero data={heroData} />
+  </main>
 </Layout>
+
+<style lang="scss">
+  .home-main {
+    flex: 1;
+  }
+</style>

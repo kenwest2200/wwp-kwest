@@ -1,0 +1,42 @@
+@use "../../variables.scss" as *;
+
+.btn {
+    font-family: inherit;
+    border: none;
+    margin: 0;
+    display: inline-flex;
+    cursor: pointer;
+    color: inherit;
+    text-decoration: none;
+    outline: none;
+    text-align: center;
+    justify-content: center;
+    position: relative;
+    padding: 0;
+    overflow: hidden;
+    vertical-align: middle;
+    font-size: px-to-rem(14);
+    font-weight: 600;
+    line-height: px-to-rem(24);
+    padding: px-to-rem(12) px-to-rem(12);
+    border-radius: px-to-rem(4);
+    max-width: px-to-rem(348);
+    min-height: px-to-rem(48);
+
+    &--primary {
+        background-color: $white;
+        color: $dark-teal;
+        border: 1px solid $white
+    }
+
+    &--secondary {
+        background-color: transparent;
+        color: $white;
+        border: 1px solid $white
+    }
+
+    @include media-breakpoint-up(md) {
+        font-size: px-to-rem(16);
+        font-weight: 800;
+    }
+}
