@@ -27,6 +27,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: 'orange-lab-8d3c'
+          projectName: 'orange-lab-8d3c-autodeploy'
           directory: 'dist'
           wranglerVersion: '3'
