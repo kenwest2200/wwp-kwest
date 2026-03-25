@@ -1,4 +1,4 @@
-name: Deploy to Cloudflare Pages
+name: Deploy to Cloudflare Pages (Wrangler v2)
 on:
   push:
     branches:
@@ -9,23 +9,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          
+
       - name: Install dependencies
         run: npm ci
 
       - name: Build
         run: npm run build
 
-      - name: Install Wrangler
-        run: npm install -g wrangler
+      - name: Install Wrangler v2
+        run: npm install -g wrangler@2.17.0
 
       - name: Deploy to Cloudflare Pages
-        run: npx wrangler pages deploy dist --project-name=orange-lab-8d3c --branch=main
+        run: wrangler pages publish dist --project-name=orange-lab-8d3c
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
