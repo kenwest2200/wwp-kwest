@@ -29,3 +29,4 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: 'orange-lab-8d3c'
           directory: 'dist'
+          wranglerVersion: '3'
