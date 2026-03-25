@@ -26,6 +26,6 @@ jobs:
         run: npm install -g wrangler
 
       - name: Deploy to Cloudflare Pages
-        run: wrangler pages deploy dist --project-name=orange-lab-8d3c
+        run: npx wrangler pages deploy dist --project-name=orange-lab-8d3c --branch=main
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
