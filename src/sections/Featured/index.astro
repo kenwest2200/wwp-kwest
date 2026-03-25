@@ -1,0 +1,122 @@
+---
+import type {
+  FeaturedProductNode,
+  HomeFeaturedData,
+} from "../../lib/queries/home-featured";
+import img1 from "../../assets/images/f1.png";
+import img2 from "../../assets/images/f2.png";
+import img3 from "../../assets/images/f3.png";
+import img4 from "../../assets/images/f4.png";
+import SectionTitle from "../../components/SectionTitle/index.astro";
+
+interface Props {
+  data: HomeFeaturedData | null;
+}
+
+const { data } = Astro.props;
+
+type FeaturedCard = {
+  categoryLabel: string;
+  title: string;
+  imageUrl: string | ImageMetadata;
+  imageAlt: string;
+  href: string;
+};
+
+function productHref(node: FeaturedProductNode): string {
+  const uri = node.uri?.trim();
+  if (uri) {
+    const path = uri.replace(/^\/+/, "");
+    return path.startsWith("http") ? uri : `/${path}`;
+  }
+  if (node.slug) {
+    return `/product/${node.slug}`;
+  }
+  return "#";
+}
+
+function mapFromApi(nodes: FeaturedProductNode[]): FeaturedCard[] {
+  return nodes
+    .filter((n) => (n.name ?? n.title)?.trim())
+    .map((node) => {
+      const img = node.featuredImage?.node;
+      return {
+        categoryLabel: "Product",
+        title: (node.name ?? node.title ?? "").trim(),
+        imageUrl: img?.sourceUrl ?? "",
+        imageAlt: img?.altText?.trim() ?? node.name ?? node.title ?? "Product",
+        href: productHref(node),
+      };
+    });
+}
+
+const mockFeaturedItems: FeaturedCard[] = [
+  {
+    categoryLabel: "Spa Skimmers and Filters",
+    title: "100 sq. ft. Roadster Skim Filter",
+    imageUrl: img1,
+    imageAlt: "Pool pump",
+    href: "#",
+  },
+  {
+    categoryLabel: "Spa Skimmers and Filters",
+    title: "Cartridge filter system",
+    imageUrl: img2,
+    imageAlt: "Filter system",
+    href: "#",
+  },
+  {
+    categoryLabel: "Pool - Ells, Tees, & Wyes",
+    title: "45° and 90° Pool Ells",
+    imageUrl: img3,
+    imageAlt: "Spa jets",
+    href: "#",
+  },
+  {
+    categoryLabel: "Lighting",
+    title: "Spa Light Accessories",
+    imageUrl: img4,
+    imageAlt: "Spa jets",
+    href: "#",
+  },
+];
+
+const apiItems = mapFromApi(data?.products?.nodes ?? []);
+const items = apiItems.length > 0 ? apiItems : mockFeaturedItems;
+---
+
+<section class="featured" aria-labelledby="featured-heading">
+  <div class="container featured__container">
+    <SectionTitle title="Featured Products" className="featured__title" />
+    <ul class="featured__grid">
+      {
+        items.map((item) => (
+          <li class="featured__item">
+            <p class="featured__item-label">{item.categoryLabel}</p>
+
+            {item.imageUrl ? (
+              <img
+                src={
+                  typeof item.imageUrl === "string"
+                    ? item.imageUrl
+                    : item.imageUrl.src
+                }
+                alt={item.imageAlt}
+                class="featured__item-image"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : null}
+            <h3 class="featured__item-title">{item.title}</h3>
+            <a
+              href={item.href}
+              class="btn btn--single-outline featured__item-link"
+            >
+              View details
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

@@ -8,6 +8,7 @@ import IconSearch from "../icons/searchIcon.astro";
 import IconBurger from "../icons/burgerIcon.astro";
 import IconClose from "../icons/closeButtonIcon.astro";
 import IconTailArrowRight from "../icons/IconTailArrowRight.astro";
+import IconArrowDown from "../icons/arrowDown.astro";
 
 interface Props {
   data: HeaderLayoutData | null | undefined;
@@ -330,6 +331,7 @@ const topMenuItems = {
               >
                 <a class="header__link" href={item.href}>
                   {item.label}
+                  {hasSubmenu && <IconArrowDown class="header__link-icon" />}
                 </a>
                 {hasSubmenu && submenu && (
                   <div class="header__submenu">
@@ -375,17 +377,29 @@ const topMenuItems = {
         }
       </ul>
     </nav>
-    <div class="header__search">
-      <form action="#">
-        <label class="header__search-label">
-          <IconSearch class="header__search-icon" />
-          <input
-            class="header__search-input"
-            type="text"
-            placeholder="Search for parts"
-          />
-        </label>
-      </form>
+    <div class="header__search" data-header-search>
+      <button
+        type="button"
+        class="header__search-toggle"
+        aria-expanded="false"
+        aria-controls="header-search-panel"
+        data-search-toggle
+      >
+        <span class="visually-hidden">Open search</span>
+        <IconSearch class="header__search-toggle-icon" />
+      </button>
+      <div id="header-search-panel" class="header__search-panel" role="search">
+        <form action="#">
+          <label class="header__search-label">
+            <IconSearch class="header__search-icon" />
+            <input
+              class="header__search-input"
+              type="text"
+              placeholder="Search for parts"
+            />
+          </label>
+        </form>
+      </div>
     </div>
   </div>
 
@@ -620,6 +634,7 @@ const topMenuItems = {
 </header>
 
 <script>
-  import { initHeaderMobile } from "./header-mobile";
+  import { initHeaderMobile, initHeaderSearch } from "./header-mobile";
   initHeaderMobile();
+  initHeaderSearch();
 </script>

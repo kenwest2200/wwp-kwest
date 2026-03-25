@@ -1,19 +1,30 @@
 ---
 import "../styles/global.scss";
 import Header from "../components/Header/index.astro";
+import Footer from "../components/Footer/index.astro";
 import { getGraphQLClient, requestGraphql } from "../lib/graphql";
 import {
   HEADER_LAYOUT_QUERY,
   type HeaderLayoutData,
 } from "../lib/queries/layout-header";
+import {
+  FOOTER_LAYOUT_QUERY,
+  type FooterLayoutData,
+} from "../lib/queries/layout-footer";
 
 let headerData: HeaderLayoutData | null = null;
+let footerData: FooterLayoutData | null = null;
 
 if (getGraphQLClient()) {
   try {
     headerData = await requestGraphql<HeaderLayoutData>(HEADER_LAYOUT_QUERY);
   } catch {
     headerData = null;
+  }
+  try {
+    footerData = await requestGraphql<FooterLayoutData>(FOOTER_LAYOUT_QUERY);
+  } catch {
+    footerData = null;
   }
 }
 ---
@@ -30,5 +41,6 @@ if (getGraphQLClient()) {
   <body>
     <Header data={headerData} />
     <slot />
+    <Footer data={footerData} />
   </body>
 </html>

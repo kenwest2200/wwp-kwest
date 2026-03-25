@@ -1,3 +1,54 @@
+const SEARCH_MQ = "(min-width: 768px)";
+
+export function initHeaderSearch(): void {
+  const root = document.querySelector("[data-header-search]");
+  const toggle = document.querySelector("[data-search-toggle]");
+  const panel = document.getElementById("header-search-panel");
+  const input = panel?.querySelector<HTMLInputElement>(".header__search-input");
+
+  if (!(root instanceof HTMLElement) || !(toggle instanceof HTMLElement)) {
+    return;
+  }
+
+  const mq = window.matchMedia(SEARCH_MQ);
+
+  const setOpen = (open: boolean) => {
+    root.classList.toggle("header__search--open", open);
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    if (open && input) {
+      requestAnimationFrame(() => input.focus());
+    }
+  };
+
+  const close = () => setOpen(false);
+
+  toggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (mq.matches) return;
+    setOpen(!root.classList.contains("header__search--open"));
+  });
+
+  document.addEventListener("click", (e) => {
+    if (mq.matches || !root.classList.contains("header__search--open")) return;
+    if (e.target instanceof Node && root.contains(e.target)) return;
+    close();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    if (mq.matches || !root.classList.contains("header__search--open")) return;
+    close();
+    toggle.focus();
+  });
+
+  mq.addEventListener("change", () => {
+    if (mq.matches) {
+      root.classList.remove("header__search--open");
+      toggle.setAttribute("aria-expanded", "false");
+    }
+  });
+}
+
 export function initHeaderMobile(): void {
   const mobile = document.getElementById("header-mobile");
   const burger = document.querySelector("[data-open-mobile]");
@@ -52,7 +103,8 @@ export function initHeaderMobile(): void {
     mobile.setAttribute("aria-hidden", "true");
     burger.setAttribute("aria-expanded", "false");
     document.body.classList.remove("header--mobile-open");
-    if (header instanceof HTMLElement) header.classList.remove("header--nav-open");
+    if (header instanceof HTMLElement)
+      header.classList.remove("header--nav-open");
     showRoot();
   };
 
@@ -85,7 +137,16 @@ export function initHeaderMobile(): void {
   backBtn?.addEventListener("click", () => showRoot());
 
   document.addEventListener("keydown", (e) => {
-    if (e.key !== "Escape" || !mobile.classList.contains("is-open")) return;
+    if (e.key !== "Escape") return;
+    const searchRoot = document.querySelector("[data-header-search]");
+    if (
+      searchRoot instanceof HTMLElement &&
+      searchRoot.classList.contains("header__search--open") &&
+      !window.matchMedia(SEARCH_MQ).matches
+    ) {
+      return;
+    }
+    if (!mobile.classList.contains("is-open")) return;
     if (subEl instanceof HTMLElement && !subEl.hidden) {
       showRoot();
       return;

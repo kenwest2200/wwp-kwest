@@ -1,0 +1,11 @@
+---
+interface Props {
+  title: string;
+  className?: string;
+  id?: string;
+}
+
+const { title, className, id = "section-title" } = Astro.props;
+---
+
+<h2 id={id} class:list={["section-title", className]}>{title}</h2>

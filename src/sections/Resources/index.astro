@@ -1,0 +1,130 @@
+---
+import IconArrowRight from "../../components/icons/IconArrowRight.astro";
+import type {
+  HomeResourcesData,
+  ResourcePostNode,
+} from "../../lib/queries/home-resources";
+import img1 from "../../assets/images/r1.svg";
+import img2 from "../../assets/images/r2.svg";
+import img3 from "../../assets/images/r3.svg";
+import img4 from "../../assets/images/r4.svg";
+import SectionTitle from "../../components/SectionTitle/index.astro";
+
+interface Props {
+  data: HomeResourcesData | null;
+}
+
+const { data } = Astro.props;
+
+type ResourceCard = {
+  title: string;
+  description: string;
+  href: string;
+  imageUrl: string | ImageMetadata;
+  imageAlt: string;
+};
+
+function stripExcerpt(html: string | null | undefined): string {
+  if (!html) return "";
+  return html
+    .replace(/<[^>]*>/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function postHref(node: ResourcePostNode): string {
+  const uri = node.uri?.trim();
+  if (!uri) return "#";
+  if (uri.startsWith("http")) return uri;
+  const path = uri.replace(/^\/+/, "");
+  return `/${path}`;
+}
+
+function mapFromApi(nodes: ResourcePostNode[]): ResourceCard[] {
+  return nodes
+    .filter((n) => n.title?.trim())
+    .map((node) => {
+      const img = node.featuredImage?.node;
+      const title = node.title!.trim();
+      return {
+        title,
+        description:
+          stripExcerpt(node.excerpt) ||
+          "Guides, downloads, and reference materials.",
+        href: postHref(node),
+        imageUrl: img?.sourceUrl ?? "",
+        imageAlt: img?.altText?.trim() ?? title,
+      };
+    });
+}
+
+const mockResourceItems: ResourceCard[] = [
+  {
+    title: "Products",
+    description:
+      "Browse pool, spa, and bath components by category or part number.",
+    href: "#",
+    imageUrl: img1,
+    imageAlt: "Catalog",
+  },
+  {
+    title: "Downloads Center",
+    description:
+      "Access catalogs, brochures, technical documents, and apps - all in one place.",
+    href: "#",
+    imageUrl: img2,
+    imageAlt: "Guides",
+  },
+  {
+    title: "Warranty",
+    description:
+      "Register products, review warranty coverage details, or check recall information.",
+    href: "#",
+    imageUrl: img3,
+    imageAlt: "Specs",
+  },
+  {
+    title: "Sales Rep Locator",
+    description:
+      "Find your regional sales representative for product questions and support.",
+    href: "#",
+    imageUrl: img4,
+    imageAlt: "Support",
+  },
+];
+
+const apiItems = mapFromApi(data?.posts?.nodes ?? []);
+const items = apiItems.length > 0 ? apiItems : mockResourceItems;
+---
+
+<section class="resources" aria-labelledby="resources-heading">
+  <div class="container resources__container">
+    <SectionTitle title="Support & Resources" className="resources__title" />
+    <ul class="resources__grid">
+      {
+        items.map((item) => (
+          <li class="resources__item">
+            {item.imageUrl ? (
+              <img
+                src={
+                  typeof item.imageUrl === "string"
+                    ? item.imageUrl
+                    : item.imageUrl.src
+                }
+                alt={item.imageAlt}
+                class="resources__item-icon"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : null}
+            <h3 class="resources__item-title">{item.title}</h3>
+            <p class="resources__item-description">{item.description}</p>
+            <a href={item.href} class="resources__item-link">
+              Browse <IconArrowRight />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

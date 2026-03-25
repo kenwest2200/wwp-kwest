@@ -1,0 +1,137 @@
+@use "../../variables.scss" as *;
+
+.resources {
+  padding: px-to-rem(60) 0;
+  background-color: $gray;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: px-to-rem(60);
+  }
+
+
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(px-to-rem(240), 1fr));
+    gap: px-to-rem(40);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0;
+    padding: 0 px-to-rem(36);
+
+    &-icon {
+      width: px-to-rem(40);
+      height: px-to-rem(40);
+      object-fit: contain;
+      margin-bottom: px-to-rem(32);
+    }
+
+    &-title {
+      margin: 0 0 px-to-rem(12);
+      font-size: px-to-rem(20);
+      font-weight: 500;
+      line-height: px-to-rem(28);
+      color: $dark;
+    }
+
+    &-description {
+      margin: 0 0 px-to-rem(32);
+      font-size: px-to-rem(16);
+      font-weight: 400;
+      line-height: px-to-rem(28);
+      color: $dark;
+    }
+
+    &-link {
+      display: flex;
+      align-items: center;
+      gap: px-to-rem(12);
+      margin-top: auto;
+      font-size: px-to-rem(12);
+      font-weight: 600;
+      line-height: px-to-rem(16);
+      color: $dark-teal;
+      text-decoration: none;
+      text-transform: uppercase;
+
+      svg {
+        width: px-to-rem(16);
+        height: px-to-rem(16);
+        flex-shrink: 0;
+      }
+
+      &:hover {
+        color: $medium-teal;
+      }
+    }
+  }
+
+  @include media-breakpoint-up(sm) {
+    &__container {
+      gap: px-to-rem(64);
+    }
+  }
+
+  @include media-breakpoint-up(md) {
+    padding: px-to-rem(80) 0 px-to-rem(100) 0;
+
+    &__grid {
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: px-to-rem(24);
+    }
+
+    &__item {
+      padding: 0 0;
+    }
+  }
+
+  @include media-breakpoint-up(lg) {
+    padding: px-to-rem(100) 0 px-to-rem(100) 0;
+
+    &__container {
+      gap: px-to-rem(80);
+      max-width: px-to-rem(864);
+
+    }
+
+    &__grid {
+      column-gap: px-to-rem(40);
+      row-gap: px-to-rem(48);
+
+    }
+  }
+
+  @include media-breakpoint-up(xl) {
+    &__container {
+      max-width: px-to-rem(1192);
+    }
+
+    &__grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: px-to-rem(64);
+    }
+
+    &__item {
+      &-title {
+        font-size: px-to-rem(24);
+        line-height: px-to-rem(32);
+        font-weight: 600;
+        margin-bottom: px-to-rem(12);
+      }
+
+      &-description {
+        font-size: px-to-rem(16);
+        line-height: px-to-rem(28);
+      }
+    }
+  }
+}

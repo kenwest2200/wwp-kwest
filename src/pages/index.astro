@@ -1,10 +1,28 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Hero from "../sections/Hero/index.astro";
+import Featured from "../sections/Featured/index.astro";
+import Resources from "../sections/Resources/index.astro";
+import Solutions from "../sections/Solutions/index.astro";
 import { getGraphQLClient, requestGraphql } from "../lib/graphql";
 import { HOME_HERO_QUERY, type HomeHeroData } from "../lib/queries/home-hero";
+import {
+  HOME_FEATURED_QUERY,
+  type HomeFeaturedData,
+} from "../lib/queries/home-featured";
+import {
+  HOME_RESOURCES_QUERY,
+  type HomeResourcesData,
+} from "../lib/queries/home-resources";
+import {
+  HOME_SOLUTIONS_QUERY,
+  type HomeSolutionsData,
+} from "../lib/queries/home-solutions";
 
 let heroData: HomeHeroData | null = null;
+let featuredData: HomeFeaturedData | null = null;
+let resourcesData: HomeResourcesData | null = null;
+let solutionsData: HomeSolutionsData | null = null;
 
 if (getGraphQLClient()) {
   try {
@@ -12,12 +30,32 @@ if (getGraphQLClient()) {
   } catch {
     heroData = null;
   }
+  try {
+    featuredData = await requestGraphql<HomeFeaturedData>(HOME_FEATURED_QUERY);
+  } catch {
+    featuredData = null;
+  }
+  try {
+    resourcesData =
+      await requestGraphql<HomeResourcesData>(HOME_RESOURCES_QUERY);
+  } catch {
+    resourcesData = null;
+  }
+  try {
+    solutionsData =
+      await requestGraphql<HomeSolutionsData>(HOME_SOLUTIONS_QUERY);
+  } catch {
+    solutionsData = null;
+  }
 }
 ---
 
 <Layout>
   <main class="home-main">
     <Hero data={heroData} />
+    <Featured data={featuredData} />
+    <Resources data={resourcesData} />
+    <Solutions data={solutionsData} />
   </main>
 </Layout>
 

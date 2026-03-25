@@ -1,0 +1,204 @@
+---
+import type { FooterLayoutData } from "../../lib/queries/layout-footer";
+import FooterLogo from "../icons/footerLogo.astro";
+import CallIcon from "../icons/callIcon.astro";
+import AppIcon from "../../assets/images/app.png";
+import FacebookIcon from "../icons/facebook.astro";
+import InstagramIcon from "../icons/instagram.astro";
+
+interface Props {
+  data?: FooterLayoutData | null;
+}
+
+const { data } = Astro.props;
+
+const columnNodes = data?.footerColumns?.nodes ?? [];
+const legalNodes = data?.footerLegal?.nodes ?? [];
+
+const mockFooterData = {
+  address: "2200 East Sturgis Road Oxnard, California 93030",
+  copyright:
+    "Copyright © 2007–2026 Waterway Plastics, Inc. All rights reserved.",
+  buttons: [
+    {
+      label: "Call us 805-981-0262",
+      href: "tel:+18059810262",
+    },
+    {
+      label: "Email us",
+      href: "#",
+    },
+  ],
+  columns: [
+    {
+      label: "Company",
+      links: [
+        {
+          label: "Privacy Policy",
+          href: "#",
+        },
+        {
+          label: "Terms of Use",
+          href: "#",
+        },
+        {
+          label: "MAP Policy",
+          href: "#",
+        },
+        {
+          label: "Find a Sale Reps",
+          href: "#",
+        },
+      ],
+    },
+    {
+      label: "Support & Resources",
+      links: [
+        {
+          label: "Support",
+          href: "#",
+        },
+        {
+          label: "FAQ",
+          href: "#",
+        },
+        {
+          label: "Catalog & Brochures",
+          href: "#",
+        },
+        {
+          label: "Tools",
+          href: "#",
+        },
+        {
+          label: "Find a Store",
+          href: "#",
+        },
+      ],
+    },
+    {
+      label: "Regulatory Information",
+      links: [
+        {
+          label: "Rebate Center",
+          href: "#",
+        },
+        {
+          label: "Certification of Compliance",
+          href: "#",
+        },
+        {
+          label: "Warranty Claims",
+          href: "#",
+        },
+        {
+          label: "Recalls",
+          href: "#",
+        },
+        {
+          label: "Conflict-Free Minerals",
+          href: "#",
+        },
+      ],
+    },
+    {
+      label: "Mobile Apps & Tools",
+      links: [
+        {
+          icon: {
+            url: AppIcon,
+            alt: "Applications",
+          },
+          href: "#",
+        },
+      ],
+    },
+    {
+      label: "Join us",
+      links: [
+        {
+          icon: "facebook",
+          href: "#",
+        },
+        {
+          icon: "instagram",
+          href: "#",
+        },
+      ],
+    },
+  ],
+};
+---
+
+<footer class="footer">
+  <div class="container footer__container">
+    <div class="footer__top">
+      <div class="footer__logo-block">
+        <FooterLogo class="footer__logo-icon" />
+        <p class="footer__logo-text">{mockFooterData.address}</p>
+      </div>
+      <div class="footer__buttons">
+        <a
+          href={mockFooterData.buttons[0].href}
+          class="btn btn--primary footer__button footer__button--call-us"
+        >
+          <CallIcon class="footer__button-icon" />
+          <span>{mockFooterData.buttons[0].label}</span>
+        </a>
+        <a
+          href={mockFooterData.buttons[1].href}
+          class="btn btn--secondary footer__button footer__button--email-us"
+        >
+          <span>{mockFooterData.buttons[1].label}</span>
+        </a>
+      </div>
+    </div>
+    <div class="footer__columns">
+      {
+        mockFooterData.columns.map((column, index) => (
+          <div class={`footer__column footer__column--${index + 1}`}>
+            <h3 class="footer__column-title">{column.label}</h3>
+            <ul
+              class={`footer__column-list ${"icon" in column.links[0] ? "footer__column-list--with-icon" : ""}`}
+            >
+              {column.links.map((link, index) => (
+                <li
+                  class={`footer__column-item footer__column-item--${index + 1}`}
+                >
+                  <a href={link.href} class="footer__column-link">
+                    {"icon" in link &&
+                    typeof link.icon === "object" &&
+                    link.icon?.url ? (
+                      <img
+                        src={
+                          typeof link.icon.url === "string"
+                            ? link.icon.url
+                            : link.icon.url.src
+                        }
+                        alt={link.icon.alt}
+                        class="footer__column-icon"
+                      />
+                    ) : null}
+                    {"icon" in link &&
+                    typeof link.icon === "string" &&
+                    link.icon === "facebook" ? (
+                      <FacebookIcon class="footer__column-icon" />
+                    ) : "icon" in link &&
+                      typeof link.icon === "string" &&
+                      link.icon === "instagram" ? (
+                      <InstagramIcon class="footer__column-icon" />
+                    ) : null}
+                    {"label" in link && link.label ? link.label : null}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+    <div class="footer__bottom">
+      <p class="footer__copyright">{mockFooterData.copyright}</p>
+    </div>
+  </div>
+</footer>
