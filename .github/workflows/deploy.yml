@@ -37,7 +37,7 @@ jobs:
 
       - name: Deploy to Cloudflare Pages
         run: |
-          npx wrangler pages project create orange-lab-new-deploy --production-branch main || true
-          npx wrangler pages deploy dist --project-name=orange-lab-new-deploy
+          npx wrangler pages project create waterwayplastics-frontend --production-branch main || true
+          npx wrangler pages deploy dist --project-name=waterwayplastics-frontend
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
