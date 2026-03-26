@@ -1,0 +1,538 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+export const prerender = false;
+---
+
+<Layout>
+  <main class="demo-filters-page">
+    <div class="demo-filters__layout">
+      <section
+        class="demo-filters__panel"
+        aria-labelledby="demo-filters-heading"
+      >
+        <h1 id="demo-filters-heading" class="demo-filters__h1">Demo filters</h1>
+        <p id="demo-filters-api-error" class="demo-filters__err" hidden></p>
+
+        <div class="demo-filters__group">
+          <h3 class="demo-filters__group-title">Categories</h3>
+          <div id="demo-filters-root" class="demo-filters__chips"></div>
+        </div>
+
+        <div class="demo-filters__group">
+          <h3 class="demo-filters__group-title">Product types</h3>
+          <div id="demo-filters-sub" class="demo-filters__chips"></div>
+        </div>
+
+        <div class="demo-filters__group">
+          <h3 class="demo-filters__group-title">Base attributes</h3>
+          <div id="demo-filters-attrs" class="demo-filters__chips"></div>
+        </div>
+
+        <button type="button" id="demo-filters-clear" class="demo-filters__btn">
+          Clear all
+        </button>
+
+        <p class="demo-filters__meta">
+          <span id="demo-filters-count"></span>
+        </p>
+      </section>
+
+      <section class="demo-filters__panel" aria-labelledby="demo-products-h">
+        <h2 id="demo-products-h" class="demo-filters__h2">Products</h2>
+        <p
+          id="demo-filters-products-total"
+          class="demo-filters__products-total"
+        >
+          Products found: 0
+        </p>
+        <ul id="demo-filters-products" class="demo-filters__list"></ul>
+        <div class="demo-filters__pager">
+          <button
+            type="button"
+            id="demo-filters-prev"
+            class="demo-filters__btn"
+          >
+            Prev
+          </button>
+          <span id="demo-filters-page" class="demo-filters__page-indicator"
+            >Page 1</span
+          >
+          <button
+            type="button"
+            id="demo-filters-next"
+            class="demo-filters__btn"
+          >
+            Next
+          </button>
+        </div>
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  :global(.demo-filters-page) {
+    background: linear-gradient(180deg, #007d8a 0%, #00aec7 100%);
+    padding: 8rem 0 4rem;
+  }
+  :global(.demo-filters__layout) {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    padding: 0 1rem;
+    max-width: 72rem;
+    margin: 0 auto;
+    display: grid;
+    gap: 1rem;
+  }
+
+  :global(.demo-filters__panel) {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 1rem;
+    background: #fff;
+  }
+  :global(.demo-filters__h1),
+  :global(.demo-filters__h2) {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+  }
+  :global(.demo-filters__err) {
+    color: #b00020;
+    font-size: 0.8125rem;
+    margin: 0 0 0.75rem;
+  }
+  :global(.demo-filters__group) {
+    margin-bottom: 1rem;
+  }
+  :global(.demo-filters__group-title) {
+    margin: 0 0 0.4rem;
+    font-size: 0.875rem;
+    color: #444;
+  }
+  :global(.demo-filters__chips) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-height: 2rem;
+  }
+  :global(.demo-filters__chip) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.8125rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f5f5f5;
+    cursor: pointer;
+  }
+  :global(.demo-filters__chip:has(input:checked)) {
+    border-color: #007d8a;
+    background: #e6f4f5;
+    font-weight: 600;
+  }
+  :global(.demo-filters__chip-input) {
+    margin: 0;
+  }
+  :global(.demo-filters__btn) {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8125rem;
+    cursor: pointer;
+  }
+  :global(.demo-filters__meta) {
+    margin: 0.75rem 0 0;
+    font-size: 0.75rem;
+    color: #666;
+  }
+  :global(.demo-filters__products-total) {
+    margin: 0 0 0.5rem;
+    font-size: 0.8125rem;
+    color: #444;
+  }
+  :global(.demo-filters__pager) {
+    margin-top: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  :global(.demo-filters__page-indicator) {
+    font-size: 0.8125rem;
+    color: #444;
+  }
+  :global(.demo-filters__list) {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+  }
+  :global(.demo-filters__list li) {
+    padding: 0.35rem 0;
+    border: 1px solid #eee;
+    font-size: 0.875rem;
+  }
+</style>
+
+<script>
+  const rootEl = document.getElementById("demo-filters-root");
+  const subEl = document.getElementById("demo-filters-sub");
+  const attrsEl = document.getElementById("demo-filters-attrs");
+  const productsEl = document.getElementById("demo-filters-products");
+  const productsTotalEl = document.getElementById(
+    "demo-filters-products-total",
+  );
+  const prevBtn = document.getElementById("demo-filters-prev");
+  const nextBtn = document.getElementById("demo-filters-next");
+  const pageEl = document.getElementById("demo-filters-page");
+  const clearBtn = document.getElementById("demo-filters-clear");
+  const errEl = document.getElementById("demo-filters-api-error");
+  const countEl = document.getElementById("demo-filters-count");
+
+  const selectedRoot = new Set<string>();
+  const selectedSub = new Set<string>();
+  const selectedAttrs = new Set<string>();
+  const selectedAll = new Set<string>();
+  let rootMap = new Map<string, { name: string; slug: string }[]>();
+  const PAGE_SIZE = 24;
+  let currentOffset = 0;
+  let currentTotal = 0;
+
+  function parseListParam(params: URLSearchParams, key: string) {
+    const raw = params.get(key);
+    if (!raw) return [];
+    return raw
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }
+
+  function applyStateFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const root = params.get("root");
+    const sub = parseListParam(params, "sub");
+    const attr = parseListParam(params, "attr");
+    const page = Number(params.get("page") ?? "1");
+
+    selectedRoot.clear();
+    selectedSub.clear();
+    selectedAttrs.clear();
+
+    if (root) selectedRoot.add(root);
+    sub.forEach((s) => selectedSub.add(s));
+    attr.forEach((s) => selectedAttrs.add(s));
+
+    const safePage = Number.isFinite(page) ? Math.max(1, Math.floor(page)) : 1;
+    currentOffset = (safePage - 1) * PAGE_SIZE;
+  }
+
+  function syncUrlState() {
+    const params = new URLSearchParams(window.location.search);
+    const root = [...selectedRoot][0];
+    const sub = [...selectedSub];
+    const attr = [...selectedAttrs];
+    const page = Math.floor(currentOffset / PAGE_SIZE) + 1;
+
+    if (root) params.set("root", root);
+    else params.delete("root");
+
+    if (sub.length > 0) params.set("sub", sub.join(","));
+    else params.delete("sub");
+
+    if (attr.length > 0) params.set("attr", attr.join(","));
+    else params.delete("attr");
+
+    if (page > 1) params.set("page", String(page));
+    else params.delete("page");
+
+    const qs = params.toString();
+    const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
+    window.history.replaceState(null, "", url);
+  }
+
+  function setError(text: string | null) {
+    if (!errEl) return;
+    if (text) {
+      errEl.textContent = text;
+      errEl.hidden = false;
+    } else {
+      errEl.textContent = "";
+      errEl.hidden = true;
+    }
+  }
+
+  function setLoading(on: boolean) {
+    if (clearBtn instanceof HTMLButtonElement) clearBtn.disabled = on;
+    if (prevBtn instanceof HTMLButtonElement) prevBtn.disabled = on;
+    if (nextBtn instanceof HTMLButtonElement) nextBtn.disabled = on;
+    [rootEl, subEl, attrsEl].forEach((el) => {
+      if (!el) return;
+      el.querySelectorAll<HTMLInputElement>("input[type='checkbox']").forEach(
+        (input) => {
+          input.disabled = on;
+        },
+      );
+    });
+  }
+
+  function escapeHtml(s: string) {
+    return s
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function refreshAllSet() {
+    selectedAll.clear();
+    [...selectedSub, ...selectedAttrs].forEach((s) => selectedAll.add(s));
+  }
+
+  function renderSubcategories() {
+    if (!subEl) return;
+    const rootSlug = [...selectedRoot][0];
+    const list =
+      rootSlug && rootMap.has(rootSlug)
+        ? (rootMap.get(rootSlug) ?? [])
+        : [...rootMap.values()].flat();
+    subEl.innerHTML = list
+      .map(
+        (a) =>
+          `<label class="demo-filters__chip"><input class="demo-filters__chip-input" type="checkbox" data-group="sub" data-slug="${escapeHtml(a.slug)}" />${escapeHtml(a.name)}</label>`,
+      )
+      .join("");
+    syncCheckboxes();
+  }
+
+  function syncPager() {
+    const page = Math.floor(currentOffset / PAGE_SIZE) + 1;
+    const totalPages = Math.max(1, Math.ceil(currentTotal / PAGE_SIZE));
+    if (pageEl) {
+      pageEl.textContent = `Page ${page} of ${totalPages}`;
+    }
+    if (prevBtn instanceof HTMLButtonElement) {
+      prevBtn.disabled = currentOffset <= 0;
+    }
+    if (nextBtn instanceof HTMLButtonElement) {
+      nextBtn.disabled = currentOffset + PAGE_SIZE >= currentTotal;
+    }
+  }
+
+  async function fetchProducts() {
+    setLoading(true);
+    setError(null);
+    refreshAllSet();
+    syncUrlState();
+    try {
+      const res = await fetch("/api/demo-filters", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          filters: [...selectedAll],
+          rootCategory: [...selectedRoot][0] ?? "",
+          subcategories: [...selectedSub],
+          productTypes: [],
+          attributes: [...selectedAttrs],
+          limit: PAGE_SIZE,
+          offset: currentOffset,
+        }),
+      });
+      const data = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        total?: number;
+        limit?: number;
+        offset?: number;
+        items?: { title: string; slug: string }[];
+      };
+      console.log("[demo-filters] POST /api/demo-filters response", {
+        status: res.status,
+        ok: res.ok,
+        body: data,
+      });
+
+      if (!data.ok) {
+        console.error("[demo-filters] POST /api/demo-filters failed", {
+          request: {
+            filters: [...selectedAll],
+            limit: PAGE_SIZE,
+            offset: currentOffset,
+          },
+          response: data,
+        });
+        setError(data.error ?? "Request failed");
+        if (productsEl) productsEl.innerHTML = "";
+        if (productsTotalEl) productsTotalEl.textContent = "Products found: 0";
+        currentTotal = 0;
+        syncPager();
+        if (countEl) countEl.textContent = "";
+        return;
+      }
+
+      const items = data.items ?? [];
+      const total = data.total ?? 0;
+      currentTotal = total;
+      const start = total === 0 ? 0 : currentOffset + 1;
+      const end = Math.min(currentOffset + PAGE_SIZE, total);
+      if (productsTotalEl) {
+        productsTotalEl.textContent = `Showing ${start}-${end} of ${total}`;
+      }
+      if (countEl) {
+        const selectedCount =
+          selectedRoot.size + selectedSub.size + selectedAttrs.size;
+        countEl.textContent =
+          selectedCount === 0
+            ? `Total: ${total} (no filters selected)`
+            : `Filters selected: ${selectedCount}. Found: ${total}`;
+      }
+      if (productsEl) {
+        productsEl.innerHTML = items
+          .map((p) => `<li>${escapeHtml(p.title)}</li>`)
+          .join("");
+      }
+      syncPager();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function syncCheckboxes() {
+    [rootEl, subEl, attrsEl].forEach((el) => {
+      if (!el) return;
+      el.querySelectorAll<HTMLInputElement>("input[type='checkbox']").forEach(
+        (input) => {
+          const slug = input.dataset.slug;
+          const group = input.dataset.group;
+          if (!slug || !group) return;
+          if (group === "root") input.checked = selectedRoot.has(slug);
+          if (group === "sub") input.checked = selectedSub.has(slug);
+          if (group === "attr") input.checked = selectedAttrs.has(slug);
+        },
+      );
+    });
+  }
+
+  function renderGroup(
+    el: HTMLElement | null,
+    group: "root" | "attr",
+    list: { name: string; slug: string }[],
+  ) {
+    if (!el) return;
+    el.innerHTML = list
+      .map(
+        (a) =>
+          `<label class="demo-filters__chip"><input class="demo-filters__chip-input" type="checkbox" data-group="${group}" data-slug="${escapeHtml(a.slug)}" />${escapeHtml(a.name)}</label>`,
+      )
+      .join("");
+  }
+
+  async function init() {
+    try {
+      const res = await fetch("/api/demo-filters");
+      const data = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        attributes?: { name: string; slug: string }[];
+        rootCategories?: {
+          name: string;
+          slug: string;
+          subcategories: { name: string; slug: string }[];
+        }[];
+        productTypes?: { name: string; slug: string }[];
+      };
+      console.log("[demo-filters] GET /api/demo-filters response", {
+        status: res.status,
+        ok: res.ok,
+        body: data,
+      });
+
+      if (!data.ok || !rootEl || !subEl || !attrsEl) {
+        console.error("[demo-filters] GET /api/demo-filters failed", {
+          response: data,
+          rootElExists: Boolean(rootEl),
+          subElExists: Boolean(subEl),
+          attrsElExists: Boolean(attrsEl),
+        });
+        setError(data.error ?? "Failed to load attributes");
+        await fetchProducts();
+        return;
+      }
+
+      const attrs = data.attributes ?? [];
+      const roots = data.rootCategories ?? [];
+      rootMap = new Map(roots.map((r) => [r.slug, r.subcategories ?? []]));
+      applyStateFromUrl();
+
+      renderGroup(rootEl, "root", roots);
+      renderGroup(attrsEl, "attr", attrs.slice(0, 12));
+      renderSubcategories();
+      syncCheckboxes();
+
+      const onChange = (e: Event) => {
+        const input = (e.target as HTMLElement).closest<HTMLInputElement>(
+          "input[type='checkbox'][data-group][data-slug]",
+        );
+        const slug = input?.dataset.slug;
+        const group = input?.dataset.group;
+        if (!input || !slug || !group) return;
+        if (group === "root") {
+          selectedRoot.clear();
+          selectedSub.clear();
+          if (input.checked) selectedRoot.add(slug);
+          renderSubcategories();
+        } else if (group === "sub") {
+          if (input.checked) selectedSub.add(slug);
+          else selectedSub.delete(slug);
+        } else if (group === "attr") {
+          if (input.checked) selectedAttrs.add(slug);
+          else selectedAttrs.delete(slug);
+        }
+        currentOffset = 0;
+        syncCheckboxes();
+        void fetchProducts();
+      };
+
+      rootEl.addEventListener("change", onChange);
+      subEl.addEventListener("change", onChange);
+      attrsEl.addEventListener("change", onChange);
+
+      clearBtn?.addEventListener("click", () => {
+        selectedRoot.clear();
+        selectedSub.clear();
+        selectedAttrs.clear();
+        currentOffset = 0;
+        renderSubcategories();
+        syncCheckboxes();
+        void fetchProducts();
+      });
+
+      prevBtn?.addEventListener("click", () => {
+        if (currentOffset <= 0) return;
+        currentOffset = Math.max(0, currentOffset - PAGE_SIZE);
+        void fetchProducts();
+      });
+
+      nextBtn?.addEventListener("click", () => {
+        if (currentOffset + PAGE_SIZE >= currentTotal) return;
+        currentOffset += PAGE_SIZE;
+        void fetchProducts();
+      });
+
+      window.addEventListener("popstate", () => {
+        applyStateFromUrl();
+        renderSubcategories();
+        syncCheckboxes();
+        void fetchProducts();
+      });
+
+      await fetchProducts();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    }
+  }
+
+  void init();
+</script>
