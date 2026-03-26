@@ -69,6 +69,19 @@ function json(data: unknown, init?: ResponseInit) {
   });
 }
 
+async function loadCloudflareRuntimeEnv() {
+  try {
+    const { env } = await import("cloudflare:workers");
+    return (env ?? {}) as {
+      PUBLIC_GRAPHQL_URL?: string;
+      GRAPHQL_BASIC_USER?: string;
+      GRAPHQL_BASIC_PASSWORD?: string;
+    };
+  } catch {
+    return {};
+  }
+}
+
 async function fallbackAllProducts(
   limit: number,
   offset: number,
@@ -140,9 +153,17 @@ async function fallbackAllProducts(
   };
 }
 
-export const GET: APIRoute = async ({ locals }) => {
-  const runtimeEnv = ((locals as { runtime?: { env?: unknown } }).runtime?.env ??
-    {}) as {
+export const GET: APIRoute = async () => {
+  const cloudflareEnv = await loadCloudflareRuntimeEnv();
+  const runtimeEnv = {
+    PUBLIC_GRAPHQL_URL:
+      cloudflareEnv.PUBLIC_GRAPHQL_URL ?? import.meta.env.PUBLIC_GRAPHQL_URL,
+    GRAPHQL_BASIC_USER:
+      cloudflareEnv.GRAPHQL_BASIC_USER ?? import.meta.env.GRAPHQL_BASIC_USER,
+    GRAPHQL_BASIC_PASSWORD:
+      cloudflareEnv.GRAPHQL_BASIC_PASSWORD ??
+      import.meta.env.GRAPHQL_BASIC_PASSWORD,
+  } as {
     PUBLIC_GRAPHQL_URL?: string;
     GRAPHQL_BASIC_USER?: string;
     GRAPHQL_BASIC_PASSWORD?: string;
@@ -196,9 +217,17 @@ type PostBody = {
   offset?: unknown;
 };
 
-export const POST: APIRoute = async ({ request, locals }) => {
-  const runtimeEnv = ((locals as { runtime?: { env?: unknown } }).runtime?.env ??
-    {}) as {
+export const POST: APIRoute = async ({ request }) => {
+  const cloudflareEnv = await loadCloudflareRuntimeEnv();
+  const runtimeEnv = {
+    PUBLIC_GRAPHQL_URL:
+      cloudflareEnv.PUBLIC_GRAPHQL_URL ?? import.meta.env.PUBLIC_GRAPHQL_URL,
+    GRAPHQL_BASIC_USER:
+      cloudflareEnv.GRAPHQL_BASIC_USER ?? import.meta.env.GRAPHQL_BASIC_USER,
+    GRAPHQL_BASIC_PASSWORD:
+      cloudflareEnv.GRAPHQL_BASIC_PASSWORD ??
+      import.meta.env.GRAPHQL_BASIC_PASSWORD,
+  } as {
     PUBLIC_GRAPHQL_URL?: string;
     GRAPHQL_BASIC_USER?: string;
     GRAPHQL_BASIC_PASSWORD?: string;

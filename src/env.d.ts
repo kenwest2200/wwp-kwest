@@ -10,3 +10,12 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+declare module "cloudflare:workers" {
+  export const env: {
+    PUBLIC_GRAPHQL_URL?: string;
+    GRAPHQL_BASIC_USER?: string;
+    GRAPHQL_BASIC_PASSWORD?: string;
+    [key: string]: string | undefined;
+  };
+}
