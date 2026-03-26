@@ -73,6 +73,11 @@ async function fallbackAllProducts(
   limit: number,
   offset: number,
   categorySlugs: string[] = [],
+  runtimeEnv?: {
+    PUBLIC_GRAPHQL_URL?: string;
+    GRAPHQL_BASIC_USER?: string;
+    GRAPHQL_BASIC_PASSWORD?: string;
+  },
 ) {
   const normalizedCategorySlugs = Array.from(
     new Set(categorySlugs.filter((slug) => Boolean(slug))),
@@ -82,6 +87,8 @@ async function fallbackAllProducts(
     try {
       const byCategories = await requestGraphql<DemoProductsFromCategoriesData>(
         DEMO_PRODUCTS_FROM_CATEGORIES_QUERY,
+        undefined,
+        runtimeEnv,
       );
       const categories = byCategories.productCategories?.nodes ?? [];
       const wanted = new Set(normalizedCategorySlugs);
@@ -111,7 +118,7 @@ async function fallbackAllProducts(
   const first = 5000;
   const allData = await requestGraphql<DemoAllProductsData>(DEMO_ALL_PRODUCTS_QUERY, {
     first,
-  });
+  }, runtimeEnv);
   const allItems = allData.products?.nodes ?? [];
 
   const filteredItems =
@@ -133,8 +140,15 @@ async function fallbackAllProducts(
   };
 }
 
-export const GET: APIRoute = async () => {
-  if (!getGraphQLClient()) {
+export const GET: APIRoute = async ({ locals }) => {
+  const runtimeEnv = ((locals as { runtime?: { env?: unknown } }).runtime?.env ??
+    {}) as {
+    PUBLIC_GRAPHQL_URL?: string;
+    GRAPHQL_BASIC_USER?: string;
+    GRAPHQL_BASIC_PASSWORD?: string;
+  };
+
+  if (!getGraphQLClient(runtimeEnv)) {
     return json({
       ok: false,
       error: "PUBLIC_GRAPHQL_URL не задан",
@@ -144,8 +158,16 @@ export const GET: APIRoute = async () => {
 
   try {
     const [attributesData, categoriesData] = await Promise.all([
-      requestGraphql<DemoProductAttributesData>(DEMO_PRODUCT_ATTRIBUTES_QUERY),
-      requestGraphql<DemoProductCategoriesData>(DEMO_PRODUCT_CATEGORIES_QUERY),
+      requestGraphql<DemoProductAttributesData>(
+        DEMO_PRODUCT_ATTRIBUTES_QUERY,
+        undefined,
+        runtimeEnv,
+      ),
+      requestGraphql<DemoProductCategoriesData>(
+        DEMO_PRODUCT_CATEGORIES_QUERY,
+        undefined,
+        runtimeEnv,
+      ),
     ]);
     const attributes = attributesData.productAttributes?.nodes ?? [];
     const { productTypes } = splitAttributesForDemo(attributes);
@@ -174,8 +196,15 @@ type PostBody = {
   offset?: unknown;
 };
 
-export const POST: APIRoute = async ({ request }) => {
-  if (!getGraphQLClient()) {
+export const POST: APIRoute = async ({ request, locals }) => {
+  const runtimeEnv = ((locals as { runtime?: { env?: unknown } }).runtime?.env ??
+    {}) as {
+    PUBLIC_GRAPHQL_URL?: string;
+    GRAPHQL_BASIC_USER?: string;
+    GRAPHQL_BASIC_PASSWORD?: string;
+  };
+
+  if (!getGraphQLClient(runtimeEnv)) {
     return json(
       { ok: false, error: "PUBLIC_GRAPHQL_URL не задан", total: 0, items: [] },
       { status: 503 },
@@ -240,13 +269,19 @@ export const POST: APIRoute = async ({ request }) => {
     const data = await requestGraphql<DemoProductsByAttributesData>(
       DEMO_PRODUCTS_BY_ATTRIBUTES_QUERY,
       variables,
+      runtimeEnv,
     );
     let block = data.productsByAttributes;
 
     // Fallback for schemas where resolver does not support current filters.
     if ((block?.total ?? 0) === 0) {
       const fallbackCategorySlugs = [...subcategories, ...(rootCategory ? [rootCategory] : [])];
-      const fallback = await fallbackAllProducts(limit, offset, fallbackCategorySlugs);
+      const fallback = await fallbackAllProducts(
+        limit,
+        offset,
+        fallbackCategorySlugs,
+        runtimeEnv,
+      );
       return json({
         ok: true,
         total: fallback.total,
@@ -282,7 +317,12 @@ export const POST: APIRoute = async ({ request }) => {
     if (filters.length === 0 || subcategories.length > 0 || Boolean(rootCategory)) {
       try {
         const fallbackCategorySlugs = [...subcategories, ...(rootCategory ? [rootCategory] : [])];
-        const fallback = await fallbackAllProducts(limit, offset, fallbackCategorySlugs);
+        const fallback = await fallbackAllProducts(
+          limit,
+          offset,
+          fallbackCategorySlugs,
+          runtimeEnv,
+        );
         return json({
           ok: true,
           total: fallback.total,
