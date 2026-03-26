@@ -25,16 +25,6 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Ensure build directory exists
-        run: |
-          if [ ! -d "dist" ]; then
-            echo "Error: build directory 'dist' not found"
-            exit 1
-          fi
-
-      - name: Install Wrangler
-        run: npm install -g wrangler@latest
-
       - name: Deploy to Cloudflare Pages
         run: npx wrangler pages deploy dist --project-name=waterwayplastics-frontend
         env:
