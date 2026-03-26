@@ -319,6 +319,20 @@ export const prerender = false;
     }
   }
 
+  async function readJsonSafe(res: Response) {
+    const text = await res.text();
+    if (!text) {
+      throw new Error(`Empty response body (HTTP ${res.status})`);
+    }
+    try {
+      return JSON.parse(text) as unknown;
+    } catch {
+      throw new Error(
+        `Non-JSON response (HTTP ${res.status}): ${text.slice(0, 200)}`,
+      );
+    }
+  }
+
   async function fetchProducts() {
     setLoading(true);
     setError(null);
@@ -338,7 +352,7 @@ export const prerender = false;
           offset: currentOffset,
         }),
       });
-      const data = (await res.json()) as {
+      const data = (await readJsonSafe(res)) as {
         ok?: boolean;
         error?: string;
         total?: number;
@@ -432,7 +446,7 @@ export const prerender = false;
   async function init() {
     try {
       const res = await fetch("/api/demo-filters");
-      const data = (await res.json()) as {
+      const data = (await readJsonSafe(res)) as {
         ok?: boolean;
         error?: string;
         attributes?: { name: string; slug: string }[];

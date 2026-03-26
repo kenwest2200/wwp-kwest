@@ -8,11 +8,27 @@ type RuntimeEnvLike = {
 
 function toBase64Utf8(value: string): string {
   const bytes = new TextEncoder().encode(value);
-  let binary = "";
-  for (const b of bytes) {
-    binary += String.fromCharCode(b);
+  const alphabet =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+  let output = "";
+  let i = 0;
+
+  while (i < bytes.length) {
+    const byte1 = bytes[i++] ?? 0;
+    const hasByte2 = i < bytes.length;
+    const byte2 = hasByte2 ? (bytes[i++] ?? 0) : 0;
+    const hasByte3 = i < bytes.length;
+    const byte3 = hasByte3 ? (bytes[i++] ?? 0) : 0;
+
+    const chunk = (byte1 << 16) | (byte2 << 8) | byte3;
+
+    output += alphabet[(chunk >> 18) & 0x3f];
+    output += alphabet[(chunk >> 12) & 0x3f];
+    output += hasByte2 ? alphabet[(chunk >> 6) & 0x3f] : "=";
+    output += hasByte3 ? alphabet[chunk & 0x3f] : "=";
   }
-  return btoa(binary);
+
+  return output;
 }
 
 function basicAuthHeader(user: string, password: string): string {
