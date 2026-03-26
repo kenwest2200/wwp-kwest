@@ -1,10 +1,16 @@
-import { Buffer } from "node:buffer";
 import { GraphQLClient } from "graphql-request";
 
+function toBase64Utf8(value: string): string {
+  const bytes = new TextEncoder().encode(value);
+  let binary = "";
+  for (const b of bytes) {
+    binary += String.fromCharCode(b);
+  }
+  return btoa(binary);
+}
+
 function basicAuthHeader(user: string, password: string): string {
-  const credentials = Buffer.from(`${user}:${password}`, "utf8").toString(
-    "base64",
-  );
+  const credentials = toBase64Utf8(`${user}:${password}`);
   return `Basic ${credentials}`;
 }
 

@@ -4,6 +4,7 @@ import Hero from "../sections/Hero/index.astro";
 import Featured from "../sections/Featured/index.astro";
 import Resources from "../sections/Resources/index.astro";
 import Solutions from "../sections/Solutions/index.astro";
+import CallToAction from "../sections/CallToAction/index.astro";
 import { getGraphQLClient, requestGraphql } from "../lib/graphql";
 import { HOME_HERO_QUERY, type HomeHeroData } from "../lib/queries/home-hero";
 import {
@@ -18,6 +19,8 @@ import {
   HOME_SOLUTIONS_QUERY,
   type HomeSolutionsData,
 } from "../lib/queries/home-solutions";
+
+export const prerender = true;
 
 let heroData: HomeHeroData | null = null;
 let featuredData: HomeFeaturedData | null = null;
@@ -56,6 +59,7 @@ if (getGraphQLClient()) {
     <Featured data={featuredData} />
     <Resources data={resourcesData} />
     <Solutions data={solutionsData} />
+    <CallToAction />
   </main>
 </Layout>
 
