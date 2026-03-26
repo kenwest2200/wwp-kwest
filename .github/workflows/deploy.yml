@@ -25,7 +25,7 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Deploy to Cloudflare Pages
-        run: npx wrangler pages deploy dist --project-name=waterwayplastics-frontend
+      - name: Deploy to Cloudflare Workers
+        run: npx wrangler deploy --name waterway-frontend
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
