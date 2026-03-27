@@ -1,9 +1,13 @@
 ---
-import type { HomeHeroData } from "../../lib/queries/home-hero";
+import type {
+  HomeHeroData,
+  HomepageApiSectionsIntroSectionLayout,
+} from "../../lib/queries/home-hero";
 import IconArrowRight from "../../components/icons/IconArrowRight.astro";
-import img1 from "../../assets/images/1.png";
-import img2 from "../../assets/images/2.png";
-import img3 from "../../assets/images/3.png";
+// Mock assets (fallback) — kept for local preview if GraphQL is empty
+// import img1 from "../../assets/images/1.png";
+// import img2 from "../../assets/images/2.png";
+// import img3 from "../../assets/images/3.png";
 
 interface Props {
   data: HomeHeroData | null;
@@ -12,33 +16,58 @@ interface Props {
 const { data } = Astro.props;
 
 const node = data?.nodeByUri ?? null;
-const title = node?.title ?? null;
-const excerpt = node?.excerpt ?? null;
-const uri = node?.uri ?? null;
-const imageUrl = node?.images?.node?.images?.nodes[0]?.url ?? null;
-const imageAlt = node?.images?.node?.images?.nodes[0]?.title ?? title ?? "";
+const sections = node?.template?.homepageApi?.sections ?? [];
 
-const ctaHref = uri ? `/${uri.replace(/^\/+/, "")}` : "#";
-const ctaDownloadUrl = node?.ctaDownloadUrl ?? "#";
+function isIntroSection(
+  s: (typeof sections)[number],
+): s is HomepageApiSectionsIntroSectionLayout {
+  return s?.__typename === "HomepageApiSectionsIntroSectionLayout";
+}
+
+const intro = sections.find(isIntroSection) ?? null;
+
+const title = intro?.title ?? null;
+const description = intro?.description ?? null;
+
+const graphQlImages: {
+  url: string;
+  alt: string;
+  width: number | undefined;
+  height: number | undefined;
+}[] = [
+  intro?.image1?.node,
+  intro?.image2?.node,
+  intro?.image3?.node,
+]
+  .map((n) =>
+    n?.sourceUrl
+      ? {
+          url: n.sourceUrl,
+          alt: n.altText ?? title ?? "Hero image",
+          width: n.mediaDetails?.width ?? undefined,
+          height: n.mediaDetails?.height ?? undefined,
+        }
+      : null,
+  )
+  .filter(
+    (x): x is NonNullable<typeof x> => x !== null,
+  );
+
+const buttonLink = intro?.buttonLink ?? null;
+const ctaHref = buttonLink?.url?.trim() || "#";
+const ctaLabel = buttonLink?.title?.trim() || "Browse catalog";
+const ctaTarget = buttonLink?.target?.trim();
+const ctaRel = ctaTarget === "_blank" ? "noopener noreferrer" : undefined;
 
 const fallbackTitle = "Engineered for Pool, Spa & Bath";
 const fallbackDescription =
   "Cross-compatible components designed in USA for distributors, installers, and inspectors.";
 
-const mockImages = [
-  {
-    url: img1,
-    title: "Image 1",
-  },
-  {
-    url: img2,
-    title: "Image 2",
-  },
-  {
-    url: img3,
-    title: "Image 3",
-  },
-];
+// const mockImages = [
+//   { url: img1, title: "Image 1" },
+//   { url: img2, title: "Image 2" },
+//   { url: img3, title: "Image 3" },
+// ];
 ---
 
 <section class="hero">
@@ -47,45 +76,43 @@ const mockImages = [
       <div class="hero__content-inner">
         <h1 class="hero__title">{title || fallbackTitle}</h1>
         {
-          excerpt ? (
-            <div class="hero__description" set:html={excerpt} />
+          description ? (
+            <div class="hero__description" set:html={description} />
           ) : (
             <p class="hero__description">{fallbackDescription}</p>
           )
         }
       </div>
-      <div class="hero__buttons">
-        <a
-          href={ctaHref}
-          class="btn btn--primary hero__button hero__button--primary"
-        >
-          Browse catalog
-          <IconArrowRight />
-        </a>
-        <a
-          href={ctaDownloadUrl}
-          class="btn btn--secondary hero__button hero__button--secondary"
-          >Download Applications</a
-        >
-      </div>
+      {
+        buttonLink?.url?.trim() ? (
+          <div class="hero__buttons">
+            <a
+              href={ctaHref}
+              class="btn btn--primary hero__button hero__button--primary"
+              target={ctaTarget}
+              rel={ctaRel}
+            >
+              {ctaLabel}
+              <IconArrowRight />
+            </a>
+          </div>
+        ) : null
+      }
     </div>
 
     {
-      (
-        // imageUrl && (
+      graphQlImages.length > 0 && (
         <div class="hero__image-container">
-          {/* {node?.images?.node?.images?.nodes.map((image) => (
-              <img class="hero__image" src={image.url} alt={image.title} />
-            ))} */}
-          {mockImages.map((image, index) => (
+          {graphQlImages.map((image, index) => (
             <img
               class={`hero__image hero__image--${index}`}
-              src={image.url.src ?? ""}
-              alt={image.title}
+              src={image.url}
+              alt={image.alt}
+              width={image.width}
+              height={image.height}
             />
           ))}
         </div>
-        // )
       )
     }
   </div>
