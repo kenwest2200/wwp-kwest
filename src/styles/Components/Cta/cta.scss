@@ -57,11 +57,26 @@
     gap: px-to-rem(20);
   }
 
+  &__button {
+
+    &-warranty,
+    &-safety {
+      font-size: px-to-rem(14);
+      font-weight: 600;
+      padding-left: px-to-rem(32);
+      padding-right: px-to-rem(32);
+    }
+  }
+
   &__button-dealer {
     display: flex;
     align-items: center;
     gap: px-to-rem(12);
+    font-weight: 600;
+    font-size: px-to-rem(14);
     width: 100%;
+    padding-left: px-to-rem(24);
+    padding-right: px-to-rem(32);
   }
 
   &__dealer {
@@ -74,5 +89,123 @@
       gap: px-to-rem(12);
       width: 100%;
     }
+  }
+
+  @include media-breakpoint-up(sm) {
+    &__container {
+      padding-left: px-to-rem(28);
+      padding-right: px-to-rem(28);
+    }
+
+    &__title {
+      max-width: px-to-rem(319);
+    }
+  }
+
+  @include media-breakpoint-up(md) {
+    background-position: 0% bottom;
+    background-size: 120% auto;
+    padding: px-to-rem(80) 0;
+
+    &__container {
+      padding-left: px-to-rem(40);
+      padding-right: px-to-rem(40);
+    }
+
+    &__title {
+      font-size: px-to-rem(36);
+      max-width: px-to-rem(463);
+    }
+
+    &__buttons {
+      flex-direction: row;
+      gap: px-to-rem(20);
+    }
+
+    &__button {
+
+      &-warranty,
+      &-safety {
+        min-height: px-to-rem(48);
+        height: px-to-rem(48);
+      }
+    }
+
+    &__button-dealer {
+      max-width: px-to-rem(175);
+      min-height: px-to-rem(48);
+      height: px-to-rem(48);
+
+      svg {
+        width: px-to-rem(20);
+        height: px-to-rem(20);
+      }
+    }
+  }
+
+  @include media-breakpoint-up(lg) {
+    background-position: center 67%;
+    background-size: 115% auto;
+
+
+    &__container {
+      flex-direction: row;
+      gap: px-to-rem(24);
+      justify-content: space-between;
+    }
+
+    &__title {
+      max-width: unset;
+    }
+
+    &__button-dealer {
+      display: none;
+    }
+
+    &__action {
+      max-width: px-to-rem(463);
+    }
+
+    &__dealer {
+      display: flex;
+      align-items: center;
+      margin-bottom: auto;
+      margin-top: 0;
+      max-width: px-to-rem(192);
+      width: 100%;
+    }
+  }
+
+  @include media-breakpoint-up(xl) {
+    background-position: center 83%;
+    background-size: 100% auto;
+
+    &__container {
+      padding-left: px-to-rem(16);
+      padding-right: px-to-rem(16);
+    }
+
+    &__action {
+      max-width: px-to-rem(798);
+    }
+
+    &__title {
+      font-size: px-to-rem(48);
+      font-weight: 500;
+    }
+  }
+
+  @include media-breakpoint-up(xxl) {
+    background-position: center 83%;
+    background-size: 100% auto;
+
+    &__title {
+      margin-bottom: px-to-rem(40);
+    }
+  }
+
+  @include media-breakpoint-up(xxxl) {
+    background-position: center 66%;
+    background-size: cover;
   }
 }
