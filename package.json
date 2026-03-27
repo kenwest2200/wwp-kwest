@@ -7,9 +7,10 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "npm run generate:demo-filters-data && astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "generate:demo-filters-data": "node ./scripts/generate-demo-filters-data.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",

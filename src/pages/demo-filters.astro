@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
-export const prerender = false;
+export const prerender = true;
 ---
 
 <Layout>
@@ -193,8 +193,14 @@ export const prerender = false;
   const selectedRoot = new Set<string>();
   const selectedSub = new Set<string>();
   const selectedAttrs = new Set<string>();
-  const selectedAll = new Set<string>();
+  let allProducts: Array<{
+    title: string;
+    slug: string;
+    categorySlugs: string[];
+    attributeSlugs: string[];
+  }> = [];
   let rootMap = new Map<string, { name: string; slug: string }[]>();
+  const rootChildrenMap = new Map<string, string[]>();
   const PAGE_SIZE = 24;
   let currentOffset = 0;
   let currentTotal = 0;
@@ -210,7 +216,7 @@ export const prerender = false;
 
   function applyStateFromUrl() {
     const params = new URLSearchParams(window.location.search);
-    const root = params.get("root");
+    const roots = parseListParam(params, "root");
     const sub = parseListParam(params, "sub");
     const attr = parseListParam(params, "attr");
     const page = Number(params.get("page") ?? "1");
@@ -219,7 +225,7 @@ export const prerender = false;
     selectedSub.clear();
     selectedAttrs.clear();
 
-    if (root) selectedRoot.add(root);
+    roots.forEach((s) => selectedRoot.add(s));
     sub.forEach((s) => selectedSub.add(s));
     attr.forEach((s) => selectedAttrs.add(s));
 
@@ -229,12 +235,12 @@ export const prerender = false;
 
   function syncUrlState() {
     const params = new URLSearchParams(window.location.search);
-    const root = [...selectedRoot][0];
+    const roots = [...selectedRoot];
     const sub = [...selectedSub];
     const attr = [...selectedAttrs];
     const page = Math.floor(currentOffset / PAGE_SIZE) + 1;
 
-    if (root) params.set("root", root);
+    if (roots.length > 0) params.set("root", roots.join(","));
     else params.delete("root");
 
     if (sub.length > 0) params.set("sub", sub.join(","));
@@ -285,18 +291,18 @@ export const prerender = false;
   }
 
   function refreshAllSet() {
-    selectedAll.clear();
-    [...selectedSub, ...selectedAttrs].forEach((s) => selectedAll.add(s));
+    // Kept for backward compatibility with previous flow.
   }
 
   function renderSubcategories() {
     if (!subEl) return;
-    const rootSlug = [...selectedRoot][0];
+    const selectedRoots = [...selectedRoot];
     const list =
-      rootSlug && rootMap.has(rootSlug)
-        ? (rootMap.get(rootSlug) ?? [])
+      selectedRoots.length > 0
+        ? selectedRoots.flatMap((slug) => rootMap.get(slug) ?? [])
         : [...rootMap.values()].flat();
-    subEl.innerHTML = list
+    const uniqueBySlug = new Map(list.map((item) => [item.slug, item]));
+    subEl.innerHTML = [...uniqueBySlug.values()]
       .map(
         (a) =>
           `<label class="demo-filters__chip"><input class="demo-filters__chip-input" type="checkbox" data-group="sub" data-slug="${escapeHtml(a.slug)}" />${escapeHtml(a.name)}</label>`,
@@ -333,59 +339,56 @@ export const prerender = false;
     }
   }
 
+  function filterProducts() {
+    const selectedRootSlugs = [...selectedRoot];
+    const selectedSubSlugs = [...selectedSub];
+    const selectedAttrSlugs = [...selectedAttrs];
+    const hasNoFilters =
+      selectedRootSlugs.length === 0 &&
+      selectedSubSlugs.length === 0 &&
+      selectedAttrSlugs.length === 0;
+    if (hasNoFilters) {
+      return allProducts;
+    }
+    const rootScope = new Set<string>();
+    selectedRootSlugs.forEach((rootSlug) => {
+      rootScope.add(rootSlug);
+      (rootChildrenMap.get(rootSlug) ?? []).forEach((slug) => rootScope.add(slug));
+    });
+    const scopedSelectedSubSlugs =
+      rootScope.size > 0
+        ? selectedSubSlugs.filter((slug) => rootScope.has(slug))
+        : selectedSubSlugs;
+
+    return allProducts.filter((product) => {
+      const categories = new Set(product.categorySlugs ?? []);
+      const attrs = new Set(product.attributeSlugs ?? []);
+
+      const rootMatch =
+        rootScope.size === 0 || [...rootScope].some((slug) => categories.has(slug));
+      if (!rootMatch) return false;
+
+      const subMatch =
+        scopedSelectedSubSlugs.length === 0 ||
+        scopedSelectedSubSlugs.some((slug) => categories.has(slug));
+      if (!subMatch) return false;
+
+      const attrMatch =
+        selectedAttrSlugs.length === 0 ||
+        selectedAttrSlugs.some((slug) => attrs.has(slug));
+      return attrMatch;
+    });
+  }
+
   async function fetchProducts() {
     setLoading(true);
     setError(null);
     refreshAllSet();
     syncUrlState();
     try {
-      const res = await fetch("/api/demo-filters", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          filters: [...selectedAll],
-          rootCategory: [...selectedRoot][0] ?? "",
-          subcategories: [...selectedSub],
-          productTypes: [],
-          attributes: [...selectedAttrs],
-          limit: PAGE_SIZE,
-          offset: currentOffset,
-        }),
-      });
-      const data = (await readJsonSafe(res)) as {
-        ok?: boolean;
-        error?: string;
-        total?: number;
-        limit?: number;
-        offset?: number;
-        items?: { title: string; slug: string }[];
-      };
-      console.log("[demo-filters] POST /api/demo-filters response", {
-        status: res.status,
-        ok: res.ok,
-        body: data,
-      });
-
-      if (!data.ok) {
-        console.error("[demo-filters] POST /api/demo-filters failed", {
-          request: {
-            filters: [...selectedAll],
-            limit: PAGE_SIZE,
-            offset: currentOffset,
-          },
-          response: data,
-        });
-        setError(data.error ?? "Request failed");
-        if (productsEl) productsEl.innerHTML = "";
-        if (productsTotalEl) productsTotalEl.textContent = "Products found: 0";
-        currentTotal = 0;
-        syncPager();
-        if (countEl) countEl.textContent = "";
-        return;
-      }
-
-      const items = data.items ?? [];
-      const total = data.total ?? 0;
+      const filtered = filterProducts();
+      const total = filtered.length;
+      const items = filtered.slice(currentOffset, currentOffset + PAGE_SIZE);
       currentTotal = total;
       const start = total === 0 ? 0 : currentOffset + 1;
       const end = Math.min(currentOffset + PAGE_SIZE, total);
@@ -445,39 +448,56 @@ export const prerender = false;
 
   async function init() {
     try {
-      const res = await fetch("/api/demo-filters");
+      const res = await fetch("/data/demo-filters.json");
       const data = (await readJsonSafe(res)) as {
-        ok?: boolean;
-        error?: string;
+        generatedAt?: string;
         attributes?: { name: string; slug: string }[];
         rootCategories?: {
           name: string;
           slug: string;
           subcategories: { name: string; slug: string }[];
         }[];
-        productTypes?: { name: string; slug: string }[];
+        products?: {
+          title: string;
+          slug: string;
+          categorySlugs?: string[];
+          attributeSlugs?: string[];
+        }[];
       };
-      console.log("[demo-filters] GET /api/demo-filters response", {
+      console.log("[demo-filters] GET /data/demo-filters.json response", {
         status: res.status,
         ok: res.ok,
         body: data,
       });
 
-      if (!data.ok || !rootEl || !subEl || !attrsEl) {
-        console.error("[demo-filters] GET /api/demo-filters failed", {
+      if (!rootEl || !subEl || !attrsEl) {
+        console.error("[demo-filters] Static data load failed", {
           response: data,
           rootElExists: Boolean(rootEl),
           subElExists: Boolean(subEl),
           attrsElExists: Boolean(attrsEl),
         });
-        setError(data.error ?? "Failed to load attributes");
+        setError("Failed to load static filter data");
         await fetchProducts();
         return;
       }
 
       const attrs = data.attributes ?? [];
       const roots = data.rootCategories ?? [];
+      allProducts = (data.products ?? []).map((item) => ({
+        title: item.title,
+        slug: item.slug,
+        categorySlugs: item.categorySlugs ?? [],
+        attributeSlugs: item.attributeSlugs ?? [],
+      }));
       rootMap = new Map(roots.map((r) => [r.slug, r.subcategories ?? []]));
+      rootChildrenMap.clear();
+      roots.forEach((root) => {
+        rootChildrenMap.set(
+          root.slug,
+          (root.subcategories ?? []).map((sub) => sub.slug),
+        );
+      });
       applyStateFromUrl();
 
       renderGroup(rootEl, "root", roots);
@@ -493,9 +513,8 @@ export const prerender = false;
         const group = input?.dataset.group;
         if (!input || !slug || !group) return;
         if (group === "root") {
-          selectedRoot.clear();
-          selectedSub.clear();
           if (input.checked) selectedRoot.add(slug);
+          else selectedRoot.delete(slug);
           renderSubcategories();
         } else if (group === "sub") {
           if (input.checked) selectedSub.add(slug);

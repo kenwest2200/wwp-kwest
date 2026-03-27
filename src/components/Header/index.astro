@@ -22,6 +22,7 @@ function menuNodesFromHeaderData(data: HeaderLayoutData | null | undefined) {
 const { data } = Astro.props;
 const items = menuNodesFromHeaderData(data);
 
+/*
 const mockMenu = {
   home: {
     label: "Home",
@@ -180,8 +181,57 @@ const mockMenu = {
     ],
   },
 };
+*/
 
 type MenuLink = { label: string; href: string };
+type FlatMenuNode = {
+  id: string;
+  label: string;
+  url: string;
+  path: string;
+  parentId: string | null;
+};
+type HeaderMenuNode = {
+  id: string;
+  label: string;
+  href: string;
+  children: HeaderMenuNode[];
+};
+
+function normalizeHref(node: FlatMenuNode) {
+  if (node.path && node.path.startsWith("/")) return node.path;
+  if (node.url && node.url.startsWith("/")) return node.url;
+  return "#";
+}
+
+function buildHeaderMenuTree(flatNodes: FlatMenuNode[]): HeaderMenuNode[] {
+  const byId = new Map<string, HeaderMenuNode>();
+  const roots: HeaderMenuNode[] = [];
+
+  flatNodes.forEach((node) => {
+    if (!node.id || !node.label) return;
+    byId.set(node.id, {
+      id: node.id,
+      label: node.label,
+      href: normalizeHref(node),
+      children: [],
+    });
+  });
+
+  flatNodes.forEach((node) => {
+    const current = byId.get(node.id);
+    if (!current) return;
+    if (node.parentId && byId.has(node.parentId)) {
+      byId.get(node.parentId)?.children.push(current);
+    } else {
+      roots.push(current);
+    }
+  });
+
+  return roots;
+}
+
+const realMenu = buildHeaderMenuTree(items as FlatMenuNode[]);
 
 /** Раскладка плоского подменю в несколько колонок (как в макете Resources). */
 function splitMenuIntoColumns(
@@ -308,20 +358,21 @@ const topMenuItems = {
         <span class="visually-hidden">Open menu</span>
         <IconBurger />
       </button>
-      <HeaderLogo class="header__logo-icon" />
+      <a href="/" class="header__logo-link">
+        <HeaderLogo class="header__logo-icon" />
+      </a>
     </div>
     <nav class="header__nav" aria-label="Main">
       <ul class="header__menu">
         {
-          Object.entries(mockMenu).map(([_, item]) => {
-            const submenu = "submenu" in item ? item.submenu : undefined;
-            const hasSubmenu =
-              submenu != null &&
-              (Array.isArray(submenu)
-                ? submenu.length > 0
-                : Object.keys(submenu).length > 0);
-            const submenuIsGrid = submenu != null && !Array.isArray(submenu);
-
+          /*
+            Mock-based menu rendering is intentionally disabled.
+            Object.entries(mockMenu).map(...)
+          */
+        }
+        {
+          realMenu.map((item) => {
+            const hasSubmenu = item.children.length > 0;
             return (
               <li
                 class:list={[
@@ -333,42 +384,17 @@ const topMenuItems = {
                   {item.label}
                   {hasSubmenu && <IconArrowDown class="header__link-icon" />}
                 </a>
-                {hasSubmenu && submenu && (
+                {hasSubmenu && (
                   <div class="header__submenu">
-                    {submenuIsGrid ? (
-                      <div class="header__submenu-grid">
-                        {Object.values(submenu).map((column) => (
-                          <ul class="header__submenu-list">
-                            {(column as MenuLink[]).map((link) => (
-                              <li class="header__submenu-item">
-                                <a
-                                  class="header__submenu-link"
-                                  href={link.href}
-                                >
-                                  {link.label}
-                                </a>
-                              </li>
-                            ))}
-                            <li class="header__submenu-item header__submenu-item--find-more">
-                              <a class="header__submenu-link" href="#">
-                                Find more
-                                <IconArrowRight />
-                              </a>
-                            </li>
-                          </ul>
-                        ))}
-                      </div>
-                    ) : (
-                      <ul class="header__submenu-list">
-                        {(submenu as MenuLink[]).map((link) => (
-                          <li class="header__submenu-item">
-                            <a class="header__submenu-link" href={link.href}>
-                              {link.label}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
+                    <ul class="header__submenu-list">
+                      {item.children.map((link) => (
+                        <li class="header__submenu-item">
+                          <a class="header__submenu-link" href={link.href}>
+                            {link.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 )}
               </li>
@@ -427,77 +453,36 @@ const topMenuItems = {
 
         <div class="header__mobile-mega-narrow">
           {
-            Object.entries(mockMenu).map(([navKey, item]) => {
-              if (navKey === "home") return null;
-              if (!("submenu" in item)) return null;
-              const submenu = item.submenu;
-              const hasSubmenu =
-                submenu != null &&
-                (Array.isArray(submenu)
-                  ? submenu.length > 0
-                  : Object.keys(submenu).length > 0);
-              if (!hasSubmenu) return null;
-
-              const submenuIsGrid = !Array.isArray(submenu);
-
+            /*
+              Mock-based mega-narrow rendering is intentionally disabled.
+              Object.entries(mockMenu).map(...)
+            */
+          }
+          {
+            realMenu.map((item) => {
+              if (item.children.length === 0) return null;
               return (
                 <section class="header__mega-narrow-section">
                   <h2 class="header__mega-narrow-cat">
                     {item.label.toUpperCase()}
                   </h2>
                   <div class="header__mega-narrow-body">
-                    {submenuIsGrid ? (
-                      <div class="header__mega-narrow-grid">
-                        {Object.values(submenu).map((column) => (
-                          <div class="header__mega-narrow-col">
-                            <p class="header__mega-narrow-col-title">
-                              {(column[0]?.label ?? "").toUpperCase()}
-                            </p>
-                            <ul
-                              class="header__mega-narrow-col-list"
-                              role="list"
-                            >
-                              {(column as MenuLink[]).slice(1).map((link) => (
-                                <li>
-                                  <a
-                                    class="header__mega-narrow-link"
-                                    href={link.href}
-                                  >
-                                    {link.label}
-                                  </a>
-                                </li>
-                              ))}
-                            </ul>
-                            <a class="header__mega-narrow-more" href="#">
-                              Find more
-                              <IconArrowRight />
-                            </a>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div class="header__mega-narrow-flat">
-                        {splitMenuIntoColumns(submenu as MenuLink[], 3).map(
-                          (col) => (
-                            <ul
-                              class="header__mega-narrow-flat-col"
-                              role="list"
-                            >
-                              {col.map((link) => (
-                                <li>
-                                  <a
-                                    class="header__mega-narrow-link header__mega-narrow-link--flat"
-                                    href={link.href}
-                                  >
-                                    {link.label}
-                                  </a>
-                                </li>
-                              ))}
-                            </ul>
-                          ),
-                        )}
-                      </div>
-                    )}
+                    <div class="header__mega-narrow-flat">
+                      {splitMenuIntoColumns(item.children, 3).map((col) => (
+                        <ul class="header__mega-narrow-flat-col" role="list">
+                          {col.map((link) => (
+                            <li>
+                              <a
+                                class="header__mega-narrow-link header__mega-narrow-link--flat"
+                                href={link.href}
+                              >
+                                {link.label}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      ))}
+                    </div>
                   </div>
                 </section>
               );
@@ -509,14 +494,15 @@ const topMenuItems = {
           <div class="header__mobile-root" data-mobile-root>
             <ul class="header__mobile-list" role="list">
               {
-                Object.entries(mockMenu).map(([navKey, item]) => {
-                  const submenu = "submenu" in item ? item.submenu : undefined;
-                  const hasSubmenu =
-                    submenu != null &&
-                    (Array.isArray(submenu)
-                      ? submenu.length > 0
-                      : Object.keys(submenu).length > 0);
-
+                /*
+                  Mock-based mobile root rendering is intentionally disabled.
+                  Object.entries(mockMenu).map(...)
+                */
+              }
+              {
+                realMenu.map((item) => {
+                  const hasSubmenu = item.children.length > 0;
+                  const navKey = item.id;
                   return (
                     <li class="header__mobile-list-item">
                       {hasSubmenu ? (
@@ -563,64 +549,30 @@ const topMenuItems = {
             </div>
             <div class="header__mobile-sub-panels">
               {
-                Object.entries(mockMenu).map(([navKey, item]) => {
-                  if (!("submenu" in item)) return null;
-                  const submenu = item.submenu;
-                  const hasSubmenu =
-                    submenu != null &&
-                    (Array.isArray(submenu)
-                      ? submenu.length > 0
-                      : Object.keys(submenu).length > 0);
-                  if (!hasSubmenu) return null;
-
-                  const submenuIsGrid = !Array.isArray(submenu);
-
+                /*
+                  Mock-based mobile sub-panel rendering is intentionally disabled.
+                  Object.entries(mockMenu).map(...)
+                */
+              }
+              {
+                realMenu.map((item) => {
+                  if (item.children.length === 0) return null;
+                  const navKey = item.id;
                   return (
                     <div
                       class="header__mobile-sub-panel"
                       data-mobile-sub-panel={navKey}
                       hidden
                     >
-                      {submenuIsGrid ? (
-                        <div class="header__mobile-cols">
-                          {Object.values(submenu).map((column) => (
-                            <div class="header__mobile-col">
-                              <p class="header__mobile-col-title">
-                                {(column[0]?.label ?? "").toUpperCase()}
-                              </p>
-                              <ul class="header__mobile-col-list" role="list">
-                                {(column as MenuLink[]).slice(1).map((link) => (
-                                  <li>
-                                    <a
-                                      class="header__mobile-col-link"
-                                      href={link.href}
-                                    >
-                                      {link.label}
-                                    </a>
-                                  </li>
-                                ))}
-                              </ul>
-                              <a class="header__mobile-find-more" href="#">
-                                Find more
-                                <IconArrowRight />
-                              </a>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <ul class="header__mobile-flat" role="list">
-                          {(submenu as MenuLink[]).map((link) => (
-                            <li>
-                              <a
-                                class="header__mobile-flat-link"
-                                href={link.href}
-                              >
-                                {link.label}
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
+                      <ul class="header__mobile-flat" role="list">
+                        {item.children.map((link) => (
+                          <li>
+                            <a class="header__mobile-flat-link" href={link.href}>
+                              {link.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   );
                 })

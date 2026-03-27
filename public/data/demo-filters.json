@@ -1,0 +1,2165 @@
+{
+  "generatedAt": "2026-03-27T09:07:54.157Z",
+  "attributes": [
+    {
+      "name": "color:red",
+      "slug": "color-red"
+    },
+    {
+      "name": "filter1:value1",
+      "slug": "filter1-value1"
+    },
+    {
+      "name": "filter2:value2",
+      "slug": "filter2-value2"
+    },
+    {
+      "name": "size:5",
+      "slug": "size-5"
+    }
+  ],
+  "rootCategories": [
+    {
+      "name": "Pool",
+      "slug": "pool",
+      "subcategories": [
+        {
+          "name": "Air Systems",
+          "slug": "air-systems"
+        },
+        {
+          "name": "CSA",
+          "slug": "csa"
+        },
+        {
+          "name": "Drains & Suctions",
+          "slug": "drains-suctions"
+        },
+        {
+          "name": "Fittings",
+          "slug": "fittings"
+        },
+        {
+          "name": "Gunite Jets",
+          "slug": "gunite-jets"
+        },
+        {
+          "name": "Hose & Tubing",
+          "slug": "hose-tubing-pool"
+        },
+        {
+          "name": "Pool - Ells, Tees, & Wyes",
+          "slug": "pool-ells-tees-wyes"
+        },
+        {
+          "name": "Pool - Unions",
+          "slug": "pool-unions"
+        },
+        {
+          "name": "Pool Chlorinators & Accessories",
+          "slug": "pool-chlorinators-accessories"
+        },
+        {
+          "name": "Pool Control System",
+          "slug": "pool-control-system"
+        },
+        {
+          "name": "Pool Filters - Above Ground",
+          "slug": "pool-filters-above-ground"
+        },
+        {
+          "name": "Pool Filters - In-Ground",
+          "slug": "pool-filters-in-ground"
+        },
+        {
+          "name": "Pool Filters - In-Ground & Above Ground",
+          "slug": "pool-filters-in-ground-above-ground"
+        },
+        {
+          "name": "Pool Miscellaneous & Accessories",
+          "slug": "pool-miscellaneous-accessories"
+        },
+        {
+          "name": "Pool Pumps - Above Ground",
+          "slug": "pool-pumps-above-ground"
+        },
+        {
+          "name": "Pool Pumps - In-Ground",
+          "slug": "pool-pumps-in-ground"
+        },
+        {
+          "name": "Pool Skimmers & Skim Filters",
+          "slug": "pool-skimmers-skim-filters"
+        },
+        {
+          "name": "Pool Valves",
+          "slug": "pool-valves"
+        },
+        {
+          "name": "International",
+          "slug": "international"
+        }
+      ]
+    },
+    {
+      "name": "Spa",
+      "slug": "spa",
+      "subcategories": [
+        {
+          "name": "Air Controls",
+          "slug": "air-controls"
+        },
+        {
+          "name": "Air Systems",
+          "slug": "air-systems-spa"
+        },
+        {
+          "name": "Hose and Tubing",
+          "slug": "hose-and-tubing"
+        },
+        {
+          "name": "Lighting",
+          "slug": "lighting"
+        },
+        {
+          "name": "Slice / Check Valves",
+          "slug": "slice-check-valves"
+        },
+        {
+          "name": "Spa - Ells, Tees, & Wyes",
+          "slug": "spa-ells-tees-wyes"
+        },
+        {
+          "name": "Spa - Unions",
+          "slug": "spa-unions"
+        },
+        {
+          "name": "Spa Control System",
+          "slug": "spa-control-system"
+        },
+        {
+          "name": "Spa Drains & Suctions",
+          "slug": "spa-drains-suctions"
+        },
+        {
+          "name": "Spa Jets",
+          "slug": "spa-jets"
+        },
+        {
+          "name": "Spa Manifolds",
+          "slug": "spa-manifolds"
+        },
+        {
+          "name": "Spa Miscellaneous & Accessories",
+          "slug": "spa-miscellaneous-accessories"
+        },
+        {
+          "name": "Spa Pumps",
+          "slug": "spa-pumps-spa"
+        },
+        {
+          "name": "Spa Skimmers and Filters",
+          "slug": "spa-skimmers-and-filters"
+        },
+        {
+          "name": "Speakers",
+          "slug": "speakers"
+        },
+        {
+          "name": "Top Side Valves",
+          "slug": "top-side-valves"
+        },
+        {
+          "name": "Water Features",
+          "slug": "water-features"
+        },
+        {
+          "name": "Wet Ends / Bases",
+          "slug": "wet-ends-bases"
+        }
+      ]
+    },
+    {
+      "name": "More Info",
+      "slug": "general-info",
+      "subcategories": []
+    },
+    {
+      "name": "Tech. Info",
+      "slug": "tech-info",
+      "subcategories": []
+    },
+    {
+      "name": "Repl. Parts",
+      "slug": "repl-parts",
+      "subcategories": []
+    },
+    {
+      "name": "Warranty",
+      "slug": "warranty",
+      "subcategories": []
+    }
+  ],
+  "products": [
+    {
+      "title": "Old Faithful Jets – Gunite & Vinyl Liner",
+      "slug": "old-faithful-jets-gunite-vinyl-liner-2",
+      "categorySlugs": [
+        "gunite-jets"
+      ],
+      "attributeSlugs": [
+        "color-red",
+        "size-5"
+      ]
+    },
+    {
+      "title": "ClearWater II – D.E. Filter System",
+      "slug": "clearwater-ii-d-e-filter-system",
+      "categorySlugs": [
+        "pool-filters-above-ground"
+      ],
+      "attributeSlugs": [
+        "color-red",
+        "filter1-value1"
+      ]
+    },
+    {
+      "title": "Carefree Top-Mount – Sand Filter",
+      "slug": "carefree-top-mount-sand-filter-inground",
+      "categorySlugs": [
+        "pool-filters-in-ground"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Pulsar Foot Massage Jets & Power Pulsar Foot & Back Message Jets",
+      "slug": "pulsar-foot-massage-jets",
+      "categorySlugs": [
+        "spa-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "AquaShapes  3, 2, 1 Jet Systems",
+      "slug": "aquashapes-storm-jet-systems",
+      "categorySlugs": [
+        "gunite-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Waterway Warranty",
+      "slug": "waterway-warranty",
+      "categorySlugs": [
+        "warranty"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "TruSeal Air Controls, Top Access Controls & Accessories",
+      "slug": "truseal-air-controls-top-access-controls-accessories",
+      "categorySlugs": [
+        "air-controls"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "VGB Suctions & Strip Drains Replacement Parts",
+      "slug": "vgb-suctions-strip-drains-replacement-parts",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "VGB Grates & Frames Replacement Parts",
+      "slug": "vgb-grates-frames",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "VGB Drains Replacement Parts",
+      "slug": "vgb-drains-replacement-parts",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "TWM Skim Filter Replacement Parts",
+      "slug": "twm-skim-filter-replacement-parts",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Ultra Skim Filter & Ultra Skim XL Filter Replacement Parts",
+      "slug": "ultra-skim-filter-ultra-skim-xl-filter-replacement-parts",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Deluxe Strip Skimmer and Skim Filter Replacement Parts",
+      "slug": "deluxe-strip-skimmer-and-skim-filter-replacement-parts",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Teleweir Replacement Parts",
+      "slug": "teleweir-replacement-parts",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Spa Skimmer and Skim Filter Replacement Parts",
+      "slug": "spa-skimmer-and-skim-filter",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Renegade Gunite and Venturi / Deep Basket Skimmers Replacement Parts",
+      "slug": "renegade-gunite-and-venturi-deep-basket-skimmers",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Renegade Fiberglass Skimmer Replacement Parts",
+      "slug": "renegade-fiberglass-skimmer",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Flo-Pro II Above Ground Skimmer Replacement Parts",
+      "slug": "flo-pro-ii-above-ground-skimmer-2",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Off-Line and Above Ground Chlorinators Replacement Parts",
+      "slug": "off-line-and-above-ground-chlorinators",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Main Drains Replacement Parts",
+      "slug": "main-drains",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "In-Line Chlorinators Replacement Parts",
+      "slug": "in-line-chlorinators",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Flo-Pro Skim Filter Replacement Parts",
+      "slug": "flo-pro-skim-filter",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "50 sq. ft. Skim Filter Replacement Parts",
+      "slug": "50-sq-ft-skim-filter-2",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Dyna-Flo XL Skim Filter Replacement Parts",
+      "slug": "dyna-flo-xl-skim-filter",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Dyna-Flo Top Mount Skim Filter Replacement Parts",
+      "slug": "dyna-flo-top-mount-skim-filter",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "100 sq. ft. Skim Filter Replacement Parts",
+      "slug": "100-sq-ft-skim-filter",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "1 1/2″ and 2″ Top-Load Filter Replacement Parts",
+      "slug": "1-1-2-and-2-top-load-filter",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "1 1/2″ In-Line Filter Replacement Parts",
+      "slug": "1-1-2-in-line-filter",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Renegade Vinyl Liner Skimmer Replacement Parts",
+      "slug": "renegade-vinyl-liner-skimmer",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "TWM Sand Filter Replacement Parts",
+      "slug": "twm-sand-filter-replacement-parts",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "UltraClean Pro Sand Filter Replacement Parts (Discontinued 2015)",
+      "slug": "ultraclean-pro-sand-filter-replacement-parts-discontinued-2015",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "TWM Cartridge Filter Package Replacement Parts",
+      "slug": "twm-cartridge-filter-package-replacement-parts",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "TruSeal Valves Replacement Parts",
+      "slug": "truseal-valves-replacement-parts",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Viper Wet End Replacement Parts",
+      "slug": "viper-wet-end-replacement-parts",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Supreme Pump Replacement Parts",
+      "slug": "supreme-pump-replacement-parts",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Power Defender 140ABG Pump Replacement Parts",
+      "slug": "power-defender-140abg-pump-replacement-parts",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Spa Flo and Iron Might Wet End Replacement Parts",
+      "slug": "spa-flo-and-iron-might-wet-end",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Spa Flo II Wet End Replacement Parts",
+      "slug": "spa-flo-ii-wet-end",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "SmartClean Sand Filter – Top Mount Replacement Parts (Discontinued 2015)",
+      "slug": "smartclean-sand-filter-top-mount-discontinued-2015",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Slide Valve Internals Replacement Parts",
+      "slug": "slide-valve-internals",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "SVL56 High-Flow Pump Replacement Parts",
+      "slug": "svl56-high-flow-pump",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "SMF International Pump Replacement Parts",
+      "slug": "smf-pump",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "ProClean Plus Cartridge Filter Replacement Parts",
+      "slug": "proclean-plus-cartridge-filter",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Hi-Flo & Hi-Flo II Side Discharge Pump Replacement Parts",
+      "slug": "hi-flo-hi-flo-ii-side-discharge-pump-2",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Multi-Port Valves – Side Mount and Top Mount Replacement Parts",
+      "slug": "multi-port-valves-side-mount-and-top-mount",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Hi-Flo Side Discharge Wet End Replacement Parts",
+      "slug": "hi-flo-side-discharge-wet-end",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Hi-Flo II Side Discharge Wet End Replacement Parts",
+      "slug": "hi-flo-ii-side-discharge-wet-end",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "CSA Hi-Flo II Side Discharge Pump Replacement Parts",
+      "slug": "csa-hi-flo-ii-side-discharge-pump-2",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Executive Wet End Replacement Parts",
+      "slug": "executive-wet-end",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "EX2 Wet End Replacement Parts",
+      "slug": "ex2-wet-end",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "E-Series Center Discharge Pump Replacement Parts",
+      "slug": "e-series-center-discharge-pump",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Crystal Water D.E. Filter Replacement Parts",
+      "slug": "crystal-water-d-e-filter",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Crystal Water Cartridge Filter Replacement Parts",
+      "slug": "crystal-water-cartridge-filter",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "ClearWater II Cartridge Filter Replacement Parts",
+      "slug": "clearwater-ii-cartridge-filter",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Champion 56-Frame Pump Replacement Parts (Discontinued 2021)",
+      "slug": "champion-56-frame-pump",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Center Discharge Wet End (2010 and Earlier) Replacement Parts",
+      "slug": "center-discharge-wet-end-2010-and-earlier",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Center Discharge Pump (2010 and Earlier) Replacement Parts",
+      "slug": "center-discharge-pump-2010-and-earlier",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Carefree Sand Filter Replacement Parts",
+      "slug": "carefree-sand-filter",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "CSA Supreme Pump Replacement Parts",
+      "slug": "csa-supreme-pump",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Reversible Skimmer Lid",
+      "slug": "reversible-skimmer-lid",
+      "categorySlugs": [
+        "pool-skimmers-skim-filters"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Power Defender SVL Pump Replacement Parts",
+      "slug": "power-defender-svl-pump-replacement-parts",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Spa Steps",
+      "slug": "spa-steps",
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Thermowells",
+      "slug": "thermowells",
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Spa Accessories",
+      "slug": "spa-accessories",
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "ShurGrip Manifolds",
+      "slug": "shurgrip-manifolds",
+      "categorySlugs": [
+        "spa-manifolds"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Reducers, Nipples, and Plugs",
+      "slug": "reducers-nipples-and-plugs",
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Power Defender Pumps Replacement Parts",
+      "slug": "power-defender-2-7hp-variable-speed-pump",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Power Defender Booster Pump Replacement Parts",
+      "slug": "power-defender-1-65hp-variable-speed-pump",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Hole Saw Sizes",
+      "slug": "hole-saw-sizes",
+      "categorySlugs": [
+        "tech-info"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Blower Sizing",
+      "slug": "blower-sizing-2",
+      "categorySlugs": [
+        "tech-info"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Spa Light Accessories",
+      "slug": "5-jumbo-spa-lights-and-spa-light-accessories-2",
+      "categorySlugs": [
+        "lighting"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Color Guide",
+      "slug": "color-guide",
+      "categorySlugs": [
+        "tech-info"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "3/4″, 1″, 1 1/2″ Barb Adapters",
+      "slug": "3-4-1-1-1-2-barb-adapters",
+      "categorySlugs": [
+        "spa-manifolds"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "3/4″ Ribbed Barb Manifolds",
+      "slug": "3-4-ribbed-barb-manifolds",
+      "categorySlugs": [
+        "spa-manifolds"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Carefree Top-Mount – Sand Standard System",
+      "slug": "carefree-top-mount-sand-standard-system",
+      "categorySlugs": [
+        "pool-filters-above-ground"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "3/4″ Barb Adapters",
+      "slug": "3-4-barb-adapters",
+      "categorySlugs": [
+        "spa-manifolds"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "3/8″ Barb Manifolds & Pancake Manifolds",
+      "slug": "3-8-barb-manifolds-pancake-manifolds",
+      "categorySlugs": [
+        "spa-manifolds"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "3/8″ Barb Manifolds",
+      "slug": "3-8-barb-manifolds",
+      "categorySlugs": [
+        "spa-manifolds"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "3/8″ Barb Adapters",
+      "slug": "3-8-barb-adapters",
+      "categorySlugs": [
+        "spa-manifolds"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Wyes & Manifold Wyes",
+      "slug": "wyes-manifold-wyes",
+      "categorySlugs": [
+        "spa-ells-tees-wyes"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Spa Sweep Ells & U Bends",
+      "slug": "spa-sweep-ells-u-bends",
+      "categorySlugs": [
+        "spa-ells-tees-wyes"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Spa Pump Union Assembies",
+      "slug": "spa-pump-union-assembies",
+      "categorySlugs": [
+        "spa-unions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Slice Valves & Check Valves",
+      "slug": "slice-valves-gate-valves",
+      "categorySlugs": [
+        "slice-check-valves"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Tees & Tee Assemblies",
+      "slug": "sanitary-tee-cross-tee-and-tee-assemblies",
+      "categorySlugs": [
+        "spa-ells-tees-wyes"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Heater Union Components",
+      "slug": "heater-union-components",
+      "categorySlugs": [
+        "spa-unions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "45° and 90° Spa Ells",
+      "slug": "45-and-90-ells-2",
+      "categorySlugs": [
+        "spa-ells-tees-wyes"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Spa 2″ & 2 1/2″ Union Components",
+      "slug": "2-2-1-2-union-components",
+      "categorySlugs": [
+        "spa-unions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "1″ Manifolds and 2-4-6 Air Manifold Systems",
+      "slug": "1-manifolds-and-2-4-6-air-manifold-systems",
+      "categorySlugs": [
+        "spa-manifolds"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Spa 1 1/2″ Union Components",
+      "slug": "1-1-2-union-components",
+      "categorySlugs": [
+        "spa-unions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "3/4″ Manifolds",
+      "slug": "3-4-manifolds",
+      "categorySlugs": [
+        "spa-manifolds"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "1/2″ Manifolds",
+      "slug": "1-2-manifolds",
+      "categorySlugs": [
+        "spa-manifolds"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Spa Wet Ends & Bases",
+      "slug": "spa-wet-ends",
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Tiny Might Pump",
+      "slug": "tiny-might-pump",
+      "categorySlugs": [
+        "spa-pumps-spa"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Hi-Flo II Side Discharge – 48-Frame Spa Pump",
+      "slug": "hi-flo-ii-side-discharge-48-frame-spa-pump",
+      "categorySlugs": [
+        "spa-pumps-spa"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "EX2 Pump",
+      "slug": "ex2-pump",
+      "categorySlugs": [
+        "spa-pumps-spa"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Viper Pump",
+      "slug": "viper",
+      "categorySlugs": [
+        "spa-pumps-spa"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Standard Return Fittings, SGMS Return Fittings & Weirs",
+      "slug": "standard-return-fittings-sgms-return-fittings-weirs",
+      "categorySlugs": [],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Top-Load Filters",
+      "slug": "top-load-filters",
+      "categorySlugs": [
+        "spa-skimmers-and-filters"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Spa Flo II – 48-Frame Pump",
+      "slug": "spa-flo-ii-48-frame-2",
+      "categorySlugs": [
+        "spa-pumps-spa"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Service Logic Replacement Filters & Soak Tanks",
+      "slug": "skimmer-and-skim-filter-options",
+      "categorySlugs": [
+        "spa-skimmers-and-filters"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Power Defender EX2 2 Speed",
+      "slug": "power-defender-ex2-2-speed",
+      "categorySlugs": [
+        "spa-pumps-spa"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Iron Might Pump",
+      "slug": "iron-might",
+      "categorySlugs": [
+        "spa-pumps-spa"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Filter Fittings",
+      "slug": "filter-accessories",
+      "categorySlugs": [
+        "spa-skimmers-and-filters"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Executive – 56-Frame Pump",
+      "slug": "executive-56-frame",
+      "categorySlugs": [
+        "spa-pumps-spa"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Executive – 48-Frame Pump",
+      "slug": "executive-48-frame",
+      "categorySlugs": [
+        "spa-pumps-spa"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Executive & Viper Euro Pump – 50 Hz",
+      "slug": "executive-viper-euro-50-hz",
+      "categorySlugs": [
+        "spa-pumps-spa"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "E-Series Center Discharge – 48-Frame Pump",
+      "slug": "e-series-center-discharge-48-frame",
+      "categorySlugs": [
+        "spa-pumps-spa"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Dyna-Flo XL Skim Filters and Ultra Skim Filter",
+      "slug": "dyna-flo-xl-skim-filters-and-ultra-skim-filter",
+      "categorySlugs": [
+        "spa-skimmers-and-filters"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Load Washer Rip Current Swim Jet & River Jet",
+      "slug": "rip-current-swim-jet",
+      "categorySlugs": [
+        "spa-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Self-Aligning Union Assemblies",
+      "slug": "pump-union-assemblies",
+      "categorySlugs": [
+        "pool-unions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Teleweir Skim Filters",
+      "slug": "teleweir-skim-filters",
+      "categorySlugs": [
+        "spa-skimmers-and-filters"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Strip Skimmer & Deluxe Strip Skimmer",
+      "slug": "strip-skimmer-deluxe-strip-skimmer",
+      "categorySlugs": [
+        "spa-skimmers-and-filters"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "LED Cabinet Light",
+      "slug": "led-cabinet-light",
+      "categorySlugs": [
+        "lighting"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "SGMS Spa Lights",
+      "slug": "sgms-spa-lights",
+      "categorySlugs": [
+        "lighting"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "LED Water Features",
+      "slug": "led-water-features-2",
+      "categorySlugs": [
+        "water-features"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "LED Cup Holders",
+      "slug": "sgms-led-cup-holder",
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "SGMS Pin Lights",
+      "slug": "sgms-pin-lights",
+      "categorySlugs": [
+        "lighting"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Sculptured Ice Feature & Cup Holder Water Feature",
+      "slug": "pop-ups-cup-holder-water-feature",
+      "categorySlugs": [
+        "water-features"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Dyna-Flo Top-Mount Skim Filters",
+      "slug": "dyna-flo-top-mount-skim-filters-2",
+      "categorySlugs": [
+        "spa-skimmers-and-filters"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Threaded LED Spa Lighting",
+      "slug": "led-lighting",
+      "categorySlugs": [
+        "lighting"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "LED Hourglass Sconce Light & SGMS Button Sconce Light",
+      "slug": "led-hourglass-sconce-light-sgms-button-sconce-light",
+      "categorySlugs": [
+        "lighting"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Aqua Falls",
+      "slug": "aqua-falls-2",
+      "categorySlugs": [
+        "water-features"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "100 sq. ft. Roadster Skim Filter",
+      "slug": "100-sq-ft-roadster-skim-filter",
+      "categorySlugs": [
+        "spa-skimmers-and-filters"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Water Feature Pop-Ups",
+      "slug": "pop-ups",
+      "categorySlugs": [
+        "water-features"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "SGMS LED Water Feature",
+      "slug": "sgms-led-water-feature",
+      "categorySlugs": [
+        "water-features"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "3.5″ & 7″ Waterfalls",
+      "slug": "3-7-waterfalls",
+      "categorySlugs": [
+        "water-features"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "24″ Spillway Waterfall",
+      "slug": "24-spillway-waterfall",
+      "categorySlugs": [
+        "water-features"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Water Restrictors, Valve Gaskets & Air Bleed",
+      "slug": "water-restrictors-valve-gaskets-air-bleed",
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "5″ Designer Pro Series Suctions & 5″ Super Hi-Flo Suctions",
+      "slug": "designer-pro-series-suctions-super-hi-flo-suctions",
+      "categorySlugs": [
+        "spa-drains-suctions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "3.5″ Hi-Flo Suctions & 3.5″ Ultra Hi-Flo Suctions",
+      "slug": "hi-flo-suctions-ultra-hi-flo-suctions",
+      "categorySlugs": [
+        "spa-drains-suctions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "SGMS Top Side Controls",
+      "slug": "sgms-top-side-controls",
+      "categorySlugs": [
+        "top-side-valves"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Orion / Luxe / Eclipse Valves",
+      "slug": "orion-luxe-eclipse-valves",
+      "categorySlugs": [
+        "top-side-valves"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Spillover Waterfall",
+      "slug": "led-water-features",
+      "categorySlugs": [
+        "water-features"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Majestic / Pin Wheel / 5-Scallop Valves",
+      "slug": "5-scallop-valves-2",
+      "categorySlugs": [
+        "top-side-valves"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "5″ Ultra Flo Suctions for Portable Spas",
+      "slug": "5-ultra-flo-suctions-for-portable-spas-2",
+      "categorySlugs": [
+        "spa-drains-suctions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "“S” Handle Valves",
+      "slug": "s-style-valves",
+      "categorySlugs": [
+        "top-side-valves"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Stealth II Spa Blowers & Ozone Injector",
+      "slug": "stealth-ii-spa-blowers-ozone-injector",
+      "categorySlugs": [
+        "air-systems-spa"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "SGMS Floor Sweep",
+      "slug": "sgms-floor-sweep",
+      "categorySlugs": [
+        "air-systems-spa"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Turbo Jets",
+      "slug": "turbo-jets",
+      "categorySlugs": [
+        "spa-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Power Stream Swim Jet",
+      "slug": "power-stream-swim-jet",
+      "categorySlugs": [
+        "spa-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Swim Jets – Old Faithful Jets",
+      "slug": "old-faithful-jets-gunite-vinyl-liner",
+      "categorySlugs": [
+        "gunite-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Lo-Pro Suctions and Floor Drains",
+      "slug": "lo-pro-suctions-and-floor-drains",
+      "categorySlugs": [
+        "spa-drains-suctions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Air Injectors",
+      "slug": "air-injectors-2",
+      "categorySlugs": [
+        "air-systems-spa"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Air Max Jets",
+      "slug": "air-max-jets",
+      "categorySlugs": [
+        "spa-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Omni Storm Jets",
+      "slug": "omni-storm-jets",
+      "categorySlugs": [
+        "spa-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "SGMS Storm Jet Body Assemblies",
+      "slug": "sgms-storm-jets",
+      "categorySlugs": [
+        "spa-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Whirlpool Jets",
+      "slug": "whirlpool-jets",
+      "categorySlugs": [
+        "spa-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Storm Jet Accessories",
+      "slug": "storm-jet-accessories",
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Storm Jet Body Assemblies",
+      "slug": "storm-jet-body-assemblies",
+      "categorySlugs": [
+        "spa-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Poly Jets",
+      "slug": "poly-jets",
+      "categorySlugs": [
+        "spa-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Ozone Cluster & Universal Cluster Jet Body",
+      "slug": "ozone-cluster-universal-cluster-jet-body",
+      "categorySlugs": [
+        "spa-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Master Massage Jets",
+      "slug": "master-massage-jets",
+      "categorySlugs": [
+        "spa-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Front Access Skim Filters",
+      "slug": "front-access-skim-filters",
+      "categorySlugs": [
+        "spa-skimmers-and-filters"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Cluster Jet Internals",
+      "slug": "cluster-jet-internals",
+      "categorySlugs": [
+        "spa-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Renegade Vinyl Liner and Fiberglass In-Ground Skimmers",
+      "slug": "renegade-vinyl-liner-and-fiberglass-in-ground-skimmers",
+      "categorySlugs": [
+        "pool-skimmers-skim-filters"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Renegade Bonded Skimmers",
+      "slug": "renegade-bonded-skimmers",
+      "categorySlugs": [
+        "pool-skimmers-skim-filters"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "SGMS Ozone Cluster Jets",
+      "slug": "sgms-ozone-cluster-jets",
+      "categorySlugs": [
+        "spa-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Renegade Vinyl Liner Builder’s Packs & 7 Degree Fiberglass Builder’s Packs",
+      "slug": "renegade-vinyl-liner-builders-packs",
+      "categorySlugs": [
+        "pool-skimmers-skim-filters"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Renegade Venturi In-Ground Skimmers",
+      "slug": "renegade-venturi-in-ground-skimmers",
+      "categorySlugs": [
+        "pool-skimmers-skim-filters"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Renegade Gunite In-Ground Skimmers",
+      "slug": "renegade-gunite-in-ground-skimmers",
+      "categorySlugs": [
+        "pool-skimmers-skim-filters"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Pool Accessories",
+      "slug": "pool-accessories",
+      "categorySlugs": [
+        "pool-miscellaneous-accessories"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Flo-Pro II Above Ground Skimmers",
+      "slug": "flo-pro-ii-above-ground-skimmers-2",
+      "categorySlugs": [
+        "pool-skimmers-skim-filters"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Volleyball Pole Holders",
+      "slug": "pole-holders",
+      "categorySlugs": [
+        "pool-miscellaneous-accessories"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "SGMS Micro Components",
+      "slug": "micro-components",
+      "categorySlugs": [
+        "spa-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Shurflex Spa Hose & Tubing",
+      "slug": "hose-tubing-2",
+      "categorySlugs": [
+        "spa"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Commercial Renegade Skimmers",
+      "slug": "commercial-renegade-skimmers",
+      "categorySlugs": [
+        "pool-skimmers-skim-filters"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Vinyl Liner Sump Bodies & Assemblies",
+      "slug": "vinyl-liner-sump-bodies-assemblies",
+      "categorySlugs": [
+        "drains-suctions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Service Logic Filter Valves & Replacement Kits",
+      "slug": "service-logic-top-mount-sand-filter-valves",
+      "categorySlugs": [
+        "pool-valves"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "TruSeal Diverter Valves, Swing Check Valves & 3″ Check Valves",
+      "slug": "truseal-diverter-valves-swing-check-valves-3-check-valves",
+      "categorySlugs": [
+        "pool-valves"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Adjustable Collar Sump Bodies & Assemblies",
+      "slug": "adjustable-collar-sump-bodies-assemblies-2",
+      "categorySlugs": [
+        "drains-suctions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "9″ x 9″ & 12″ x 12″ Grate & Frame",
+      "slug": "9-x-9-12-x-12-grate-frame-2",
+      "categorySlugs": [
+        "drains-suctions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "8″ Anti-Vortex Drains",
+      "slug": "8-anti-vortex-drains-2",
+      "categorySlugs": [
+        "drains-suctions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "8″ & 10″ Covers and Frames",
+      "slug": "8-10-covers-and-frames-2",
+      "categorySlugs": [
+        "drains-suctions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "6″ Ultra Suction & Equalizer",
+      "slug": "6-ultra-suction-equalizer-2",
+      "categorySlugs": [
+        "drains-suctions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Concrete Sump Bodies & Assemblies",
+      "slug": "concrete-sump-bodies-assemblies",
+      "categorySlugs": [
+        "drains-suctions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "32″ Diamond Strip Drains",
+      "slug": "32-diamond-strip-drains",
+      "categorySlugs": [
+        "drains-suctions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "18″ x 18″ & 24″ x 24″ Grate & Frame",
+      "slug": "18-x-18-24-x-24-grate-frame",
+      "categorySlugs": [
+        "drains-suctions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "10″ Ultra Retro Drains",
+      "slug": "10-ultra-retro-drains",
+      "categorySlugs": [
+        "drains-suctions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "AquaShapes Swim Jet System & Deck Jets",
+      "slug": "aquashapes-swim-jet-system-deck-jets",
+      "categorySlugs": [
+        "pool-miscellaneous-accessories"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Legacy Poly Gunite Thread-In Jets & Poly Gunite II Thread-In Jets",
+      "slug": "legacy-poly-gunite-thread-in-jets-poly-gunite-ii-thread-in-jets",
+      "categorySlugs": [
+        "gunite-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Power Storm Thread-In Gunite Jets",
+      "slug": "power-storm-thread-in-gunite-jets",
+      "categorySlugs": [
+        "gunite-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Plugs and Grate Inserts",
+      "slug": "miscellaneous-plugs-and-grate-inserts",
+      "categorySlugs": [
+        "gunite-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Hydro Spa Jets",
+      "slug": "hydro-spa-jets",
+      "categorySlugs": [
+        "gunite-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Gunite Venturi Tees",
+      "slug": "gunite-venturi-tees",
+      "categorySlugs": [
+        "gunite-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Poly Storm Thread-In Gunite Jets",
+      "slug": "poly-storm-thread-in-gunite-jets",
+      "categorySlugs": [
+        "gunite-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Vinyl Liner Fittings & Vinyl Wall Fitting",
+      "slug": "vinyl-liner-fittings-vinyl-wall-fitting",
+      "categorySlugs": [
+        "fittings"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Threaded Eyeball Fittings",
+      "slug": "threaded-eyeball-fittings",
+      "categorySlugs": [
+        "fittings"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Pool Sweep Ells",
+      "slug": "sweep-ells",
+      "categorySlugs": [
+        "pool-ells-tees-wyes"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "ClearWater VS Chlorinator",
+      "slug": "clearwater-vs-chlorinator",
+      "categorySlugs": [
+        "pool-chlorinators-accessories"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Rotating Eyeball Fittings",
+      "slug": "rotating-eyeball-fittings",
+      "categorySlugs": [
+        "fittings"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Return Wall Fittings",
+      "slug": "return-wall-fittings",
+      "categorySlugs": [
+        "fittings"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Return Fittings",
+      "slug": "return-fittings",
+      "categorySlugs": [
+        "fittings"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Mini Storm Thread-In Gunite Jets",
+      "slug": "mini-storm-thread-in-gunite-jets",
+      "categorySlugs": [
+        "gunite-jets"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Insert Inlet Eyeball Fitting & In-Floor Return",
+      "slug": "insert-inlet-eyeball-fitting-in-floor-return",
+      "categorySlugs": [
+        "fittings"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Hose Adapters",
+      "slug": "hose-adapters",
+      "categorySlugs": [
+        "pool-ells-tees-wyes"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Fiberglass Wall Fitting / Aerators / Vac Lock Fitting",
+      "slug": "fiberglass-wall-fitting-aerators-vac-lock-fitting",
+      "categorySlugs": [
+        "fittings"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "45° and 90° Pool Ells",
+      "slug": "45-and-90-ells-3",
+      "categorySlugs": [
+        "pool-ells-tees-wyes"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Couplers & Accessories",
+      "slug": "couplers-accessories",
+      "categorySlugs": [
+        "pool-ells-tees-wyes"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Pool 2″ & 2 1/2″ Union Components",
+      "slug": "2-2-1-2-union-components-2",
+      "categorySlugs": [
+        "pool-unions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "ClearWater Chlorinator",
+      "slug": "chlorinators",
+      "categorySlugs": [
+        "pool-chlorinators-accessories"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Union Assemblies",
+      "slug": "union-assemblies",
+      "categorySlugs": [
+        "pool-unions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Pool Pump Union Assemblies",
+      "slug": "pump-union-assemblies-3",
+      "categorySlugs": [
+        "pool-unions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "OASIS Pool & Spa Control",
+      "slug": "oasis",
+      "categorySlugs": [
+        "pool-control-system"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Pool 1 1/2″ Union Components",
+      "slug": "1-1-2-union-components-2",
+      "categorySlugs": [
+        "pool-unions"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "ProClean Plus Filter",
+      "slug": "proclean-plus-single-cartridge-1-speed-system",
+      "categorySlugs": [
+        "pool-filters-above-ground"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Power Defender 165 Variable Speed Pump",
+      "slug": "power-defender-165-variable-speed",
+      "categorySlugs": [
+        "pool-pumps-in-ground"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "ClearWater II – Cartridge Filter",
+      "slug": "clearwater-ii-cartridge-filter-2",
+      "categorySlugs": [
+        "pool-filters-above-ground"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Accessories and Wet Ends",
+      "slug": "accessories-and-wet-ends-2",
+      "categorySlugs": [
+        "pool-miscellaneous-accessories"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Equipment Bases",
+      "slug": "equipment-bases",
+      "categorySlugs": [
+        "pool-miscellaneous-accessories"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Crystal Water – Cartridge Filter",
+      "slug": "crystal-water-cartridge",
+      "categorySlugs": [
+        "pool-filters-in-ground"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "ClearWater Sand Filter Replacement Parts",
+      "slug": "clearwater-sand-filter",
+      "categorySlugs": [
+        "repl-parts"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "CSA Carefree Sand Systems",
+      "slug": "carefree-sand-csa-systems",
+      "categorySlugs": [
+        "csa"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "CSA Hi-Flo II Side Discharge – 48-Frame – Above Ground Pump",
+      "slug": "csa-hi-flo-ii-side-discharge-48-frame-above-ground-pool-pump",
+      "categorySlugs": [
+        "csa"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Mustang VS 270 Pool Pump",
+      "slug": "mustang-vs-270-pool-pump",
+      "categorySlugs": [
+        "pool-pumps-in-ground",
+        "international"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Mustang VS 140 Pool Pump",
+      "slug": "mustang-vs-140-pool-pump",
+      "categorySlugs": [
+        "pool-pumps-in-ground",
+        "international"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "No-Flo Gate Valves",
+      "slug": "no-flo-gate-valves",
+      "categorySlugs": [
+        "pool-miscellaneous-accessories"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Santanna II Air Blowers",
+      "slug": "santanna-ii-stealth-ii-air-blowers",
+      "categorySlugs": [
+        "air-systems"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Power Defender 270 Variable Speed Pump",
+      "slug": "power-defender-270-variable-speed",
+      "categorySlugs": [
+        "pool-pumps-in-ground"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Hi-Flo II Side Discharge – 48-Frame Pump",
+      "slug": "hi-flo-ii-side-discharge-48-frame-5",
+      "categorySlugs": [
+        "pool-pumps-above-ground"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Crystal Water – D.E. Filter",
+      "slug": "crystal-water-d-e-2",
+      "categorySlugs": [
+        "pool-filters-in-ground"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Carefree Top-Mount – Sand Filter",
+      "slug": "carefree-top-mount-sand",
+      "categorySlugs": [
+        "pool-filters-above-ground"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "CSA ClearWater II Cartridge Filter Systems",
+      "slug": "csa-clearwater-ii-d-e-and-cartridge-filter-deluxe-systems",
+      "categorySlugs": [
+        "csa"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Power Defender Booster Pump",
+      "slug": "power-defender-booster",
+      "categorySlugs": [
+        "pool-pumps-in-ground"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Power Defender 110 Single Speed Dual Voltage Pump",
+      "slug": "power-defender-110",
+      "categorySlugs": [
+        "pool-pumps-in-ground"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Shurflex Pool Hose & Tubing",
+      "slug": "hose-tubing",
+      "categorySlugs": [
+        "hose-tubing-pool"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "SGMS Micro Air Injector",
+      "slug": "sgms-micro-air-injector",
+      "categorySlugs": [
+        "air-systems-spa"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "NEO 1500 & NEO 2100 Spa Control",
+      "slug": "neo-1500-spa-control",
+      "categorySlugs": [
+        "spa-control-system"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Stealth II Air Blowers",
+      "slug": "stealth-ii-air-blowers",
+      "categorySlugs": [
+        "air-systems"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "SMF International Pool Pump",
+      "slug": "smf-international-pool-pump",
+      "categorySlugs": [
+        "international"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "TWM Cartridge Filter System",
+      "slug": "twm-cartridge-filter-system",
+      "categorySlugs": [
+        "pool-filters-above-ground"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "TWM-30-S Sand Filter System",
+      "slug": "twm-30-s-sand-filter-system",
+      "categorySlugs": [
+        "pool-filters-above-ground"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "TWM-30 Cartridge Filter System",
+      "slug": "twm-30-cartridge-filter-system",
+      "categorySlugs": [
+        "pool-filters-above-ground"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "ClearWater II – D.E. Filter",
+      "slug": "clearwater-ii-d-e-filter",
+      "categorySlugs": [
+        "pool-filters-above-ground"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Power Defender SVL270 Variable Speed Pump",
+      "slug": "power-defender-svl270-variable-speed",
+      "categorySlugs": [
+        "pool-pumps-in-ground"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Power Defender 350 Variable Speed Pump",
+      "slug": "pd350",
+      "categorySlugs": [
+        "pool-pumps-in-ground"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "ProClean Plus ProPack",
+      "slug": "propack-proclean-plus-systems",
+      "categorySlugs": [
+        "pool-filters-above-ground",
+        "pool-filters-in-ground",
+        "pool-filters-in-ground-above-ground"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Jet Worksheet Fluid Dynamics",
+      "slug": "jet-worksheet-fluid-dynamics",
+      "categorySlugs": [
+        "tech-info"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Information",
+      "slug": "information",
+      "categorySlugs": [
+        "general-info"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Hydraulic System Design",
+      "slug": "hydraulic-system-design",
+      "categorySlugs": [
+        "tech-info"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Friction Loss in Fittings",
+      "slug": "friction-loss-in-fittings",
+      "categorySlugs": [
+        "tech-info"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Friction Flow Chart",
+      "slug": "friction-flow-chart",
+      "categorySlugs": [
+        "tech-info"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Fax Cover Sheet",
+      "slug": "fax-cover-sheet",
+      "categorySlugs": [
+        "tech-info"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "Contact Us",
+      "slug": "contact-us",
+      "categorySlugs": [
+        "general-info"
+      ],
+      "attributeSlugs": []
+    },
+    {
+      "title": "ClearWater II – Cartridge Filter System",
+      "slug": "clearwater-ii-cartridge",
+      "categorySlugs": [
+        "pool-filters-above-ground"
+      ],
+      "attributeSlugs": []
+    }
+  ]
+}
