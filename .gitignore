@@ -1,6 +1,9 @@
 # build output
 dist/
 
+# wrangler local deploy metadata (do not commit; breaks CI / other OS paths)
+.wrangler/
+
 # generated types
 .astro/
 
