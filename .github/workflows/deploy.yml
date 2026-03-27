@@ -29,8 +29,8 @@ jobs:
           GRAPHQL_BASIC_USER: ${{ secrets.GRAPHQL_BASIC_USER }}
           GRAPHQL_BASIC_PASSWORD: ${{ secrets.GRAPHQL_BASIC_PASSWORD }}
 
-      - name: Deploy Worker (Astro Cloudflare output)
-        run: npx wrangler deploy --config dist/server/wrangler.json
+      - name: Deploy to Cloudflare Pages
+        run: npx wrangler pages deploy dist --project-name=waterway-frontend
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
