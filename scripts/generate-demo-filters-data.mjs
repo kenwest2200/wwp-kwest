@@ -1,4 +1,4 @@
-import { mkdir, writeFile, readFile } from "node:fs/promises";
+import { access, mkdir, writeFile, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { GraphQLClient } from "graphql-request";
@@ -164,7 +164,17 @@ async function main() {
 
   const url = env.PUBLIC_GRAPHQL_URL;
   if (!url) {
-    throw new Error("PUBLIC_GRAPHQL_URL is not set for demo filters build data.");
+    try {
+      await access(outputPath);
+      console.warn(
+        "[demo-filters] PUBLIC_GRAPHQL_URL is not set. Reusing existing static data file.",
+      );
+      return;
+    } catch {
+      throw new Error(
+        "PUBLIC_GRAPHQL_URL is not set for demo filters build data and no existing public/data/demo-filters.json was found.",
+      );
+    }
   }
 
   const basicUser = env.GRAPHQL_BASIC_USER ?? "api";
@@ -225,6 +235,9 @@ async function main() {
 
   await mkdir(path.dirname(outputPath), { recursive: true });
   await writeFile(outputPath, JSON.stringify(payload, null, 2), "utf8");
+  console.log(
+    "[demo-filters] New filter data was fetched from GraphQL and written to disk.",
+  );
   console.log(
     `[demo-filters] generated ${outputPath} with ${products.length} products`,
   );
