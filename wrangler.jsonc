@@ -1,6 +1,7 @@
 {
-	// Cloudflare Pages (static Astro `output: "static"` → build into `dist/`)
 	"name": "waterway-frontend",
 	"compatibility_date": "2026-03-26",
-	"pages_build_output_dir": "dist"
+	"assets": {
+		"directory": "./dist",
+	},
 }
