@@ -19,3 +19,9 @@ declare module "cloudflare:workers" {
     [key: string]: string | undefined;
   };
 }
+
+declare namespace Cloudflare {
+  interface Env {
+    WEBHOOK_SECRET: string;
+  }
+}
