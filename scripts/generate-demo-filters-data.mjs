@@ -32,6 +32,30 @@ async function loadEnv() {
   }
 }
 
+/** WPGraphQL often returns HTML-entity-encoded labels (&amp;). Normalize to plain text in JSON. */
+function decodeHtmlEntities(raw) {
+  if (typeof raw !== "string" || raw.length === 0) return raw;
+  return raw
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#0*39;/g, "'")
+    .replace(/&#(\d+);/g, (m, n) => {
+      const code = Number(n);
+      return Number.isFinite(code) && code >= 0 && code <= 0x10ffff
+        ? String.fromCodePoint(code)
+        : m;
+    })
+    .replace(/&#x([0-9a-f]+);/gi, (m, h) => {
+      const code = parseInt(h, 16);
+      return Number.isFinite(code) && code >= 0 && code <= 0x10ffff
+        ? String.fromCodePoint(code)
+        : m;
+    });
+}
+
 function toBase64Utf8(value) {
   const bytes = new TextEncoder().encode(value);
   const alphabet =
@@ -197,7 +221,10 @@ async function generateFromGraphql(env) {
   const rootsData = await client.request(ROOT_PRODUCT_CATEGORIES_QUERY);
   const rootCategories = (rootsData.rootProductCategories ?? [])
     .filter((row) => row?.name && row?.slug)
-    .map((row) => ({ name: row.name, slug: row.slug }));
+    .map((row) => ({
+      name: decodeHtmlEntities(row.name),
+      slug: row.slug,
+    }));
 
   const rootSlugsSorted = rootCategories.map((r) => r.slug).sort(); // stable key for merged map
   const mergedSubcategoryGroupsBySelection = {};
@@ -216,13 +243,13 @@ async function generateFromGraphql(env) {
           );
           const normalized = groups.map((g) => ({
             groupSlug: g.groupSlug,
-            groupName: g.groupName,
+            groupName: decodeHtmlEntities(g.groupName),
             subcategories: (g.subcategories ?? [])
               .filter((s) => s?.slug && s?.name)
               .map((s) => ({
                 databaseId: s.databaseId ?? null,
                 slug: s.slug,
-                name: s.name,
+                name: decodeHtmlEntities(s.name),
                 uri: s.uri ?? null,
               })),
           }));
@@ -269,12 +296,12 @@ async function generateFromGraphql(env) {
           (row) => row?.slug && row?.name,
         );
         const normalized = rows.map((row) => ({
-          name: row.name,
+          name: decodeHtmlEntities(row.name),
           slug: row.slug,
           values: (row.values ?? [])
             .filter((v) => v?.slug)
             .map((v) => ({
-              label: v.label ?? v.slug,
+              label: decodeHtmlEntities(v.label ?? v.slug),
               slug: v.slug,
             })),
         }));
@@ -293,7 +320,7 @@ async function generateFromGraphql(env) {
   const products = productsNodes
     .filter((item) => item?.title && item?.slug)
     .map((item) => ({
-      title: item.title,
+      title: decodeHtmlEntities(item.title),
       slug: item.slug,
       categorySlugs: (item.productCategories?.nodes ?? [])
         .map((node) => node?.slug)

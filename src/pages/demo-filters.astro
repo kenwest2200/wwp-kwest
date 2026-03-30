@@ -358,6 +358,18 @@ export const prerender = true;
       .replace(/"/g, "&quot;");
   }
 
+  /** WP / JSON may ship labels as HTML entities (e.g. &amp;). Decode, then escape for safe HTML. */
+  function decodeHtmlEntities(s: string): string {
+    if (!s) return s;
+    const el = document.createElement("textarea");
+    el.innerHTML = s;
+    return el.value;
+  }
+
+  function safeDisplayText(s: string): string {
+    return escapeHtml(decodeHtmlEntities(s));
+  }
+
   function syncRootMapLegacyShim() {
     rootMap.clear();
     for (const slug of knownRootSlugs) {
@@ -569,7 +581,7 @@ export const prerender = true;
         <div class="demo-filters__chips demo-filters__chips--row">
           <label class="demo-filters__chip">
             <input class="demo-filters__chip-input" type="checkbox" data-group="subgroup" data-group-key="${escapeHtml(g.groupSlug)}" data-member-slugs="${escapeHtml(memberEnc)}" />
-            ${escapeHtml(g.groupName)}
+            ${safeDisplayText(g.groupName)}
           </label>
         </div>
       </div>`;
@@ -716,7 +728,7 @@ export const prerender = true;
     el.innerHTML = list
       .map(
         (a) =>
-          `<label class="demo-filters__chip"><input class="demo-filters__chip-input" type="checkbox" data-group="${group}" data-slug="${escapeHtml(a.slug)}" />${escapeHtml(a.name)}</label>`,
+          `<label class="demo-filters__chip"><input class="demo-filters__chip-input" type="checkbox" data-group="${group}" data-slug="${escapeHtml(a.slug)}" />${safeDisplayText(a.name)}</label>`,
       )
       .join("");
   }
