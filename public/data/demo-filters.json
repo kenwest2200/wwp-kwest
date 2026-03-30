@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-30T10:50:56.963Z",
+  "generatedAt": "2026-03-30T11:05:34.056Z",
   "attributesByCategory": {
     "pool": [
       {
@@ -31,10 +31,31 @@
             "slug": "size-5"
           }
         ]
+      },
+      {
+        "name": "Test",
+        "slug": "test",
+        "values": [
+          {
+            "label": "attr-value1",
+            "slug": "test-attr-value1"
+          }
+        ]
       }
     ],
     "spa": [],
-    "air-systems": [],
+    "air-systems": [
+      {
+        "name": "Test",
+        "slug": "test",
+        "values": [
+          {
+            "label": "attr-value1",
+            "slug": "test-attr-value1"
+          }
+        ]
+      }
+    ],
     "csa": [],
     "drains-suctions": [],
     "fittings": [],
@@ -2737,7 +2758,9 @@
       "categorySlugs": [
         "air-systems"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "test-attr-value1"
+      ]
     },
     {
       "title": "Power Defender 270 Variable Speed Pump",
