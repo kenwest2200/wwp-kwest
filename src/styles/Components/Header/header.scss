@@ -77,6 +77,7 @@
       font-size: px-to-rem(14);
       font-weight: 500;
       line-height: px-to-rem(24);
+      letter-spacing: 0.03em;
       transition: color 0.3s ease;
 
       &:hover {
@@ -153,6 +154,7 @@
     align-items: center;
     color: $white-90;
     font-size: px-to-rem(16);
+    letter-spacing: 0.03em;
     font-weight: 600;
     line-height: px-to-rem(24);
     padding: px-to-rem(8) 0;
@@ -231,6 +233,7 @@
       color: $black;
       display: block;
       font-size: px-to-rem(14);
+      letter-spacing: 0.03em;
       font-weight: 500;
       padding: px-to-rem(8) 0;
       line-height: px-to-rem(24);
@@ -368,6 +371,7 @@
       min-height: px-to-rem(40);
       color: $white;
       font-size: px-to-rem(14);
+      letter-spacing: 0.02em;
       font-weight: 400;
       line-height: px-to-rem(20);
       outline: none;
@@ -504,6 +508,7 @@
   &__mega-narrow-cat {
     margin: 0 0 px-to-rem(14);
     font-size: px-to-rem(14);
+    letter-spacing: 0.08em;
     font-weight: 400;
     text-transform: uppercase;
     color: $dark;
@@ -644,6 +649,7 @@
     background: transparent;
     padding: px-to-rem(12) px-to-rem(14) px-to-rem(12) px-to-rem(48);
     font-size: px-to-rem(14);
+    letter-spacing: 0.02em;
     color: $white;
     outline: none;
 
@@ -672,6 +678,7 @@
     width: 100%;
     padding: px-to-rem(16) 0;
     font-size: px-to-rem(12);
+    letter-spacing: 0.06em;
     font-weight: 400;
     line-height: px-to-rem(16);
     text-transform: uppercase;
@@ -832,6 +839,7 @@
     font-size: px-to-rem(14);
     font-weight: 600;
     line-height: px-to-rem(20);
+    letter-spacing: 0.03em;
     color: $dark;
     text-decoration: none;
   }

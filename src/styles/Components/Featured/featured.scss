@@ -53,6 +53,7 @@
       font-size: px-to-rem(12);
       font-weight: 400;
       line-height: px-to-rem(16);
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       color: $dark-gray;
       text-align: center;
@@ -63,6 +64,7 @@
       font-size: px-to-rem(20);
       font-weight: 500;
       line-height: px-to-rem(28);
+      letter-spacing: 0.02em;
       color: $dark;
       text-align: center;
     }

@@ -41,6 +41,7 @@
       font-weight: 500;
       line-height: px-to-rem(28);
       color: $dark;
+      letter-spacing: 0.02em;
     }
 
     &-description {
@@ -48,6 +49,7 @@
       font-size: px-to-rem(16);
       font-weight: 400;
       line-height: px-to-rem(28);
+      letter-spacing: 0.02em;
       color: $dark;
     }
 
@@ -107,6 +109,12 @@
       column-gap: px-to-rem(40);
       row-gap: px-to-rem(48);
 
+    }
+
+    &__item {
+      &-title {
+        letter-spacing: 0.03em;
+      }
     }
   }
 

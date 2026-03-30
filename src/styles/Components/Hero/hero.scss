@@ -4,7 +4,6 @@
     position: relative;
     overflow: hidden;
     background: $gradient-background;
-    // min-height: px-to-rem(909);
 
     .container {
         position: relative;
@@ -21,10 +20,6 @@
         padding: px-to-rem(176) px-to-rem(21) px-to-rem(60);
         max-width: px-to-rem(1192);
 
-    }
-
-    &__content {
-        // max-width: px-to-rem(484);
     }
 
     &__image-container {
@@ -77,8 +72,7 @@
         font-weight: 400;
         line-height: px-to-rem(28);
         margin-bottom: px-to-rem(40);
-
-
+        letter-spacing: 0.02em;
     }
 
     &__description p:last-child {
@@ -126,6 +120,7 @@
         &__description {
             font-size: px-to-rem(22);
             line-height: px-to-rem(33);
+            letter-spacing: 0.03em;
         }
 
         &__image-container {

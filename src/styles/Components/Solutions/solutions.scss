@@ -43,6 +43,7 @@
       font-size: px-to-rem(16);
       font-weight: 600;
       line-height: px-to-rem(24);
+      letter-spacing: 0.03em;
       color: $dark;
       align-self: stretch;
       width: 100%;
@@ -152,6 +153,10 @@
     }
 
     &__item {
+      &-title {
+        letter-spacing: 0.02em;
+      }
+
       &-link {
         height: 100%;
         padding: px-to-rem(24) px-to-rem(24) px-to-rem(48) px-to-rem(24);

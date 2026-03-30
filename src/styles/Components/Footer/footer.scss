@@ -24,6 +24,7 @@
             font-weight: 400;
             line-height: px-to-rem(20);
             color: $white;
+            letter-spacing: 0.02em;
         }
 
         &-block {
@@ -69,6 +70,7 @@
         font-size: px-to-rem(14);
         font-weight: 400;
         line-height: px-to-rem(20);
+        letter-spacing: 0.02em;
     }
 
     &__columns {
@@ -99,6 +101,7 @@
             font-weight: 400;
             line-height: px-to-rem(20);
             color: $blue;
+            letter-spacing: 0.02em;
         }
 
         &-link {
@@ -107,6 +110,7 @@
             font-size: px-to-rem(14);
             font-weight: 500;
             line-height: px-to-rem(24);
+            letter-spacing: 0.03em;
             color: $white;
             text-decoration: none;
             padding: px-to-rem(8) 0;
