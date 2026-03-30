@@ -9,6 +9,36 @@ export type DemoProductAttributesData = {
   } | null;
 };
 
+/** Value option for an attribute (e.g. Woo term) from `attributesByCategory`. */
+export type AttributeByCategoryValue = {
+  label: string;
+  slug: string;
+};
+
+/** One attribute row returned per category from custom resolver `attributesByCategory`. */
+export type AttributeByCategoryRow = {
+  name: string;
+  slug: string;
+  values: AttributeByCategoryValue[];
+};
+
+export type AttributesByCategoryQueryData = {
+  attributesByCategory?: AttributeByCategoryRow[] | null;
+};
+
+export const ATTRIBUTES_BY_CATEGORY_QUERY = /* GraphQL */ `
+  query GetAttributesByCategory($categorySlug: String!) {
+    attributesByCategory(categorySlug: $categorySlug) {
+      name
+      slug
+      values {
+        label
+        slug
+      }
+    }
+  }
+`;
+
 export type ProductByAttributeItem = {
   title: string;
   slug: string;
@@ -30,6 +60,57 @@ export type DemoProductCategoriesData = {
     nodes: ProductCategoryNode[];
   } | null;
 };
+
+/** Root product categories from custom resolver `rootProductCategories`. */
+export type RootProductCategoryNode = {
+  name: string;
+  slug: string;
+};
+
+export type RootProductCategoriesData = {
+  rootProductCategories?: RootProductCategoryNode[] | null;
+};
+
+export type MergedSubcategoryItem = {
+  databaseId?: number | null;
+  slug: string;
+  name: string;
+  uri?: string | null;
+};
+
+export type MergedSubcategoryGroup = {
+  groupSlug: string;
+  groupName: string;
+  subcategories: MergedSubcategoryItem[];
+};
+
+export type MergedSubcategoryGroupsData = {
+  mergedSubcategoryGroups?: MergedSubcategoryGroup[] | null;
+};
+
+export const ROOT_PRODUCT_CATEGORIES_QUERY = /* GraphQL */ `
+  query GetRootCategories {
+    rootProductCategories {
+      name
+      slug
+    }
+  }
+`;
+
+export const MERGED_SUBCATEGORY_GROUPS_QUERY = /* GraphQL */ `
+  query GetMergedSubcategoryGroups($rootCategorySlugs: [String!]!) {
+    mergedSubcategoryGroups(rootCategorySlugs: $rootCategorySlugs) {
+      groupSlug
+      groupName
+      subcategories {
+        databaseId
+        slug
+        name
+        uri
+      }
+    }
+  }
+`;
 
 export type DemoProductsByAttributesData = {
   productsByAttributes?: {

@@ -21,12 +21,12 @@ export const prerender = true;
 
         <div class="demo-filters__group">
           <h3 class="demo-filters__group-title">Product types</h3>
-          <div id="demo-filters-sub" class="demo-filters__chips"></div>
+          <div id="demo-filters-sub" class="demo-filters__sub-panels"></div>
         </div>
 
         <div class="demo-filters__group">
-          <h3 class="demo-filters__group-title">Base attributes</h3>
-          <div id="demo-filters-attrs" class="demo-filters__chips"></div>
+          <h3 class="demo-filters__group-title">Attributes</h3>
+          <div id="demo-filters-attrs" class="demo-filters__attrs"></div>
         </div>
 
         <button type="button" id="demo-filters-clear" class="demo-filters__btn">
@@ -116,6 +116,52 @@ export const prerender = true;
     gap: 0.5rem;
     min-height: 2rem;
   }
+  :global(.demo-filters__attrs) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-height: 2rem;
+  }
+  :global(.demo-filters__attr-block) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  :global(.demo-filters__attr-name) {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #333;
+  }
+  :global(.demo-filters__chips--row) {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  :global(.demo-filters__hint) {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: #666;
+  }
+  :global(.demo-filters__sub-panels) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-height: 2rem;
+  }
+  :global(.demo-filters__subgroup) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  :global(.demo-filters__subgroup-title) {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #333;
+  }
+  :global(.demo-filters__subgroup .demo-filters__chips) {
+    min-height: 0;
+  }
   :global(.demo-filters__chip) {
     display: inline-flex;
     align-items: center;
@@ -193,14 +239,36 @@ export const prerender = true;
   const selectedRoot = new Set<string>();
   const selectedSub = new Set<string>();
   const selectedAttrs = new Set<string>();
+  type AttrValue = { label: string; slug: string };
+  type AttrByCategoryRow = { name: string; slug: string; values: AttrValue[] };
+
+  type MergedSubItem = {
+    databaseId?: number | null;
+    slug: string;
+    name: string;
+    uri?: string | null;
+  };
+  type MergedSubGroup = {
+    groupSlug: string;
+    groupName: string;
+    subcategories: MergedSubItem[];
+  };
+
   let allProducts: Array<{
     title: string;
     slug: string;
     categorySlugs: string[];
     attributeSlugs: string[];
   }> = [];
-  let rootMap = new Map<string, { name: string; slug: string }[]>();
-  const rootChildrenMap = new Map<string, string[]>();
+  const mergedSubcategoryGroupsBySelection = new Map<string, MergedSubGroup[]>();
+  const attributesByCategoryMap = new Map<string, AttrByCategoryRow[]>();
+  /** Slug list from `rootCategories` (used to refresh legacy `rootMap` shim). */
+  let knownRootSlugs: string[] = [];
+  /**
+   * Legacy: flat subs per root (key = single root slug). Kept so cached/old snippets
+   * or HMR that still reference `rootMap` do not throw — not used by current UI.
+   */
+  const rootMap = new Map<string, { name: string; slug: string }[]>();
   const PAGE_SIZE = 24;
   let currentOffset = 0;
   let currentTotal = 0;
@@ -290,23 +358,222 @@ export const prerender = true;
       .replace(/"/g, "&quot;");
   }
 
+  function syncRootMapLegacyShim() {
+    rootMap.clear();
+    for (const slug of knownRootSlugs) {
+      const groups = mergedSubcategoryGroupsBySelection.get(slug) ?? [];
+      rootMap.set(
+        slug,
+        groups.flatMap((g) =>
+          (g.subcategories ?? []).map((s) => ({
+            name: s.name,
+            slug: s.slug,
+          })),
+        ),
+      );
+    }
+  }
+
   function refreshAllSet() {
-    // Kept for backward compatibility with previous flow.
+    syncRootMapLegacyShim();
+  }
+
+  /**
+   * Key into `mergedSubcategoryGroupsBySelection` — must match build script keys.
+   * If no root is checked, use all known roots so subcategory groups match the wireframe
+   * ("all unique product types across all categories").
+   */
+  function getMergedDataKey(): string {
+    if (selectedRoot.size > 0) {
+      return [...selectedRoot].sort().join(",");
+    }
+    if (knownRootSlugs.length > 0) {
+      return [...knownRootSlugs].sort().join(",");
+    }
+    return "";
+  }
+
+  /** Subcategory slugs currently shown in the Product type panel. */
+  function getSubSlugsAllowedInPanel(): Set<string> {
+    const key = getMergedDataKey();
+    const groups = mergedSubcategoryGroupsBySelection.get(key) ?? [];
+    return new Set(
+      groups.flatMap((g) =>
+        (g.subcategories ?? []).map((s) => s.slug).filter(Boolean),
+      ),
+    );
+  }
+
+  /** Roots + all sub slugs from merged groups for the active data key (used when roots are selected). */
+  function getRootScopeForSelection(): Set<string> {
+    const key = getMergedDataKey();
+    const scope = new Set<string>();
+    if (!key) return scope;
+
+    if (selectedRoot.size > 0) {
+      for (const r of selectedRoot) scope.add(r);
+    }
+    const groups = mergedSubcategoryGroupsBySelection.get(key) ?? [];
+    for (const g of groups) {
+      for (const s of g.subcategories ?? []) {
+        if (s.slug) scope.add(s.slug);
+      }
+    }
+    if (selectedRoot.size === 0) {
+      for (const r of knownRootSlugs) scope.add(r);
+    }
+    return scope;
+  }
+
+  /**
+   * Wireframe step 2+: attribute filters only after at least one product type (sub) is selected,
+   * not when only root categories are checked.
+   */
+  function getActiveCategorySlugsForAttributes(): string[] {
+    const selectedSubSlugs = [...selectedSub];
+    const allowedSubs = getSubSlugsAllowedInPanel();
+    const scopedSub = selectedSubSlugs.filter((slug) => allowedSubs.has(slug));
+    if (scopedSub.length > 0) return [...new Set(scopedSub)];
+    return [];
+  }
+
+  function mergeAttributesForSelection(
+    slugs: string[],
+    map: Map<string, AttrByCategoryRow[]>,
+  ): AttrByCategoryRow[] {
+    const byAttrSlug = new Map<
+      string,
+      { name: string; slug: string; valuesMap: Map<string, AttrValue> }
+    >();
+    for (const catSlug of slugs) {
+      const list = map.get(catSlug) ?? [];
+      for (const attr of list) {
+        let entry = byAttrSlug.get(attr.slug);
+        if (!entry) {
+          entry = {
+            name: attr.name,
+            slug: attr.slug,
+            valuesMap: new Map(),
+          };
+          byAttrSlug.set(attr.slug, entry);
+        }
+        for (const v of attr.values ?? []) {
+          if (v.slug)
+            entry.valuesMap.set(v.slug, {
+              label: v.label ?? v.slug,
+              slug: v.slug,
+            });
+        }
+      }
+    }
+    return [...byAttrSlug.values()].map((e) => ({
+      name: e.name,
+      slug: e.slug,
+      values: [...e.valuesMap.values()],
+    }));
+  }
+
+  function renderAttributesPanel() {
+    if (!attrsEl) return;
+    const slugs = getActiveCategorySlugsForAttributes();
+    const merged = mergeAttributesForSelection(slugs, attributesByCategoryMap);
+    const allowedSlugs = new Set(
+      merged.flatMap((a) => a.values.map((v) => v.slug)),
+    );
+    for (const s of [...selectedAttrs]) {
+      if (!allowedSlugs.has(s)) selectedAttrs.delete(s);
+    }
+    if (slugs.length === 0) {
+      const hint =
+        selectedRoot.size > 0
+          ? "Select at least one product type to see attribute filters."
+          : "Select a category or product type to see attribute filters.";
+      attrsEl.innerHTML = `<p class="demo-filters__hint">${hint}</p>`;
+      return;
+    }
+    if (merged.length === 0) {
+      attrsEl.innerHTML =
+        '<p class="demo-filters__hint">No attributes for the selected categories.</p>';
+      return;
+    }
+    attrsEl.innerHTML = merged
+      .map(
+        (attr) => `
+      <div class="demo-filters__attr-block">
+        <h4 class="demo-filters__attr-name">${escapeHtml(attr.name)}</h4>
+        <div class="demo-filters__chips demo-filters__chips--row">
+          ${attr.values
+            .map(
+              (v) =>
+                `<label class="demo-filters__chip"><input class="demo-filters__chip-input" type="checkbox" data-group="attr" data-slug="${escapeHtml(v.slug)}" />${escapeHtml(v.label)}</label>`,
+            )
+            .join("")}
+        </div>
+      </div>`,
+      )
+      .join("");
+  }
+
+  function encodeMemberSlugsForAttr(slugs: string[]): string {
+    return slugs
+      .filter(Boolean)
+      .map((s) => encodeURIComponent(s))
+      .join("|");
+  }
+
+  function parseMemberSlugsFromAttr(raw: string | undefined): string[] {
+    if (!raw) return [];
+    return raw
+      .split("|")
+      .map((s) => {
+        try {
+          return decodeURIComponent(s.trim());
+        } catch {
+          return s.trim();
+        }
+      })
+      .filter(Boolean);
   }
 
   function renderSubcategories() {
     if (!subEl) return;
-    const selectedRoots = [...selectedRoot];
-    const list =
-      selectedRoots.length > 0
-        ? selectedRoots.flatMap((slug) => rootMap.get(slug) ?? [])
-        : [...rootMap.values()].flat();
-    const uniqueBySlug = new Map(list.map((item) => [item.slug, item]));
-    subEl.innerHTML = [...uniqueBySlug.values()]
-      .map(
-        (a) =>
-          `<label class="demo-filters__chip"><input class="demo-filters__chip-input" type="checkbox" data-group="sub" data-slug="${escapeHtml(a.slug)}" />${escapeHtml(a.name)}</label>`,
-      )
+    const key = getMergedDataKey();
+    if (!key) {
+      subEl.innerHTML =
+        '<p class="demo-filters__hint">Subcategory groups are not available yet.</p>';
+      syncCheckboxes();
+      return;
+    }
+    const groups = mergedSubcategoryGroupsBySelection.get(key) ?? [];
+    const allowed = new Set(
+      groups.flatMap((g) =>
+        (g.subcategories ?? []).map((s) => s.slug).filter(Boolean),
+      ),
+    );
+    for (const s of [...selectedSub]) {
+      if (!allowed.has(s)) selectedSub.delete(s);
+    }
+    if (groups.length === 0) {
+      subEl.innerHTML =
+        '<p class="demo-filters__hint">No subcategory groups for this combination.</p>';
+      syncCheckboxes();
+      return;
+    }
+    subEl.innerHTML = groups
+      .map((g) => {
+        const subs = (g.subcategories ?? []).filter((s) => s?.slug && s?.name);
+        if (subs.length === 0) return "";
+        const memberEnc = encodeMemberSlugsForAttr(subs.map((s) => s.slug));
+        return `
+      <div class="demo-filters__subgroup" data-group-slug="${escapeHtml(g.groupSlug)}">
+        <div class="demo-filters__chips demo-filters__chips--row">
+          <label class="demo-filters__chip">
+            <input class="demo-filters__chip-input" type="checkbox" data-group="subgroup" data-group-key="${escapeHtml(g.groupSlug)}" data-member-slugs="${escapeHtml(memberEnc)}" />
+            ${escapeHtml(g.groupName)}
+          </label>
+        </div>
+      </div>`;
+      })
       .join("");
     syncCheckboxes();
   }
@@ -350,22 +617,20 @@ export const prerender = true;
     if (hasNoFilters) {
       return allProducts;
     }
-    const rootScope = new Set<string>();
-    selectedRootSlugs.forEach((rootSlug) => {
-      rootScope.add(rootSlug);
-      (rootChildrenMap.get(rootSlug) ?? []).forEach((slug) => rootScope.add(slug));
-    });
-    const scopedSelectedSubSlugs =
-      rootScope.size > 0
-        ? selectedSubSlugs.filter((slug) => rootScope.has(slug))
-        : selectedSubSlugs;
+    const noRootSelected = selectedRootSlugs.length === 0;
+    const rootScope = getRootScopeForSelection();
+    const allowedSubs = getSubSlugsAllowedInPanel();
+    const scopedSelectedSubSlugs = selectedSubSlugs.filter((slug) =>
+      allowedSubs.has(slug),
+    );
 
     return allProducts.filter((product) => {
       const categories = new Set(product.categorySlugs ?? []);
       const attrs = new Set(product.attributeSlugs ?? []);
 
-      const rootMatch =
-        rootScope.size === 0 || [...rootScope].some((slug) => categories.has(slug));
+      const rootMatch = noRootSelected
+        ? true
+        : [...rootScope].some((slug) => categories.has(slug));
       if (!rootMatch) return false;
 
       const subMatch =
@@ -421,9 +686,19 @@ export const prerender = true;
       if (!el) return;
       el.querySelectorAll<HTMLInputElement>("input[type='checkbox']").forEach(
         (input) => {
-          const slug = input.dataset.slug;
           const group = input.dataset.group;
-          if (!slug || !group) return;
+          if (!group) return;
+          if (group === "subgroup") {
+            const slugs = parseMemberSlugsFromAttr(input.dataset.memberSlugs);
+            if (slugs.length === 0) return;
+            const allOn = slugs.every((s) => selectedSub.has(s));
+            const someOn = slugs.some((s) => selectedSub.has(s));
+            input.checked = allOn;
+            input.indeterminate = someOn && !allOn;
+            return;
+          }
+          const slug = input.dataset.slug;
+          if (!slug) return;
           if (group === "root") input.checked = selectedRoot.has(slug);
           if (group === "sub") input.checked = selectedSub.has(slug);
           if (group === "attr") input.checked = selectedAttrs.has(slug);
@@ -451,12 +726,13 @@ export const prerender = true;
       const res = await fetch("/data/demo-filters.json");
       const data = (await readJsonSafe(res)) as {
         generatedAt?: string;
-        attributes?: { name: string; slug: string }[];
+        attributesByCategory?: Record<string, AttrByCategoryRow[]>;
         rootCategories?: {
           name: string;
           slug: string;
-          subcategories: { name: string; slug: string }[];
+          subcategories?: { name: string; slug: string }[];
         }[];
+        mergedSubcategoryGroupsBySelection?: Record<string, MergedSubGroup[]>;
         products?: {
           title: string;
           slug: string;
@@ -482,47 +758,93 @@ export const prerender = true;
         return;
       }
 
-      const attrs = data.attributes ?? [];
       const roots = data.rootCategories ?? [];
+      knownRootSlugs = roots.map((r) => r.slug);
+      attributesByCategoryMap.clear();
+      for (const [slug, rows] of Object.entries(
+        data.attributesByCategory ?? {},
+      )) {
+        attributesByCategoryMap.set(slug, Array.isArray(rows) ? rows : []);
+      }
       allProducts = (data.products ?? []).map((item) => ({
         title: item.title,
         slug: item.slug,
         categorySlugs: item.categorySlugs ?? [],
         attributeSlugs: item.attributeSlugs ?? [],
       }));
-      rootMap = new Map(roots.map((r) => [r.slug, r.subcategories ?? []]));
-      rootChildrenMap.clear();
-      roots.forEach((root) => {
-        rootChildrenMap.set(
-          root.slug,
-          (root.subcategories ?? []).map((sub) => sub.slug),
+      mergedSubcategoryGroupsBySelection.clear();
+      const mergedRaw = data.mergedSubcategoryGroupsBySelection ?? {};
+      for (const [k, groups] of Object.entries(mergedRaw)) {
+        mergedSubcategoryGroupsBySelection.set(
+          k,
+          Array.isArray(groups) ? groups : [],
         );
-      });
+      }
+      if (
+        mergedSubcategoryGroupsBySelection.size === 0 &&
+        roots.some((r) => (r.subcategories?.length ?? 0) > 0)
+      ) {
+        for (const r of roots) {
+          const subs = r.subcategories ?? [];
+          if (subs.length === 0) continue;
+          mergedSubcategoryGroupsBySelection.set(r.slug, [
+            {
+              groupSlug: "legacy",
+              groupName: "Subcategories",
+              subcategories: subs.map((s) => ({
+                slug: s.slug,
+                name: s.name,
+              })),
+            },
+          ]);
+        }
+      }
+      syncRootMapLegacyShim();
       applyStateFromUrl();
 
       renderGroup(rootEl, "root", roots);
-      renderGroup(attrsEl, "attr", attrs.slice(0, 12));
       renderSubcategories();
+      renderAttributesPanel();
       syncCheckboxes();
 
       const onChange = (e: Event) => {
         const input = (e.target as HTMLElement).closest<HTMLInputElement>(
-          "input[type='checkbox'][data-group][data-slug]",
+          "input[type='checkbox'][data-group]",
         );
-        const slug = input?.dataset.slug;
-        const group = input?.dataset.group;
-        if (!input || !slug || !group) return;
+        if (!input) return;
+        const group = input.dataset.group;
+        if (!group) return;
+
         if (group === "root") {
+          const slug = input.dataset.slug;
+          if (!slug) return;
           if (input.checked) selectedRoot.add(slug);
           else selectedRoot.delete(slug);
           renderSubcategories();
+          renderAttributesPanel();
+        } else if (group === "subgroup") {
+          input.indeterminate = false;
+          const slugs = parseMemberSlugsFromAttr(input.dataset.memberSlugs);
+          if (slugs.length === 0) return;
+          if (input.checked) {
+            for (const s of slugs) selectedSub.add(s);
+          } else {
+            for (const s of slugs) selectedSub.delete(s);
+          }
+          renderAttributesPanel();
         } else if (group === "sub") {
+          const slug = input.dataset.slug;
+          if (!slug) return;
           if (input.checked) selectedSub.add(slug);
           else selectedSub.delete(slug);
+          renderAttributesPanel();
         } else if (group === "attr") {
+          const slug = input.dataset.slug;
+          if (!slug) return;
           if (input.checked) selectedAttrs.add(slug);
           else selectedAttrs.delete(slug);
         }
+
         currentOffset = 0;
         syncCheckboxes();
         void fetchProducts();
@@ -538,6 +860,7 @@ export const prerender = true;
         selectedAttrs.clear();
         currentOffset = 0;
         renderSubcategories();
+        renderAttributesPanel();
         syncCheckboxes();
         void fetchProducts();
       });
@@ -557,6 +880,7 @@ export const prerender = true;
       window.addEventListener("popstate", () => {
         applyStateFromUrl();
         renderSubcategories();
+        renderAttributesPanel();
         syncCheckboxes();
         void fetchProducts();
       });

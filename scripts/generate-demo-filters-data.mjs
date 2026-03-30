@@ -55,29 +55,38 @@ function toBase64Utf8(value) {
   return output;
 }
 
-const PRODUCT_ATTRIBUTES_QUERY = `
-  query DemoProductAttributes {
-    productAttributes(first: 100) {
-      nodes {
-        name
+const ATTRIBUTES_BY_CATEGORY_QUERY = `
+  query GetAttributesByCategory($categorySlug: String!) {
+    attributesByCategory(categorySlug: $categorySlug) {
+      name
+      slug
+      values {
+        label
         slug
       }
     }
   }
 `;
 
-const PRODUCT_CATEGORIES_QUERY = `
-  query DemoProductCategories {
-    productCategories(where: { parent: 0, hideEmpty: false }) {
-      nodes {
-        name
+const ROOT_PRODUCT_CATEGORIES_QUERY = `
+  query GetRootCategories {
+    rootProductCategories {
+      name
+      slug
+    }
+  }
+`;
+
+const MERGED_SUBCATEGORY_GROUPS_QUERY = `
+  query GetMergedSubcategoryGroups($rootCategorySlugs: [String!]!) {
+    mergedSubcategoryGroups(rootCategorySlugs: $rootCategorySlugs) {
+      groupSlug
+      groupName
+      subcategories {
+        databaseId
         slug
-        children(first: 100, where: { hideEmpty: false }) {
-          nodes {
-            name
-            slug
-          }
-        }
+        name
+        uri
       }
     }
   }
@@ -158,6 +167,20 @@ async function fetchAllProducts(client, withAttributes) {
   return all;
 }
 
+/** Every non-empty subset of `sortedSlugs` (order preserved). */
+function nonEmptySubsets(sortedSlugs) {
+  const n = sortedSlugs.length;
+  const out = [];
+  for (let i = 1; i < 1 << n; i++) {
+    const subset = [];
+    for (let j = 0; j < n; j++) {
+      if (i & (1 << j)) subset.push(sortedSlugs[j]);
+    }
+    out.push(subset);
+  }
+  return out;
+}
+
 async function main() {
   const envFile = await loadEnv();
   const env = { ...envFile, ...process.env };
@@ -188,10 +211,63 @@ async function main() {
     },
   });
 
-  const [attributesData, categoriesData] = await Promise.all([
-    client.request(PRODUCT_ATTRIBUTES_QUERY),
-    client.request(PRODUCT_CATEGORIES_QUERY),
-  ]);
+  const rootsData = await client.request(ROOT_PRODUCT_CATEGORIES_QUERY);
+  const rootCategories = (rootsData.rootProductCategories ?? [])
+    .filter((row) => row?.name && row?.slug)
+    .map((row) => ({ name: row.name, slug: row.slug }));
+
+  const rootSlugsSorted = rootCategories.map((r) => r.slug).sort(); // stable key for merged map
+  const mergedSubcategoryGroupsBySelection = {};
+
+  if (rootSlugsSorted.length > 0) {
+    const subsets = nonEmptySubsets(rootSlugsSorted);
+    const mergedEntries = await Promise.all(
+      subsets.map(async (rootCategorySlugs) => {
+        const key = rootCategorySlugs.join(",");
+        try {
+          const data = await client.request(MERGED_SUBCATEGORY_GROUPS_QUERY, {
+            rootCategorySlugs,
+          });
+          const groups = (data.mergedSubcategoryGroups ?? []).filter(
+            (g) => g?.groupSlug && g?.groupName,
+          );
+          const normalized = groups.map((g) => ({
+            groupSlug: g.groupSlug,
+            groupName: g.groupName,
+            subcategories: (g.subcategories ?? [])
+              .filter((s) => s?.slug && s?.name)
+              .map((s) => ({
+                databaseId: s.databaseId ?? null,
+                slug: s.slug,
+                name: s.name,
+                uri: s.uri ?? null,
+              })),
+          }));
+          return [key, normalized];
+        } catch (err) {
+          console.warn(
+            `[demo-filters] mergedSubcategoryGroups([${key}]) failed:`,
+            err?.message ?? err,
+          );
+          return [key, []];
+        }
+      }),
+    );
+    Object.assign(
+      mergedSubcategoryGroupsBySelection,
+      Object.fromEntries(mergedEntries),
+    );
+  }
+
+  const categorySlugsForAttributes = new Set(rootSlugsSorted);
+  for (const groups of Object.values(mergedSubcategoryGroupsBySelection)) {
+    for (const g of groups) {
+      for (const s of g.subcategories ?? []) {
+        categorySlugsForAttributes.add(s.slug);
+      }
+    }
+  }
+  const categorySlugsList = [...categorySlugsForAttributes];
 
   let productsNodes = [];
   try {
@@ -200,18 +276,36 @@ async function main() {
     productsNodes = await fetchAllProducts(client, false);
   }
 
-  const attributes = (attributesData.productAttributes?.nodes ?? []).filter(
-    (item) => item?.name && item?.slug,
+  const attributesByCategoryEntries = await Promise.all(
+    categorySlugsList.map(async (categorySlug) => {
+      try {
+        const data = await client.request(ATTRIBUTES_BY_CATEGORY_QUERY, {
+          categorySlug,
+        });
+        const rows = (data.attributesByCategory ?? []).filter(
+          (row) => row?.slug && row?.name,
+        );
+        const normalized = rows.map((row) => ({
+          name: row.name,
+          slug: row.slug,
+          values: (row.values ?? [])
+            .filter((v) => v?.slug)
+            .map((v) => ({
+              label: v.label ?? v.slug,
+              slug: v.slug,
+            })),
+        }));
+        return [categorySlug, normalized];
+      } catch (err) {
+        console.warn(
+          `[demo-filters] attributesByCategory("${categorySlug}") failed:`,
+          err?.message ?? err,
+        );
+        return [categorySlug, []];
+      }
+    }),
   );
-  const rootCategories = (categoriesData.productCategories?.nodes ?? [])
-    .filter((cat) => cat?.name && cat?.slug)
-    .map((cat) => ({
-      name: cat.name,
-      slug: cat.slug,
-      subcategories: (cat.children?.nodes ?? [])
-        .filter((sub) => sub?.name && sub?.slug)
-        .map((sub) => ({ name: sub.name, slug: sub.slug })),
-    }));
+  const attributesByCategory = Object.fromEntries(attributesByCategoryEntries);
 
   const products = productsNodes
     .filter((item) => item?.title && item?.slug)
@@ -228,8 +322,9 @@ async function main() {
 
   const payload = {
     generatedAt: new Date().toISOString(),
-    attributes,
+    attributesByCategory,
     rootCategories,
+    mergedSubcategoryGroupsBySelection,
     products,
   };
 
