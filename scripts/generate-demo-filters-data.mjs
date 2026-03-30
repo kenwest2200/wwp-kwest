@@ -181,25 +181,8 @@ function nonEmptySubsets(sortedSlugs) {
   return out;
 }
 
-async function main() {
-  const envFile = await loadEnv();
-  const env = { ...envFile, ...process.env };
-
+async function generateFromGraphql(env) {
   const url = env.PUBLIC_GRAPHQL_URL;
-  if (!url) {
-    try {
-      await access(outputPath);
-      console.warn(
-        "[demo-filters] PUBLIC_GRAPHQL_URL is not set. Reusing existing static data file.",
-      );
-      return;
-    } catch {
-      throw new Error(
-        "PUBLIC_GRAPHQL_URL is not set for demo filters build data and no existing public/data/demo-filters.json was found.",
-      );
-    }
-  }
-
   const basicUser = env.GRAPHQL_BASIC_USER ?? "api";
   const basicPass = env.GRAPHQL_BASIC_PASSWORD ?? "apiwaterway";
   const auth = `Basic ${toBase64Utf8(`${basicUser}:${basicPass}`)}`;
@@ -336,6 +319,41 @@ async function main() {
   console.log(
     `[demo-filters] generated ${outputPath} with ${products.length} products`,
   );
+}
+
+async function main() {
+  const envFile = await loadEnv();
+  const env = { ...envFile, ...process.env };
+
+  const url = env.PUBLIC_GRAPHQL_URL;
+  if (!url) {
+    try {
+      await access(outputPath);
+      console.warn(
+        "[demo-filters] PUBLIC_GRAPHQL_URL is not set. Reusing existing static data file.",
+      );
+      return;
+    } catch {
+      throw new Error(
+        "PUBLIC_GRAPHQL_URL is not set for demo filters build data and no existing public/data/demo-filters.json was found.",
+      );
+    }
+  }
+
+  try {
+    await generateFromGraphql(env);
+  } catch (err) {
+    try {
+      await access(outputPath);
+      console.warn(
+        "[demo-filters] GraphQL fetch failed (timeout, network, etc.); reusing existing public/data/demo-filters.json.",
+        err?.cause?.message ?? err?.message ?? String(err),
+      );
+      return;
+    } catch {
+      throw err;
+    }
+  }
 }
 
 main().catch((error) => {
