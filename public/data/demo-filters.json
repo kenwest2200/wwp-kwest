@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-30T09:25:41.840Z",
+  "generatedAt": "2026-03-30T10:50:56.963Z",
   "attributesByCategory": {
     "pool": [
       {
@@ -128,7 +128,7 @@
     "pool": [
       {
         "groupSlug": "air-systems",
-        "groupName": "Air Systems",
+        "groupName": "Air systems",
         "subcategories": [
           {
             "databaseId": 310,
@@ -363,8 +363,8 @@
         ]
       },
       {
-        "groupSlug": "air-systems-spa",
-        "groupName": "Air Systems",
+        "groupSlug": "air-systems",
+        "groupName": "Air systems",
         "subcategories": [
           {
             "databaseId": 333,
@@ -582,20 +582,14 @@
       },
       {
         "groupSlug": "air-systems",
-        "groupName": "Air Systems",
+        "groupName": "Air systems",
         "subcategories": [
           {
             "databaseId": 310,
             "slug": "air-systems",
             "name": "Air Systems",
             "uri": "/product_category/air-systems/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "air-systems-spa",
-        "groupName": "Air Systems",
-        "subcategories": [
+          },
           {
             "databaseId": 333,
             "slug": "air-systems-spa",
