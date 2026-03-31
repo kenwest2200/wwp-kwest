@@ -1,6 +1,7 @@
 ---
 import type { ImageMetadata } from "astro";
 import SectionTitle from "../../components/SectionTitle/index.astro";
+import { decodeHtmlEntities } from "../../lib/decode-html-entities";
 import {
   getFeaturedProductsSection,
   type HomeFeaturedData,
@@ -43,10 +44,11 @@ function mapFromHomepageProducts(
   return products
     .filter((p) => p.title?.trim())
     .map((p) => {
-      const title = (p.title ?? "").trim();
-      const category = p.productCategory?.trim();
+      const title = decodeHtmlEntities((p.title ?? "").trim());
+      const categoryRaw = p.productCategory?.trim();
+      const categoryLabel = decodeHtmlEntities(categoryRaw || "Product");
       return {
-        categoryLabel: category || "Product",
+        categoryLabel,
         title,
         imageUrl: p.image?.trim() ?? "",
         imageAlt: title,
@@ -57,6 +59,9 @@ function mapFromHomepageProducts(
 
 const { sectionTitle, products } = getFeaturedProductsSection(data);
 const items = mapFromHomepageProducts(products);
+const sectionHeading = sectionTitle?.trim()
+  ? decodeHtmlEntities(sectionTitle.trim())
+  : "Featured Products";
 
 // const mockFeaturedItems: FeaturedCard[] = [
 //   {
@@ -93,10 +98,7 @@ const items = mapFromHomepageProducts(products);
 
 <section class="featured" aria-labelledby="featured-heading">
   <div class="container featured__container">
-    <SectionTitle
-      title={sectionTitle?.trim() || "Featured Products"}
-      className="featured__title"
-    />
+    <SectionTitle title={sectionHeading} className="featured__title" />
     <ul class="featured__grid">
       {
         items.map((item) => (
