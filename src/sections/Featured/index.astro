@@ -1,13 +1,15 @@
 ---
-import type {
-  FeaturedProductNode,
-  HomeFeaturedData,
-} from "../../lib/queries/home-featured";
-import img1 from "../../assets/images/f1.png";
-import img2 from "../../assets/images/f2.png";
-import img3 from "../../assets/images/f3.png";
-import img4 from "../../assets/images/f4.png";
+import type { ImageMetadata } from "astro";
 import SectionTitle from "../../components/SectionTitle/index.astro";
+import {
+  getFeaturedProductsSection,
+  type HomeFeaturedData,
+  type HomepageFeaturedProduct,
+} from "../../lib/queries/home-featured";
+// import img1 from "../../assets/images/f1.png";
+// import img2 from "../../assets/images/f2.png";
+// import img3 from "../../assets/images/f3.png";
+// import img4 from "../../assets/images/f4.png";
 
 interface Props {
   data: HomeFeaturedData | null;
@@ -23,71 +25,78 @@ type FeaturedCard = {
   href: string;
 };
 
-function productHref(node: FeaturedProductNode): string {
-  const uri = node.uri?.trim();
-  if (uri) {
-    const path = uri.replace(/^\/+/, "");
-    return path.startsWith("http") ? uri : `/${path}`;
+function productHref(url: string | null | undefined): string {
+  const raw = url?.trim();
+  if (!raw) {
+    return "#";
   }
-  if (node.slug) {
-    return `/product/${node.slug}`;
+  if (raw.startsWith("http://") || raw.startsWith("https://")) {
+    return raw;
   }
-  return "#";
+  const path = raw.replace(/^\/+/, "");
+  return `/${path}`;
 }
 
-function mapFromApi(nodes: FeaturedProductNode[]): FeaturedCard[] {
-  return nodes
-    .filter((n) => (n.name ?? n.title)?.trim())
-    .map((node) => {
-      const img = node.featuredImage?.node;
+function mapFromHomepageProducts(
+  products: HomepageFeaturedProduct[],
+): FeaturedCard[] {
+  return products
+    .filter((p) => p.title?.trim())
+    .map((p) => {
+      const title = (p.title ?? "").trim();
+      const desc = p.description?.trim();
       return {
-        categoryLabel: "Product",
-        title: (node.name ?? node.title ?? "").trim(),
-        imageUrl: img?.sourceUrl ?? "",
-        imageAlt: img?.altText?.trim() ?? node.name ?? node.title ?? "Product",
-        href: productHref(node),
+        categoryLabel: desc || "Product",
+        title,
+        imageUrl: p.image?.trim() ?? "",
+        imageAlt: title,
+        href: productHref(p.productUrl),
       };
     });
 }
 
-const mockFeaturedItems: FeaturedCard[] = [
-  {
-    categoryLabel: "Spa Skimmers and Filters",
-    title: "100 sq. ft. Roadster Skim Filter",
-    imageUrl: img1,
-    imageAlt: "Pool pump",
-    href: "#",
-  },
-  {
-    categoryLabel: "Spa Skimmers and Filters",
-    title: "Cartridge filter system",
-    imageUrl: img2,
-    imageAlt: "Filter system",
-    href: "#",
-  },
-  {
-    categoryLabel: "Pool - Ells, Tees, & Wyes",
-    title: "45° and 90° Pool Ells",
-    imageUrl: img3,
-    imageAlt: "Spa jets",
-    href: "#",
-  },
-  {
-    categoryLabel: "Lighting",
-    title: "Spa Light Accessories",
-    imageUrl: img4,
-    imageAlt: "Spa jets",
-    href: "#",
-  },
-];
+const { sectionTitle, products } = getFeaturedProductsSection(data);
+const items = mapFromHomepageProducts(products);
 
-const apiItems = mapFromApi(data?.products?.nodes ?? []);
-const items = apiItems.length > 0 ? apiItems : mockFeaturedItems;
+// const mockFeaturedItems: FeaturedCard[] = [
+//   {
+//     categoryLabel: "Spa Skimmers and Filters",
+//     title: "100 sq. ft. Roadster Skim Filter",
+//     imageUrl: img1,
+//     imageAlt: "Pool pump",
+//     href: "#",
+//   },
+//   {
+//     categoryLabel: "Spa Skimmers and Filters",
+//     title: "Cartridge filter system",
+//     imageUrl: img2,
+//     imageAlt: "Filter system",
+//     href: "#",
+//   },
+//   {
+//     categoryLabel: "Pool - Ells, Tees, & Wyes",
+//     title: "45° and 90° Pool Ells",
+//     imageUrl: img3,
+//     imageAlt: "Spa jets",
+//     href: "#",
+//   },
+//   {
+//     categoryLabel: "Lighting",
+//     title: "Spa Light Accessories",
+//     imageUrl: img4,
+//     imageAlt: "Spa jets",
+//     href: "#",
+//   },
+// ];
+// const items = itemsFromApi.length > 0 ? itemsFromApi : mockFeaturedItems;
 ---
 
 <section class="featured" aria-labelledby="featured-heading">
   <div class="container featured__container">
-    <SectionTitle title="Featured Products" className="featured__title" />
+    <SectionTitle
+      title={sectionTitle?.trim() || "Featured Products"}
+      className="featured__title"
+    />
     <ul class="featured__grid">
       {
         items.map((item) => (
