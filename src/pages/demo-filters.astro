@@ -547,6 +547,30 @@ export const prerender = true;
       .filter(Boolean);
   }
 
+  /**
+   * One merged "product type" chip can map to several WP category slugs (one per root).
+   * After only Pool + Pumps was selected, `selectedSub` holds one slug; adding Spa adds
+   * another slug to the group → checkbox becomes indeterminate and Spa products drop
+   * out of matches. If any member of the group is selected, select all members so the
+   * meaning stays "Pumps under every selected root" (union Pool/Pumps and Spa/Pumps).
+   */
+  function expandPartialSubgroupSelectionsForMergedKey() {
+    const key = getMergedDataKey();
+    if (!key) return;
+    const groups = mergedSubcategoryGroupsBySelection.get(key) ?? [];
+    for (const g of groups) {
+      const slugs = (g.subcategories ?? [])
+        .map((s) => s.slug)
+        .filter(Boolean);
+      if (slugs.length < 2) continue;
+      const allOn = slugs.every((s) => selectedSub.has(s));
+      const someOn = slugs.some((s) => selectedSub.has(s));
+      if (someOn && !allOn) {
+        for (const s of slugs) selectedSub.add(s);
+      }
+    }
+  }
+
   function renderSubcategories() {
     if (!subEl) return;
     const key = getMergedDataKey();
@@ -587,6 +611,7 @@ export const prerender = true;
       </div>`;
       })
       .join("");
+    expandPartialSubgroupSelectionsForMergedKey();
     syncCheckboxes();
   }
 
