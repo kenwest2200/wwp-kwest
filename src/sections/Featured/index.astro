@@ -44,9 +44,9 @@ function mapFromHomepageProducts(
     .filter((p) => p.title?.trim())
     .map((p) => {
       const title = (p.title ?? "").trim();
-      const desc = p.description?.trim();
+      const category = p.productCategory?.trim();
       return {
-        categoryLabel: desc || "Product",
+        categoryLabel: category || "Product",
         title,
         imageUrl: p.image?.trim() ?? "",
         imageAlt: title,

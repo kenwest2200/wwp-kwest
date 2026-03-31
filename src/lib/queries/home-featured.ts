@@ -5,7 +5,7 @@
 
 export type HomepageFeaturedProduct = {
   title?: string | null;
-  description?: string | null;
+  productCategory?: string | null;
   image?: string | null;
   productUrl?: string | null;
 };
@@ -74,7 +74,7 @@ export const HOME_FEATURED_QUERY = /* GraphQL */ `
                   title
                   featuredProducts {
                     title
-                    description
+                    productCategory
                     image
                     productUrl
                   }
