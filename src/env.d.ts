@@ -23,5 +23,7 @@ declare module "cloudflare:workers" {
 declare namespace Cloudflare {
   interface Env {
     WEBHOOK_SECRET: string;
+    ZONE_ID: string;
+    CF_API_TOKEN: string;
   }
 }
