@@ -3,7 +3,12 @@
 	"compatibility_date": "2026-03-26",
 	"main": "src/worker.ts",
 	"assets": {
-		"directory": "./dist",
-		"binding": "ASSETS",
+	  "directory": "./dist",
+	  "binding": "ASSETS"
 	},
-}
+	"env": {
+	  "dev": {
+		"name": "waterway-frontend-dev"
+	  }
+	}
+  }
