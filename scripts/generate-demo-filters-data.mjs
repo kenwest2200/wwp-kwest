@@ -122,6 +122,7 @@ const PRODUCTS_QUERY = `
       nodes {
         title
         slug
+        databaseId
         productCategories {
           nodes {
             slug
@@ -147,6 +148,7 @@ const PRODUCTS_NO_ATTRS_QUERY = `
       nodes {
         title
         slug
+        databaseId
         productCategories {
           nodes {
             slug
@@ -322,6 +324,8 @@ async function generateFromGraphql(env) {
     .map((item) => ({
       title: decodeHtmlEntities(item.title),
       slug: item.slug,
+      databaseId:
+        typeof item.databaseId === "number" ? item.databaseId : null,
       categorySlugs: (item.productCategories?.nodes ?? [])
         .map((node) => node?.slug)
         .filter(Boolean),
