@@ -34,11 +34,7 @@ const graphQlImages: {
   alt: string;
   width: number | undefined;
   height: number | undefined;
-}[] = [
-  intro?.image1?.node,
-  intro?.image2?.node,
-  intro?.image3?.node,
-]
+}[] = [intro?.image1?.node, intro?.image2?.node, intro?.image3?.node]
   .map((n) =>
     n?.sourceUrl
       ? {
@@ -49,9 +45,7 @@ const graphQlImages: {
         }
       : null,
   )
-  .filter(
-    (x): x is NonNullable<typeof x> => x !== null,
-  );
+  .filter((x): x is NonNullable<typeof x> => x !== null);
 
 const buttonLink = intro?.buttonLink ?? null;
 const ctaHref = buttonLink?.url?.trim() || "#";
@@ -71,6 +65,7 @@ const fallbackDescription =
 ---
 
 <section class="hero">
+  <span class="hero__title visually-hidden">test</span>
   <div class="container hero__container">
     <div class="hero__content">
       <div class="hero__content-inner">
