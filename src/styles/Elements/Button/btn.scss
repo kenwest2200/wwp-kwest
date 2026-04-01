@@ -1,0 +1,77 @@
+@use "../../variables.scss" as *;
+
+.btn {
+    font-family: inherit;
+    border: none;
+    margin: 0;
+    display: inline-flex;
+    cursor: pointer;
+    color: inherit;
+    text-decoration: none;
+    outline: none;
+    text-align: center;
+    justify-content: center;
+    position: relative;
+    padding: 0;
+    overflow: hidden;
+    vertical-align: middle;
+    font-size: px-to-rem(14);
+    letter-spacing: 0.03em;
+    font-weight: 600;
+    line-height: px-to-rem(24);
+    padding: px-to-rem(12) px-to-rem(12);
+    border-radius: px-to-rem(4);
+    max-width: px-to-rem(348);
+    min-height: px-to-rem(48);
+
+    &--primary {
+        background-color: $white;
+        color: $dark-teal;
+        border: 1px solid $white;
+    }
+
+    &--primary-dark {
+        background-color: $dark-teal;
+        color: $white;
+        border: 1px solid $dark-teal;
+    }
+
+    &--secondary {
+        background-color: transparent;
+        color: $white;
+        border: 1px solid $white
+    }
+
+    &--single-outline {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $dark-teal;
+        text-decoration: none !important;
+        padding: px-to-rem(8) px-to-rem(16);
+        border: 1px solid;
+        border-color: transparent;
+        max-width: unset;
+        min-height: px-to-rem(40);
+        border-radius: px-to-rem(4);
+        width: 100%;
+        transition: all 0.3s ease;
+
+        &:hover {
+            text-decoration: none;
+            border-color: $medium-teal;
+            color: $medium-teal;
+            transition: all 0.3s ease;
+        }
+    }
+
+    @include media-breakpoint-up(md) {
+        font-size: px-to-rem(16);
+        font-weight: 800;
+
+        &--single-outline {
+            font-size: px-to-rem(14);
+            font-weight: 600;
+        }
+    }
+}

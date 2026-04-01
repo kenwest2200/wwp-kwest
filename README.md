@@ -1,37 +1,3 @@
-# Astro Starter Kit: Basics
-
-```sh
-npm create astro@latest -- --template basics
-```
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
 | `npm install`             | Installs dependencies                            |
@@ -41,6 +7,13 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 
-## 👀 Want to learn more?
+## GraphQL
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+1. Copy `.env.example` to `.env`.
+2. Set `PUBLIC_GRAPHQL_URL`; optionally `GRAPHQL_BASIC_USER` / `GRAPHQL_BASIC_PASSWORD` (defaults: `api` / `apiwaterway`).
+3. Adjust the header query in `src/lib/queries/layout-header.ts` to your schema (loaded once from `Layout.astro`).
+4. Page-specific data: fetch in `src/pages/<page>.astro` and pass props to section components (e.g. home hero: `src/lib/queries/home-hero.ts` → `index.astro` → `Hero.astro`).
+
+Client helpers: `src/lib/graphql.ts` (`getGraphQLClient`, `requestGraphql`).
+
+ESLint uses `typescript-eslint` so `.astro` frontmatter can use TypeScript (`interface Props`, `import type`, generics on `requestGraphql<...>`).

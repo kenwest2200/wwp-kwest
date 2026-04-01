@@ -1,0 +1,129 @@
+---
+import SectionTitle from "../../components/SectionTitle/index.astro";
+import type {
+  HomeSolutionsData,
+  SolutionPostNode,
+} from "../../lib/queries/home-solutions";
+import img1 from "../../assets/images/s1.png";
+import img2 from "../../assets/images/s2.png";
+import img3 from "../../assets/images/s3.png";
+import img4 from "../../assets/images/s4.png";
+import img5 from "../../assets/images/s5.png";
+import img6 from "../../assets/images/s6.png";
+import IconArrowRight from "../../components/icons/IconArrowRight.astro";
+
+interface Props {
+  data: HomeSolutionsData | null;
+}
+
+const { data } = Astro.props;
+
+type SolutionCard = {
+  title: string;
+  href: string;
+  imageUrl: string | ImageMetadata;
+  imageAlt: string;
+};
+
+function postHref(node: SolutionPostNode): string {
+  const uri = node.uri?.trim();
+  if (!uri) return "#";
+  if (uri.startsWith("http")) return uri;
+  return `/${uri.replace(/^\/+/, "")}`;
+}
+
+function mapFromApi(nodes: SolutionPostNode[]): SolutionCard[] {
+  return nodes
+    .filter((n) => n.title?.trim())
+    .map((node) => {
+      const img = node.featuredImage?.node;
+      const title = node.title!.trim();
+      return {
+        title,
+        href: postHref(node),
+        imageUrl: img?.sourceUrl ?? "",
+        imageAlt: img?.altText?.trim() ?? title,
+      };
+    });
+}
+
+const mockSolutionItems: SolutionCard[] = [
+  {
+    title: "Pumps",
+    href: "#",
+    imageUrl: img1,
+    imageAlt: "Pool systems",
+  },
+  {
+    title: "Lighting",
+    href: "#",
+    imageUrl: img2,
+    imageAlt: "Spa and bath",
+  },
+  {
+    title: "Jets & Hydrotherapy",
+    href: "#",
+    imageUrl: img3,
+    imageAlt: "Commercial solutions",
+  },
+  {
+    title: "Air Systems",
+    href: "#",
+    imageUrl: img4,
+    imageAlt: "Pool systems",
+  },
+  {
+    title: "Filters",
+    href: "#",
+    imageUrl: img5,
+    imageAlt: "Spa and bath",
+  },
+  {
+    title: "Controls",
+    href: "#",
+    imageUrl: img6,
+    imageAlt: "Commercial solutions",
+  },
+];
+
+const apiItems = mapFromApi(data?.posts?.nodes ?? []);
+const items = apiItems.length > 0 ? apiItems : mockSolutionItems;
+---
+
+<section class="solutions" aria-labelledby="solutions-heading">
+  <div class="container solutions__container">
+    <SectionTitle
+      title="Solutions for every water system"
+      className="solutions__title"
+      id="solutions-heading"
+    />
+    <ul class="solutions__grid">
+      {
+        items.map((item) => (
+          <li class="solutions__item">
+            <a href={item.href} class="solutions__item-link">
+              <h3 class="solutions__item-title">{item.title}</h3>
+              {item.imageUrl ? (
+                <img
+                  src={
+                    typeof item.imageUrl === "string"
+                      ? item.imageUrl
+                      : item.imageUrl.src
+                  }
+                  alt={item.imageAlt}
+                  class="solutions__item-image"
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : null}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <a href="#" class="btn btn--primary-dark solutions__button">
+      Browse full catalog
+      <IconArrowRight />
+    </a>
+  </div>
+</section>

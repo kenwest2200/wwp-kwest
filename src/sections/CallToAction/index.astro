@@ -1,0 +1,29 @@
+---
+import IconMarker from "../../components/icons/iconMarker.astro";
+import backgroundImage from "../../assets/images/cta.png";
+---
+
+<section class="cta" style={`background-image: url(${backgroundImage.src})`}>
+  <div class="container cta__container">
+    <div class="cta__action">
+      <span class="cta__label">FOR HOMEOWNERS</span>
+      <h2 class="cta__title">Need help finding the right replacement part?</h2>
+      <div class="cta__buttons">
+        <a href="#" class="btn btn--primary cta__button-dealer">
+          <IconMarker />
+          Find a Dealer</a
+        >
+        <a href="#" class="btn btn--secondary cta__button-warranty">Warranty</a>
+        <a href="#" class="btn btn--secondary cta__button-safety"
+          >Safety / Recall</a
+        >
+      </div>
+    </div>
+    <div class="cta__dealer">
+      <a href="#" class="btn btn--primary">
+        <IconMarker />
+        Find a Dealer</a
+      >
+    </div>
+  </div>
+</section>

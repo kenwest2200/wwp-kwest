@@ -1,0 +1,245 @@
+@use "../../variables.scss" as *;
+
+.footer {
+    background-color: $dark-teal;
+    font-family: $font-sans;
+    color: $white;
+
+    &__container {
+        padding-top: px-to-rem(60);
+    }
+
+    &__top {
+        padding-bottom: px-to-rem(40);
+        display: flex;
+        flex-direction: column;
+        gap: px-to-rem(24);
+        border-bottom: 1px solid $white-20;
+    }
+
+    &__logo {
+        &-text {
+            margin: 0;
+            font-size: px-to-rem(14);
+            font-weight: 400;
+            line-height: px-to-rem(20);
+            color: $white;
+            letter-spacing: 0.02em;
+        }
+
+        &-block {
+            display: flex;
+            flex-direction: column;
+            gap: px-to-rem(16);
+        }
+
+        &-icon {
+            width: px-to-rem(230);
+            height: px-to-rem(48);
+
+            path {
+                fill: $white;
+            }
+        }
+
+    }
+
+    &__buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: px-to-rem(20);
+    }
+
+    &__button {
+        padding: px-to-rem(16) px-to-rem(32);
+        width: 100%;
+
+        &-icon {
+            margin-right: px-to-rem(12);
+        }
+    }
+
+    &__bottom {
+        border-top: 1px solid $white-20;
+        padding: px-to-rem(40) 0;
+    }
+
+    &__copyright {
+        margin: 0;
+        font-size: px-to-rem(14);
+        font-weight: 400;
+        line-height: px-to-rem(20);
+        letter-spacing: 0.02em;
+    }
+
+    &__columns {
+        padding: px-to-rem(40) 0;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, auto);
+        gap: px-to-rem(40);
+    }
+
+    &__column {
+        &-list {
+            &--with-icon {
+                display: flex;
+                flex-direction: row;
+                gap: px-to-rem(12);
+
+                & .footer__column-link {
+                    padding: 0;
+                }
+            }
+        }
+
+        &-title {
+            margin-top: 0;
+            margin-bottom: px-to-rem(26);
+            font-size: px-to-rem(14);
+            font-weight: 400;
+            line-height: px-to-rem(20);
+            color: $blue;
+            letter-spacing: 0.02em;
+        }
+
+        &-link {
+            display: flex;
+            align-items: center;
+            font-size: px-to-rem(14);
+            font-weight: 500;
+            line-height: px-to-rem(24);
+            letter-spacing: 0.03em;
+            color: $white;
+            text-decoration: none;
+            padding: px-to-rem(8) 0;
+            transition: color 0.3s ease;
+
+            &:hover {
+                color: $light-teal;
+                transition: color 0.3s ease;
+            }
+        }
+
+        &--1 {
+            grid-area: 1 / 1 / 2 / 2;
+        }
+
+        &--2 {
+            grid-area: 1 / 2 / 2 / 3;
+        }
+
+        &--3 {
+            grid-area: 2 / 1 / 3 / 3;
+        }
+
+        &--4 {
+            grid-area: 3 / 1 / 4 / 2;
+        }
+
+        &--5 {
+            grid-area: 3 / 2 / 4 / 3;
+        }
+    }
+
+
+
+    @include media-breakpoint-up(md) {
+        &__container {
+            padding-top: px-to-rem(80);
+        }
+
+        &__top {
+            gap: px-to-rem(58);
+        }
+
+        &__buttons {
+            flex-direction: row;
+            gap: px-to-rem(16);
+
+        }
+
+        &__button {
+            align-items: unset;
+            width: auto;
+        }
+
+        &__columns {
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(2, auto);
+        }
+
+        &__column {
+            &--1 {
+                grid-area: 1 / 1 / 2 / 3;
+            }
+
+            &--2 {
+                grid-area: 1 / 3 / 2 / 5;
+            }
+
+            &--3 {
+                grid-area: 1 / 5 / 2 / 7;
+            }
+
+            &--4 {
+                grid-area: 2 / 1 / 3 / 4;
+            }
+
+            &--5 {
+                grid-area: 2 / 4 / 3 / 7;
+            }
+        }
+
+        &__logo {
+            &-text {
+                font-size: px-to-rem(16);
+                line-height: px-to-rem(28);
+            }
+        }
+    }
+
+    @include media-breakpoint-up(lg) {
+        &__top {
+            padding-bottom: px-to-rem(48);
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        &__columns {
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, auto);
+            padding: px-to-rem(48) 0;
+        }
+
+        &__column {
+            &--1 {
+                grid-area: 1 / 1 / 3 / 2;
+            }
+
+            &--2 {
+                grid-area: 1 / 2 / 3 / 3;
+            }
+
+            &--3 {
+                grid-area: 1 / 3 / 3 / 4;
+            }
+
+            &--4 {
+                grid-area: 1 / 4 / 2 / 5;
+            }
+
+            &--5 {
+                grid-area: 2 / 4 / 3 / 5;
+            }
+        }
+    }
+
+    @include media-breakpoint-up(xl) {
+        &__bottom {
+            padding: px-to-rem(48) 0;
+        }
+    }
+}

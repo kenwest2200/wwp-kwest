@@ -1,11 +1,70 @@
 ---
-import Welcome from "../components/Welcome.astro";
 import Layout from "../layouts/Layout.astro";
+import Hero from "../sections/Hero/index.astro";
+import Featured from "../sections/Featured/index.astro";
+import Resources from "../sections/Resources/index.astro";
+import Solutions from "../sections/Solutions/index.astro";
+import CallToAction from "../sections/CallToAction/index.astro";
+import { getGraphQLClient, requestGraphql } from "../lib/graphql";
+import { HOME_HERO_QUERY, type HomeHeroData } from "../lib/queries/home-hero";
+import {
+  HOME_FEATURED_QUERY,
+  type HomeFeaturedData,
+} from "../lib/queries/home-featured";
+import {
+  HOME_RESOURCES_QUERY,
+  type HomeResourcesData,
+} from "../lib/queries/home-resources";
+import {
+  HOME_SOLUTIONS_QUERY,
+  type HomeSolutionsData,
+} from "../lib/queries/home-solutions";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+export const prerender = true;
+
+let heroData: HomeHeroData | null = null;
+let featuredData: HomeFeaturedData | null = null;
+let resourcesData: HomeResourcesData | null = null;
+let solutionsData: HomeSolutionsData | null = null;
+
+if (getGraphQLClient()) {
+  try {
+    heroData = await requestGraphql<HomeHeroData>(HOME_HERO_QUERY);
+  } catch {
+    heroData = null;
+  }
+  try {
+    featuredData = await requestGraphql<HomeFeaturedData>(HOME_FEATURED_QUERY);
+  } catch {
+    featuredData = null;
+  }
+  try {
+    resourcesData =
+      await requestGraphql<HomeResourcesData>(HOME_RESOURCES_QUERY);
+  } catch {
+    resourcesData = null;
+  }
+  try {
+    solutionsData =
+      await requestGraphql<HomeSolutionsData>(HOME_SOLUTIONS_QUERY);
+  } catch {
+    solutionsData = null;
+  }
+}
 ---
 
 <Layout>
-  <Welcome />
+  <main class="home-main">
+    <Hero data={heroData} />
+    <Featured data={featuredData} />
+    <Resources data={resourcesData} />
+    <Solutions data={solutionsData} />
+    <CallToAction />
+  </main>
 </Layout>
+
+<style lang="scss">
+  .home-main {
+    flex: 1;
+  }
+</style>

@@ -1,0 +1,592 @@
+---
+import type { HeaderLayoutData } from "../../lib/queries/layout-header";
+import IconFacebook from "../icons/facebook.astro";
+import IconInstagram from "../icons/instagram.astro";
+import HeaderLogo from "../icons/headerLogo.astro";
+import IconArrowRight from "../icons/IconArrowRight.astro";
+import IconSearch from "../icons/searchIcon.astro";
+import IconBurger from "../icons/burgerIcon.astro";
+import IconClose from "../icons/closeButtonIcon.astro";
+import IconTailArrowRight from "../icons/IconTailArrowRight.astro";
+import IconArrowDown from "../icons/arrowDown.astro";
+
+interface Props {
+  data: HeaderLayoutData | null | undefined;
+}
+
+function menuNodesFromHeaderData(data: HeaderLayoutData | null | undefined) {
+  const nodes = data?.menuItems?.nodes;
+  return Array.isArray(nodes) ? nodes : [];
+}
+
+const { data } = Astro.props;
+const items = menuNodesFromHeaderData(data);
+
+/*
+const mockMenu = {
+  home: {
+    label: "Home",
+    href: "/",
+  },
+  products: {
+    label: "Products",
+    href: "/products",
+    submenu: {
+      pool: [
+        {
+          label: "Pool",
+          href: "#",
+        },
+        {
+          label: "Air Systems",
+          href: "#",
+        },
+        {
+          label: "SCA",
+          href: "#",
+        },
+        {
+          label: "Drains & Suctions",
+          href: "#",
+        },
+      ],
+      spa: [
+        {
+          label: "Spa",
+          href: "#",
+        },
+        {
+          label: "Air Controls",
+          href: "#",
+        },
+        {
+          label: "Air Systems",
+          href: "#",
+        },
+        {
+          label: "Lighting",
+          href: "#",
+        },
+      ],
+      bath: [
+        {
+          label: "Bath",
+          href: "#",
+        },
+        {
+          label: "Air Controls",
+          href: "#",
+        },
+        {
+          label: "Air Systems",
+          href: "#",
+        },
+        {
+          label: "Lighting",
+          href: "#",
+        },
+      ],
+    },
+  },
+  resources: {
+    label: "Resources",
+    href: "#",
+    submenu: [
+      {
+        label: "Technical Guides",
+        href: "#",
+      },
+      {
+        label: "Apps & Tools",
+        href: "#",
+      },
+      {
+        label: "Certification of Compliance",
+        href: "#",
+      },
+      {
+        label: "Manuals & Specs",
+        href: "#",
+      },
+      {
+        label: "Videos",
+        href: "#",
+      },
+      {
+        label: "Rebates",
+        href: "#",
+      },
+      {
+        label: "FAQ",
+        href: "#",
+      },
+    ],
+  },
+  support: {
+    label: "Support",
+    href: "#",
+    submenu: [
+      {
+        label: "Warranty",
+        href: "#",
+      },
+      {
+        label: "Recall",
+        href: "#",
+      },
+      {
+        label: "Help",
+        href: "#",
+      },
+    ],
+  },
+  company: {
+    label: "Company",
+    href: "#",
+    submenu: [
+      {
+        label: "About us",
+        href: "#",
+      },
+      {
+        label: "Find Sales Representatives",
+        href: "#",
+      },
+      {
+        label: "Contact us",
+        href: "#",
+      },
+      {
+        label: "Carrer",
+        href: "#",
+      },
+    ],
+  },
+  news: {
+    label: "For Homeowners",
+    href: "#",
+    submenu: [
+      {
+        label: "Find a Dealer",
+        href: "#",
+      },
+      {
+        label: "Warranty",
+        href: "#",
+      },
+      {
+        label: "Safety & Recalls",
+        href: "#",
+      },
+    ],
+  },
+};
+*/
+
+type MenuLink = { label: string; href: string };
+type FlatMenuNode = {
+  id: string;
+  label: string;
+  url: string;
+  path: string;
+  parentId: string | null;
+};
+type HeaderMenuNode = {
+  id: string;
+  label: string;
+  href: string;
+  children: HeaderMenuNode[];
+};
+
+function normalizeHref(node: FlatMenuNode) {
+  if (node.path && node.path.startsWith("/")) return node.path;
+  if (node.url && node.url.startsWith("/")) return node.url;
+  return "#";
+}
+
+function buildHeaderMenuTree(flatNodes: FlatMenuNode[]): HeaderMenuNode[] {
+  const byId = new Map<string, HeaderMenuNode>();
+  const roots: HeaderMenuNode[] = [];
+
+  flatNodes.forEach((node) => {
+    if (!node.id || !node.label) return;
+    byId.set(node.id, {
+      id: node.id,
+      label: node.label,
+      href: normalizeHref(node),
+      children: [],
+    });
+  });
+
+  flatNodes.forEach((node) => {
+    const current = byId.get(node.id);
+    if (!current) return;
+    if (node.parentId && byId.has(node.parentId)) {
+      byId.get(node.parentId)?.children.push(current);
+    } else {
+      roots.push(current);
+    }
+  });
+
+  return roots;
+}
+
+const realMenu = buildHeaderMenuTree(items as FlatMenuNode[]);
+
+/** Раскладка плоского подменю в несколько колонок (как в макете Resources). */
+function splitMenuIntoColumns(
+  links: MenuLink[],
+  columnCount: number,
+): MenuLink[][] {
+  if (links.length === 0) return [];
+  const per = Math.ceil(links.length / columnCount);
+  const out: MenuLink[][] = [];
+  for (let c = 0; c < columnCount; c++) {
+    const slice = links.slice(c * per, (c + 1) * per);
+    if (slice.length > 0) out.push(slice);
+  }
+  return out.length > 0 ? out : [links];
+}
+
+const topMenuItems = {
+  "call-us": [
+    {
+      label: "CALL US  805-981-0262",
+      href: "tel:+18059810262",
+    },
+    {
+      label: "Support",
+      href: "#",
+    },
+  ],
+  "help-us": [
+    {
+      label: "Warranty",
+      href: "#",
+    },
+    {
+      label: "Find a Store",
+      href: "#",
+    },
+    {
+      label: "Find Sales Rep",
+      href: "#",
+    },
+  ],
+  social: [
+    {
+      label: "Instagram",
+      icon: "instagram",
+      href: "#",
+    },
+    {
+      label: "Facebook",
+      icon: "facebook",
+      href: "#",
+    },
+  ],
+};
+---
+
+<header class="header">
+  <div class="header__top">
+    <div class="header__top-container">
+      <ul class="header__top-menu header__top-menu--call-us">
+        {
+          topMenuItems["call-us"].map((item) => (
+            <li class="header__top-item">
+              <a
+                class="header__top-link"
+                href="#"
+                aria-label={`go to ${item.label}`}
+              >
+                <span>{item.label}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="header__top-menu-right">
+        <ul class="header__top-menu header__top-menu--help-us">
+          {
+            topMenuItems["help-us"].map((item) => (
+              <li class="header__top-item">
+                <a
+                  class="header__top-link"
+                  href="#"
+                  aria-label={`go to ${item.label}`}
+                >
+                  <span>{item.label}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <ul class="header__top-menu header__top-menu--social">
+          {
+            topMenuItems["social"].map((item) => (
+              <li class="header__top-item">
+                <a
+                  class="header__top-link"
+                  href={item.href}
+                  aria-label={`go to ${item.label}`}
+                >
+                  <span class="visually-hidden">{item.label}</span>
+                  {item.icon === "facebook" ? (
+                    <IconFacebook />
+                  ) : item.icon === "instagram" ? (
+                    <IconInstagram />
+                  ) : null}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container header__container">
+    <div class="header__logo">
+      <button
+        type="button"
+        class="header__burger"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="header-mobile"
+        data-open-mobile
+      >
+        <span class="visually-hidden">Open menu</span>
+        <IconBurger />
+      </button>
+      <a href="/" class="header__logo-link">
+        <HeaderLogo class="header__logo-icon" />
+      </a>
+    </div>
+    <nav class="header__nav" aria-label="Main">
+      <ul class="header__menu">
+        {
+          /*
+            Mock-based menu rendering is intentionally disabled.
+            Object.entries(mockMenu).map(...)
+          */
+        }
+        {
+          realMenu.map((item) => {
+            const hasSubmenu = item.children.length > 0;
+            return (
+              <li
+                class:list={[
+                  "header__item",
+                  hasSubmenu && "header__item--has-submenu",
+                ]}
+              >
+                <a class="header__link" href={item.href}>
+                  {item.label}
+                  {hasSubmenu && <IconArrowDown class="header__link-icon" />}
+                </a>
+                {hasSubmenu && (
+                  <div class="header__submenu">
+                    <ul class="header__submenu-list">
+                      {item.children.map((link) => (
+                        <li class="header__submenu-item">
+                          <a class="header__submenu-link" href={link.href}>
+                            {link.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </li>
+            );
+          })
+        }
+      </ul>
+    </nav>
+    <div class="header__search" data-header-search>
+      <button
+        type="button"
+        class="header__search-toggle"
+        aria-expanded="false"
+        aria-controls="header-search-panel"
+        data-search-toggle
+      >
+        <span class="visually-hidden">Open search</span>
+        <IconSearch class="header__search-toggle-icon" />
+      </button>
+      <div id="header-search-panel" class="header__search-panel" role="search">
+        <form action="#">
+          <label class="header__search-label">
+            <IconSearch class="header__search-icon" />
+            <input
+              class="header__search-input"
+              type="text"
+              placeholder="Search for parts"
+            />
+          </label>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="header__mobile"
+    id="header-mobile"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Main navigation"
+    aria-hidden="true"
+  >
+    <div class="header__mobile-backdrop" tabindex="-1" data-close-mobile></div>
+    <div class="header__mobile-sheet">
+      <div class="header__mobile-sheet-inner">
+        <div class="header__mobile-head">
+          <button
+            type="button"
+            class="header__mobile-close"
+            aria-label="Close menu"
+            data-close-mobile
+          >
+            <IconClose />
+          </button>
+        </div>
+
+        <div class="header__mobile-mega-narrow">
+          {
+            /*
+              Mock-based mega-narrow rendering is intentionally disabled.
+              Object.entries(mockMenu).map(...)
+            */
+          }
+          {
+            realMenu.map((item) => {
+              if (item.children.length === 0) return null;
+              return (
+                <section class="header__mega-narrow-section">
+                  <h2 class="header__mega-narrow-cat">
+                    {item.label.toUpperCase()}
+                  </h2>
+                  <div class="header__mega-narrow-body">
+                    <div class="header__mega-narrow-flat">
+                      {splitMenuIntoColumns(item.children, 3).map((col) => (
+                        <ul class="header__mega-narrow-flat-col" role="list">
+                          {col.map((link) => (
+                            <li>
+                              <a
+                                class="header__mega-narrow-link header__mega-narrow-link--flat"
+                                href={link.href}
+                              >
+                                {link.label}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+              );
+            })
+          }
+        </div>
+
+        <div class="header__mobile-stage">
+          <div class="header__mobile-root" data-mobile-root>
+            <ul class="header__mobile-list" role="list">
+              {
+                /*
+                  Mock-based mobile root rendering is intentionally disabled.
+                  Object.entries(mockMenu).map(...)
+                */
+              }
+              {
+                realMenu.map((item) => {
+                  const hasSubmenu = item.children.length > 0;
+                  const navKey = item.id;
+                  return (
+                    <li class="header__mobile-list-item">
+                      {hasSubmenu ? (
+                        <button
+                          type="button"
+                          class="header__mobile-row header__mobile-row--parent"
+                          data-open-sub={navKey}
+                          data-sub-label={item.label}
+                        >
+                          <span class="header__mobile-row-label">
+                            {item.label}
+                          </span>
+                          <span
+                            class="header__mobile-row-arrow"
+                            aria-hidden="true"
+                          >
+                            <IconTailArrowRight />
+                          </span>
+                        </button>
+                      ) : (
+                        <a class="header__mobile-row" href={item.href}>
+                          {item.label}
+                        </a>
+                      )}
+                    </li>
+                  );
+                })
+              }
+            </ul>
+          </div>
+
+          <div class="header__mobile-sub" data-mobile-sub hidden>
+            <div class="header__mobile-sub-bar">
+              <button
+                type="button"
+                class="header__mobile-back"
+                data-mobile-back
+              >
+                <IconArrowRight class="header__mobile-back-icon" />
+                <span>Back to menu</span>
+              </button>
+              <span class="header__mobile-sub-heading" data-mobile-sub-title>
+              </span>
+            </div>
+            <div class="header__mobile-sub-panels">
+              {
+                /*
+                  Mock-based mobile sub-panel rendering is intentionally disabled.
+                  Object.entries(mockMenu).map(...)
+                */
+              }
+              {
+                realMenu.map((item) => {
+                  if (item.children.length === 0) return null;
+                  const navKey = item.id;
+                  return (
+                    <div
+                      class="header__mobile-sub-panel"
+                      data-mobile-sub-panel={navKey}
+                      hidden
+                    >
+                      <ul class="header__mobile-flat" role="list">
+                        {item.children.map((link) => (
+                          <li>
+                            <a class="header__mobile-flat-link" href={link.href}>
+                              {link.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                })
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  import { initHeaderMobile, initHeaderSearch } from "./header-mobile";
+  initHeaderMobile();
+  initHeaderSearch();
+</script>

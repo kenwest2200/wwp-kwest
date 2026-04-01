@@ -1,0 +1,57 @@
+@forward "functions";
+@forward "breakpoints";
+
+$font-sans: "Roboto", system-ui, sans-serif;
+$font-alt: "Source Sans Pro", system-ui, sans-serif;
+
+// Colors
+$dark-teal: #007d8a;
+$dark: #0D2725;
+$dark-gray: #9C9C9C;
+$gray: #D0C4C5;
+$medium-teal: #00aec7;
+$light-teal: #00c1d4;
+$cool-gray: #c8c9c7;
+$blue: #82C3D9;
+$white: #ffffff;
+$white-90: #FFFFFFE5;
+$white-20: #FFFFFF33;
+$dark-70: #0D2725B2;
+
+$border-color: #D0C4C5;
+
+$black: #000000;
+
+
+
+// Background colors
+$gradient-background: linear-gradient(180deg, #007D8A 0%, #00AEC7 100%);
+$submenu-background: #F4F7FA;
+$header-mobile-background: #F4F7FA;
+
+// Sizing
+$s-max-container-width: 1120px;
+$s-padding-x: 16px;
+$s-padding-y: 16px;
+
+// Section
+$section-left: $s-padding-x;
+$section-right: $s-padding-x;
+
+// Expose tokens as CSS custom properties (Sass $vars do not become var(--*) by themselves).
+:root {
+    --s-max-container-width: #{$s-max-container-width};
+    --s-padding-x: #{$s-padding-x};
+    --s-padding-y: #{$s-padding-y};
+    --section-left: #{$section-left};
+    --section-right: #{$section-right};
+}
+
+// Container
+.container {
+    max-width: var(--s-max-container-width);
+    padding-left: var(--section-left, var(--s-padding-x));
+    padding-right: var(--section-right, var(--s-padding-x));
+    margin-left: auto;
+    margin-right: auto;
+}
