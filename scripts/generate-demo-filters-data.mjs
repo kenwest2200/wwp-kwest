@@ -124,6 +124,12 @@ const PRODUCTS_QUERY = `
         title
         slug
         databaseId
+        featuredImage {
+          node {
+            sourceUrl
+            altText
+          }
+        }
         productCategories {
           nodes {
             slug
@@ -150,6 +156,12 @@ const PRODUCTS_NO_ATTRS_QUERY = `
         title
         slug
         databaseId
+        featuredImage {
+          node {
+            sourceUrl
+            altText
+          }
+        }
         productCategories {
           nodes {
             slug
@@ -322,18 +334,25 @@ async function generateFromGraphql(env) {
 
   const products = productsNodes
     .filter((item) => item?.title && item?.slug)
-    .map((item) => ({
-      title: decodeHtmlEntities(item.title),
-      slug: item.slug,
-      databaseId:
-        typeof item.databaseId === "number" ? item.databaseId : null,
-      categorySlugs: (item.productCategories?.nodes ?? [])
-        .map((node) => node?.slug)
-        .filter(Boolean),
-      attributeSlugs: (item.productAttributes?.nodes ?? [])
-        .map((node) => node?.slug)
-        .filter(Boolean),
-    }));
+    .map((item) => {
+      const imgNode = item.featuredImage?.node;
+      const rawUrl = imgNode?.sourceUrl;
+      const imageUrl =
+        typeof rawUrl === "string" && rawUrl.trim() ? rawUrl.trim() : null;
+      return {
+        title: decodeHtmlEntities(item.title),
+        slug: item.slug,
+        databaseId:
+          typeof item.databaseId === "number" ? item.databaseId : null,
+        imageUrl,
+        categorySlugs: (item.productCategories?.nodes ?? [])
+          .map((node) => node?.slug)
+          .filter(Boolean),
+        attributeSlugs: (item.productAttributes?.nodes ?? [])
+          .map((node) => node?.slug)
+          .filter(Boolean),
+      };
+    });
 
   const payload = {
     generatedAt: new Date().toISOString(),

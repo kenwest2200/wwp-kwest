@@ -3,6 +3,7 @@
 const rootEl = document.getElementById("demo-filters-root");
 const subEl = document.getElementById("demo-filters-sub");
 const attrsEl = document.getElementById("demo-filters-attrs");
+const attrsSectionEl = document.getElementById("demo-filters-attrs-section");
 const productsEl = document.getElementById("demo-filters-products");
 const productsTotalEl = document.getElementById("demo-filters-products-total");
 const prevBtn = document.getElementById("demo-filters-prev");
@@ -47,7 +48,10 @@ type Product = {
   databaseId?: number | null;
   date?: string | null;
   modified?: string | null;
+  imageUrl?: string | null;
 };
+
+const PRODUCT_IMAGE_PLACEHOLDER = "/images/no-product-image.svg";
 
 let allProducts: Product[] = [];
 const mergedSubcategoryGroupsBySelection = new Map<string, MergedSubGroup[]>();
@@ -72,6 +76,9 @@ const categorySlugToGroupNames = new Map<string, Set<string>>();
 const attrValueSlugToLabel = new Map<string, string>();
 let currentOffset = 0;
 let currentTotal = 0;
+/** When product-type groups exceed the visible limit, user can expand the rest. */
+let subTypesExtraExpanded = false;
+const SUBTYPE_GROUPS_VISIBLE_LIMIT = 10;
 
 function parseListParam(params: URLSearchParams, key: string) {
   const raw = params.get(key);
@@ -329,20 +336,26 @@ function renderAttributesPanel() {
   for (const s of [...selectedAttrs]) {
     if (!allowedSlugs.has(s)) selectedAttrs.delete(s);
   }
-  if (slugs.length === 0) {
-    const hint =
-      selectedRoot.size > 0
-        ? "Select at least one product type to see attribute filters."
-        : "Select a category or product type to see attribute filters.";
-    attrsEl.innerHTML = `<p class="demo-filters__hint">${hint}</p>`;
+  const hasAttrsContent =
+    slugs.length > 0 && merged.some((a) => a.values.length > 0);
+  if (!hasAttrsContent) {
+    if (attrsSectionEl) attrsSectionEl.hidden = true;
+    attrsEl.innerHTML = "";
     return;
   }
-  if (merged.length === 0) {
-    attrsEl.innerHTML =
-      '<p class="demo-filters__hint">No attributes for the selected categories.</p>';
-    return;
+  if (attrsSectionEl) {
+    const wasHidden = attrsSectionEl.hidden;
+    attrsSectionEl.hidden = false;
+    if (wasHidden) {
+      document
+        .getElementById("demo-filters-attrs-trigger")
+        ?.setAttribute("aria-expanded", "false");
+      const attrsPanel = document.getElementById("demo-filters-attrs-panel");
+      if (attrsPanel) attrsPanel.hidden = true;
+    }
   }
   attrsEl.innerHTML = merged
+    .filter((attr) => attr.values.length > 0)
     .map(
       (attr) => `
       <div class="demo-filters__attr-block">
@@ -403,12 +416,66 @@ function expandPartialSubgroupSelectionsForMergedKey() {
   }
 }
 
+function renderSubgroupBlock(g: MergedSubGroup): string {
+  const subs = (g.subcategories ?? []).filter((s) => s?.slug && s?.name);
+  if (subs.length === 0) return "";
+  const memberSlugs = subs.map((s) => s.slug).filter(Boolean);
+  const memberEnc = encodeMemberSlugsForAttr(memberSlugs);
+  const facetCount = countSubgroupFacet(memberSlugs);
+  return `
+      <div class="demo-filters__subgroup" data-group-slug="${escapeHtml(g.groupSlug)}">
+        <div class="demo-filters__chips demo-filters__chips--row">
+          <label class="demo-filters__chip">
+            <input class="demo-filters__chip-input" type="checkbox" data-group="subgroup" data-group-key="${escapeHtml(g.groupSlug)}" data-member-slugs="${escapeHtml(memberEnc)}" />
+            ${safeDisplayText(g.groupName)} <span class="demo-filters__count">(${facetCount})</span>
+          </label>
+        </div>
+      </div>`;
+}
+
+function bindSubShowMoreControls(hasExtra: boolean) {
+  const more = document.getElementById("demo-filters-sub-more");
+  const less = document.getElementById("demo-filters-sub-less");
+  const extra = document.getElementById("demo-filters-sub-extra");
+  if (!more || !less) return;
+  if (!hasExtra) {
+    more.hidden = true;
+    less.hidden = true;
+    more.onclick = null;
+    less.onclick = null;
+    return;
+  }
+  const expanded = subTypesExtraExpanded;
+  if (extra) {
+    if (expanded) extra.removeAttribute("hidden");
+    else extra.hidden = true;
+  }
+  more.hidden = expanded;
+  less.hidden = !expanded;
+  more.onclick = () => {
+    subTypesExtraExpanded = true;
+    if (extra) extra.removeAttribute("hidden");
+    more.hidden = true;
+    less.hidden = false;
+    syncCheckboxes();
+  };
+  less.onclick = () => {
+    subTypesExtraExpanded = false;
+    if (extra) extra.hidden = true;
+    less.hidden = true;
+    more.hidden = false;
+    syncCheckboxes();
+  };
+}
+
 function renderSubcategories() {
   if (!subEl) return;
   const key = getMergedDataKey();
   if (!key) {
+    subTypesExtraExpanded = false;
     subEl.innerHTML =
       '<p class="demo-filters__hint">Subcategory groups are not available yet.</p>';
+    bindSubShowMoreControls(false);
     syncCheckboxes();
     return;
   }
@@ -422,29 +489,28 @@ function renderSubcategories() {
     if (!allowed.has(s)) selectedSub.delete(s);
   }
   if (groups.length === 0) {
+    subTypesExtraExpanded = false;
     subEl.innerHTML =
       '<p class="demo-filters__hint">No subcategory groups for this combination.</p>';
+    bindSubShowMoreControls(false);
     syncCheckboxes();
     return;
   }
-  subEl.innerHTML = groups
-    .map((g) => {
-      const subs = (g.subcategories ?? []).filter((s) => s?.slug && s?.name);
-      if (subs.length === 0) return "";
-      const memberSlugs = subs.map((s) => s.slug).filter(Boolean);
-      const memberEnc = encodeMemberSlugsForAttr(memberSlugs);
-      const facetCount = countSubgroupFacet(memberSlugs);
-      return `
-      <div class="demo-filters__subgroup" data-group-slug="${escapeHtml(g.groupSlug)}">
-        <div class="demo-filters__chips demo-filters__chips--row">
-          <label class="demo-filters__chip">
-            <input class="demo-filters__chip-input" type="checkbox" data-group="subgroup" data-group-key="${escapeHtml(g.groupSlug)}" data-member-slugs="${escapeHtml(memberEnc)}" />
-            ${safeDisplayText(g.groupName)} <span class="demo-filters__count">(${facetCount})</span>
-          </label>
-        </div>
-      </div>`;
-    })
-    .join("");
+  const blocks = groups
+    .map((g) => renderSubgroupBlock(g))
+    .filter((html) => html.length > 0);
+  const limit = SUBTYPE_GROUPS_VISIBLE_LIMIT;
+  if (blocks.length <= limit) {
+    subTypesExtraExpanded = false;
+    subEl.innerHTML = `<div class="demo-filters__sub-visible">${blocks.join("")}</div>`;
+    bindSubShowMoreControls(false);
+  } else {
+    const visible = blocks.slice(0, limit);
+    const extraBlocks = blocks.slice(limit);
+    const extraHidden = !subTypesExtraExpanded;
+    subEl.innerHTML = `<div class="demo-filters__sub-visible">${visible.join("")}</div><div id="demo-filters-sub-extra" class="demo-filters__sub-extra"${extraHidden ? " hidden" : ""}>${extraBlocks.join("")}</div>`;
+    bindSubShowMoreControls(true);
+  }
   expandPartialSubgroupSelectionsForMergedKey();
   syncCheckboxes();
 }
@@ -689,6 +755,42 @@ function countAttrFacet(valueSlug: string): number {
     .filter((p) => (p.attributeSlugs ?? []).includes(valueSlug)).length;
 }
 
+/** Subcategory label: prefer leaf category, not root slug. */
+function getProductSubcategoryLabel(p: Product): string {
+  const slugs = p.categorySlugs ?? [];
+  const roots = new Set(knownRootSlugs);
+  const candidates = slugs.filter((s) => !roots.has(s));
+  const order = candidates.length > 0 ? candidates : slugs;
+  for (const slug of order) {
+    const label = categorySlugToLabel.get(slug);
+    if (label?.trim()) return label.trim();
+  }
+  if (order.length > 0) {
+    return order[0].replace(/-/g, " ");
+  }
+  return "Product";
+}
+
+function renderProductCard(p: Product): string {
+  const href = `/product/${p.slug}/`;
+  const subLabel = getProductSubcategoryLabel(p);
+  const rawImg = p.imageUrl?.trim();
+  const imgSrc = rawImg ? escapeHtml(rawImg) : PRODUCT_IMAGE_PLACEHOLDER;
+  const imgAlt = escapeHtml(p.title);
+  const onErrorAttr = ` onerror="this.onerror=null;this.src='${PRODUCT_IMAGE_PLACEHOLDER}'"`;
+
+  return `<li class="demo-filters__product-card">
+  <a class="demo-filters__product-link" href="${escapeHtml(href)}">
+    <span class="demo-filters__product-label">${safeDisplayText(subLabel)}</span>
+    <span class="demo-filters__product-thumb">
+      <img src="${imgSrc}" alt="${imgAlt}" width="400" height="300" loading="lazy" decoding="async"${rawImg ? onErrorAttr : ""} />
+    </span>
+    <h3 class="demo-filters__product-title">${safeDisplayText(p.title)}</h3>
+    <span class="demo-filters__product-cta btn btn--single-outline">View details</span>
+  </a>
+</li>`;
+}
+
 async function fetchProducts() {
   setLoading(true);
   setError(null);
@@ -726,9 +828,7 @@ async function fetchProducts() {
           : `Filters selected: ${selectedCount}.${qHint} Found: ${total}`;
     }
     if (productsEl) {
-      productsEl.innerHTML = items
-        .map((p) => `<li>${escapeHtml(p.title)}</li>`)
-        .join("");
+      productsEl.innerHTML = items.map((p) => renderProductCard(p)).join("");
     }
     syncPager();
   } catch (e) {
@@ -736,6 +836,23 @@ async function fetchProducts() {
   } finally {
     setLoading(false);
   }
+}
+
+function setupDemoFiltersAccordions() {
+  const catalog = document.getElementById("demo-filters-catalog");
+  if (!catalog) return;
+  catalog.addEventListener("click", (e) => {
+    const trigger = (e.target as HTMLElement).closest<HTMLButtonElement>(
+      ".demo-filters__accordion-trigger",
+    );
+    if (!trigger) return;
+    const id = trigger.getAttribute("aria-controls");
+    const region = id ? document.getElementById(id) : null;
+    if (!region) return;
+    const wasExpanded = trigger.getAttribute("aria-expanded") === "true";
+    trigger.setAttribute("aria-expanded", String(!wasExpanded));
+    region.hidden = wasExpanded;
+  });
 }
 
 function syncCheckboxes() {
@@ -794,6 +911,7 @@ async function init() {
         databaseId?: number | null;
         date?: string | null;
         modified?: string | null;
+        imageUrl?: string | null;
       }[];
     };
     console.log("[demo-filters] GET /data/demo-filters.json response", {
@@ -834,6 +952,7 @@ async function init() {
       databaseId: item.databaseId ?? null,
       date: item.date ?? null,
       modified: item.modified ?? null,
+      imageUrl: item.imageUrl ?? null,
     }));
     mergedSubcategoryGroupsBySelection.clear();
     const mergedRaw = data.mergedSubcategoryGroupsBySelection ?? {};
@@ -962,6 +1081,8 @@ async function init() {
       applyStateFromUrl();
       void fetchProducts();
     });
+
+    setupDemoFiltersAccordions();
 
     await fetchProducts();
   } catch (e) {
