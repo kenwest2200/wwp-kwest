@@ -97,6 +97,7 @@ export const ROOT_PRODUCT_CATEGORIES_QUERY = /* GraphQL */ `
   }
 `;
 
+/** On the API, `groupSlug` / `groupName` are built from the subcategory title (merged groups). */
 export const MERGED_SUBCATEGORY_GROUPS_QUERY = /* GraphQL */ `
   query GetMergedSubcategoryGroups($rootCategorySlugs: [String!]!) {
     mergedSubcategoryGroups(rootCategorySlugs: $rootCategorySlugs) {
@@ -107,6 +108,49 @@ export const MERGED_SUBCATEGORY_GROUPS_QUERY = /* GraphQL */ `
         slug
         name
         uri
+      }
+    }
+  }
+`;
+
+/** One item from `productsByMergedSubcategory`. */
+export type ProductsByMergedSubcategoryItem = {
+  databaseId?: number | null;
+  title?: string | null;
+};
+
+export type ProductsByMergedSubcategoryResult = {
+  total: number;
+  items: ProductsByMergedSubcategoryItem[];
+};
+
+export type ProductsByMergedSubcategoryData = {
+  productsByMergedSubcategory?: ProductsByMergedSubcategoryResult | null;
+};
+
+/**
+ * Fetch products for a merged product-type group. Pass either `groupSlug` or `subcategoryName`, not both.
+ * `groupSlug` matches the slug derived from the subcategory name on the server (e.g. `"air-systems"`).
+ */
+export const PRODUCTS_BY_MERGED_SUBCATEGORY_QUERY = /* GraphQL */ `
+  query ProductsByMergedSubcategory(
+    $rootCategorySlugs: [String!]!
+    $groupSlug: String
+    $subcategoryName: String
+    $limit: Int!
+    $offset: Int
+  ) {
+    productsByMergedSubcategory(
+      rootCategorySlugs: $rootCategorySlugs
+      groupSlug: $groupSlug
+      subcategoryName: $subcategoryName
+      limit: $limit
+      offset: $offset
+    ) {
+      total
+      items {
+        databaseId
+        title
       }
     }
   }
