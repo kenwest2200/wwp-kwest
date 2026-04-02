@@ -101,6 +101,7 @@ const ROOT_PRODUCT_CATEGORIES_QUERY = `
   }
 `;
 
+/** groupSlug / groupName are derived on the API from subcategory title (one merged row per type). */
 const MERGED_SUBCATEGORY_GROUPS_QUERY = `
   query GetMergedSubcategoryGroups($rootCategorySlugs: [String!]!) {
     mergedSubcategoryGroups(rootCategorySlugs: $rootCategorySlugs) {
