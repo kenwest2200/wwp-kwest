@@ -1,0 +1,44 @@
+---
+import type { DemoFiltersRootNavBlock } from "./types";
+
+interface Props {
+  blocks: DemoFiltersRootNavBlock[];
+}
+
+const { blocks } = Astro.props;
+---
+
+{
+  blocks.length > 0 ? (
+    <section
+      class="demo-filters-root-nav"
+      aria-label="Quick links by category"
+    >
+      <div class="demo-filters-root-nav__inner">
+        <div class="demo-filters-root-nav__grid">
+          {blocks.map((block) => (
+            <div class="demo-filters-root-nav__card">
+              <h2 class="demo-filters-root-nav__card-title">{block.rootName}</h2>
+              {block.subLinks.length > 0 ? (
+                <ul class="demo-filters-root-nav__list">
+                  {block.subLinks.map((link) => (
+                    <li>
+                      <a class="demo-filters-root-nav__link" href={link.href}>
+                        {link.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p class="demo-filters__hint">No subcategories in static data.</p>
+              )}
+              <a class="demo-filters-root-nav__cta" href={block.filterHref}>
+                Open {block.rootName} filters
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  ) : null
+}

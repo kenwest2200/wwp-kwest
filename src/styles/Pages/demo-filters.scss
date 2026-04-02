@@ -1,0 +1,349 @@
+@use "../variables" as *;
+
+.demo-filters-page {
+  background: linear-gradient(180deg, #007d8a 0%, #00aec7 100%);
+  padding: 8rem 0 4rem;
+}
+
+.demo-filters-intro {
+  padding-bottom: 2.5rem;
+
+  &__inner {
+    max-width: var(--s-max-container-width);
+    margin: 0 auto;
+    padding-left: var(--section-left, var(--s-padding-x));
+    padding-right: var(--section-right, var(--s-padding-x));
+  }
+
+  &__title {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.75rem, 4vw, 2.25rem);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+  }
+
+  &__description {
+    margin: 0;
+    max-width: 42rem;
+    font-size: 1rem;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.92);
+  }
+}
+
+.demo-filters-root-nav {
+  padding-bottom: 2.5rem;
+
+  &__inner {
+    max-width: var(--s-max-container-width);
+    margin: 0 auto;
+    padding-left: var(--section-left, var(--s-padding-x));
+    padding-right: var(--section-right, var(--s-padding-x));
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    max-width: 72rem;
+
+    @media (min-width: 1100px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    padding: 1.25rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  }
+
+  &__card-title {
+    margin: 0 0 0.75rem;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0 0 1rem;
+    padding: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    max-height: 10rem;
+    overflow-y: auto;
+  }
+
+  &__link {
+    font-size: 0.875rem;
+    color: #007d8a;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    &:hover {
+      color: #005f6a;
+    }
+  }
+
+  &__cta {
+    margin-top: auto;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #fff;
+    background: #007d8a;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      background: #006572;
+    }
+  }
+}
+
+.demo-filters-catalog {
+  &__inner {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding-left: var(--section-left, var(--s-padding-x));
+    padding-right: var(--section-right, var(--s-padding-x));
+  }
+}
+
+.demo-filters__layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.demo-filters__panel {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 1rem;
+  background: #fff;
+}
+
+.demo-filters__filters-title,
+.demo-filters__h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.demo-filters__err {
+  color: #b00020;
+  font-size: 0.8125rem;
+  margin: 0 0 0.75rem;
+}
+
+.demo-filters__group {
+  margin-bottom: 1rem;
+}
+
+.demo-filters__group-title {
+  margin: 0 0 0.4rem;
+  font-size: 0.875rem;
+  color: #444;
+}
+
+.demo-filters__group--search {
+  margin-bottom: 1rem;
+}
+
+.demo-filters__search-label {
+  display: block;
+  margin: 0 0 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.demo-filters__search-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.45rem 0.5rem;
+  font-size: 0.875rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.demo-filters__products-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.demo-filters__toolbar-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8125rem;
+  color: #444;
+}
+
+.demo-filters__toolbar-select {
+  font-size: 0.8125rem;
+  padding: 0.3rem 0.45rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.demo-filters__count {
+  margin-left: 0.25rem;
+  font-weight: 500;
+  color: #666;
+  font-size: 0.75em;
+}
+
+.demo-filters__chips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 2rem;
+}
+
+.demo-filters__attrs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 2rem;
+}
+
+.demo-filters__attr-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.demo-filters__attr-name {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.demo-filters__chips--row {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.demo-filters__hint {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #666;
+}
+
+.demo-filters__sub-panels {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 2rem;
+}
+
+.demo-filters__subgroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.demo-filters__subgroup-title {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.demo-filters__subgroup .demo-filters__chips {
+  min-height: 0;
+}
+
+.demo-filters__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.8125rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+.demo-filters__chip:has(input:checked) {
+  border-color: #007d8a;
+  background: #e6f4f5;
+  font-weight: 600;
+}
+
+.demo-filters__chip-input {
+  margin: 0;
+}
+
+.demo-filters__btn {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.demo-filters__meta {
+  margin: 0.75rem 0 0;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.demo-filters__products-total {
+  margin: 0 0 0.5rem;
+  font-size: 0.8125rem;
+  color: #444;
+}
+
+.demo-filters__pager {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.demo-filters__page-indicator {
+  font-size: 0.8125rem;
+  color: #444;
+}
+
+.demo-filters__list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.demo-filters__list li {
+  padding: 0.35rem 0;
+  border: 1px solid #eee;
+  font-size: 0.875rem;
+}
