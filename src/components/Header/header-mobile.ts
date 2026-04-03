@@ -1,5 +1,102 @@
 const SEARCH_MQ = "(min-width: 768px)";
 
+let mobileMenuForcesHeaderTopZero = false;
+
+function applyHeaderTopHeight(): void {
+  const header = document.querySelector(".header");
+  const topEl = document.querySelector("[data-header-top]");
+  if (!(header instanceof HTMLElement) || !(topEl instanceof HTMLElement)) {
+    return;
+  }
+  if (mobileMenuForcesHeaderTopZero) {
+    header.style.setProperty("--header-top-height", "0px");
+    return;
+  }
+  const h = Math.round(topEl.getBoundingClientRect().height);
+  header.style.setProperty("--header-top-height", `${Math.max(0, h)}px`);
+}
+
+function getDocumentScrollY(): number {
+  if (typeof window === "undefined") return 0;
+  const d = document.documentElement;
+  const b = document.body;
+  let y = Math.max(
+    window.scrollY ?? 0,
+    window.pageYOffset ?? 0,
+    d.scrollTop ?? 0,
+    b.scrollTop ?? 0,
+  );
+  const main = document.querySelector("main");
+  if (main instanceof HTMLElement) {
+    y = Math.max(y, main.scrollTop);
+  }
+  return y;
+}
+
+function bindHeaderStickyScroll(): void {
+  const header = document.querySelector(".header");
+  const topEl = document.querySelector("[data-header-top]");
+  if (!(header instanceof HTMLElement) || !(topEl instanceof HTMLElement)) {
+    return;
+  }
+
+  const onScroll = () => {
+    const threshold = mobileMenuForcesHeaderTopZero
+      ? 0
+      : Math.round(topEl.getBoundingClientRect().height);
+    header.classList.toggle("is-scrolling", getDocumentScrollY() > threshold);
+  };
+
+  const passive: AddEventListenerOptions = { passive: true };
+
+  applyHeaderTopHeight();
+  onScroll();
+
+  window.addEventListener("scroll", onScroll, passive);
+  document.addEventListener("scroll", onScroll, { ...passive, capture: true });
+
+  const scrollRoot = document.scrollingElement;
+  if (scrollRoot instanceof HTMLElement) {
+    scrollRoot.addEventListener("scroll", onScroll, passive);
+  }
+
+  const mainEl = document.querySelector("main");
+  if (mainEl instanceof HTMLElement) {
+    mainEl.addEventListener("scroll", onScroll, passive);
+  }
+
+  const onResize = () => {
+    applyHeaderTopHeight();
+    onScroll();
+  };
+  window.addEventListener("resize", onResize);
+  window.addEventListener("load", applyHeaderTopHeight);
+
+  if (typeof ResizeObserver !== "undefined") {
+    const ro = new ResizeObserver(() => applyHeaderTopHeight());
+    ro.observe(topEl);
+  }
+
+  requestAnimationFrame(() => {
+    applyHeaderTopHeight();
+    onScroll();
+    requestAnimationFrame(() => {
+      applyHeaderTopHeight();
+      onScroll();
+    });
+  });
+}
+
+export function initHeaderStickyScroll(): void {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bindHeaderStickyScroll, {
+      once: true,
+    });
+  } else {
+    bindHeaderStickyScroll();
+  }
+}
+
 export function initHeaderSearch(): void {
   const root = document.querySelector("[data-header-search]");
   const toggle = document.querySelector("[data-search-toggle]");
@@ -89,6 +186,8 @@ export function initHeaderMobile(): void {
   };
 
   const openMobile = () => {
+    mobileMenuForcesHeaderTopZero = true;
+    applyHeaderTopHeight();
     syncHeaderOffset();
     mobile.classList.add("is-open");
     mobile.setAttribute("aria-hidden", "false");
@@ -96,6 +195,9 @@ export function initHeaderMobile(): void {
     document.body.classList.add("header--mobile-open");
     if (header instanceof HTMLElement) header.classList.add("header--nav-open");
     showRoot();
+    requestAnimationFrame(() => {
+      window.dispatchEvent(new Event("scroll"));
+    });
   };
 
   const closeMobile = () => {
@@ -105,7 +207,13 @@ export function initHeaderMobile(): void {
     document.body.classList.remove("header--mobile-open");
     if (header instanceof HTMLElement)
       header.classList.remove("header--nav-open");
+    mobileMenuForcesHeaderTopZero = false;
+    applyHeaderTopHeight();
+    syncHeaderOffset();
     showRoot();
+    requestAnimationFrame(() => {
+      window.dispatchEvent(new Event("scroll"));
+    });
   };
 
   window.addEventListener("resize", () => {
