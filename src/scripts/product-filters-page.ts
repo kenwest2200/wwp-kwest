@@ -1,25 +1,25 @@
-// Demo filters page client script (DOM ids from DemoFiltersPanel.astro)
+// Product filters page client script (DOM ids from ProductFiltersPanel.astro)
 
-const rootEl = document.getElementById("demo-filters-root");
-const subEl = document.getElementById("demo-filters-sub");
-const attrsEl = document.getElementById("demo-filters-attrs");
-const attrsSectionEl = document.getElementById("demo-filters-attrs-section");
-const productsEl = document.getElementById("demo-filters-products");
-const productsTotalEl = document.getElementById("demo-filters-products-total");
-const prevBtn = document.getElementById("demo-filters-prev");
-const nextBtn = document.getElementById("demo-filters-next");
-const pageEl = document.getElementById("demo-filters-page");
-const clearBtn = document.getElementById("demo-filters-clear");
-const errEl = document.getElementById("demo-filters-api-error");
-const countEl = document.getElementById("demo-filters-count");
+const rootEl = document.getElementById("product-filters-root");
+const subEl = document.getElementById("product-filters-sub");
+const attrsEl = document.getElementById("product-filters-attrs");
+const attrsSectionEl = document.getElementById("product-filters-attrs-section");
+const productsEl = document.getElementById("product-filters-products");
+const productsTotalEl = document.getElementById("product-filters-products-total");
+const prevBtn = document.getElementById("product-filters-prev");
+const nextBtn = document.getElementById("product-filters-next");
+const pageEl = document.getElementById("product-filters-page");
+const clearBtn = document.getElementById("product-filters-clear");
+const errEl = document.getElementById("product-filters-api-error");
+const countEl = document.getElementById("product-filters-count");
 const searchInput = document.getElementById(
-  "demo-filters-search",
+  "product-filters-search",
 ) as HTMLInputElement | null;
 const perSelect = document.getElementById(
-  "demo-filters-per",
+  "product-filters-per",
 ) as HTMLSelectElement | null;
 const sortSelect = document.getElementById(
-  "demo-filters-sort",
+  "product-filters-sort",
 ) as HTMLSelectElement | null;
 
 const selectedRoot = new Set<string>();
@@ -177,7 +177,7 @@ function setError(text: string | null) {
 }
 
 function setLoading(on: boolean) {
-  if (clearBtn instanceof HTMLButtonElement) clearBtn.disabled = on;
+  // if (clearBtn instanceof HTMLButtonElement) clearBtn.disabled = on;
   if (prevBtn instanceof HTMLButtonElement) prevBtn.disabled = on;
   if (nextBtn instanceof HTMLButtonElement) nextBtn.disabled = on;
   // Do not disable search / per-page / sort: data is local; disabling drops focus from the search field on every keystroke.
@@ -348,9 +348,9 @@ function renderAttributesPanel() {
     attrsSectionEl.hidden = false;
     if (wasHidden) {
       document
-        .getElementById("demo-filters-attrs-trigger")
+        .getElementById("product-filters-attrs-trigger")
         ?.setAttribute("aria-expanded", "false");
-      const attrsPanel = document.getElementById("demo-filters-attrs-panel");
+      const attrsPanel = document.getElementById("product-filters-attrs-panel");
       if (attrsPanel) attrsPanel.hidden = true;
     }
   }
@@ -358,13 +358,13 @@ function renderAttributesPanel() {
     .filter((attr) => attr.values.length > 0)
     .map(
       (attr) => `
-      <div class="demo-filters__attr-block">
-        <h4 class="demo-filters__attr-name">${escapeHtml(attr.name)}</h4>
-        <div class="demo-filters__chips demo-filters__chips--row">
+      <div class="product-filters__attr-block">
+        <h4 class="product-filters__attr-name">${escapeHtml(attr.name)}</h4>
+        <div class="product-filters__chips product-filters__chips--row">
           ${attr.values
             .map((v) => {
               const n = countAttrFacet(v.slug);
-              return `<label class="demo-filters__chip"><input class="demo-filters__chip-input" type="checkbox" data-group="attr" data-slug="${escapeHtml(v.slug)}" />${escapeHtml(v.label)} <span class="demo-filters__count">(${n})</span></label>`;
+              return `<label class="product-filters__chip"><input class="product-filters__chip-input" type="checkbox" data-group="attr" data-slug="${escapeHtml(v.slug)}" />${escapeHtml(v.label)} <span class="product-filters__count">${n}</span></label>`;
             })
             .join("")}
         </div>
@@ -423,20 +423,20 @@ function renderSubgroupBlock(g: MergedSubGroup): string {
   const memberEnc = encodeMemberSlugsForAttr(memberSlugs);
   const facetCount = countSubgroupFacet(memberSlugs);
   return `
-      <div class="demo-filters__subgroup" data-group-slug="${escapeHtml(g.groupSlug)}">
-        <div class="demo-filters__chips demo-filters__chips--row">
-          <label class="demo-filters__chip">
-            <input class="demo-filters__chip-input" type="checkbox" data-group="subgroup" data-group-key="${escapeHtml(g.groupSlug)}" data-member-slugs="${escapeHtml(memberEnc)}" />
-            ${safeDisplayText(g.groupName)} <span class="demo-filters__count">(${facetCount})</span>
+      <div class="product-filters__subgroup" data-group-slug="${escapeHtml(g.groupSlug)}">
+        <div class="product-filters__chips product-filters__chips--row">
+          <label class="product-filters__chip">
+            <input class="product-filters__chip-input" type="checkbox" data-group="subgroup" data-group-key="${escapeHtml(g.groupSlug)}" data-member-slugs="${escapeHtml(memberEnc)}" />
+            ${safeDisplayText(g.groupName)} <span class="product-filters__count">${facetCount}</span>
           </label>
         </div>
       </div>`;
 }
 
 function bindSubShowMoreControls(hasExtra: boolean) {
-  const more = document.getElementById("demo-filters-sub-more");
-  const less = document.getElementById("demo-filters-sub-less");
-  const extra = document.getElementById("demo-filters-sub-extra");
+  const more = document.getElementById("product-filters-sub-more");
+  const less = document.getElementById("product-filters-sub-less");
+  const extra = document.getElementById("product-filters-sub-extra");
   if (!more || !less) return;
   if (!hasExtra) {
     more.hidden = true;
@@ -474,7 +474,7 @@ function renderSubcategories() {
   if (!key) {
     subTypesExtraExpanded = false;
     subEl.innerHTML =
-      '<p class="demo-filters__hint">Subcategory groups are not available yet.</p>';
+      '<p class="product-filters__hint">Subcategory groups are not available yet.</p>';
     bindSubShowMoreControls(false);
     syncCheckboxes();
     return;
@@ -491,7 +491,7 @@ function renderSubcategories() {
   if (groups.length === 0) {
     subTypesExtraExpanded = false;
     subEl.innerHTML =
-      '<p class="demo-filters__hint">No subcategory groups for this combination.</p>';
+      '<p class="product-filters__hint">No subcategory groups for this combination.</p>';
     bindSubShowMoreControls(false);
     syncCheckboxes();
     return;
@@ -502,13 +502,13 @@ function renderSubcategories() {
   const limit = SUBTYPE_GROUPS_VISIBLE_LIMIT;
   if (blocks.length <= limit) {
     subTypesExtraExpanded = false;
-    subEl.innerHTML = `<div class="demo-filters__sub-visible">${blocks.join("")}</div>`;
+    subEl.innerHTML = `<div class="product-filters__sub-visible">${blocks.join("")}</div>`;
     bindSubShowMoreControls(false);
   } else {
     const visible = blocks.slice(0, limit);
     const extraBlocks = blocks.slice(limit);
     const extraHidden = !subTypesExtraExpanded;
-    subEl.innerHTML = `<div class="demo-filters__sub-visible">${visible.join("")}</div><div id="demo-filters-sub-extra" class="demo-filters__sub-extra"${extraHidden ? " hidden" : ""}>${extraBlocks.join("")}</div>`;
+    subEl.innerHTML = `<div class="product-filters__sub-visible">${visible.join("")}</div><div id="product-filters-sub-extra" class="product-filters__sub-extra"${extraHidden ? " hidden" : ""}>${extraBlocks.join("")}</div>`;
     bindSubShowMoreControls(true);
   }
   expandPartialSubgroupSelectionsForMergedKey();
@@ -545,7 +545,7 @@ async function readJsonSafe(res: Response) {
 
 /**
  * Indexes human-readable names for every product type / root / attribute value
- * in `demo-filters.json`, so search matches "Pumps" etc. even when the title does not.
+ * in `product-filters.json`, so search matches "Pumps" etc. even when the title does not.
  */
 function rebuildSearchLabelMaps() {
   categorySlugToLabel.clear();
@@ -779,14 +779,14 @@ function renderProductCard(p: Product): string {
   const imgAlt = escapeHtml(p.title);
   const onErrorAttr = ` onerror="this.onerror=null;this.src='${PRODUCT_IMAGE_PLACEHOLDER}'"`;
 
-  return `<li class="demo-filters__product-card">
-  <a class="demo-filters__product-link" href="${escapeHtml(href)}">
-    <span class="demo-filters__product-label">${safeDisplayText(subLabel)}</span>
-    <span class="demo-filters__product-thumb">
+  return `<li class="product-filters__product-card">
+  <a class="product-filters__product-link" href="${escapeHtml(href)}">
+    <span class="product-filters__product-label">${safeDisplayText(subLabel)}</span>
+    <span class="product-filters__product-thumb">
       <img src="${imgSrc}" alt="${imgAlt}" width="400" height="300" loading="lazy" decoding="async"${rawImg ? onErrorAttr : ""} />
     </span>
-    <h3 class="demo-filters__product-title">${safeDisplayText(p.title)}</h3>
-    <span class="demo-filters__product-cta btn btn--single-outline">View details</span>
+    <h3 class="product-filters__product-title">${safeDisplayText(p.title)}</h3>
+    <span class="product-filters__product-cta btn btn--single-outline">View details</span>
   </a>
 </li>`;
 }
@@ -816,17 +816,17 @@ async function fetchProducts() {
     if (productsTotalEl) {
       productsTotalEl.textContent = `Showing ${start}-${end} of ${total}`;
     }
-    if (countEl) {
-      const selectedCount =
-        selectedRoot.size + selectedSub.size + selectedAttrs.size;
-      const qHint = searchQuery.trim()
-        ? ` Search: "${searchQuery.trim()}".`
-        : "";
-      countEl.textContent =
-        selectedCount === 0 && !searchQuery.trim()
-          ? `Total: ${total} (no filters selected)`
-          : `Filters selected: ${selectedCount}.${qHint} Found: ${total}`;
-    }
+    // if (countEl) {
+    //   const selectedCount =
+    //     selectedRoot.size + selectedSub.size + selectedAttrs.size;
+    //   const qHint = searchQuery.trim()
+    //     ? ` Search: "${searchQuery.trim()}".`
+    //     : "";
+    //   countEl.textContent =
+    //     selectedCount === 0 && !searchQuery.trim()
+    //       ? `Total: ${total} (no filters selected)`
+    //       : `Filters selected: ${selectedCount}.${qHint} Found: ${total}`;
+    // }
     if (productsEl) {
       productsEl.innerHTML = items.map((p) => renderProductCard(p)).join("");
     }
@@ -838,12 +838,12 @@ async function fetchProducts() {
   }
 }
 
-function setupDemoFiltersAccordions() {
-  const catalog = document.getElementById("demo-filters-catalog");
+function setupProductFiltersAccordions() {
+  const catalog = document.getElementById("product-filters-catalog");
   if (!catalog) return;
   catalog.addEventListener("click", (e) => {
     const trigger = (e.target as HTMLElement).closest<HTMLButtonElement>(
-      ".demo-filters__accordion-trigger",
+      ".product-filters__accordion-trigger",
     );
     if (!trigger) return;
     const id = trigger.getAttribute("aria-controls");
@@ -886,14 +886,14 @@ function renderRootChips() {
   rootEl.innerHTML = rootCategoriesList
     .map(
       (a) =>
-        `<label class="demo-filters__chip"><input class="demo-filters__chip-input" type="checkbox" data-group="root" data-slug="${escapeHtml(a.slug)}" />${safeDisplayText(a.name)} <span class="demo-filters__count">(${countRootFacet(a.slug)})</span></label>`,
+        `<label class="product-filters__chip"><input class="product-filters__chip-input" type="checkbox" data-group="root" data-slug="${escapeHtml(a.slug)}" />${safeDisplayText(a.name)} <span class="product-filters__count">${countRootFacet(a.slug)}</span></label>`,
     )
     .join("");
 }
 
 async function init() {
   try {
-    const res = await fetch("/data/demo-filters.json");
+    const res = await fetch("/data/product-filters.json");
     const data = (await readJsonSafe(res)) as {
       generatedAt?: string;
       attributesByCategory?: Record<string, AttrByCategoryRow[]>;
@@ -914,14 +914,14 @@ async function init() {
         imageUrl?: string | null;
       }[];
     };
-    console.log("[demo-filters] GET /data/demo-filters.json response", {
+    console.log("[product-filters] GET /data/product-filters.json response", {
       status: res.status,
       ok: res.ok,
       body: data,
     });
 
     if (!rootEl || !subEl || !attrsEl) {
-      console.error("[demo-filters] Static data load failed", {
+      console.error("[product-filters] Static data load failed", {
         response: data,
         rootElExists: Boolean(rootEl),
         subElExists: Boolean(subEl),
@@ -1027,19 +1027,19 @@ async function init() {
     subEl.addEventListener("change", onChange);
     attrsEl.addEventListener("change", onChange);
 
-    clearBtn?.addEventListener("click", () => {
-      selectedRoot.clear();
-      selectedSub.clear();
-      selectedAttrs.clear();
-      searchQuery = "";
-      if (searchInput) searchInput.value = "";
-      pageSize = 24;
-      sortMode = "newest";
-      if (perSelect) perSelect.value = "24";
-      if (sortSelect) sortSelect.value = "newest";
-      currentOffset = 0;
-      void fetchProducts();
-    });
+    // clearBtn?.addEventListener("click", () => {
+    //   selectedRoot.clear();
+    //   selectedSub.clear();
+    //   selectedAttrs.clear();
+    //   searchQuery = "";
+    //   if (searchInput) searchInput.value = "";
+    //   pageSize = 24;
+    //   sortMode = "newest";
+    //   if (perSelect) perSelect.value = "24";
+    //   if (sortSelect) sortSelect.value = "newest";
+    //   currentOffset = 0;
+    //   void fetchProducts();
+    // });
 
     searchInput?.addEventListener("input", () => {
       searchQuery = searchInput?.value ?? "";
@@ -1082,7 +1082,7 @@ async function init() {
       void fetchProducts();
     });
 
-    setupDemoFiltersAccordions();
+    setupProductFiltersAccordions();
 
     await fetchProducts();
   } catch (e) {

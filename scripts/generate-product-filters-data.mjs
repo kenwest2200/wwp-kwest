@@ -6,7 +6,7 @@ import { GraphQLClient } from "graphql-request";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, "..");
-const outputPath = path.join(projectRoot, "public", "data", "demo-filters.json");
+const outputPath = path.join(projectRoot, "public", "data", "product-filters.json");
 const envPath = path.join(projectRoot, ".env");
 
 function parseEnvFile(content) {
@@ -118,7 +118,7 @@ const MERGED_SUBCATEGORY_GROUPS_QUERY = `
 `;
 
 const PRODUCTS_QUERY = `
-  query DemoProducts($first: Int!, $after: String) {
+  query ProductFiltersProducts($first: Int!, $after: String) {
     products(first: $first, after: $after) {
       nodes {
         title
@@ -150,7 +150,7 @@ const PRODUCTS_QUERY = `
 `;
 
 const PRODUCTS_NO_ATTRS_QUERY = `
-  query DemoProductsNoAttrs($first: Int!, $after: String) {
+  query ProductFiltersProductsNoAttrs($first: Int!, $after: String) {
     products(first: $first, after: $after) {
       nodes {
         title
@@ -271,7 +271,7 @@ async function generateFromGraphql(env) {
           return [key, normalized];
         } catch (err) {
           console.warn(
-            `[demo-filters] mergedSubcategoryGroups([${key}]) failed:`,
+            `[product-filters] mergedSubcategoryGroups([${key}]) failed:`,
             err?.message ?? err,
           );
           return [key, []];
@@ -323,7 +323,7 @@ async function generateFromGraphql(env) {
         return [categorySlug, normalized];
       } catch (err) {
         console.warn(
-          `[demo-filters] attributesByCategory("${categorySlug}") failed:`,
+          `[product-filters] attributesByCategory("${categorySlug}") failed:`,
           err?.message ?? err,
         );
         return [categorySlug, []];
@@ -365,10 +365,10 @@ async function generateFromGraphql(env) {
   await mkdir(path.dirname(outputPath), { recursive: true });
   await writeFile(outputPath, JSON.stringify(payload, null, 2), "utf8");
   console.log(
-    "[demo-filters] New filter data was fetched from GraphQL and written to disk.",
+    "[product-filters] New filter data was fetched from GraphQL and written to disk.",
   );
   console.log(
-    `[demo-filters] generated ${outputPath} with ${products.length} products`,
+    `[product-filters] generated ${outputPath} with ${products.length} products`,
   );
 }
 
@@ -381,12 +381,12 @@ async function main() {
     try {
       await access(outputPath);
       console.warn(
-        "[demo-filters] PUBLIC_GRAPHQL_URL is not set. Reusing existing static data file.",
+        "[product-filters] PUBLIC_GRAPHQL_URL is not set. Reusing existing static data file.",
       );
       return;
     } catch {
       throw new Error(
-        "PUBLIC_GRAPHQL_URL is not set for demo filters build data and no existing public/data/demo-filters.json was found.",
+        "PUBLIC_GRAPHQL_URL is not set for product filters build data and no existing public/data/product-filters.json was found.",
       );
     }
   }
@@ -397,7 +397,7 @@ async function main() {
     try {
       await access(outputPath);
       console.warn(
-        "[demo-filters] GraphQL fetch failed (timeout, network, etc.); reusing existing public/data/demo-filters.json.",
+        "[product-filters] GraphQL fetch failed (timeout, network, etc.); reusing existing public/data/product-filters.json.",
         err?.cause?.message ?? err?.message ?? String(err),
       );
       return;
@@ -408,6 +408,6 @@ async function main() {
 }
 
 main().catch((error) => {
-  console.error("[demo-filters] failed to generate data", error);
+  console.error("[product-filters] failed to generate data", error);
   process.exitCode = 1;
 });

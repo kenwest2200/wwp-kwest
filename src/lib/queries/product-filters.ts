@@ -3,7 +3,7 @@ export type ProductAttributeNode = {
   slug: string;
 };
 
-export type DemoProductAttributesData = {
+export type ProductAttributesQueryData = {
   productAttributes?: {
     nodes: ProductAttributeNode[];
   } | null;
@@ -55,7 +55,7 @@ export type ProductCategoryNode = {
   } | null;
 };
 
-export type DemoProductCategoriesData = {
+export type ProductCategoriesQueryData = {
   productCategories?: {
     nodes: ProductCategoryNode[];
   } | null;
@@ -156,14 +156,14 @@ export const PRODUCTS_BY_MERGED_SUBCATEGORY_QUERY = /* GraphQL */ `
   }
 `;
 
-export type DemoProductsByAttributesData = {
+export type ProductsByAttributesQueryData = {
   productsByAttributes?: {
     total: number;
     items: ProductByAttributeItem[];
   } | null;
 };
 
-export type DemoAllProductsData = {
+export type AllProductsQueryData = {
   products?: {
     nodes: Array<
       ProductByAttributeItem & {
@@ -177,7 +177,7 @@ export type DemoAllProductsData = {
   } | null;
 };
 
-export type DemoProductsFromCategoriesData = {
+export type ProductsFromCategoriesQueryData = {
   productCategories?: {
     nodes: Array<{
       slug: string;
@@ -188,8 +188,8 @@ export type DemoProductsFromCategoriesData = {
   } | null;
 };
 
-export const DEMO_PRODUCT_ATTRIBUTES_QUERY = /* GraphQL */ `
-  query DemoProductAttributes {
+export const PRODUCT_ATTRIBUTES_EXPLORER_QUERY = /* GraphQL */ `
+  query ProductAttributesExplorer {
     productAttributes(first: 100) {
       nodes {
         name
@@ -199,8 +199,8 @@ export const DEMO_PRODUCT_ATTRIBUTES_QUERY = /* GraphQL */ `
   }
 `;
 
-export const DEMO_PRODUCT_CATEGORIES_QUERY = /* GraphQL */ `
-  query DemoProductCategories {
+export const PRODUCT_CATEGORIES_EXPLORER_QUERY = /* GraphQL */ `
+  query ProductCategoriesExplorer {
     productCategories(where: { parent: 0, hideEmpty: false }) {
       nodes {
         id
@@ -222,8 +222,8 @@ export const DEMO_PRODUCT_CATEGORIES_QUERY = /* GraphQL */ `
   }
 `;
 
-export const DEMO_PRODUCTS_BY_ATTRIBUTES_QUERY = /* GraphQL */ `
-  query DemoProductsByAttributes(
+export const PRODUCTS_BY_ATTRIBUTES_EXPLORER_QUERY = /* GraphQL */ `
+  query ProductsByAttributesExplorer(
     $filters: [String!]
     $limit: Int!
     $offset: Int!
@@ -238,8 +238,8 @@ export const DEMO_PRODUCTS_BY_ATTRIBUTES_QUERY = /* GraphQL */ `
   }
 `;
 
-export const DEMO_ALL_PRODUCTS_QUERY = /* GraphQL */ `
-  query DemoAllProducts($first: Int!) {
+export const ALL_PRODUCTS_EXPLORER_QUERY = /* GraphQL */ `
+  query AllProductsExplorer($first: Int!) {
     products(first: $first) {
       nodes {
         title
@@ -254,8 +254,8 @@ export const DEMO_ALL_PRODUCTS_QUERY = /* GraphQL */ `
   }
 `;
 
-export const DEMO_PRODUCTS_FROM_CATEGORIES_QUERY = /* GraphQL */ `
-  query DemoProductsFromCategories {
+export const PRODUCTS_FROM_CATEGORIES_EXPLORER_QUERY = /* GraphQL */ `
+  query ProductsFromCategoriesExplorer {
     productCategories(first: 300, where: { hideEmpty: false }) {
       nodes {
         slug

@@ -2,10 +2,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import Layout from "../layouts/Layout.astro";
-import DemoFiltersIntro from "../components/DemoFilters/DemoFiltersIntro.astro";
-import DemoFiltersRootNav from "../components/DemoFilters/DemoFiltersRootNav.astro";
-import DemoFiltersPanel from "../components/DemoFilters/DemoFiltersPanel.astro";
-import type { DemoFiltersRootNavBlock } from "../components/DemoFilters/types";
+import ProductFiltersIntro from "../components/ProductFilters/ProductFiltersIntro.astro";
+import ProductFiltersRootNav from "../components/ProductFilters/ProductFiltersRootNav.astro";
+import ProductFiltersPanel from "../components/ProductFilters/ProductFiltersPanel.astro";
+import type { ProductFiltersRootNavBlock } from "../components/ProductFilters/types";
 
 export const prerender = true;
 
@@ -13,12 +13,12 @@ const dataPath = path.join(
   process.cwd(),
   "public",
   "data",
-  "demo-filters.json",
+  "product-filters.json",
 );
 
 const MAX_SUB_LINKS_PER_CARD = 6;
 
-function buildRootNavBlocks(): DemoFiltersRootNavBlock[] {
+function buildRootNavBlocks(): ProductFiltersRootNavBlock[] {
   if (!fs.existsSync(dataPath)) {
     return [];
   }
@@ -50,7 +50,7 @@ function buildRootNavBlocks(): DemoFiltersRootNavBlock[] {
           seen.add(s.slug);
           const href =
             s.uri?.trim() ||
-            `?root=${encodeURIComponent(root.slug)}&sub=${encodeURIComponent(s.slug)}#demo-filters-catalog`;
+            `?root=${encodeURIComponent(root.slug)}&sub=${encodeURIComponent(s.slug)}#product-filters-catalog`;
           subLinks.push({ name: s.name, href });
           if (subLinks.length >= MAX_SUB_LINKS_PER_CARD) break;
         }
@@ -61,7 +61,7 @@ function buildRootNavBlocks(): DemoFiltersRootNavBlock[] {
         rootName: root.name,
         rootSlug: root.slug,
         subLinks,
-        filterHref: `?root=${encodeURIComponent(root.slug)}#demo-filters-catalog`,
+        filterHref: `?root=${encodeURIComponent(root.slug)}#product-filters-catalog`,
       };
     });
   } catch {
@@ -73,13 +73,13 @@ const rootNavBlocks = buildRootNavBlocks();
 ---
 
 <Layout>
-  <main class="demo-filters-page">
-    <DemoFiltersIntro />
-    <DemoFiltersRootNav blocks={rootNavBlocks} />
-    <DemoFiltersPanel />
+  <main class="product-filters-page">
+    <ProductFiltersIntro />
+    <ProductFiltersRootNav blocks={rootNavBlocks} />
+    <ProductFiltersPanel />
   </main>
 </Layout>
 
 <script>
-  import "../scripts/demo-filters-page.ts";
+  import "../scripts/product-filters-page.ts";
 </script>

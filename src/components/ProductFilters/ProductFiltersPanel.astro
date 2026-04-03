@@ -1,0 +1,205 @@
+---
+import SectionTitle from "../SectionTitle/index.astro";
+import IconSearch from "../icons/searchIcon.astro";
+import IconArrowDown from "../icons/arrowDown.astro";
+---
+
+<section
+  id="product-filters-catalog"
+  class="product-filters-catalog"
+  aria-label="Filters and product list"
+>
+  <SectionTitle
+    title="Explore our products"
+    className="product-filters-catalog__section-title"
+  />
+
+  <div class="product-filters-catalog__inner">
+    <div class="product-filters__layout">
+      <div class="product-filters__panel" aria-labelledby="product-filters-heading">
+        <h2 id="product-filters-heading" class="product-filters__filters-title">
+          Filtering by:
+        </h2>
+        <p id="product-filters-api-error" class="product-filters__err" hidden></p>
+
+        <div class="product-filters__group product-filters__group--search">
+          <label class="product-filters__search-label" for="product-filters-search">
+            <IconSearch />
+            <input
+              id="product-filters-search"
+              type="search"
+              class="product-filters__search-input"
+              placeholder="Search parts"
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </label>
+        </div>
+
+        <div class="product-filters__group product-filters__accordion">
+          <button
+            type="button"
+            class="product-filters__accordion-trigger"
+            id="product-filters-cat-trigger"
+            aria-expanded="true"
+            aria-controls="product-filters-cat-panel"
+          >
+            <span class="product-filters__accordion-title">Categories</span>
+            <span class="product-filters__accordion-chevron" aria-hidden="true">
+              <span class="product-filters__accordion-chevron-icon"></span>
+            </span>
+          </button>
+          <div
+            id="product-filters-cat-panel"
+            class="product-filters__accordion-panel"
+            role="region"
+            aria-labelledby="product-filters-cat-trigger"
+          >
+            <div id="product-filters-root" class="product-filters__chips"></div>
+          </div>
+        </div>
+
+        <div class="product-filters__group product-filters__accordion">
+          <button
+            type="button"
+            class="product-filters__accordion-trigger"
+            id="product-filters-sub-trigger"
+            aria-expanded="true"
+            aria-controls="product-filters-sub-panel"
+          >
+            <span class="product-filters__accordion-title">Product types</span>
+            <span class="product-filters__accordion-chevron" aria-hidden="true">
+              <span class="product-filters__accordion-chevron-icon"></span>
+            </span>
+          </button>
+          <div
+            id="product-filters-sub-panel"
+            class="product-filters__accordion-panel"
+            role="region"
+            aria-labelledby="product-filters-sub-trigger"
+          >
+            <div id="product-filters-sub" class="product-filters__sub-panels"></div>
+            <div class="product-filters__sub-more-row">
+              <button
+                type="button"
+                id="product-filters-sub-more"
+                class="product-filters__link-btn"
+                hidden
+              >
+                Show more
+                <IconArrowDown />
+              </button>
+              <button
+                type="button"
+                id="product-filters-sub-less"
+                class="product-filters__link-btn"
+                hidden
+              >
+                Hide
+                <IconArrowDown
+                  class="product-filters__link-btn-icon product-filters__link-btn-icon--rotate"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div
+          id="product-filters-attrs-section"
+          class="product-filters__group product-filters__accordion"
+          hidden
+        >
+          <button
+            type="button"
+            class="product-filters__accordion-trigger"
+            id="product-filters-attrs-trigger"
+            aria-expanded="false"
+            aria-controls="product-filters-attrs-panel"
+          >
+            <span class="product-filters__accordion-title">Attributes</span>
+            <span class="product-filters__accordion-chevron" aria-hidden="true">
+              <span class="product-filters__accordion-chevron-icon"></span>
+            </span>
+          </button>
+          <div
+            id="product-filters-attrs-panel"
+            class="product-filters__accordion-panel"
+            role="region"
+            aria-labelledby="product-filters-attrs-trigger"
+            hidden
+          >
+            <div id="product-filters-attrs" class="product-filters__attrs"></div>
+          </div>
+        </div>
+
+        <!-- Clear all — 
+        <button type="button" id="product-filters-clear" class="product-filters__btn">
+          Clear all
+        </button>
+        -->
+
+        <!-- 
+        <p class="product-filters__meta">
+          <span id="product-filters-count"></span>
+        </p>
+        -->
+      </div>
+
+      <div class="product-filters__panel" aria-labelledby="product-filters-products-h">
+        <h2 id="product-filters-products-h" class="product-filters__h2">Products</h2>
+        <div class="product-filters__products-toolbar">
+          <label class="product-filters__toolbar-label">
+            Per page
+            <select
+              id="product-filters-per"
+              class="product-filters__toolbar-select"
+              aria-label="Products per page"
+            >
+              <option value="12">12</option>
+              <option value="24" selected>24</option>
+              <option value="48">48</option>
+            </select>
+          </label>
+          <label class="product-filters__toolbar-label">
+            Sort
+            <select
+              id="product-filters-sort"
+              class="product-filters__toolbar-select"
+              aria-label="Sort products"
+            >
+              <option value="newest" selected>Newest</option>
+              <option value="oldest">Oldest</option>
+              <option value="title">Title A–Z</option>
+            </select>
+          </label>
+        </div>
+        <p
+          id="product-filters-products-total"
+          class="product-filters__products-total"
+        >
+          Products found: 0
+        </p>
+        <ul id="product-filters-products" class="product-filters__list"></ul>
+        <div class="product-filters__pager">
+          <button
+            type="button"
+            id="product-filters-prev"
+            class="product-filters__btn"
+          >
+            Prev
+          </button>
+          <span id="product-filters-page" class="product-filters__page-indicator"
+            >Page 1</span
+          >
+          <button
+            type="button"
+            id="product-filters-next"
+            class="product-filters__btn"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,50 @@
+---
+import type { ProductFiltersRootNavBlock } from "./types";
+import IconArrowRight from "../icons/IconArrowRight.astro";
+
+interface Props {
+  blocks: ProductFiltersRootNavBlock[];
+}
+
+const { blocks } = Astro.props;
+---
+
+{
+  blocks.length > 0 ? (
+    <section class="product-filters-root-nav" aria-label="Quick links by category">
+      <div class="product-filters-root-nav__inner">
+        <div class="product-filters-root-nav__grid">
+          {blocks.map((block) => (
+            <div class="product-filters-root-nav__card">
+              <h2 class="product-filters-root-nav__card-title">
+                {block.rootName}
+              </h2>
+              {block.subLinks.length > 0 ? (
+                <ul class="product-filters-root-nav__list">
+                  {block.subLinks.map((link) => (
+                    <li>
+                      <a class="product-filters-root-nav__link" href={link.href}>
+                        {link.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p class="product-filters__hint">
+                  No subcategories in static data.
+                </p>
+              )}
+              <a
+                class="product-filters-root-nav__cta btn btn--primary"
+                href={block.filterHref}
+              >
+                Browse {block.rootName} components
+                <IconArrowRight />
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  ) : null
+}

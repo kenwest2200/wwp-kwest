@@ -1,0 +1,20 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Catalog",
+  description = "Explore Waterway components for pool, spa, and bath systems — including pumps, jets, lighting, air systems, controls, and plumbing solutions.",
+} = Astro.props;
+---
+
+<section class="product-filters-intro" aria-labelledby="product-filters-intro-title">
+  <div class="product-filters-intro__inner">
+    <h1 id="product-filters-intro-title" class="product-filters-intro__title">
+      {title}
+    </h1>
+    <p class="product-filters-intro__description">{description}</p>
+  </div>
+</section>
