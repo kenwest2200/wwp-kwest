@@ -196,114 +196,123 @@ const topMenuItems = {
       </div>
     </div>
   </div>
-  <div class="container header__container js-header-container">
-    <div class="header__logo">
-      <button
-        type="button"
-        class="header__burger"
-        aria-label="Open menu"
-        aria-expanded="false"
-        aria-controls="header-mobile"
-        data-open-mobile
-      >
-        <span class="visually-hidden">Open menu</span>
-        <IconBurger />
-      </button>
-      <a href="/" class="header__logo-link">
-        <HeaderLogo class="header__logo-icon" />
-      </a>
-    </div>
-    <nav class="header__nav" aria-label="Main">
-      <ul class="header__menu">
-        {
-          realMenu.map((item) => {
-            const hasSubmenu = item.children.length > 0;
-            return (
-              <li
-                class:list={[
-                  "header__item",
-                  hasSubmenu && "header__item--has-submenu",
-                ]}
-              >
-                <a class="header__link" href={item.href}>
-                  {item.label}
-                  {hasSubmenu && <IconArrowDown class="header__link-icon" />}
-                </a>
-                {hasSubmenu && (
-                  <div class="header__submenu">
-                    {menuItemHasNestedChildren(item) ? (
-                      <div class="header__submenu-grid">
-                        {item.children.map((col) => (
-                          <ul
-                            class="header__submenu-list"
-                            role="list"
-                            aria-label={col.label}
-                          >
-                            <li class="header__submenu-item">
-                              <a class="header__submenu-link" href={col.href}>
-                                {col.label}
-                              </a>
-                            </li>
-                            {col.children.map((sub) => (
+  <div class="header__container js-header-container">
+    <div class="container">
+      <div class="header__logo">
+        <button
+          type="button"
+          class="header__burger"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="header-mobile"
+          data-open-mobile
+        >
+          <span class="visually-hidden">Open menu</span>
+          <IconBurger />
+        </button>
+        <a href="/" class="header__logo-link">
+          <HeaderLogo class="header__logo-icon" />
+        </a>
+      </div>
+      <nav class="header__nav" aria-label="Main">
+        <ul class="header__menu">
+          {
+            realMenu.map((item) => {
+              const hasSubmenu = item.children.length > 0;
+              return (
+                <li
+                  class:list={[
+                    "header__item",
+                    hasSubmenu && "header__item--has-submenu",
+                  ]}
+                >
+                  <a class="header__link" href={item.href}>
+                    {item.label}
+                    {hasSubmenu && <IconArrowDown class="header__link-icon" />}
+                  </a>
+                  {hasSubmenu && (
+                    <div class="header__submenu">
+                      {menuItemHasNestedChildren(item) ? (
+                        <div class="header__submenu-grid">
+                          {item.children.map((col) => (
+                            <ul
+                              class="header__submenu-list"
+                              role="list"
+                              aria-label={col.label}
+                            >
                               <li class="header__submenu-item">
-                                <a class="header__submenu-link" href={sub.href}>
-                                  {sub.label}
+                                <a class="header__submenu-link" href={col.href}>
+                                  {col.label}
                                 </a>
                               </li>
-                            ))}
-                            <li class="header__submenu-item-link--find-more">
-                              <a
-                                class="header__mobile-find-more"
-                                href={col.href}
-                              >
-                                Find more
-                                <IconArrowRight />
+                              {col.children.map((sub) => (
+                                <li class="header__submenu-item">
+                                  <a
+                                    class="header__submenu-link"
+                                    href={sub.href}
+                                  >
+                                    {sub.label}
+                                  </a>
+                                </li>
+                              ))}
+                              <li class="header__submenu-item-link--find-more">
+                                <a
+                                  class="header__mobile-find-more"
+                                  href={col.href}
+                                >
+                                  Find more
+                                  <IconArrowRight />
+                                </a>
+                              </li>
+                            </ul>
+                          ))}
+                        </div>
+                      ) : (
+                        <ul class="header__submenu-list" role="list">
+                          {item.children.map((link) => (
+                            <li class="header__submenu-item">
+                              <a class="header__submenu-link" href={link.href}>
+                                {link.label}
                               </a>
                             </li>
-                          </ul>
-                        ))}
-                      </div>
-                    ) : (
-                      <ul class="header__submenu-list" role="list">
-                        {item.children.map((link) => (
-                          <li class="header__submenu-item">
-                            <a class="header__submenu-link" href={link.href}>
-                              {link.label}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                )}
-              </li>
-            );
-          })
-        }
-      </ul>
-    </nav>
-    <div class="header__search" data-header-search>
-      <button
-        type="button"
-        class="header__search-toggle"
-        aria-expanded="false"
-        aria-controls="header-search-panel"
-        data-search-toggle
-      >
-        <span class="visually-hidden">Open search</span>
-        <IconSearch class="header__search-toggle-icon" />
-      </button>
-      <div id="header-search-panel" class="header__search-panel" role="search">
-        <form action="#">
-          <label class="header__search-label">
-            <IconSearch class="header__search-icon" />
-            <input
-              class="header__search-input"
-              type="text"
-              placeholder="Search for parts"
-            />
-          </label>
-        </form>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  )}
+                </li>
+              );
+            })
+          }
+        </ul>
+      </nav>
+      <div class="header__search" data-header-search>
+        <button
+          type="button"
+          class="header__search-toggle"
+          aria-expanded="false"
+          aria-controls="header-search-panel"
+          data-search-toggle
+        >
+          <span class="visually-hidden">Open search</span>
+          <IconSearch class="header__search-toggle-icon" />
+        </button>
+        <div
+          id="header-search-panel"
+          class="header__search-panel"
+          role="search"
+        >
+          <form action="#">
+            <label class="header__search-label">
+              <IconSearch class="header__search-icon" />
+              <input
+                class="header__search-input"
+                type="text"
+                placeholder="Search for parts"
+              />
+            </label>
+          </form>
+        </div>
       </div>
     </div>
   </div>

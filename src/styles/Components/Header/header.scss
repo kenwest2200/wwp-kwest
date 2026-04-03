@@ -35,12 +35,12 @@
     }
 
     .header__logo-icon {
-      fill: $dark-medium;
+      fill: $dark-teal;
     }
 
     .header__burger {
       path {
-        stroke: $dark-medium;
+        stroke: $dark-teal;
       }
     }
 
@@ -92,6 +92,12 @@
     padding-left: px-to-rem(40);
     padding-right: px-to-rem(40);
     padding-top: px-to-rem(24);
+    width: 100%;
+
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   &__top {
@@ -158,9 +164,9 @@
   }
 
   &__container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    // display: flex;
+    // align-items: center;
+    // justify-content: space-between;
   }
 
   &__burger {
