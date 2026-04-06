@@ -9,7 +9,9 @@ const productsEmptyEl = document.getElementById("product-filters-empty");
 const productsTotalEl = document.getElementById(
   "product-filters-products-total",
 );
-const activeFiltersEl = document.getElementById("product-filters-active-filters");
+const activeFiltersEl = document.getElementById(
+  "product-filters-active-filters",
+);
 const activeFiltersRowEl = document.getElementById(
   "product-filters-active-filters-row",
 );
@@ -839,7 +841,7 @@ function renderProductCard(p: Product): string {
   const onErrorAttr = ` onerror="this.onerror=null;this.src='${PRODUCT_IMAGE_PLACEHOLDER}'"`;
 
   return `<li class="product-filters__product-card">
-  <a class="product-filters__product-link" href="${escapeHtml(href)}">
+  <a class="product-filters__product-link" target="_blank" href="${escapeHtml(href)}">
     <span class="product-filters__product-label">${safeDisplayText(subLabel)}</span>
     <span class="product-filters__product-thumb">
       <img src="${imgSrc}" alt="${imgAlt}" width="${imgW}" height="${imgH}" loading="lazy" decoding="async"${rawImg ? onErrorAttr : ""} />
@@ -1202,8 +1204,7 @@ async function init() {
       modified: item.modified ?? null,
       imageUrl: item.imageUrl ?? null,
       imageAlt: item.imageAlt ?? null,
-      imageWidth:
-        typeof item.imageWidth === "number" ? item.imageWidth : null,
+      imageWidth: typeof item.imageWidth === "number" ? item.imageWidth : null,
       imageHeight:
         typeof item.imageHeight === "number" ? item.imageHeight : null,
     }));
@@ -1308,18 +1309,16 @@ async function init() {
       }
     });
 
-    document.getElementById("product-filters-view-grid")?.addEventListener(
-      "click",
-      () => {
+    document
+      .getElementById("product-filters-view-grid")
+      ?.addEventListener("click", () => {
         setCatalogViewMode("grid", true);
-      },
-    );
-    document.getElementById("product-filters-view-rows")?.addEventListener(
-      "click",
-      () => {
+      });
+    document
+      .getElementById("product-filters-view-rows")
+      ?.addEventListener("click", () => {
         setCatalogViewMode("rows", true);
-      },
-    );
+      });
 
     prevBtn?.addEventListener("click", () => {
       if (currentOffset <= 0) return;

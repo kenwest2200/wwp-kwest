@@ -12,6 +12,12 @@ import {
   type FooterLayoutData,
 } from "../lib/queries/layout-footer";
 
+export interface Props {
+  headerType?: "white";
+}
+
+const { headerType } = Astro.props;
+
 let headerData: HeaderLayoutData | null = null;
 let footerData: FooterLayoutData | null = null;
 
@@ -39,7 +45,7 @@ if (getGraphQLClient()) {
     <title>Waterway Plastics - Pool & Spa Supplies</title>
   </head>
   <body>
-    <Header data={headerData} />
+    <Header data={headerData} headerType={headerType} />
     <slot />
     <Footer data={footerData} />
   </body>

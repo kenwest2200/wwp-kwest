@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-03T13:26:49.245Z",
+  "generatedAt": "2026-04-06T14:36:37.528Z",
   "attributesByCategory": {
     "bath": [],
     "pool": [],
@@ -1803,7 +1803,12 @@
       "title": "Old Faithful Jets – Gunite & Vinyl Liner",
       "slug": "old-faithful-jets-gunite-vinyl-liner-2",
       "databaseId": 40265,
+      "date": "2025-08-14T15:28:33",
+      "modified": "2025-08-14T15:47:50",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "gunite-jets"
       ],
@@ -1813,7 +1818,12 @@
       "title": "ClearWater II – D.E. Filter System",
       "slug": "clearwater-ii-d-e-filter-system",
       "databaseId": 40169,
+      "date": "2025-06-02T17:08:07",
+      "modified": "2026-04-02T09:38:48",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
@@ -1823,7 +1833,12 @@
       "title": "Carefree Top-Mount – Sand Filter",
       "slug": "carefree-top-mount-sand-filter-inground",
       "databaseId": 39535,
+      "date": "2023-11-30T14:30:19",
+      "modified": "2026-04-02T09:42:40",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
@@ -1833,7 +1848,12 @@
       "title": "Pulsar Foot Massage Jets & Power Pulsar Foot & Back Message Jets",
       "slug": "pulsar-foot-massage-jets",
       "databaseId": 38111,
+      "date": "2023-11-22T17:47:04",
+      "modified": "2024-01-29T16:33:02",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-jets"
       ],
@@ -1843,7 +1863,12 @@
       "title": "AquaShapes  3, 2, 1 Jet Systems",
       "slug": "aquashapes-storm-jet-systems",
       "databaseId": 37826,
+      "date": "2023-09-06T20:29:58",
+      "modified": "2024-09-13T21:10:27",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "gunite-jets"
       ],
@@ -1853,7 +1878,12 @@
       "title": "Waterway Warranty",
       "slug": "waterway-warranty",
       "databaseId": 39232,
+      "date": "2023-06-30T21:17:40",
+      "modified": "2025-12-10T19:56:51",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "warranty"
       ],
@@ -1863,7 +1893,12 @@
       "title": "TruSeal Air Controls, Top Access Controls & Accessories",
       "slug": "truseal-air-controls-top-access-controls-accessories",
       "databaseId": 38197,
+      "date": "2023-06-07T16:55:57",
+      "modified": "2023-12-15T14:53:29",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "air-controls"
       ],
@@ -1873,7 +1908,12 @@
       "title": "VGB Suctions & Strip Drains Replacement Parts",
       "slug": "vgb-suctions-strip-drains-replacement-parts",
       "databaseId": 38964,
+      "date": "2023-06-06T22:31:03",
+      "modified": "2023-06-07T23:09:45",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -1883,7 +1923,12 @@
       "title": "VGB Grates & Frames Replacement Parts",
       "slug": "vgb-grates-frames",
       "databaseId": 38952,
+      "date": "2023-06-06T20:44:25",
+      "modified": "2023-06-06T22:07:27",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -1893,7 +1938,12 @@
       "title": "VGB Drains Replacement Parts",
       "slug": "vgb-drains-replacement-parts",
       "databaseId": 38947,
+      "date": "2023-06-06T18:52:15",
+      "modified": "2023-06-07T23:11:45",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -1903,7 +1953,12 @@
       "title": "TWM Skim Filter Replacement Parts",
       "slug": "twm-skim-filter-replacement-parts",
       "databaseId": 38932,
+      "date": "2023-06-06T18:23:23",
+      "modified": "2023-06-06T18:23:23",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -1913,7 +1968,12 @@
       "title": "Ultra Skim Filter & Ultra Skim XL Filter Replacement Parts",
       "slug": "ultra-skim-filter-ultra-skim-xl-filter-replacement-parts",
       "databaseId": 38913,
+      "date": "2023-06-06T17:06:19",
+      "modified": "2023-06-07T23:12:41",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -1923,7 +1983,12 @@
       "title": "Deluxe Strip Skimmer and Skim Filter Replacement Parts",
       "slug": "deluxe-strip-skimmer-and-skim-filter-replacement-parts",
       "databaseId": 38897,
+      "date": "2023-06-06T16:16:03",
+      "modified": "2023-06-06T16:33:32",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -1933,7 +1998,12 @@
       "title": "Teleweir Replacement Parts",
       "slug": "teleweir-replacement-parts",
       "databaseId": 38894,
+      "date": "2023-06-06T16:06:39",
+      "modified": "2023-06-06T16:06:39",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -1943,7 +2013,12 @@
       "title": "Spa Skimmer and Skim Filter Replacement Parts",
       "slug": "spa-skimmer-and-skim-filter",
       "databaseId": 33622,
+      "date": "2023-06-06T12:37:07",
+      "modified": "2023-06-06T23:00:56",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -1953,7 +2028,12 @@
       "title": "Renegade Gunite and Venturi / Deep Basket Skimmers Replacement Parts",
       "slug": "renegade-gunite-and-venturi-deep-basket-skimmers",
       "databaseId": 33229,
+      "date": "2023-06-06T12:37:03",
+      "modified": "2023-06-06T17:37:53",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -1963,7 +2043,12 @@
       "title": "Renegade Fiberglass Skimmer Replacement Parts",
       "slug": "renegade-fiberglass-skimmer",
       "databaseId": 33197,
+      "date": "2023-06-06T12:37:03",
+      "modified": "2023-06-07T23:15:21",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -1973,7 +2058,12 @@
       "title": "Flo-Pro II Above Ground Skimmer Replacement Parts",
       "slug": "flo-pro-ii-above-ground-skimmer-2",
       "databaseId": 32765,
+      "date": "2023-06-06T12:36:59",
+      "modified": "2023-06-06T23:04:28",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -1983,7 +2073,12 @@
       "title": "Off-Line and Above Ground Chlorinators Replacement Parts",
       "slug": "off-line-and-above-ground-chlorinators",
       "databaseId": 32656,
+      "date": "2023-06-06T12:36:59",
+      "modified": "2023-06-07T23:26:50",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -1993,7 +2088,12 @@
       "title": "Main Drains Replacement Parts",
       "slug": "main-drains",
       "databaseId": 32470,
+      "date": "2023-06-06T12:36:57",
+      "modified": "2023-06-06T23:09:56",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2003,7 +2103,12 @@
       "title": "In-Line Chlorinators Replacement Parts",
       "slug": "in-line-chlorinators",
       "databaseId": 32380,
+      "date": "2023-06-06T12:36:56",
+      "modified": "2023-06-07T23:18:44",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2013,7 +2118,12 @@
       "title": "Flo-Pro Skim Filter Replacement Parts",
       "slug": "flo-pro-skim-filter",
       "databaseId": 32180,
+      "date": "2023-06-06T12:36:54",
+      "modified": "2023-06-07T23:19:50",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2023,7 +2133,12 @@
       "title": "50 sq. ft. Skim Filter Replacement Parts",
       "slug": "50-sq-ft-skim-filter-2",
       "databaseId": 32005,
+      "date": "2023-06-06T12:36:53",
+      "modified": "2023-06-07T23:30:39",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2033,7 +2148,12 @@
       "title": "Dyna-Flo XL Skim Filter Replacement Parts",
       "slug": "dyna-flo-xl-skim-filter",
       "databaseId": 31994,
+      "date": "2023-06-06T12:36:52",
+      "modified": "2023-06-07T23:31:52",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2043,7 +2163,12 @@
       "title": "Dyna-Flo Top Mount Skim Filter Replacement Parts",
       "slug": "dyna-flo-top-mount-skim-filter",
       "databaseId": 31977,
+      "date": "2023-06-06T12:36:52",
+      "modified": "2023-06-07T23:32:41",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2053,7 +2178,12 @@
       "title": "100 sq. ft. Skim Filter Replacement Parts",
       "slug": "100-sq-ft-skim-filter",
       "databaseId": 31760,
+      "date": "2023-06-06T12:36:50",
+      "modified": "2023-06-07T23:34:56",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2063,7 +2193,12 @@
       "title": "1 1/2″ and 2″ Top-Load Filter Replacement Parts",
       "slug": "1-1-2-and-2-top-load-filter",
       "databaseId": 31727,
+      "date": "2023-06-06T12:36:50",
+      "modified": "2023-06-07T23:33:45",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2073,7 +2208,12 @@
       "title": "1 1/2″ In-Line Filter Replacement Parts",
       "slug": "1-1-2-in-line-filter",
       "databaseId": 31677,
+      "date": "2023-06-06T12:36:50",
+      "modified": "2023-06-07T23:34:28",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2083,7 +2223,12 @@
       "title": "Renegade Vinyl Liner Skimmer Replacement Parts",
       "slug": "renegade-vinyl-liner-skimmer",
       "databaseId": 33257,
+      "date": "2023-06-03T12:37:04",
+      "modified": "2023-06-07T23:35:30",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2093,7 +2238,12 @@
       "title": "TWM Sand Filter Replacement Parts",
       "slug": "twm-sand-filter-replacement-parts",
       "databaseId": 38879,
+      "date": "2023-06-02T23:42:00",
+      "modified": "2023-06-02T23:42:00",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2103,7 +2253,12 @@
       "title": "UltraClean Pro Sand Filter Replacement Parts (Discontinued 2015)",
       "slug": "ultraclean-pro-sand-filter-replacement-parts-discontinued-2015",
       "databaseId": 38873,
+      "date": "2023-06-02T23:15:02",
+      "modified": "2023-06-07T23:36:19",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2113,7 +2268,12 @@
       "title": "TWM Cartridge Filter Package Replacement Parts",
       "slug": "twm-cartridge-filter-package-replacement-parts",
       "databaseId": 38866,
+      "date": "2023-06-02T22:50:59",
+      "modified": "2023-06-07T23:37:15",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2123,7 +2283,12 @@
       "title": "TruSeal Valves Replacement Parts",
       "slug": "truseal-valves-replacement-parts",
       "databaseId": 38843,
+      "date": "2023-06-02T18:44:04",
+      "modified": "2023-06-07T23:37:57",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2133,7 +2298,12 @@
       "title": "Viper Wet End Replacement Parts",
       "slug": "viper-wet-end-replacement-parts",
       "databaseId": 38823,
+      "date": "2023-06-02T18:06:04",
+      "modified": "2023-06-07T23:38:28",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2143,7 +2313,12 @@
       "title": "Supreme Pump Replacement Parts",
       "slug": "supreme-pump-replacement-parts",
       "databaseId": 38795,
+      "date": "2023-06-02T16:28:02",
+      "modified": "2023-06-07T23:39:00",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2153,7 +2328,12 @@
       "title": "Power Defender 140ABG Pump Replacement Parts",
       "slug": "power-defender-140abg-pump-replacement-parts",
       "databaseId": 38788,
+      "date": "2023-06-02T15:57:24",
+      "modified": "2023-06-07T23:40:52",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2163,7 +2343,12 @@
       "title": "Spa Flo and Iron Might Wet End Replacement Parts",
       "slug": "spa-flo-and-iron-might-wet-end",
       "databaseId": 33608,
+      "date": "2023-06-02T12:37:07",
+      "modified": "2023-06-02T18:10:01",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2173,7 +2358,12 @@
       "title": "Spa Flo II Wet End Replacement Parts",
       "slug": "spa-flo-ii-wet-end",
       "databaseId": 33606,
+      "date": "2023-06-02T12:37:07",
+      "modified": "2023-06-07T23:41:26",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2183,7 +2373,12 @@
       "title": "SmartClean Sand Filter – Top Mount Replacement Parts (Discontinued 2015)",
       "slug": "smartclean-sand-filter-top-mount-discontinued-2015",
       "databaseId": 33540,
+      "date": "2023-06-02T12:37:06",
+      "modified": "2023-06-06T23:34:11",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2193,7 +2388,12 @@
       "title": "Slide Valve Internals Replacement Parts",
       "slug": "slide-valve-internals",
       "databaseId": 33536,
+      "date": "2023-06-02T12:37:06",
+      "modified": "2023-06-07T23:42:13",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2203,7 +2403,12 @@
       "title": "SVL56 High-Flow Pump Replacement Parts",
       "slug": "svl56-high-flow-pump",
       "databaseId": 33432,
+      "date": "2023-06-02T12:37:05",
+      "modified": "2023-06-07T23:43:55",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2213,7 +2418,12 @@
       "title": "SMF International Pump Replacement Parts",
       "slug": "smf-pump",
       "databaseId": 33402,
+      "date": "2023-06-02T12:37:05",
+      "modified": "2023-06-07T23:46:07",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2223,7 +2433,12 @@
       "title": "ProClean Plus Cartridge Filter Replacement Parts",
       "slug": "proclean-plus-cartridge-filter",
       "databaseId": 33083,
+      "date": "2023-06-02T12:37:02",
+      "modified": "2023-06-06T23:43:00",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2233,7 +2448,12 @@
       "title": "Hi-Flo & Hi-Flo II Side Discharge Pump Replacement Parts",
       "slug": "hi-flo-hi-flo-ii-side-discharge-pump-2",
       "databaseId": 32891,
+      "date": "2023-06-02T12:37:00",
+      "modified": "2023-06-07T23:47:12",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2243,7 +2463,12 @@
       "title": "Multi-Port Valves – Side Mount and Top Mount Replacement Parts",
       "slug": "multi-port-valves-side-mount-and-top-mount",
       "databaseId": 32538,
+      "date": "2023-06-02T12:36:58",
+      "modified": "2023-06-06T23:47:49",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2253,7 +2478,12 @@
       "title": "Hi-Flo Side Discharge Wet End Replacement Parts",
       "slug": "hi-flo-side-discharge-wet-end",
       "databaseId": 32300,
+      "date": "2023-06-02T12:36:55",
+      "modified": "2023-06-07T23:48:56",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2263,7 +2493,12 @@
       "title": "Hi-Flo II Side Discharge Wet End Replacement Parts",
       "slug": "hi-flo-ii-side-discharge-wet-end",
       "databaseId": 32298,
+      "date": "2023-06-02T12:36:55",
+      "modified": "2023-06-07T23:50:36",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2273,7 +2508,12 @@
       "title": "CSA Hi-Flo II Side Discharge Pump Replacement Parts",
       "slug": "csa-hi-flo-ii-side-discharge-pump-2",
       "databaseId": 32177,
+      "date": "2023-06-02T12:36:54",
+      "modified": "2023-06-07T23:52:23",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2283,7 +2523,12 @@
       "title": "Executive Wet End Replacement Parts",
       "slug": "executive-wet-end",
       "databaseId": 32114,
+      "date": "2023-06-02T12:36:54",
+      "modified": "2023-06-07T23:51:28",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2293,7 +2538,12 @@
       "title": "EX2 Wet End Replacement Parts",
       "slug": "ex2-wet-end",
       "databaseId": 32042,
+      "date": "2023-06-02T12:36:53",
+      "modified": "2023-06-02T17:58:32",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2303,7 +2553,12 @@
       "title": "E-Series Center Discharge Pump Replacement Parts",
       "slug": "e-series-center-discharge-pump",
       "databaseId": 32017,
+      "date": "2023-06-02T12:36:53",
+      "modified": "2023-06-07T23:53:32",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2313,7 +2568,12 @@
       "title": "Crystal Water D.E. Filter Replacement Parts",
       "slug": "crystal-water-d-e-filter",
       "databaseId": 31965,
+      "date": "2023-06-02T12:36:52",
+      "modified": "2023-06-06T23:54:46",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2323,7 +2583,12 @@
       "title": "Crystal Water Cartridge Filter Replacement Parts",
       "slug": "crystal-water-cartridge-filter",
       "databaseId": 31958,
+      "date": "2023-06-02T12:36:52",
+      "modified": "2023-06-07T23:54:25",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2333,7 +2598,12 @@
       "title": "ClearWater II Cartridge Filter Replacement Parts",
       "slug": "clearwater-ii-cartridge-filter",
       "databaseId": 31825,
+      "date": "2023-06-02T12:36:51",
+      "modified": "2023-06-07T23:55:35",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2343,7 +2613,12 @@
       "title": "Champion 56-Frame Pump Replacement Parts (Discontinued 2021)",
       "slug": "champion-56-frame-pump",
       "databaseId": 31679,
+      "date": "2023-06-02T12:36:50",
+      "modified": "2023-06-07T23:56:41",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2353,7 +2628,12 @@
       "title": "Center Discharge Wet End (2010 and Earlier) Replacement Parts",
       "slug": "center-discharge-wet-end-2010-and-earlier",
       "databaseId": 31661,
+      "date": "2023-06-02T12:36:49",
+      "modified": "2023-06-08T15:03:18",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2363,7 +2643,12 @@
       "title": "Center Discharge Pump (2010 and Earlier) Replacement Parts",
       "slug": "center-discharge-pump-2010-and-earlier",
       "databaseId": 31656,
+      "date": "2023-06-02T12:36:49",
+      "modified": "2023-06-08T15:03:53",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2373,7 +2658,12 @@
       "title": "Carefree Sand Filter Replacement Parts",
       "slug": "carefree-sand-filter",
       "databaseId": 31576,
+      "date": "2023-06-02T12:36:49",
+      "modified": "2023-06-08T15:01:50",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2383,7 +2673,12 @@
       "title": "CSA Supreme Pump Replacement Parts",
       "slug": "csa-supreme-pump",
       "databaseId": 31550,
+      "date": "2023-06-02T12:36:49",
+      "modified": "2023-06-08T15:02:48",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2393,7 +2688,12 @@
       "title": "Reversible Skimmer Lid",
       "slug": "reversible-skimmer-lid",
       "databaseId": 36895,
+      "date": "2023-06-01T23:22:01",
+      "modified": "2023-06-08T15:14:32",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-skimmers-skim-filters"
       ],
@@ -2403,7 +2703,12 @@
       "title": "Power Defender SVL Pump Replacement Parts",
       "slug": "power-defender-svl-pump-replacement-parts",
       "databaseId": 38782,
+      "date": "2023-06-01T23:17:05",
+      "modified": "2023-06-08T15:15:50",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2413,7 +2718,12 @@
       "title": "Spa Steps",
       "slug": "spa-steps",
       "databaseId": 38736,
+      "date": "2023-06-01T17:36:58",
+      "modified": "2023-06-01T17:36:58",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-miscellaneous-accessories"
       ],
@@ -2423,7 +2733,12 @@
       "title": "Thermowells",
       "slug": "thermowells",
       "databaseId": 38715,
+      "date": "2023-06-01T17:14:07",
+      "modified": "2023-06-08T15:17:26",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-miscellaneous-accessories"
       ],
@@ -2433,7 +2748,12 @@
       "title": "Spa Accessories",
       "slug": "spa-accessories",
       "databaseId": 33545,
+      "date": "2023-06-01T12:37:06",
+      "modified": "2025-06-04T22:52:22",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-miscellaneous-accessories"
       ],
@@ -2443,7 +2763,12 @@
       "title": "ShurGrip Manifolds",
       "slug": "shurgrip-manifolds",
       "databaseId": 33470,
+      "date": "2023-06-01T12:37:05",
+      "modified": "2023-07-17T17:53:56",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-manifolds"
       ],
@@ -2453,7 +2778,12 @@
       "title": "Reducers, Nipples, and Plugs",
       "slug": "reducers-nipples-and-plugs",
       "databaseId": 33167,
+      "date": "2023-06-01T12:37:03",
+      "modified": "2023-07-17T18:46:47",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-miscellaneous-accessories"
       ],
@@ -2463,7 +2793,12 @@
       "title": "Power Defender Pumps Replacement Parts",
       "slug": "power-defender-2-7hp-variable-speed-pump",
       "databaseId": 32916,
+      "date": "2023-06-01T12:37:00",
+      "modified": "2023-06-08T15:38:49",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2473,7 +2808,12 @@
       "title": "Power Defender Booster Pump Replacement Parts",
       "slug": "power-defender-1-65hp-variable-speed-pump",
       "databaseId": 32862,
+      "date": "2023-06-01T12:37:00",
+      "modified": "2023-06-08T15:41:43",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -2483,7 +2823,12 @@
       "title": "Hole Saw Sizes",
       "slug": "hole-saw-sizes",
       "databaseId": 32304,
+      "date": "2023-06-01T12:36:55",
+      "modified": "2025-06-04T23:28:12",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "tech-info"
       ],
@@ -2493,7 +2838,12 @@
       "title": "Blower Sizing",
       "slug": "blower-sizing-2",
       "databaseId": 32150,
+      "date": "2023-06-01T12:36:54",
+      "modified": "2023-12-26T14:00:09",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "tech-info"
       ],
@@ -2503,7 +2853,12 @@
       "title": "Spa Light Accessories",
       "slug": "5-jumbo-spa-lights-and-spa-light-accessories-2",
       "databaseId": 31957,
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/630-0005.png",
+      "date": "2023-06-01T12:36:52",
+      "modified": "2026-04-01T07:57:04",
+      "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "lighting"
       ],
@@ -2513,7 +2868,12 @@
       "title": "Color Guide",
       "slug": "color-guide",
       "databaseId": 31880,
+      "date": "2023-06-01T12:36:51",
+      "modified": "2023-06-01T21:56:33",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "tech-info"
       ],
@@ -2523,7 +2883,12 @@
       "title": "3/4″, 1″, 1 1/2″ Barb Adapters",
       "slug": "3-4-1-1-1-2-barb-adapters",
       "databaseId": 31660,
+      "date": "2023-06-01T12:36:49",
+      "modified": "2023-07-17T18:43:46",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-manifolds"
       ],
@@ -2533,7 +2898,12 @@
       "title": "3/4″ Ribbed Barb Manifolds",
       "slug": "3-4-ribbed-barb-manifolds",
       "databaseId": 31644,
+      "date": "2023-06-01T12:36:49",
+      "modified": "2023-06-07T15:36:53",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-manifolds"
       ],
@@ -2543,7 +2913,12 @@
       "title": "Carefree Top-Mount – Sand Standard System",
       "slug": "carefree-top-mount-sand-standard-system",
       "databaseId": 31622,
+      "date": "2023-06-01T12:36:49",
+      "modified": "2026-04-02T09:39:01",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
@@ -2553,7 +2928,12 @@
       "title": "3/4″ Barb Adapters",
       "slug": "3-4-barb-adapters",
       "databaseId": 31615,
+      "date": "2023-06-01T12:36:49",
+      "modified": "2023-07-17T18:43:23",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-manifolds"
       ],
@@ -2563,7 +2943,12 @@
       "title": "3/8″ Barb Manifolds & Pancake Manifolds",
       "slug": "3-8-barb-manifolds-pancake-manifolds",
       "databaseId": 31574,
+      "date": "2023-06-01T12:36:49",
+      "modified": "2023-07-17T17:33:11",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-manifolds"
       ],
@@ -2573,7 +2958,12 @@
       "title": "3/8″ Barb Manifolds",
       "slug": "3-8-barb-manifolds",
       "databaseId": 31563,
+      "date": "2023-06-01T12:36:49",
+      "modified": "2023-07-17T17:34:04",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-manifolds"
       ],
@@ -2583,7 +2973,12 @@
       "title": "3/8″ Barb Adapters",
       "slug": "3-8-barb-adapters",
       "databaseId": 31544,
+      "date": "2023-06-01T12:36:49",
+      "modified": "2023-07-17T17:43:52",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-manifolds"
       ],
@@ -2593,7 +2988,12 @@
       "title": "Wyes & Manifold Wyes",
       "slug": "wyes-manifold-wyes",
       "databaseId": 38600,
+      "date": "2023-05-31T22:31:00",
+      "modified": "2023-06-30T23:31:42",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-ells-tees-wyes"
       ],
@@ -2603,7 +3003,12 @@
       "title": "Spa Sweep Ells & U Bends",
       "slug": "spa-sweep-ells-u-bends",
       "databaseId": 38576,
+      "date": "2023-05-31T18:48:43",
+      "modified": "2023-06-30T23:25:36",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-ells-tees-wyes"
       ],
@@ -2613,7 +3018,12 @@
       "title": "Spa Pump Union Assembies",
       "slug": "spa-pump-union-assembies",
       "databaseId": 38543,
+      "date": "2023-05-31T17:30:15",
+      "modified": "2023-11-22T19:14:16",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-unions"
       ],
@@ -2623,7 +3033,12 @@
       "title": "Slice Valves & Check Valves",
       "slug": "slice-valves-gate-valves",
       "databaseId": 33524,
+      "date": "2023-05-31T12:37:06",
+      "modified": "2026-04-02T10:48:26",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "top-side-valves"
       ],
@@ -2633,7 +3048,12 @@
       "title": "Tees & Tee Assemblies",
       "slug": "sanitary-tee-cross-tee-and-tee-assemblies",
       "databaseId": 33440,
+      "date": "2023-05-31T12:37:05",
+      "modified": "2025-05-06T20:53:26",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-ells-tees-wyes"
       ],
@@ -2643,7 +3063,12 @@
       "title": "Heater Union Components",
       "slug": "heater-union-components",
       "databaseId": 32238,
+      "date": "2023-05-31T12:36:55",
+      "modified": "2023-06-07T15:55:41",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-unions"
       ],
@@ -2653,7 +3078,12 @@
       "title": "45° and 90° Spa Ells",
       "slug": "45-and-90-ells-2",
       "databaseId": 31900,
+      "date": "2023-05-31T12:36:52",
+      "modified": "2025-06-02T16:03:36",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-ells-tees-wyes"
       ],
@@ -2663,7 +3093,12 @@
       "title": "Spa 2″ & 2 1/2″ Union Components",
       "slug": "2-2-1-2-union-components",
       "databaseId": 31775,
+      "date": "2023-05-31T12:36:50",
+      "modified": "2023-06-07T16:05:58",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-unions"
       ],
@@ -2673,7 +3108,12 @@
       "title": "1″ Manifolds and 2-4-6 Air Manifold Systems",
       "slug": "1-manifolds-and-2-4-6-air-manifold-systems",
       "databaseId": 31733,
+      "date": "2023-05-31T12:36:50",
+      "modified": "2023-07-17T17:31:31",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-manifolds"
       ],
@@ -2683,7 +3123,12 @@
       "title": "Spa 1 1/2″ Union Components",
       "slug": "1-1-2-union-components",
       "databaseId": 31680,
+      "date": "2023-05-31T12:36:50",
+      "modified": "2023-06-30T23:24:10",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-unions"
       ],
@@ -2693,7 +3138,12 @@
       "title": "3/4″ Manifolds",
       "slug": "3-4-manifolds",
       "databaseId": 31630,
+      "date": "2023-05-31T12:36:49",
+      "modified": "2023-06-30T23:38:10",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-manifolds"
       ],
@@ -2703,7 +3153,12 @@
       "title": "1/2″ Manifolds",
       "slug": "1-2-manifolds",
       "databaseId": 31596,
+      "date": "2023-05-31T12:36:49",
+      "modified": "2023-06-30T23:36:55",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-manifolds"
       ],
@@ -2713,7 +3168,12 @@
       "title": "Spa Wet Ends & Bases",
       "slug": "spa-wet-ends",
       "databaseId": 38507,
+      "date": "2023-05-30T23:58:17",
+      "modified": "2023-06-08T16:09:13",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-miscellaneous-accessories"
       ],
@@ -2723,7 +3183,12 @@
       "title": "Tiny Might Pump",
       "slug": "tiny-might-pump",
       "databaseId": 38501,
+      "date": "2023-05-30T23:19:50",
+      "modified": "2024-07-03T20:33:05",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-pumps-spa"
       ],
@@ -2733,7 +3198,12 @@
       "title": "Hi-Flo II Side Discharge – 48-Frame Spa Pump",
       "slug": "hi-flo-ii-side-discharge-48-frame-spa-pump",
       "databaseId": 38474,
+      "date": "2023-05-30T22:26:00",
+      "modified": "2023-08-16T23:02:01",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-pumps-spa"
       ],
@@ -2743,7 +3213,12 @@
       "title": "EX2 Pump",
       "slug": "ex2-pump",
       "databaseId": 38469,
+      "date": "2023-05-30T21:59:47",
+      "modified": "2025-06-04T22:44:48",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-pumps-spa"
       ],
@@ -2753,7 +3228,12 @@
       "title": "Viper Pump",
       "slug": "viper",
       "databaseId": 38442,
+      "date": "2023-05-30T20:31:57",
+      "modified": "2025-06-04T22:31:49",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-pumps-spa"
       ],
@@ -2763,7 +3243,12 @@
       "title": "Standard Return Fittings, SGMS Return Fittings & Weirs",
       "slug": "standard-return-fittings-sgms-return-fittings-weirs",
       "databaseId": 38423,
+      "date": "2023-05-30T18:43:09",
+      "modified": "2025-06-04T22:24:38",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [],
       "attributeSlugs": []
     },
@@ -2771,7 +3256,12 @@
       "title": "Top-Load Filters",
       "slug": "top-load-filters",
       "databaseId": 38400,
+      "date": "2023-05-30T16:58:35",
+      "modified": "2023-06-30T23:11:24",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-skimmers-and-filters"
       ],
@@ -2781,7 +3271,12 @@
       "title": "Spa Flo II – 48-Frame Pump",
       "slug": "spa-flo-ii-48-frame-2",
       "databaseId": 33593,
+      "date": "2023-05-30T12:37:06",
+      "modified": "2024-07-03T20:02:41",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-pumps-spa"
       ],
@@ -2791,7 +3286,12 @@
       "title": "Service Logic Replacement Filters & Soak Tanks",
       "slug": "skimmer-and-skim-filter-options",
       "databaseId": 33498,
+      "date": "2023-05-30T12:37:05",
+      "modified": "2025-06-04T22:08:59",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-skimmers-and-filters"
       ],
@@ -2801,7 +3301,12 @@
       "title": "Power Defender EX2 2 Speed",
       "slug": "power-defender-ex2-2-speed",
       "databaseId": 32979,
+      "date": "2023-05-30T12:37:01",
+      "modified": "2023-05-30T18:56:58",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-pumps-spa"
       ],
@@ -2811,7 +3316,12 @@
       "title": "Iron Might Pump",
       "slug": "iron-might",
       "databaseId": 32396,
+      "date": "2023-05-30T12:36:56",
+      "modified": "2023-06-08T16:26:59",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-pumps-spa"
       ],
@@ -2821,7 +3331,12 @@
       "title": "Filter Fittings",
       "slug": "filter-accessories",
       "databaseId": 32142,
+      "date": "2023-05-30T12:36:54",
+      "modified": "2023-06-30T23:14:47",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-skimmers-and-filters"
       ],
@@ -2831,7 +3346,12 @@
       "title": "Executive – 56-Frame Pump",
       "slug": "executive-56-frame",
       "databaseId": 32101,
+      "date": "2023-05-30T12:36:53",
+      "modified": "2025-06-04T22:38:20",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-pumps-spa"
       ],
@@ -2841,7 +3361,12 @@
       "title": "Executive – 48-Frame Pump",
       "slug": "executive-48-frame",
       "databaseId": 32094,
+      "date": "2023-05-30T12:36:53",
+      "modified": "2023-11-22T18:21:39",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-pumps-spa"
       ],
@@ -2851,7 +3376,12 @@
       "title": "Executive & Viper Euro Pump – 50 Hz",
       "slug": "executive-viper-euro-50-hz",
       "databaseId": 32083,
+      "date": "2023-05-30T12:36:53",
+      "modified": "2023-06-30T22:24:24",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-pumps-spa"
       ],
@@ -2861,7 +3391,12 @@
       "title": "E-Series Center Discharge – 48-Frame Pump",
       "slug": "e-series-center-discharge-48-frame",
       "databaseId": 32007,
+      "date": "2023-05-30T12:36:53",
+      "modified": "2023-06-07T16:35:33",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-pumps-spa"
       ],
@@ -2871,7 +3406,12 @@
       "title": "Dyna-Flo XL Skim Filters and Ultra Skim Filter",
       "slug": "dyna-flo-xl-skim-filters-and-ultra-skim-filter",
       "databaseId": 32000,
+      "date": "2023-05-30T12:36:52",
+      "modified": "2023-06-30T23:10:39",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-skimmers-and-filters"
       ],
@@ -2881,7 +3421,12 @@
       "title": "Load Washer Rip Current Swim Jet & River Jet",
       "slug": "rip-current-swim-jet",
       "databaseId": 33332,
+      "date": "2023-05-27T12:37:04",
+      "modified": "2023-06-30T22:23:49",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-jets"
       ],
@@ -2891,7 +3436,12 @@
       "title": "Self-Aligning Union Assemblies",
       "slug": "pump-union-assemblies",
       "databaseId": 33106,
+      "date": "2023-05-27T12:37:02",
+      "modified": "2025-06-04T20:09:12",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-unions"
       ],
@@ -2901,7 +3451,12 @@
       "title": "Teleweir Skim Filters",
       "slug": "teleweir-skim-filters",
       "databaseId": 38381,
+      "date": "2023-05-26T23:26:11",
+      "modified": "2023-05-26T23:26:11",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-skimmers-and-filters"
       ],
@@ -2911,7 +3466,12 @@
       "title": "Strip Skimmer & Deluxe Strip Skimmer",
       "slug": "strip-skimmer-deluxe-strip-skimmer",
       "databaseId": 38359,
+      "date": "2023-05-26T21:37:03",
+      "modified": "2023-05-26T21:37:03",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-skimmers-and-filters"
       ],
@@ -2921,7 +3481,12 @@
       "title": "LED Cabinet Light",
       "slug": "led-cabinet-light",
       "databaseId": 38330,
+      "date": "2023-05-26T19:59:38",
+      "modified": "2023-05-26T19:59:38",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "lighting"
       ],
@@ -2931,7 +3496,12 @@
       "title": "SGMS Spa Lights",
       "slug": "sgms-spa-lights",
       "databaseId": 36990,
+      "date": "2023-05-26T15:56:35",
+      "modified": "2023-06-30T22:45:27",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "lighting"
       ],
@@ -2941,7 +3511,12 @@
       "title": "LED Water Features",
       "slug": "led-water-features-2",
       "databaseId": 38274,
+      "date": "2023-05-26T15:36:51",
+      "modified": "2023-06-30T22:44:47",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "water-features"
       ],
@@ -2951,7 +3526,12 @@
       "title": "LED Cup Holders",
       "slug": "sgms-led-cup-holder",
       "databaseId": 36930,
+      "date": "2023-05-26T15:25:47",
+      "modified": "2023-06-30T23:01:45",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-miscellaneous-accessories"
       ],
@@ -2961,7 +3541,12 @@
       "title": "SGMS Pin Lights",
       "slug": "sgms-pin-lights",
       "databaseId": 33370,
+      "date": "2023-05-26T12:37:04",
+      "modified": "2023-05-26T16:35:09",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "lighting"
       ],
@@ -2971,7 +3556,12 @@
       "title": "Sculptured Ice Feature & Cup Holder Water Feature",
       "slug": "pop-ups-cup-holder-water-feature",
       "databaseId": 32847,
+      "date": "2023-05-26T12:37:00",
+      "modified": "2023-11-22T18:08:06",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "water-features"
       ],
@@ -2981,7 +3571,12 @@
       "title": "Dyna-Flo Top-Mount Skim Filters",
       "slug": "dyna-flo-top-mount-skim-filters-2",
       "databaseId": 32565,
+      "date": "2023-05-26T12:36:58",
+      "modified": "2023-06-08T16:43:13",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-skimmers-and-filters"
       ],
@@ -2991,7 +3586,12 @@
       "title": "Threaded LED Spa Lighting",
       "slug": "led-lighting",
       "databaseId": 32419,
+      "date": "2023-05-26T12:36:57",
+      "modified": "2023-06-30T22:47:31",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "lighting"
       ],
@@ -3001,7 +3601,12 @@
       "title": "LED Hourglass Sconce Light & SGMS Button Sconce Light",
       "slug": "led-hourglass-sconce-light-sgms-button-sconce-light",
       "databaseId": 32407,
+      "date": "2023-05-26T12:36:56",
+      "modified": "2023-06-30T23:02:39",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "lighting"
       ],
@@ -3011,7 +3616,12 @@
       "title": "Aqua Falls",
       "slug": "aqua-falls-2",
       "databaseId": 32138,
+      "date": "2023-05-26T12:36:54",
+      "modified": "2023-11-22T18:13:29",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "water-features"
       ],
@@ -3021,7 +3631,12 @@
       "title": "100 sq. ft. Roadster Skim Filter",
       "slug": "100-sq-ft-roadster-skim-filter",
       "databaseId": 31755,
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/510-6689DSG-PS.png",
+      "date": "2023-05-26T12:36:50",
+      "modified": "2026-04-01T07:52:11",
+      "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-skimmers-and-filters"
       ],
@@ -3031,7 +3646,12 @@
       "title": "Water Feature Pop-Ups",
       "slug": "pop-ups",
       "databaseId": 32831,
+      "date": "2023-05-26T08:37:00",
+      "modified": "2023-05-26T15:59:40",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "water-features"
       ],
@@ -3041,7 +3661,12 @@
       "title": "SGMS LED Water Feature",
       "slug": "sgms-led-water-feature",
       "databaseId": 36960,
+      "date": "2023-05-26T08:04:39",
+      "modified": "2023-05-26T15:45:34",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "water-features"
       ],
@@ -3051,7 +3676,12 @@
       "title": "3.5″ & 7″ Waterfalls",
       "slug": "3-7-waterfalls",
       "databaseId": 38265,
+      "date": "2023-05-25T23:23:37",
+      "modified": "2023-06-30T22:44:07",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "water-features"
       ],
@@ -3061,7 +3691,12 @@
       "title": "24″ Spillway Waterfall",
       "slug": "24-spillway-waterfall",
       "databaseId": 38254,
+      "date": "2023-05-25T22:26:34",
+      "modified": "2023-06-30T22:40:54",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "water-features"
       ],
@@ -3071,7 +3706,12 @@
       "title": "Water Restrictors, Valve Gaskets & Air Bleed",
       "slug": "water-restrictors-valve-gaskets-air-bleed",
       "databaseId": 38247,
+      "date": "2023-05-25T22:14:21",
+      "modified": "2023-06-30T22:38:12",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-miscellaneous-accessories"
       ],
@@ -3081,7 +3721,12 @@
       "title": "5″ Designer Pro Series Suctions & 5″ Super Hi-Flo Suctions",
       "slug": "designer-pro-series-suctions-super-hi-flo-suctions",
       "databaseId": 38176,
+      "date": "2023-05-25T16:28:46",
+      "modified": "2023-11-22T19:19:13",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-drains-suctions"
       ],
@@ -3091,7 +3736,12 @@
       "title": "3.5″ Hi-Flo Suctions & 3.5″ Ultra Hi-Flo Suctions",
       "slug": "hi-flo-suctions-ultra-hi-flo-suctions",
       "databaseId": 38168,
+      "date": "2023-05-25T15:57:52",
+      "modified": "2023-05-25T16:31:20",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-drains-suctions"
       ],
@@ -3101,7 +3751,12 @@
       "title": "SGMS Top Side Controls",
       "slug": "sgms-top-side-controls",
       "databaseId": 33379,
+      "date": "2023-05-25T12:37:05",
+      "modified": "2023-06-07T16:57:52",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "top-side-valves"
       ],
@@ -3111,7 +3766,12 @@
       "title": "Orion / Luxe / Eclipse Valves",
       "slug": "orion-luxe-eclipse-valves",
       "databaseId": 32683,
+      "date": "2023-05-25T12:36:59",
+      "modified": "2023-06-08T16:56:36",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "top-side-valves"
       ],
@@ -3121,7 +3781,12 @@
       "title": "Spillover Waterfall",
       "slug": "led-water-features",
       "databaseId": 32440,
+      "date": "2023-05-25T12:36:57",
+      "modified": "2023-06-30T22:42:24",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "water-features"
       ],
@@ -3131,7 +3796,12 @@
       "title": "Majestic / Pin Wheel / 5-Scallop Valves",
       "slug": "5-scallop-valves-2",
       "databaseId": 31980,
+      "date": "2023-05-25T12:36:52",
+      "modified": "2023-06-07T17:03:36",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "top-side-valves"
       ],
@@ -3141,7 +3811,12 @@
       "title": "5″ Ultra Flo Suctions for Portable Spas",
       "slug": "5-ultra-flo-suctions-for-portable-spas-2",
       "databaseId": 31969,
+      "date": "2023-05-25T12:36:52",
+      "modified": "2023-06-07T17:05:28",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-drains-suctions"
       ],
@@ -3151,7 +3826,12 @@
       "title": "“S” Handle Valves",
       "slug": "s-style-valves",
       "databaseId": 31528,
+      "date": "2023-05-25T12:36:48",
+      "modified": "2023-06-07T17:07:00",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "top-side-valves"
       ],
@@ -3161,7 +3841,12 @@
       "title": "Stealth II Spa Blowers & Ozone Injector",
       "slug": "stealth-ii-spa-blowers-ozone-injector",
       "databaseId": 38156,
+      "date": "2023-05-24T20:36:28",
+      "modified": "2023-06-07T17:07:28",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "air-systems-spa"
       ],
@@ -3171,7 +3856,12 @@
       "title": "SGMS Floor Sweep",
       "slug": "sgms-floor-sweep",
       "databaseId": 36999,
+      "date": "2023-05-24T17:01:50",
+      "modified": "2023-05-25T15:04:49",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "air-systems-spa"
       ],
@@ -3181,7 +3871,12 @@
       "title": "Turbo Jets",
       "slug": "turbo-jets",
       "databaseId": 38115,
+      "date": "2023-05-24T16:03:50",
+      "modified": "2023-05-24T16:03:50",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-jets"
       ],
@@ -3191,7 +3886,12 @@
       "title": "Power Stream Swim Jet",
       "slug": "power-stream-swim-jet",
       "databaseId": 33052,
+      "date": "2023-05-24T12:37:02",
+      "modified": "2023-06-08T17:00:20",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-jets"
       ],
@@ -3201,7 +3901,12 @@
       "title": "Swim Jets – Old Faithful Jets",
       "slug": "old-faithful-jets-gunite-vinyl-liner",
       "databaseId": 32667,
+      "date": "2023-05-24T12:36:59",
+      "modified": "2023-06-08T17:02:05",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "gunite-jets"
       ],
@@ -3211,7 +3916,12 @@
       "title": "Lo-Pro Suctions and Floor Drains",
       "slug": "lo-pro-suctions-and-floor-drains",
       "databaseId": 32460,
+      "date": "2023-05-24T12:36:57",
+      "modified": "2023-06-30T22:27:25",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-drains-suctions"
       ],
@@ -3221,7 +3931,12 @@
       "title": "Air Injectors",
       "slug": "air-injectors-2",
       "databaseId": 32118,
+      "date": "2023-05-24T12:36:54",
+      "modified": "2023-05-24T17:42:24",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "air-systems-spa"
       ],
@@ -3231,7 +3946,12 @@
       "title": "Air Max Jets",
       "slug": "air-max-jets",
       "databaseId": 38106,
+      "date": "2023-05-23T22:34:58",
+      "modified": "2023-05-23T22:34:58",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-jets"
       ],
@@ -3241,7 +3961,12 @@
       "title": "Omni Storm Jets",
       "slug": "omni-storm-jets",
       "databaseId": 38096,
+      "date": "2023-05-23T22:08:01",
+      "modified": "2023-05-23T22:12:26",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-jets"
       ],
@@ -3251,7 +3976,12 @@
       "title": "SGMS Storm Jet Body Assemblies",
       "slug": "sgms-storm-jets",
       "databaseId": 36981,
+      "date": "2023-05-23T21:53:33",
+      "modified": "2025-06-04T20:50:40",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-jets"
       ],
@@ -3261,7 +3991,12 @@
       "title": "Whirlpool Jets",
       "slug": "whirlpool-jets",
       "databaseId": 38090,
+      "date": "2023-05-23T20:46:32",
+      "modified": "2023-06-30T22:21:27",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-jets"
       ],
@@ -3271,7 +4006,12 @@
       "title": "Storm Jet Accessories",
       "slug": "storm-jet-accessories",
       "databaseId": 38078,
+      "date": "2023-05-23T18:34:37",
+      "modified": "2023-05-23T18:34:37",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-miscellaneous-accessories"
       ],
@@ -3281,7 +4021,12 @@
       "title": "Storm Jet Body Assemblies",
       "slug": "storm-jet-body-assemblies",
       "databaseId": 38067,
+      "date": "2023-05-23T17:40:54",
+      "modified": "2023-06-30T22:14:34",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-jets"
       ],
@@ -3291,7 +4036,12 @@
       "title": "Poly Jets",
       "slug": "poly-jets",
       "databaseId": 32741,
+      "date": "2023-05-23T12:36:59",
+      "modified": "2023-06-30T22:04:24",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-jets"
       ],
@@ -3301,7 +4051,12 @@
       "title": "Ozone Cluster & Universal Cluster Jet Body",
       "slug": "ozone-cluster-universal-cluster-jet-body",
       "databaseId": 32701,
+      "date": "2023-05-23T12:36:59",
+      "modified": "2023-06-30T22:03:32",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-jets"
       ],
@@ -3311,7 +4066,12 @@
       "title": "Master Massage Jets",
       "slug": "master-massage-jets",
       "databaseId": 32478,
+      "date": "2023-05-23T12:36:57",
+      "modified": "2023-05-23T22:59:24",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-jets"
       ],
@@ -3321,7 +4081,12 @@
       "title": "Front Access Skim Filters",
       "slug": "front-access-skim-filters",
       "databaseId": 32196,
+      "date": "2023-05-23T12:36:54",
+      "modified": "2023-09-06T20:14:57",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-skimmers-and-filters"
       ],
@@ -3331,7 +4096,12 @@
       "title": "Cluster Jet Internals",
       "slug": "cluster-jet-internals",
       "databaseId": 31856,
+      "date": "2023-05-23T12:36:51",
+      "modified": "2023-06-30T21:33:14",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-jets"
       ],
@@ -3341,7 +4111,12 @@
       "title": "Renegade Vinyl Liner and Fiberglass In-Ground Skimmers",
       "slug": "renegade-vinyl-liner-and-fiberglass-in-ground-skimmers",
       "databaseId": 37973,
+      "date": "2023-05-22T20:12:51",
+      "modified": "2023-11-22T16:43:05",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-skimmers-skim-filters"
       ],
@@ -3351,7 +4126,12 @@
       "title": "Renegade Bonded Skimmers",
       "slug": "renegade-bonded-skimmers",
       "databaseId": 36636,
+      "date": "2023-05-22T16:38:33",
+      "modified": "2023-05-22T21:26:12",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-skimmers-skim-filters"
       ],
@@ -3361,7 +4141,12 @@
       "title": "SGMS Ozone Cluster Jets",
       "slug": "sgms-ozone-cluster-jets",
       "databaseId": 36995,
+      "date": "2023-05-22T16:21:24",
+      "modified": "2023-06-07T17:43:48",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-jets"
       ],
@@ -3371,7 +4156,12 @@
       "title": "Renegade Vinyl Liner Builder’s Packs & 7 Degree Fiberglass Builder’s Packs",
       "slug": "renegade-vinyl-liner-builders-packs",
       "databaseId": 33251,
+      "date": "2023-05-22T12:37:03",
+      "modified": "2024-12-09T22:13:06",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-skimmers-skim-filters"
       ],
@@ -3381,7 +4171,12 @@
       "title": "Renegade Venturi In-Ground Skimmers",
       "slug": "renegade-venturi-in-ground-skimmers",
       "databaseId": 33237,
+      "date": "2023-05-22T12:37:03",
+      "modified": "2023-06-08T17:18:17",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-skimmers-skim-filters"
       ],
@@ -3391,7 +4186,12 @@
       "title": "Renegade Gunite In-Ground Skimmers",
       "slug": "renegade-gunite-in-ground-skimmers",
       "databaseId": 33199,
+      "date": "2023-05-22T12:37:03",
+      "modified": "2023-05-22T17:44:59",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-skimmers-skim-filters"
       ],
@@ -3401,7 +4201,12 @@
       "title": "Pool Accessories",
       "slug": "pool-accessories",
       "databaseId": 32802,
+      "date": "2023-05-22T12:37:00",
+      "modified": "2023-11-22T17:28:20",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-miscellaneous-accessories"
       ],
@@ -3411,7 +4216,12 @@
       "title": "Flo-Pro II Above Ground Skimmers",
       "slug": "flo-pro-ii-above-ground-skimmers-2",
       "databaseId": 32767,
+      "date": "2023-05-22T12:36:59",
+      "modified": "2023-05-22T22:11:57",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-skimmers-skim-filters"
       ],
@@ -3421,7 +4231,12 @@
       "title": "Volleyball Pole Holders",
       "slug": "pole-holders",
       "databaseId": 32733,
+      "date": "2023-05-22T12:36:59",
+      "modified": "2023-06-07T17:50:25",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-miscellaneous-accessories"
       ],
@@ -3431,7 +4246,12 @@
       "title": "SGMS Micro Components",
       "slug": "micro-components",
       "databaseId": 32487,
+      "date": "2023-05-22T12:36:57",
+      "modified": "2023-06-30T21:47:15",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-jets"
       ],
@@ -3441,7 +4261,12 @@
       "title": "Shurflex Spa Hose & Tubing",
       "slug": "hose-tubing-2",
       "databaseId": 32325,
+      "date": "2023-05-22T12:36:55",
+      "modified": "2025-06-04T20:39:40",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa"
       ],
@@ -3451,7 +4276,12 @@
       "title": "Commercial Renegade Skimmers",
       "slug": "commercial-renegade-skimmers",
       "databaseId": 31881,
+      "date": "2023-05-22T12:36:51",
+      "modified": "2023-06-07T17:54:38",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-skimmers-skim-filters"
       ],
@@ -3461,7 +4291,12 @@
       "title": "Vinyl Liner Sump Bodies & Assemblies",
       "slug": "vinyl-liner-sump-bodies-assemblies",
       "databaseId": 37921,
+      "date": "2023-05-17T18:46:13",
+      "modified": "2023-06-08T17:29:06",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "drains-suctions"
       ],
@@ -3471,7 +4306,12 @@
       "title": "Service Logic Filter Valves & Replacement Kits",
       "slug": "service-logic-top-mount-sand-filter-valves",
       "databaseId": 37895,
+      "date": "2023-05-17T16:56:52",
+      "modified": "2025-06-04T19:34:40",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-valves"
       ],
@@ -3481,7 +4321,12 @@
       "title": "TruSeal Diverter Valves, Swing Check Valves & 3″ Check Valves",
       "slug": "truseal-diverter-valves-swing-check-valves-3-check-valves",
       "databaseId": 37884,
+      "date": "2023-05-17T16:25:50",
+      "modified": "2023-12-15T14:51:03",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-valves"
       ],
@@ -3491,7 +4336,12 @@
       "title": "Adjustable Collar Sump Bodies & Assemblies",
       "slug": "adjustable-collar-sump-bodies-assemblies-2",
       "databaseId": 32099,
+      "date": "2023-05-17T12:36:53",
+      "modified": "2023-11-21T19:07:47",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "drains-suctions"
       ],
@@ -3501,7 +4351,12 @@
       "title": "9″ x 9″ & 12″ x 12″ Grate & Frame",
       "slug": "9-x-9-12-x-12-grate-frame-2",
       "databaseId": 32069,
+      "date": "2023-05-17T12:36:53",
+      "modified": "2023-05-17T22:09:45",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "drains-suctions"
       ],
@@ -3511,7 +4366,12 @@
       "title": "8″ Anti-Vortex Drains",
       "slug": "8-anti-vortex-drains-2",
       "databaseId": 32053,
+      "date": "2023-05-17T12:36:53",
+      "modified": "2023-05-17T21:37:05",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "drains-suctions"
       ],
@@ -3521,7 +4381,12 @@
       "title": "8″ & 10″ Covers and Frames",
       "slug": "8-10-covers-and-frames-2",
       "databaseId": 32037,
+      "date": "2023-05-17T12:36:53",
+      "modified": "2023-05-17T21:38:02",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "drains-suctions"
       ],
@@ -3531,7 +4396,12 @@
       "title": "6″ Ultra Suction & Equalizer",
       "slug": "6-ultra-suction-equalizer-2",
       "databaseId": 32010,
+      "date": "2023-05-17T12:36:53",
+      "modified": "2023-11-21T19:06:16",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "drains-suctions"
       ],
@@ -3541,7 +4411,12 @@
       "title": "Concrete Sump Bodies & Assemblies",
       "slug": "concrete-sump-bodies-assemblies",
       "databaseId": 31888,
+      "date": "2023-05-17T12:36:52",
+      "modified": "2023-05-17T21:40:04",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "drains-suctions"
       ],
@@ -3551,7 +4426,12 @@
       "title": "32″ Diamond Strip Drains",
       "slug": "32-diamond-strip-drains",
       "databaseId": 31823,
+      "date": "2023-05-17T12:36:51",
+      "modified": "2023-05-17T22:56:19",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "drains-suctions"
       ],
@@ -3561,7 +4441,12 @@
       "title": "18″ x 18″ & 24″ x 24″ Grate & Frame",
       "slug": "18-x-18-24-x-24-grate-frame",
       "databaseId": 31763,
+      "date": "2023-05-17T12:36:50",
+      "modified": "2023-05-17T22:07:25",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "drains-suctions"
       ],
@@ -3571,7 +4456,12 @@
       "title": "10″ Ultra Retro Drains",
       "slug": "10-ultra-retro-drains",
       "databaseId": 31744,
+      "date": "2023-05-17T12:36:50",
+      "modified": "2023-05-17T21:40:41",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "drains-suctions"
       ],
@@ -3581,7 +4471,12 @@
       "title": "AquaShapes Swim Jet System & Deck Jets",
       "slug": "aquashapes-swim-jet-system-deck-jets",
       "databaseId": 37880,
+      "date": "2023-05-16T23:39:36",
+      "modified": "2023-06-09T22:24:34",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-miscellaneous-accessories"
       ],
@@ -3591,7 +4486,12 @@
       "title": "Legacy Poly Gunite Thread-In Jets & Poly Gunite II Thread-In Jets",
       "slug": "legacy-poly-gunite-thread-in-jets-poly-gunite-ii-thread-in-jets",
       "databaseId": 37831,
+      "date": "2023-05-16T18:56:32",
+      "modified": "2023-05-16T18:56:32",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "gunite-jets"
       ],
@@ -3601,7 +4501,12 @@
       "title": "Power Storm Thread-In Gunite Jets",
       "slug": "power-storm-thread-in-gunite-jets",
       "databaseId": 33035,
+      "date": "2023-05-16T12:37:02",
+      "modified": "2023-06-07T18:20:24",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "gunite-jets"
       ],
@@ -3611,7 +4516,12 @@
       "title": "Plugs and Grate Inserts",
       "slug": "miscellaneous-plugs-and-grate-inserts",
       "databaseId": 32528,
+      "date": "2023-05-16T12:36:57",
+      "modified": "2023-06-08T17:42:37",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "gunite-jets"
       ],
@@ -3621,7 +4531,12 @@
       "title": "Hydro Spa Jets",
       "slug": "hydro-spa-jets",
       "databaseId": 32355,
+      "date": "2023-05-16T12:36:56",
+      "modified": "2023-06-08T17:43:48",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "gunite-jets"
       ],
@@ -3631,7 +4546,12 @@
       "title": "Gunite Venturi Tees",
       "slug": "gunite-venturi-tees",
       "databaseId": 32212,
+      "date": "2023-05-16T12:36:54",
+      "modified": "2023-06-08T17:50:20",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "gunite-jets"
       ],
@@ -3641,7 +4561,12 @@
       "title": "Poly Storm Thread-In Gunite Jets",
       "slug": "poly-storm-thread-in-gunite-jets",
       "databaseId": 32770,
+      "date": "2023-05-09T12:36:59",
+      "modified": "2023-06-07T18:25:00",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "gunite-jets"
       ],
@@ -3651,7 +4576,12 @@
       "title": "Vinyl Liner Fittings & Vinyl Wall Fitting",
       "slug": "vinyl-liner-fittings-vinyl-wall-fitting",
       "databaseId": 37761,
+      "date": "2023-05-05T21:15:24",
+      "modified": "2023-06-07T18:29:13",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "fittings"
       ],
@@ -3661,7 +4591,12 @@
       "title": "Threaded Eyeball Fittings",
       "slug": "threaded-eyeball-fittings",
       "databaseId": 37742,
+      "date": "2023-05-05T19:01:16",
+      "modified": "2023-05-05T19:01:16",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "fittings"
       ],
@@ -3671,7 +4606,12 @@
       "title": "Pool Sweep Ells",
       "slug": "sweep-ells",
       "databaseId": 37703,
+      "date": "2023-05-05T17:31:39",
+      "modified": "2023-05-31T18:25:33",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-ells-tees-wyes"
       ],
@@ -3681,7 +4621,12 @@
       "title": "ClearWater VS Chlorinator",
       "slug": "clearwater-vs-chlorinator",
       "databaseId": 37686,
+      "date": "2023-05-05T17:01:37",
+      "modified": "2023-06-08T17:52:10",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-chlorinators-accessories"
       ],
@@ -3691,7 +4636,12 @@
       "title": "Rotating Eyeball Fittings",
       "slug": "rotating-eyeball-fittings",
       "databaseId": 33352,
+      "date": "2023-05-05T12:37:04",
+      "modified": "2023-06-08T17:53:51",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "fittings"
       ],
@@ -3701,7 +4651,12 @@
       "title": "Return Wall Fittings",
       "slug": "return-wall-fittings",
       "databaseId": 33303,
+      "date": "2023-05-05T12:37:04",
+      "modified": "2023-05-05T18:07:35",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "fittings"
       ],
@@ -3711,7 +4666,12 @@
       "title": "Return Fittings",
       "slug": "return-fittings",
       "databaseId": 33294,
+      "date": "2023-05-05T12:37:04",
+      "modified": "2023-06-07T18:35:48",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "fittings"
       ],
@@ -3721,7 +4681,12 @@
       "title": "Mini Storm Thread-In Gunite Jets",
       "slug": "mini-storm-thread-in-gunite-jets",
       "databaseId": 32493,
+      "date": "2023-05-05T12:36:57",
+      "modified": "2023-06-07T21:52:46",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "gunite-jets"
       ],
@@ -3731,7 +4696,12 @@
       "title": "Insert Inlet Eyeball Fitting & In-Floor Return",
       "slug": "insert-inlet-eyeball-fitting-in-floor-return",
       "databaseId": 32390,
+      "date": "2023-05-05T12:36:56",
+      "modified": "2023-06-07T21:57:46",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "fittings"
       ],
@@ -3741,7 +4711,12 @@
       "title": "Hose Adapters",
       "slug": "hose-adapters",
       "databaseId": 32331,
+      "date": "2023-05-05T12:36:56",
+      "modified": "2023-11-21T22:49:04",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-ells-tees-wyes"
       ],
@@ -3751,7 +4726,12 @@
       "title": "Fiberglass Wall Fitting / Aerators / Vac Lock Fitting",
       "slug": "fiberglass-wall-fitting-aerators-vac-lock-fitting",
       "databaseId": 32122,
+      "date": "2023-05-05T12:36:54",
+      "modified": "2023-11-21T19:12:58",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "fittings"
       ],
@@ -3761,7 +4741,12 @@
       "title": "45° and 90° Pool Ells",
       "slug": "45-and-90-ells-3",
       "databaseId": 31922,
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/411-5040.png",
+      "date": "2023-05-05T12:36:52",
+      "modified": "2026-04-01T07:56:07",
+      "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-ells-tees-wyes"
       ],
@@ -3771,7 +4756,12 @@
       "title": "Couplers & Accessories",
       "slug": "couplers-accessories",
       "databaseId": 31907,
+      "date": "2023-05-05T12:36:52",
+      "modified": "2025-05-06T21:03:37",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-ells-tees-wyes"
       ],
@@ -3781,7 +4771,12 @@
       "title": "Pool 2″ & 2 1/2″ Union Components",
       "slug": "2-2-1-2-union-components-2",
       "databaseId": 31792,
+      "date": "2023-05-05T12:36:51",
+      "modified": "2023-06-07T22:16:31",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-unions"
       ],
@@ -3791,7 +4786,12 @@
       "title": "ClearWater Chlorinator",
       "slug": "chlorinators",
       "databaseId": 31706,
+      "date": "2023-05-05T12:36:50",
+      "modified": "2023-06-07T22:17:39",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-chlorinators-accessories"
       ],
@@ -3801,7 +4801,12 @@
       "title": "Union Assemblies",
       "slug": "union-assemblies",
       "databaseId": 37633,
+      "date": "2023-05-04T23:30:10",
+      "modified": "2023-05-04T23:30:10",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-unions"
       ],
@@ -3811,7 +4816,12 @@
       "title": "Pool Pump Union Assemblies",
       "slug": "pump-union-assemblies-3",
       "databaseId": 37620,
+      "date": "2023-05-04T23:12:59",
+      "modified": "2023-05-31T16:33:33",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-unions"
       ],
@@ -3821,7 +4831,12 @@
       "title": "OASIS Pool & Spa Control",
       "slug": "oasis",
       "databaseId": 32627,
+      "date": "2023-05-04T12:36:58",
+      "modified": "2023-12-15T14:26:55",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-control-system"
       ],
@@ -3831,7 +4846,12 @@
       "title": "Pool 1 1/2″ Union Components",
       "slug": "1-1-2-union-components-2",
       "databaseId": 31705,
+      "date": "2023-05-04T12:36:50",
+      "modified": "2023-06-07T22:21:40",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-unions"
       ],
@@ -3841,7 +4861,12 @@
       "title": "ProClean Plus Filter",
       "slug": "proclean-plus-single-cartridge-1-speed-system",
       "databaseId": 33088,
+      "date": "2023-05-03T12:37:02",
+      "modified": "2026-04-02T09:39:25",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
@@ -3851,7 +4876,12 @@
       "title": "Power Defender 165 Variable Speed Pump",
       "slug": "power-defender-165-variable-speed",
       "databaseId": 32889,
+      "date": "2023-05-03T12:37:00",
+      "modified": "2024-12-03T23:31:20",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-pumps-in-ground"
       ],
@@ -3861,7 +4891,12 @@
       "title": "ClearWater II – Cartridge Filter",
       "slug": "clearwater-ii-cartridge-filter-2",
       "databaseId": 32382,
+      "date": "2023-05-03T12:36:56",
+      "modified": "2026-04-02T09:39:36",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
@@ -3871,7 +4906,12 @@
       "title": "Accessories and Wet Ends",
       "slug": "accessories-and-wet-ends-2",
       "databaseId": 32085,
+      "date": "2023-05-03T12:36:53",
+      "modified": "2023-12-15T14:37:36",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-miscellaneous-accessories"
       ],
@@ -3881,7 +4921,12 @@
       "title": "Equipment Bases",
       "slug": "equipment-bases",
       "databaseId": 32046,
+      "date": "2023-05-03T12:36:53",
+      "modified": "2023-06-07T22:23:57",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-miscellaneous-accessories"
       ],
@@ -3891,7 +4936,12 @@
       "title": "Crystal Water – Cartridge Filter",
       "slug": "crystal-water-cartridge",
       "databaseId": 31928,
+      "date": "2023-05-03T12:36:52",
+      "modified": "2026-04-02T09:42:54",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
@@ -3901,7 +4951,12 @@
       "title": "ClearWater Sand Filter Replacement Parts",
       "slug": "clearwater-sand-filter",
       "databaseId": 31848,
+      "date": "2023-05-03T12:36:51",
+      "modified": "2023-06-07T22:31:05",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "repl-parts"
       ],
@@ -3911,7 +4966,12 @@
       "title": "CSA Carefree Sand Systems",
       "slug": "carefree-sand-csa-systems",
       "databaseId": 31565,
+      "date": "2023-05-03T12:36:49",
+      "modified": "2026-04-02T09:53:53",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "international"
       ],
@@ -3921,7 +4981,12 @@
       "title": "CSA Hi-Flo II Side Discharge – 48-Frame – Above Ground Pump",
       "slug": "csa-hi-flo-ii-side-discharge-48-frame-above-ground-pool-pump",
       "databaseId": 31525,
+      "date": "2023-05-03T12:36:48",
+      "modified": "2026-04-02T09:54:03",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "international"
       ],
@@ -3931,7 +4996,12 @@
       "title": "Mustang VS 270 Pool Pump",
       "slug": "mustang-vs-270-pool-pump",
       "databaseId": 37566,
+      "date": "2023-05-02T23:18:07",
+      "modified": "2024-12-03T23:51:42",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "international",
         "pool-pumps-in-ground"
@@ -3942,7 +5012,12 @@
       "title": "Mustang VS 140 Pool Pump",
       "slug": "mustang-vs-140-pool-pump",
       "databaseId": 37555,
+      "date": "2023-05-02T22:44:41",
+      "modified": "2024-12-03T23:51:24",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "international",
         "pool-pumps-in-ground"
@@ -3953,7 +5028,12 @@
       "title": "No-Flo Gate Valves",
       "slug": "no-flo-gate-valves",
       "databaseId": 37541,
+      "date": "2023-05-02T17:40:51",
+      "modified": "2023-05-02T17:40:51",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-miscellaneous-accessories"
       ],
@@ -3963,7 +5043,12 @@
       "title": "Santanna II Air Blowers",
       "slug": "santanna-ii-stealth-ii-air-blowers",
       "databaseId": 33454,
+      "date": "2023-05-02T12:37:05",
+      "modified": "2023-06-07T22:33:25",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "air-systems"
       ],
@@ -3973,7 +5058,12 @@
       "title": "Power Defender 270 Variable Speed Pump",
       "slug": "power-defender-270-variable-speed",
       "databaseId": 32922,
+      "date": "2023-05-02T12:37:01",
+      "modified": "2024-12-03T23:32:47",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-pumps-in-ground"
       ],
@@ -3983,7 +5073,12 @@
       "title": "Hi-Flo II Side Discharge – 48-Frame Pump",
       "slug": "hi-flo-ii-side-discharge-48-frame-5",
       "databaseId": 32909,
+      "date": "2023-05-02T12:37:00",
+      "modified": "2026-04-02T10:38:51",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-pumps-in-ground"
       ],
@@ -3993,7 +5088,12 @@
       "title": "Crystal Water – D.E. Filter",
       "slug": "crystal-water-d-e-2",
       "databaseId": 32525,
+      "date": "2023-05-02T12:36:57",
+      "modified": "2026-04-02T09:43:05",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
@@ -4003,7 +5103,12 @@
       "title": "Carefree Top-Mount – Sand Filter",
       "slug": "carefree-top-mount-sand",
       "databaseId": 31591,
+      "date": "2023-05-02T12:36:49",
+      "modified": "2026-04-02T09:40:12",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
@@ -4013,7 +5118,12 @@
       "title": "CSA ClearWater II Cartridge Filter Systems",
       "slug": "csa-clearwater-ii-d-e-and-cartridge-filter-deluxe-systems",
       "databaseId": 31523,
+      "date": "2023-05-02T12:36:48",
+      "modified": "2026-04-02T09:54:12",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "international"
       ],
@@ -4023,7 +5133,12 @@
       "title": "Power Defender Booster Pump",
       "slug": "power-defender-booster",
       "databaseId": 36938,
+      "date": "2023-05-01T15:07:16",
+      "modified": "2023-05-05T15:39:07",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-pumps-in-ground"
       ],
@@ -4033,7 +5148,12 @@
       "title": "Power Defender 110 Single Speed Dual Voltage Pump",
       "slug": "power-defender-110",
       "databaseId": 33390,
+      "date": "2023-05-01T12:37:05",
+      "modified": "2024-12-03T23:36:12",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-pumps-in-ground"
       ],
@@ -4043,7 +5163,12 @@
       "title": "Shurflex Pool Hose & Tubing",
       "slug": "hose-tubing",
       "databaseId": 32315,
+      "date": "2023-05-01T12:36:55",
+      "modified": "2025-06-04T20:22:57",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "hose-tubing-pool"
       ],
@@ -4053,7 +5178,12 @@
       "title": "SGMS Micro Air Injector",
       "slug": "sgms-micro-air-injector",
       "databaseId": 36347,
+      "date": "2023-04-24T15:30:13",
+      "modified": "2023-06-30T22:26:42",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "air-systems-spa"
       ],
@@ -4063,7 +5193,12 @@
       "title": "NEO 1500 & NEO 2100 Spa Control",
       "slug": "neo-1500-spa-control",
       "databaseId": 32552,
+      "date": "2023-04-23T12:36:58",
+      "modified": "2024-01-04T15:02:04",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "spa-control-system"
       ],
@@ -4073,7 +5208,12 @@
       "title": "Stealth II Air Blowers",
       "slug": "stealth-ii-air-blowers",
       "databaseId": 37444,
+      "date": "2023-03-27T23:30:24",
+      "modified": "2023-11-21T18:40:38",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "air-systems"
       ],
@@ -4083,7 +5223,12 @@
       "title": "SMF International Pool Pump",
       "slug": "smf-international-pool-pump",
       "databaseId": 37426,
+      "date": "2023-03-23T23:17:59",
+      "modified": "2025-06-04T17:35:27",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "international"
       ],
@@ -4093,7 +5238,12 @@
       "title": "TWM Cartridge Filter System",
       "slug": "twm-cartridge-filter-system",
       "databaseId": 37398,
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/TWM_Filter-1.png",
+      "date": "2023-03-21T18:44:36",
+      "modified": "2026-04-02T09:40:22",
+      "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
@@ -4103,7 +5253,12 @@
       "title": "TWM-30-S Sand Filter System",
       "slug": "twm-30-s-sand-filter-system",
       "databaseId": 37395,
+      "date": "2023-03-21T18:18:22",
+      "modified": "2026-04-02T09:40:30",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
@@ -4113,7 +5268,12 @@
       "title": "TWM-30 Cartridge Filter System",
       "slug": "twm-30-cartridge-filter-system",
       "databaseId": 37390,
+      "date": "2023-03-21T18:06:43",
+      "modified": "2026-04-02T09:40:38",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
@@ -4123,7 +5283,12 @@
       "title": "ClearWater II – D.E. Filter",
       "slug": "clearwater-ii-d-e-filter",
       "databaseId": 37383,
+      "date": "2023-03-20T23:58:47",
+      "modified": "2026-04-02T09:40:49",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
@@ -4133,7 +5298,12 @@
       "title": "Power Defender SVL270 Variable Speed Pump",
       "slug": "power-defender-svl270-variable-speed",
       "databaseId": 37349,
+      "date": "2023-03-07T21:00:32",
+      "modified": "2023-05-01T17:25:59",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-pumps-in-ground"
       ],
@@ -4143,7 +5313,12 @@
       "title": "Power Defender 350 Variable Speed Pump",
       "slug": "pd350",
       "databaseId": 37345,
+      "date": "2023-03-07T17:16:56",
+      "modified": "2024-12-03T23:36:38",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-pumps-in-ground"
       ],
@@ -4153,7 +5328,12 @@
       "title": "ProClean Plus ProPack",
       "slug": "propack-proclean-plus-systems",
       "databaseId": 33099,
+      "date": "2020-01-27T12:37:02",
+      "modified": "2026-04-02T09:41:04",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
@@ -4163,7 +5343,12 @@
       "title": "Jet Worksheet Fluid Dynamics",
       "slug": "jet-worksheet-fluid-dynamics",
       "databaseId": 32405,
+      "date": "2020-01-27T12:36:56",
+      "modified": "2020-01-27T12:36:56",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "tech-info"
       ],
@@ -4173,7 +5358,12 @@
       "title": "Information",
       "slug": "information",
       "databaseId": 32386,
+      "date": "2020-01-27T12:36:56",
+      "modified": "2024-12-03T18:41:55",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "general-info"
       ],
@@ -4183,7 +5373,12 @@
       "title": "Hydraulic System Design",
       "slug": "hydraulic-system-design",
       "databaseId": 32343,
+      "date": "2020-01-27T12:36:56",
+      "modified": "2020-01-27T12:36:56",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "tech-info"
       ],
@@ -4193,7 +5388,12 @@
       "title": "Friction Loss in Fittings",
       "slug": "friction-loss-in-fittings",
       "databaseId": 32188,
+      "date": "2020-01-27T12:36:54",
+      "modified": "2020-01-27T12:36:54",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "tech-info"
       ],
@@ -4203,7 +5403,12 @@
       "title": "Friction Flow Chart",
       "slug": "friction-flow-chart",
       "databaseId": 32185,
+      "date": "2020-01-27T12:36:54",
+      "modified": "2020-01-27T12:36:54",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "tech-info"
       ],
@@ -4213,7 +5418,12 @@
       "title": "Fax Cover Sheet",
       "slug": "fax-cover-sheet",
       "databaseId": 32116,
+      "date": "2020-01-27T12:36:54",
+      "modified": "2020-01-27T12:36:54",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "tech-info"
       ],
@@ -4223,7 +5433,12 @@
       "title": "Contact Us",
       "slug": "contact-us",
       "databaseId": 31905,
+      "date": "2020-01-27T12:36:52",
+      "modified": "2020-01-27T12:36:52",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "general-info"
       ],
@@ -4233,7 +5448,12 @@
       "title": "ClearWater II – Cartridge Filter System",
       "slug": "clearwater-ii-cartridge",
       "databaseId": 31762,
+      "date": "2020-01-27T12:36:50",
+      "modified": "2026-04-02T09:41:50",
       "imageUrl": null,
+      "imageAlt": null,
+      "imageWidth": null,
+      "imageHeight": null,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],

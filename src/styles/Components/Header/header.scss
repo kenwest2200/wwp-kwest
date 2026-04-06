@@ -24,13 +24,35 @@
     transition: background 0.2s ease, padding-bottom 0s ease;
   }
 
-  &.is-scrolling {
+  &.is-scrolling,
+  &.header--white {
     top: calc(-1 * var(--header-top-height, 0px));
+
+    .header__top {
+      background: $white;
+
+      border: 1px solid #D0CFCB66;
+
+      &-link {
+        color: $dark-medium;
+
+        svg {
+          path {
+            fill: $dark-medium;
+          }
+
+          rect {
+            stroke: $dark-medium;
+          }
+        }
+      }
+    }
+
 
     .header__container {
       background: $white;
       padding-bottom: px-to-rem(24);
-      box-shadow: 0px 1px 40px 0px rgba(0, 0, 0, 0.06);
+      box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.06);
       transition: background 0.2s ease, padding-bottom 0s ease;
     }
 

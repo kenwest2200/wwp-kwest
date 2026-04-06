@@ -12,6 +12,7 @@ import IconArrowDown from "../icons/arrowDown.astro";
 
 interface Props {
   data: HeaderLayoutData | null | undefined;
+  headerType?: "white";
 }
 
 function menuNodesFromHeaderData(data: HeaderLayoutData | null | undefined) {
@@ -19,7 +20,7 @@ function menuNodesFromHeaderData(data: HeaderLayoutData | null | undefined) {
   return Array.isArray(nodes) ? nodes : [];
 }
 
-const { data } = Astro.props;
+const { data, headerType } = Astro.props;
 const items = menuNodesFromHeaderData(data);
 
 type MenuLink = { label: string; href: string };
@@ -139,7 +140,9 @@ const topMenuItems = {
 };
 ---
 
-<header class="header">
+<header
+  class:list={["header", ...(headerType === "white" ? ["header--white"] : [])]}
+>
   <div class="header__top" data-header-top>
     <div class="header__top-container">
       <ul class="header__top-menu header__top-menu--call-us">

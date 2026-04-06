@@ -1,0 +1,206 @@
+---
+import fs from "node:fs";
+import path from "node:path";
+import Layout from "../../layouts/Layout.astro";
+import { getGraphQLClient, requestGraphql } from "../../lib/graphql";
+import {
+  PRODUCT_PAGE_QUERY,
+  type ProductPageData,
+} from "../../lib/queries/product-detail";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const dataPath = path.join(
+    process.cwd(),
+    "public",
+    "data",
+    "product-filters.json",
+  );
+  if (!fs.existsSync(dataPath)) {
+    return [];
+  }
+  try {
+    const raw = JSON.parse(fs.readFileSync(dataPath, "utf-8")) as {
+      products?: { slug?: string }[];
+    };
+    const products = raw.products ?? [];
+    const seen = new Set<string>();
+    const paths: { params: { slug: string } }[] = [];
+    for (const p of products) {
+      const slug = p?.slug?.trim();
+      if (!slug || seen.has(slug)) continue;
+      seen.add(slug);
+      paths.push({ params: { slug } });
+    }
+    return paths;
+  } catch {
+    return [];
+  }
+}
+
+const slug = Astro.params.slug ?? "";
+
+let product: ProductPageData["product"] | null = null;
+if (getGraphQLClient() && slug) {
+  try {
+    const data = await requestGraphql<ProductPageData>(PRODUCT_PAGE_QUERY, {
+      id: slug,
+    });
+    product = data.product ?? null;
+  } catch {
+    product = null;
+  }
+}
+
+const title =
+  product?.name?.trim() || (slug ? slug.replace(/-/g, " ") : "Product");
+const images = product?.productSettings?.productImagesGroup;
+const mainImg = images?.productImagesMain?.node;
+const brandImg = images?.productImagesBrand?.node;
+const specHtml =
+  product?.productSettings?.productSpecificationGroup?.productSpecification?.trim() ??
+  "";
+---
+
+<Layout headerType="white">
+  <main class="product-page">
+    <div class="product-page__inner">
+      <p class="product-page__crumb">
+        <a href="/products/">Products</a>
+        <span aria-hidden="true"> / </span>
+        <span>{slug}</span>
+      </p>
+      <h1 class="product-page__title">{title}</h1>
+      {
+        !product && (
+          <p class="product-page__placeholder">
+            No data from the API for slug <code>{slug}</code> (check{" "}
+            <code>PUBLIC_GRAPHQL_URL</code> and the slug in WordPress).
+          </p>
+        )
+      }
+      {
+        product && (
+          <div class="product-page__body">
+            <div class="product-page__gallery">
+              {mainImg?.sourceUrl && (
+                <figure class="product-page__figure product-page__figure--main">
+                  <img
+                    src={mainImg.sourceUrl}
+                    alt={mainImg.altText ?? title}
+                    width={mainImg.mediaDetails?.width ?? undefined}
+                    height={mainImg.mediaDetails?.height ?? undefined}
+                    loading="eager"
+                    decoding="async"
+                  />
+                </figure>
+              )}
+              {brandImg?.sourceUrl && (
+                <figure class="product-page__figure product-page__figure--brand">
+                  <img
+                    src={brandImg.sourceUrl}
+                    alt={brandImg.altText ?? ""}
+                    width={brandImg.mediaDetails?.width ?? undefined}
+                    height={brandImg.mediaDetails?.height ?? undefined}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </figure>
+              )}
+            </div>
+            {specHtml && <div class="product-page__spec" set:html={specHtml} />}
+          </div>
+        )
+      }
+    </div>
+  </main>
+</Layout>
+
+<style lang="scss">
+  @use "../../styles/functions" as *;
+
+  .product-page {
+    max-width: px-to-rem(1120);
+    margin: 0 auto;
+    padding: px-to-rem(150) px-to-rem(16) px-to-rem(48);
+    box-sizing: border-box;
+  }
+
+  .product-page__crumb {
+    margin: 0 0 px-to-rem(12);
+    font-size: px-to-rem(14);
+    color: #666;
+
+    a {
+      color: inherit;
+    }
+  }
+
+  .product-page__title {
+    margin: 0 0 px-to-rem(16);
+    font-size: px-to-rem(28);
+    font-weight: 600;
+    line-height: 1.2;
+    text-transform: capitalize;
+  }
+
+  .product-page__placeholder {
+    margin: 0;
+    font-size: px-to-rem(15);
+    color: #444;
+
+    code {
+      font-size: 0.9em;
+    }
+  }
+
+  .product-page__body {
+    display: flex;
+    flex-direction: column;
+    gap: px-to-rem(24);
+  }
+
+  .product-page__gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: px-to-rem(16);
+    align-items: flex-start;
+  }
+
+  .product-page__figure {
+    margin: 0;
+
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  .product-page__figure--main img {
+    max-width: min(100%, px-to-rem(560));
+  }
+
+  .product-page__figure--brand img {
+    max-width: px-to-rem(200);
+  }
+
+  .product-page__spec {
+    font-size: px-to-rem(15);
+    line-height: 1.5;
+    color: #333;
+
+    :global(table) {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    :global(th),
+    :global(td) {
+      border: 1px solid #ddd;
+      padding: px-to-rem(8) px-to-rem(10);
+      text-align: left;
+    }
+  }
+</style>

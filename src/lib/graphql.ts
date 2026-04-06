@@ -1,4 +1,23 @@
+import { createHash } from "node:crypto";
 import { GraphQLClient } from "graphql-request";
+
+/**
+ * In-memory dedupe for identical GraphQL operations during one Node process
+ * (e.g. `astro build`: Layout runs per page, but header/footer queries hit the API once).
+ */
+const graphqlResultCache = new Map<string, unknown>();
+const graphqlPending = new Map<string, Promise<unknown>>();
+
+function graphqlCacheKey(
+  document: string,
+  variables: Record<string, unknown> | undefined,
+): string {
+  return createHash("sha256")
+    .update(document)
+    .update("\0")
+    .update(JSON.stringify(variables ?? {}))
+    .digest("hex");
+}
 
 type RuntimeEnvLike = {
   PUBLIC_GRAPHQL_URL?: string;
@@ -72,6 +91,7 @@ export type GraphQLPayload<T> = {
 
 /**
  * Runs a GraphQL request. Throws if the URL is missing or the request fails.
+ * Caches successful responses by `document` + `variables` for the lifetime of the process.
  */
 export async function requestGraphql<T>(
   document: string,
@@ -85,5 +105,27 @@ export async function requestGraphql<T>(
     );
   }
 
-  return client.request<T>(document, variables);
+  const key = graphqlCacheKey(document, variables);
+  const cached = graphqlResultCache.get(key);
+  if (cached !== undefined) {
+    return cached as T;
+  }
+
+  let pending = graphqlPending.get(key);
+  if (!pending) {
+    pending = client
+      .request<T>(document, variables)
+      .then((data) => {
+        graphqlResultCache.set(key, data);
+        graphqlPending.delete(key);
+        return data;
+      })
+      .catch((err) => {
+        graphqlPending.delete(key);
+        throw err;
+      });
+    graphqlPending.set(key, pending);
+  }
+
+  return pending as Promise<T>;
 }
