@@ -399,6 +399,39 @@
   background: #fff;
 }
 
+.product-filters__layout-toggle {
+  display: flex;
+  align-items: center;
+  gap: px-to-rem(16);
+}
+
+.product-filters__layout-toggle-btn {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: px-to-rem(8);
+  background: transparent;
+  cursor: pointer;
+  border: none;
+
+
+  &[aria-pressed="true"] {
+    svg {
+      path {
+        stroke: $dark-teal;
+      }
+    }
+  }
+
+  &:focus-visible {
+    outline: px-to-rem(2) solid $dark-teal;
+    outline-offset: px-to-rem(-2);
+    position: relative;
+    z-index: 1;
+  }
+}
+
 .product-filters__count {
   display: flex;
   align-items: center;
@@ -572,8 +605,7 @@ $product-filters-check-svg: "%3Csvg xmlns='http://www.w3.org/2000/svg' width='9'
   gap: px-to-rem(8);
 }
 
-.product-filters__active-filters-row--collapsed
-  .product-filters__active-chip:nth-child(n + 6) {
+.product-filters__active-filters-row--collapsed .product-filters__active-chip:nth-child(n + 6) {
   display: none;
 }
 
@@ -678,6 +710,51 @@ $product-filters-check-svg: "%3Csvg xmlns='http://www.w3.org/2000/svg' width='9'
 
   @media (max-width: 640px) {
     grid-template-columns: 1fr;
+  }
+}
+
+.product-filters__list--rows {
+  grid-template-columns: 1fr;
+  max-width: 100%;
+
+  .product-filters__product-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .product-filters__product-thumb {
+    grid-area: 1 / 1 / 4 / 2;
+    max-width: px-to-rem(180);
+    max-height: px-to-rem(180);
+    margin: 0;
+
+    img {
+      width: px-to-rem(180);
+      height: px-to-rem(180);
+    }
+  }
+
+  .product-filters__product-cta {
+    grid-area: 3 / 2 / 4 / 3;
+  }
+
+  .product-filters__product-link {
+    display: grid;
+    column-gap: px-to-rem(48);
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    padding: px-to-rem(24) px-to-rem(32);
+  }
+
+  .product-filters__product-label {
+    text-align: left;
+    grid-area: 1 / 2 / 2 / 6;
+  }
+
+  .product-filters__product-title {
+    text-align: left;
+    grid-area: 2 / 2 / 3 / 6;
+    font-size: px-to-rem(24);
   }
 }
 

@@ -32,6 +32,9 @@ const sortSelect = document.getElementById(
   "product-filters-sort",
 ) as HTMLSelectElement | null;
 
+const CATALOG_VIEW_STORAGE_KEY = "product-filters-catalog-view";
+type CatalogViewMode = "grid" | "rows";
+
 const selectedRoot = new Set<string>();
 const selectedSub = new Set<string>();
 const selectedAttrs = new Set<string>();
@@ -59,6 +62,10 @@ type Product = {
   date?: string | null;
   modified?: string | null;
   imageUrl?: string | null;
+  /** From productSettings.productImagesGroup.productImagesMain (catalog / former featured). */
+  imageAlt?: string | null;
+  imageWidth?: number | null;
+  imageHeight?: number | null;
 };
 
 const PRODUCT_IMAGE_PLACEHOLDER = "/images/no-product-image.svg";
@@ -73,7 +80,7 @@ let knownRootSlugs: string[] = [];
  * or HMR that still reference `rootMap` do not throw — not used by current UI.
  */
 const rootMap = new Map<string, { name: string; slug: string }[]>();
-const PAGE_SIZE_OPTIONS = [12, 24, 48] as const;
+const PAGE_SIZE_OPTIONS = [12, 24] as const;
 let pageSize = 24;
 let searchQuery = "";
 type SortMode = "updated" | "name-asc" | "name-desc";
@@ -820,14 +827,22 @@ function renderProductCard(p: Product): string {
   const subLabel = getProductSubcategoryLabel(p);
   const rawImg = p.imageUrl?.trim();
   const imgSrc = rawImg ? escapeHtml(rawImg) : PRODUCT_IMAGE_PLACEHOLDER;
-  const imgAlt = escapeHtml(p.title);
+  const altSource =
+    p.imageAlt && p.imageAlt.trim() ? p.imageAlt.trim() : p.title;
+  const imgAlt = safeDisplayText(altSource);
+  const imgW =
+    typeof p.imageWidth === "number" && p.imageWidth > 0 ? p.imageWidth : 268;
+  const imgH =
+    typeof p.imageHeight === "number" && p.imageHeight > 0
+      ? p.imageHeight
+      : 176;
   const onErrorAttr = ` onerror="this.onerror=null;this.src='${PRODUCT_IMAGE_PLACEHOLDER}'"`;
 
   return `<li class="product-filters__product-card">
   <a class="product-filters__product-link" href="${escapeHtml(href)}">
     <span class="product-filters__product-label">${safeDisplayText(subLabel)}</span>
     <span class="product-filters__product-thumb">
-      <img src="${imgSrc}" alt="${imgAlt}" width="268" height="176" loading="lazy" decoding="async"${rawImg ? onErrorAttr : ""} />
+      <img src="${imgSrc}" alt="${imgAlt}" width="${imgW}" height="${imgH}" loading="lazy" decoding="async"${rawImg ? onErrorAttr : ""} />
     </span>
     <h3 class="product-filters__product-title">${safeDisplayText(p.title)}</h3>
     <span class="product-filters__product-cta btn btn--single-outline">View details</span>
@@ -1078,6 +1093,37 @@ function clearAllFilters() {
   void fetchProducts();
 }
 
+function readStoredCatalogViewMode(): CatalogViewMode {
+  if (typeof localStorage === "undefined") return "grid";
+  try {
+    return localStorage.getItem(CATALOG_VIEW_STORAGE_KEY) === "rows"
+      ? "rows"
+      : "grid";
+  } catch {
+    return "grid";
+  }
+}
+
+function setCatalogViewMode(mode: CatalogViewMode, persist: boolean) {
+  if (!productsEl) return;
+  productsEl.classList.toggle("product-filters__list--rows", mode === "rows");
+  const gridBtn = document.getElementById("product-filters-view-grid");
+  const rowsBtn = document.getElementById("product-filters-view-rows");
+  if (gridBtn) {
+    gridBtn.setAttribute("aria-pressed", String(mode === "grid"));
+  }
+  if (rowsBtn) {
+    rowsBtn.setAttribute("aria-pressed", String(mode === "rows"));
+  }
+  if (persist) {
+    try {
+      localStorage.setItem(CATALOG_VIEW_STORAGE_KEY, mode);
+    } catch {
+      /* ignore quota / private mode */
+    }
+  }
+}
+
 function renderRootChips() {
   if (!rootEl) return;
   rootEl.innerHTML = rootCategoriesList
@@ -1090,6 +1136,8 @@ function renderRootChips() {
 
 async function init() {
   try {
+    setCatalogViewMode(readStoredCatalogViewMode(), false);
+
     const res = await fetch("/data/product-filters.json");
     const data = (await readJsonSafe(res)) as {
       generatedAt?: string;
@@ -1109,6 +1157,9 @@ async function init() {
         date?: string | null;
         modified?: string | null;
         imageUrl?: string | null;
+        imageAlt?: string | null;
+        imageWidth?: number | null;
+        imageHeight?: number | null;
       }[];
     };
     console.log("[product-filters] GET /data/product-filters.json response", {
@@ -1150,6 +1201,11 @@ async function init() {
       date: item.date ?? null,
       modified: item.modified ?? null,
       imageUrl: item.imageUrl ?? null,
+      imageAlt: item.imageAlt ?? null,
+      imageWidth:
+        typeof item.imageWidth === "number" ? item.imageWidth : null,
+      imageHeight:
+        typeof item.imageHeight === "number" ? item.imageHeight : null,
     }));
     mergedSubcategoryGroupsBySelection.clear();
     const mergedRaw = data.mergedSubcategoryGroupsBySelection ?? {};
@@ -1251,6 +1307,19 @@ async function init() {
         void fetchProducts();
       }
     });
+
+    document.getElementById("product-filters-view-grid")?.addEventListener(
+      "click",
+      () => {
+        setCatalogViewMode("grid", true);
+      },
+    );
+    document.getElementById("product-filters-view-rows")?.addEventListener(
+      "click",
+      () => {
+        setCatalogViewMode("rows", true);
+      },
+    );
 
     prevBtn?.addEventListener("click", () => {
       if (currentOffset <= 0) return;

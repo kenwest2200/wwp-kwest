@@ -117,6 +117,24 @@ const MERGED_SUBCATEGORY_GROUPS_QUERY = `
   }
 `;
 
+/** Catalog thumbnail / former featured: Main image under product settings. */
+const PRODUCT_CATALOG_IMAGE_SELECTION = `
+        productSettings {
+          productImagesGroup {
+            productImagesMain {
+              node {
+                sourceUrl
+                altText
+                mediaDetails {
+                  width
+                  height
+                }
+              }
+            }
+          }
+        }
+`;
+
 const PRODUCTS_QUERY = `
   query ProductFiltersProducts($first: Int!, $after: String) {
     products(first: $first, after: $after) {
@@ -126,12 +144,7 @@ const PRODUCTS_QUERY = `
         databaseId
         date
         modified
-        featuredImage {
-          node {
-            sourceUrl
-            altText
-          }
-        }
+${PRODUCT_CATALOG_IMAGE_SELECTION}
         productCategories {
           nodes {
             slug
@@ -160,12 +173,7 @@ const PRODUCTS_NO_ATTRS_QUERY = `
         databaseId
         date
         modified
-        featuredImage {
-          node {
-            sourceUrl
-            altText
-          }
-        }
+${PRODUCT_CATALOG_IMAGE_SELECTION}
         productCategories {
           nodes {
             slug
@@ -336,13 +344,30 @@ async function generateFromGraphql(env) {
   );
   const attributesByCategory = Object.fromEntries(attributesByCategoryEntries);
 
+  function mainCatalogImageFromProduct(item) {
+    const node =
+      item?.productSettings?.productImagesGroup?.productImagesMain?.node ??
+      null;
+    const rawUrl = node?.sourceUrl;
+    const imageUrl =
+      typeof rawUrl === "string" && rawUrl.trim() ? rawUrl.trim() : null;
+    const altRaw = node?.altText;
+    const imageAlt =
+      typeof altRaw === "string" && altRaw.trim()
+        ? decodeHtmlEntities(altRaw.trim())
+        : null;
+    const w = Number(node?.mediaDetails?.width);
+    const h = Number(node?.mediaDetails?.height);
+    const imageWidth = Number.isFinite(w) && w > 0 ? w : null;
+    const imageHeight = Number.isFinite(h) && h > 0 ? h : null;
+    return { imageUrl, imageAlt, imageWidth, imageHeight };
+  }
+
   const products = productsNodes
     .filter((item) => item?.title && item?.slug)
     .map((item) => {
-      const imgNode = item.featuredImage?.node;
-      const rawUrl = imgNode?.sourceUrl;
-      const imageUrl =
-        typeof rawUrl === "string" && rawUrl.trim() ? rawUrl.trim() : null;
+      const { imageUrl, imageAlt, imageWidth, imageHeight } =
+        mainCatalogImageFromProduct(item);
       return {
         title: decodeHtmlEntities(item.title),
         slug: item.slug,
@@ -351,6 +376,9 @@ async function generateFromGraphql(env) {
         date: typeof item.date === "string" ? item.date : null,
         modified: typeof item.modified === "string" ? item.modified : null,
         imageUrl,
+        imageAlt,
+        imageWidth,
+        imageHeight,
         categorySlugs: (item.productCategories?.nodes ?? [])
           .map((node) => node?.slug)
           .filter(Boolean),

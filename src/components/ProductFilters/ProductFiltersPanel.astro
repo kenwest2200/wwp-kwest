@@ -2,6 +2,8 @@
 import SectionTitle from "../SectionTitle/index.astro";
 import IconSearch from "../icons/searchIcon.astro";
 import IconArrowDown from "../icons/arrowDown.astro";
+import IconGridRows from "../icons/gridRowsIcon.astro";
+import IconGridList from "../icons/gridListIcon.astro";
 ---
 
 <section
@@ -165,7 +167,6 @@ import IconArrowDown from "../icons/arrowDown.astro";
             >
               <option value="12">12</option>
               <option value="24" selected>24</option>
-              <option value="48">48</option>
             </select>
           </label>
           <label class="product-filters__toolbar-label">
@@ -180,6 +181,28 @@ import IconArrowDown from "../icons/arrowDown.astro";
               <option value="name-desc">Z–A by product name</option>
             </select>
           </label>
+          <div
+            class="product-filters__layout-toggle"
+            role="group"
+            aria-label="Product layout"
+          >
+            <button
+              type="button"
+              id="product-filters-view-grid"
+              class="product-filters__layout-toggle-btn"
+              aria-pressed="true"
+            >
+              <IconGridRows />
+            </button>
+            <button
+              type="button"
+              id="product-filters-view-rows"
+              class="product-filters__layout-toggle-btn"
+              aria-pressed="false"
+            >
+              <IconGridList />
+            </button>
+          </div>
         </div>
         <p
           id="product-filters-products-total"
