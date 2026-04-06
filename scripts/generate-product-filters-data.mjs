@@ -124,6 +124,8 @@ const PRODUCTS_QUERY = `
         title
         slug
         databaseId
+        date
+        modified
         featuredImage {
           node {
             sourceUrl
@@ -156,6 +158,8 @@ const PRODUCTS_NO_ATTRS_QUERY = `
         title
         slug
         databaseId
+        date
+        modified
         featuredImage {
           node {
             sourceUrl
@@ -344,6 +348,8 @@ async function generateFromGraphql(env) {
         slug: item.slug,
         databaseId:
           typeof item.databaseId === "number" ? item.databaseId : null,
+        date: typeof item.date === "string" ? item.date : null,
+        modified: typeof item.modified === "string" ? item.modified : null,
         imageUrl,
         categorySlugs: (item.productCategories?.nodes ?? [])
           .map((node) => node?.slug)

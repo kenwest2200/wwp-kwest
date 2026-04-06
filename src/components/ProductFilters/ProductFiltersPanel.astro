@@ -16,14 +16,21 @@ import IconArrowDown from "../icons/arrowDown.astro";
 
   <div class="product-filters-catalog__inner">
     <div class="product-filters__layout">
-      <div class="product-filters__panel" aria-labelledby="product-filters-heading">
+      <div
+        class="product-filters__panel product-filters__panel--filters"
+        aria-labelledby="product-filters-heading"
+      >
         <h2 id="product-filters-heading" class="product-filters__filters-title">
           Filtering by:
         </h2>
-        <p id="product-filters-api-error" class="product-filters__err" hidden></p>
+        <p id="product-filters-api-error" class="product-filters__err" hidden>
+        </p>
 
         <div class="product-filters__group product-filters__group--search">
-          <label class="product-filters__search-label" for="product-filters-search">
+          <label
+            class="product-filters__search-label"
+            for="product-filters-search"
+          >
             <IconSearch />
             <input
               id="product-filters-search"
@@ -78,7 +85,8 @@ import IconArrowDown from "../icons/arrowDown.astro";
             role="region"
             aria-labelledby="product-filters-sub-trigger"
           >
-            <div id="product-filters-sub" class="product-filters__sub-panels"></div>
+            <div id="product-filters-sub" class="product-filters__sub-panels">
+            </div>
             <div class="product-filters__sub-more-row">
               <button
                 type="button"
@@ -128,15 +136,10 @@ import IconArrowDown from "../icons/arrowDown.astro";
             aria-labelledby="product-filters-attrs-trigger"
             hidden
           >
-            <div id="product-filters-attrs" class="product-filters__attrs"></div>
+            <div id="product-filters-attrs" class="product-filters__attrs">
+            </div>
           </div>
         </div>
-
-        <!-- Clear all — 
-        <button type="button" id="product-filters-clear" class="product-filters__btn">
-          Clear all
-        </button>
-        -->
 
         <!-- 
         <p class="product-filters__meta">
@@ -145,8 +148,13 @@ import IconArrowDown from "../icons/arrowDown.astro";
         -->
       </div>
 
-      <div class="product-filters__panel" aria-labelledby="product-filters-products-h">
-        <h2 id="product-filters-products-h" class="product-filters__h2">Products</h2>
+      <div
+        class="product-filters__panel"
+        aria-labelledby="product-filters-products-h"
+      >
+        <h2 id="product-filters-products-h" class="product-filters__h2">
+          Products
+        </h2>
         <div class="product-filters__products-toolbar">
           <label class="product-filters__toolbar-label">
             Per page
@@ -161,15 +169,15 @@ import IconArrowDown from "../icons/arrowDown.astro";
             </select>
           </label>
           <label class="product-filters__toolbar-label">
-            Sort
+            Sorting by:
             <select
               id="product-filters-sort"
               class="product-filters__toolbar-select"
-              aria-label="Sort products"
+              aria-label="Sorting options"
             >
-              <option value="newest" selected>Newest</option>
-              <option value="oldest">Oldest</option>
-              <option value="title">Title A–Z</option>
+              <option value="updated" selected> Last updated date </option>
+              <option value="name-asc">A–Z by product name</option>
+              <option value="name-desc">Z–A by product name</option>
             </select>
           </label>
         </div>
@@ -179,7 +187,59 @@ import IconArrowDown from "../icons/arrowDown.astro";
         >
           Products found: 0
         </p>
+        <div
+          id="product-filters-active-filters"
+          class="product-filters__active-filters"
+          hidden
+        >
+          <div class="product-filters__active-filters-toolbar">
+            <button
+              type="button"
+              id="product-filters-clear"
+              class="product-filters__btn product-filters__active-filters-clear"
+            >
+              Clear all
+            </button>
+          </div>
+          <div
+            id="product-filters-active-filters-row"
+            class="product-filters__active-filters-row"
+            role="group"
+            aria-label="Active filters"
+          >
+          </div>
+          <div
+            id="product-filters-active-filters-toggle"
+            class="product-filters__active-filters-toggle"
+            hidden
+          >
+            <button
+              type="button"
+              id="product-filters-active-filters-show"
+              class="product-filters__link-btn product-filters__active-filters-toggle-btn"
+            >
+              Show
+            </button>
+            <button
+              type="button"
+              id="product-filters-active-filters-hide"
+              class="product-filters__link-btn product-filters__active-filters-toggle-btn"
+              hidden
+            >
+              Hide
+            </button>
+          </div>
+        </div>
         <ul id="product-filters-products" class="product-filters__list"></ul>
+        <p
+          id="product-filters-empty"
+          class="product-filters__empty"
+          role="status"
+          aria-live="polite"
+          hidden
+        >
+          No product found
+        </p>
         <div class="product-filters__pager">
           <button
             type="button"
@@ -188,8 +248,9 @@ import IconArrowDown from "../icons/arrowDown.astro";
           >
             Prev
           </button>
-          <span id="product-filters-page" class="product-filters__page-indicator"
-            >Page 1</span
+          <span
+            id="product-filters-page"
+            class="product-filters__page-indicator">Page 1</span
           >
           <button
             type="button"

@@ -5,7 +5,17 @@ const subEl = document.getElementById("product-filters-sub");
 const attrsEl = document.getElementById("product-filters-attrs");
 const attrsSectionEl = document.getElementById("product-filters-attrs-section");
 const productsEl = document.getElementById("product-filters-products");
-const productsTotalEl = document.getElementById("product-filters-products-total");
+const productsEmptyEl = document.getElementById("product-filters-empty");
+const productsTotalEl = document.getElementById(
+  "product-filters-products-total",
+);
+const activeFiltersEl = document.getElementById("product-filters-active-filters");
+const activeFiltersRowEl = document.getElementById(
+  "product-filters-active-filters-row",
+);
+const activeFiltersToggleEl = document.getElementById(
+  "product-filters-active-filters-toggle",
+);
 const prevBtn = document.getElementById("product-filters-prev");
 const nextBtn = document.getElementById("product-filters-next");
 const pageEl = document.getElementById("product-filters-page");
@@ -66,7 +76,8 @@ const rootMap = new Map<string, { name: string; slug: string }[]>();
 const PAGE_SIZE_OPTIONS = [12, 24, 48] as const;
 let pageSize = 24;
 let searchQuery = "";
-let sortMode: "newest" | "oldest" | "title" = "newest";
+type SortMode = "updated" | "name-asc" | "name-desc";
+let sortMode: SortMode = "updated";
 let rootCategoriesList: { name: string; slug: string }[] = [];
 /** Category slug → display name (roots + every merged sub from all API keys). */
 const categorySlugToLabel = new Map<string, string>();
@@ -79,6 +90,17 @@ let currentTotal = 0;
 /** When product-type groups exceed the visible limit, user can expand the rest. */
 let subTypesExtraExpanded = false;
 const SUBTYPE_GROUPS_VISIBLE_LIMIT = 10;
+/** Max active-filter chips before Show / Hide toggles the rest. */
+const ACTIVE_FILTER_CHIPS_VISIBLE = 5;
+let activeFilterChipsExpanded = false;
+
+type ActiveFilterChip = {
+  kind: "root" | "subgroup" | "attr" | "search";
+  label: string;
+  rootSlug?: string;
+  attrSlug?: string;
+  memberSlugs?: string[];
+};
 
 function parseListParam(params: URLSearchParams, key: string) {
   const raw = params.get(key);
@@ -115,10 +137,18 @@ function applyStateFromUrl() {
   } else {
     pageSize = 24;
   }
-  if (sortRaw === "oldest" || sortRaw === "title") {
+  if (sortRaw === "name-asc" || sortRaw === "name-desc") {
     sortMode = sortRaw;
+  } else if (sortRaw === "title") {
+    sortMode = "name-asc";
+  } else if (
+    sortRaw === "newest" ||
+    sortRaw === "updated" ||
+    sortRaw === "oldest"
+  ) {
+    sortMode = "updated";
   } else {
-    sortMode = "newest";
+    sortMode = "updated";
   }
 
   if (searchInput) searchInput.value = searchQuery;
@@ -152,7 +182,7 @@ function syncUrlState() {
   if (pageSize !== 24) params.set("per", String(pageSize));
   else params.delete("per");
 
-  if (sortMode !== "newest") params.set("sort", sortMode);
+  if (sortMode !== "updated") params.set("sort", sortMode);
   else params.delete("sort");
 
   if (page > 1) params.set("page", String(page));
@@ -177,7 +207,7 @@ function setError(text: string | null) {
 }
 
 function setLoading(on: boolean) {
-  // if (clearBtn instanceof HTMLButtonElement) clearBtn.disabled = on;
+  if (clearBtn instanceof HTMLButtonElement) clearBtn.disabled = on;
   if (prevBtn instanceof HTMLButtonElement) prevBtn.disabled = on;
   if (nextBtn instanceof HTMLButtonElement) nextBtn.disabled = on;
   // Do not disable search / per-page / sort: data is local; disabling drops focus from the search field on every keystroke.
@@ -516,6 +546,12 @@ function renderSubcategories() {
 }
 
 function syncPager() {
+  if (currentTotal === 0) {
+    if (pageEl) pageEl.textContent = "—";
+    if (prevBtn instanceof HTMLButtonElement) prevBtn.disabled = true;
+    if (nextBtn instanceof HTMLButtonElement) nextBtn.disabled = true;
+    return;
+  }
   const page = Math.floor(currentOffset / pageSize) + 1;
   const totalPages = Math.max(1, Math.ceil(currentTotal / pageSize));
   if (pageEl) {
@@ -679,8 +715,9 @@ function filterProducts(): Product[] {
     .filter(productMatchesSearch);
 }
 
-function parseSortTime(p: Product): number {
-  const raw = p.date ?? p.modified;
+/** DB last_update equivalent: prefer `modified`, then publish `date`, then id. */
+function parseLastUpdatedTime(p: Product): number {
+  const raw = p.modified ?? p.date;
   if (raw && typeof raw === "string") {
     const t = Date.parse(raw);
     if (!Number.isNaN(t)) return t;
@@ -691,10 +728,12 @@ function parseSortTime(p: Product): number {
 
 function sortProductsList(list: Product[]): Product[] {
   const out = [...list];
-  if (sortMode === "newest") {
-    out.sort((a, b) => parseSortTime(b) - parseSortTime(a));
-  } else if (sortMode === "oldest") {
-    out.sort((a, b) => parseSortTime(a) - parseSortTime(b));
+  if (sortMode === "updated") {
+    out.sort((a, b) => parseLastUpdatedTime(b) - parseLastUpdatedTime(a));
+  } else if (sortMode === "name-desc") {
+    out.sort((a, b) =>
+      b.title.localeCompare(a.title, undefined, { sensitivity: "base" }),
+    );
   } else {
     out.sort((a, b) =>
       a.title.localeCompare(b.title, undefined, { sensitivity: "base" }),
@@ -783,7 +822,7 @@ function renderProductCard(p: Product): string {
   <a class="product-filters__product-link" href="${escapeHtml(href)}">
     <span class="product-filters__product-label">${safeDisplayText(subLabel)}</span>
     <span class="product-filters__product-thumb">
-      <img src="${imgSrc}" alt="${imgAlt}" width="400" height="300" loading="lazy" decoding="async"${rawImg ? onErrorAttr : ""} />
+      <img src="${imgSrc}" alt="${imgAlt}" width="268" height="176" loading="lazy" decoding="async"${rawImg ? onErrorAttr : ""} />
     </span>
     <h3 class="product-filters__product-title">${safeDisplayText(p.title)}</h3>
     <span class="product-filters__product-cta btn btn--single-outline">View details</span>
@@ -828,8 +867,15 @@ async function fetchProducts() {
     //       : `Filters selected: ${selectedCount}.${qHint} Found: ${total}`;
     // }
     if (productsEl) {
-      productsEl.innerHTML = items.map((p) => renderProductCard(p)).join("");
+      if (total === 0) {
+        productsEl.innerHTML = "";
+        if (productsEmptyEl) productsEmptyEl.hidden = false;
+      } else {
+        productsEl.innerHTML = items.map((p) => renderProductCard(p)).join("");
+        if (productsEmptyEl) productsEmptyEl.hidden = true;
+      }
     }
+    renderActiveFilterChips();
     syncPager();
   } catch (e) {
     setError(e instanceof Error ? e.message : String(e));
@@ -879,6 +925,152 @@ function syncCheckboxes() {
       },
     );
   });
+}
+
+function buildActiveFilterChips(): ActiveFilterChip[] {
+  const out: ActiveFilterChip[] = [];
+  const sortedRoots = [...selectedRoot].sort((a, b) =>
+    a.localeCompare(b, undefined, { sensitivity: "base" }),
+  );
+  for (const slug of sortedRoots) {
+    const label =
+      categorySlugToLabel.get(slug)?.trim() || slug.replace(/-/g, " ");
+    out.push({ kind: "root", label, rootSlug: slug });
+  }
+
+  const key = getMergedDataKey();
+  const groups = mergedSubcategoryGroupsBySelection.get(key) ?? [];
+  const coveredSubs = new Set<string>();
+
+  for (const g of groups) {
+    const memberSlugs = (g.subcategories ?? [])
+      .map((s) => s.slug)
+      .filter(Boolean);
+    if (memberSlugs.length === 0) continue;
+    if (!memberSlugs.every((s) => selectedSub.has(s))) continue;
+    for (const s of memberSlugs) coveredSubs.add(s);
+    const label =
+      (g.groupName ?? "").trim() || memberSlugs[0].replace(/-/g, " ");
+    out.push({ kind: "subgroup", label, memberSlugs: [...memberSlugs] });
+  }
+
+  const leftover = [...selectedSub]
+    .filter((s) => !coveredSubs.has(s))
+    .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
+  for (const slug of leftover) {
+    const label =
+      categorySlugToLabel.get(slug)?.trim() || slug.replace(/-/g, " ");
+    out.push({ kind: "subgroup", label, memberSlugs: [slug] });
+  }
+
+  const sortedAttrs = [...selectedAttrs].sort((a, b) =>
+    a.localeCompare(b, undefined, { sensitivity: "base" }),
+  );
+  for (const slug of sortedAttrs) {
+    const label =
+      attrValueSlugToLabel.get(slug)?.trim() || slug.replace(/-/g, " ");
+    out.push({ kind: "attr", label, attrSlug: slug });
+  }
+
+  const q = searchQuery.trim();
+  if (q) {
+    out.push({ kind: "search", label: `Search: ${q}` });
+  }
+  return out;
+}
+
+function renderActiveFilterChipButton(chip: ActiveFilterChip): string {
+  let extra = ` type="button" class="product-filters__active-chip" data-active-chip="1"`;
+  if (chip.kind === "root" && chip.rootSlug) {
+    extra += ` data-filter-kind="root" data-root-slug="${escapeHtml(chip.rootSlug)}"`;
+  } else if (chip.kind === "subgroup" && chip.memberSlugs?.length) {
+    extra += ` data-filter-kind="subgroup" data-member-slugs="${escapeHtml(encodeMemberSlugsForAttr(chip.memberSlugs))}"`;
+  } else if (chip.kind === "attr" && chip.attrSlug) {
+    extra += ` data-filter-kind="attr" data-attr-slug="${escapeHtml(chip.attrSlug)}"`;
+  } else if (chip.kind === "search") {
+    extra += ` data-filter-kind="search"`;
+  }
+  return `<button${extra}>
+  <span class="product-filters__active-chip-label">${safeDisplayText(chip.label)}</span>
+  <span class="product-filters__active-chip-remove" aria-hidden="true">×</span>
+  <span class="visually-hidden">Remove ${safeDisplayText(chip.label)} filter</span>
+</button>`;
+}
+
+function renderActiveFilterChips() {
+  if (!activeFiltersEl || !activeFiltersRowEl) return;
+  const chips = buildActiveFilterChips();
+  if (chips.length <= ACTIVE_FILTER_CHIPS_VISIBLE) {
+    activeFilterChipsExpanded = false;
+  }
+  if (chips.length === 0) {
+    activeFiltersEl.hidden = true;
+    activeFiltersRowEl.innerHTML = "";
+    activeFiltersRowEl.classList.remove(
+      "product-filters__active-filters-row--collapsed",
+    );
+    if (activeFiltersToggleEl) activeFiltersToggleEl.hidden = true;
+    return;
+  }
+  activeFiltersEl.hidden = false;
+  const collapsed =
+    chips.length > ACTIVE_FILTER_CHIPS_VISIBLE && !activeFilterChipsExpanded;
+  activeFiltersRowEl.classList.toggle(
+    "product-filters__active-filters-row--collapsed",
+    collapsed,
+  );
+  activeFiltersRowEl.innerHTML = chips
+    .map((c) => renderActiveFilterChipButton(c))
+    .join("");
+  if (activeFiltersToggleEl) {
+    const showToggle = chips.length > ACTIVE_FILTER_CHIPS_VISIBLE;
+    activeFiltersToggleEl.hidden = !showToggle;
+    const showBtn = document.getElementById(
+      "product-filters-active-filters-show",
+    );
+    const hideBtn = document.getElementById(
+      "product-filters-active-filters-hide",
+    );
+    if (showBtn && hideBtn) {
+      showBtn.hidden = !showToggle || activeFilterChipsExpanded;
+      hideBtn.hidden = !showToggle || !activeFilterChipsExpanded;
+    }
+  }
+}
+
+function applyActiveFilterRemoval(button: HTMLButtonElement) {
+  const kind = button.dataset.filterKind;
+  if (kind === "root" && button.dataset.rootSlug) {
+    selectedRoot.delete(button.dataset.rootSlug);
+  } else if (kind === "subgroup" && button.dataset.memberSlugs) {
+    for (const s of parseMemberSlugsFromAttr(button.dataset.memberSlugs)) {
+      selectedSub.delete(s);
+    }
+  } else if (kind === "attr" && button.dataset.attrSlug) {
+    selectedAttrs.delete(button.dataset.attrSlug);
+  } else if (kind === "search") {
+    searchQuery = "";
+    if (searchInput) searchInput.value = "";
+  } else {
+    return;
+  }
+  currentOffset = 0;
+  void fetchProducts();
+}
+
+function clearAllFilters() {
+  selectedRoot.clear();
+  selectedSub.clear();
+  selectedAttrs.clear();
+  searchQuery = "";
+  if (searchInput) searchInput.value = "";
+  activeFilterChipsExpanded = false;
+  pageSize = 24;
+  sortMode = "updated";
+  if (perSelect) perSelect.value = "24";
+  if (sortSelect) sortSelect.value = "updated";
+  currentOffset = 0;
+  void fetchProducts();
 }
 
 function renderRootChips() {
@@ -1027,19 +1219,9 @@ async function init() {
     subEl.addEventListener("change", onChange);
     attrsEl.addEventListener("change", onChange);
 
-    // clearBtn?.addEventListener("click", () => {
-    //   selectedRoot.clear();
-    //   selectedSub.clear();
-    //   selectedAttrs.clear();
-    //   searchQuery = "";
-    //   if (searchInput) searchInput.value = "";
-    //   pageSize = 24;
-    //   sortMode = "newest";
-    //   if (perSelect) perSelect.value = "24";
-    //   if (sortSelect) sortSelect.value = "newest";
-    //   currentOffset = 0;
-    //   void fetchProducts();
-    // });
+    clearBtn?.addEventListener("click", () => {
+      clearAllFilters();
+    });
 
     searchInput?.addEventListener("input", () => {
       searchQuery = searchInput?.value ?? "";
@@ -1058,7 +1240,7 @@ async function init() {
 
     sortSelect?.addEventListener("change", () => {
       const v = sortSelect.value;
-      if (v === "newest" || v === "oldest" || v === "title") {
+      if (v === "updated" || v === "name-asc" || v === "name-desc") {
         sortMode = v;
         currentOffset = 0;
         void fetchProducts();
@@ -1083,6 +1265,27 @@ async function init() {
     });
 
     setupProductFiltersAccordions();
+
+    activeFiltersEl?.addEventListener("click", (e) => {
+      const t = e.target as HTMLElement;
+      if (t.closest("#product-filters-active-filters-show")) {
+        e.preventDefault();
+        activeFilterChipsExpanded = true;
+        renderActiveFilterChips();
+        return;
+      }
+      if (t.closest("#product-filters-active-filters-hide")) {
+        e.preventDefault();
+        activeFilterChipsExpanded = false;
+        renderActiveFilterChips();
+        return;
+      }
+      const chip = t.closest<HTMLButtonElement>("[data-active-chip]");
+      if (chip && activeFiltersRowEl?.contains(chip)) {
+        e.preventDefault();
+        applyActiveFilterRemoval(chip);
+      }
+    });
 
     await fetchProducts();
   } catch (e) {
