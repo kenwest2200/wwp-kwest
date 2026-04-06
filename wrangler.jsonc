@@ -9,6 +9,9 @@
 	"env": {
 	  "dev": {
 		"name": "waterway-frontend-dev"
+	  },
+	  "stage": {
+		"name": "waterway-frontend-stage"
 	  }
 	}
   }
