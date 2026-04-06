@@ -208,8 +208,11 @@ function setError(text: string | null) {
 
 function setLoading(on: boolean) {
   if (clearBtn instanceof HTMLButtonElement) clearBtn.disabled = on;
-  if (prevBtn instanceof HTMLButtonElement) prevBtn.disabled = on;
-  if (nextBtn instanceof HTMLButtonElement) nextBtn.disabled = on;
+  // Prev/Next: only disable while loading; `syncPager()` sets first/last page rules after.
+  if (on) {
+    if (prevBtn instanceof HTMLButtonElement) prevBtn.disabled = true;
+    if (nextBtn instanceof HTMLButtonElement) nextBtn.disabled = true;
+  }
   // Do not disable search / per-page / sort: data is local; disabling drops focus from the search field on every keystroke.
   [rootEl, subEl, attrsEl].forEach((el) => {
     if (!el) return;
@@ -557,11 +560,13 @@ function syncPager() {
   if (pageEl) {
     pageEl.textContent = `Page ${page} of ${totalPages}`;
   }
+  const isFirstPage = page <= 1;
+  const isLastPage = page >= totalPages;
   if (prevBtn instanceof HTMLButtonElement) {
-    prevBtn.disabled = currentOffset <= 0;
+    prevBtn.disabled = isFirstPage;
   }
   if (nextBtn instanceof HTMLButtonElement) {
-    nextBtn.disabled = currentOffset + pageSize >= currentTotal;
+    nextBtn.disabled = isLastPage;
   }
 }
 
@@ -876,11 +881,11 @@ async function fetchProducts() {
       }
     }
     renderActiveFilterChips();
-    syncPager();
   } catch (e) {
     setError(e instanceof Error ? e.message : String(e));
   } finally {
     setLoading(false);
+    syncPager();
   }
 }
 
