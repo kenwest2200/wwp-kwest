@@ -23,9 +23,14 @@ export type ProductSupportLink = {
   target?: string | null;
 };
 
-export type ProductSupportLinksField = {
-  productSupportLink?: ProductSupportLink[] | ProductSupportLink | null;
-} | null;
+export type ProductSupportLinkRow = {
+  productSupportLink?: ProductSupportLink | ProductSupportLink[] | null;
+};
+
+export type ProductSupportLinksField =
+  | ProductSupportLinkRow
+  | ProductSupportLinkRow[]
+  | null;
 
 export type GalleryMediaNode = {
   databaseId?: number | null;
@@ -202,13 +207,23 @@ export function normalizeSingleTemplateOptionalItems(
   return Array.isArray(raw) ? raw : [raw];
 }
 
-export function normalizeSupportLinks(
-  links: ProductSupportLinksField,
+function linksFromRow(
+  row: ProductSupportLinkRow | null | undefined,
 ): ProductSupportLink[] {
-  if (!links?.productSupportLink) return [];
-  const raw = links.productSupportLink;
+  const raw = row?.productSupportLink;
+  if (raw == null) return [];
   const arr = Array.isArray(raw) ? raw : [raw];
   return arr.filter(Boolean) as ProductSupportLink[];
+}
+
+export function normalizeSupportLinks(
+  links: ProductSupportLinksField | undefined,
+): ProductSupportLink[] {
+  if (links == null) return [];
+  if (Array.isArray(links)) {
+    return links.flatMap((row) => linksFromRow(row));
+  }
+  return linksFromRow(links);
 }
 
 export function normalizeProductListContent(
