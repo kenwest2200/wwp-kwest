@@ -6,7 +6,8 @@ on:
       - main
 
   workflow_dispatch:
-
+  repository_dispatch:
+    types: [wp_update]
 jobs:
   deploy:
     runs-on: ubuntu-latest
