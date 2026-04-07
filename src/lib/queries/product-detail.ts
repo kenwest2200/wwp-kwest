@@ -11,35 +11,103 @@ export type ProductPageImageField = {
   node?: ProductPageMediaNode;
 } | null;
 
+export type RelatedProductNode = {
+  databaseId?: number | null;
+  title?: string | null;
+  uri?: string | null;
+};
+
+export type ProductSupportLink = {
+  title?: string | null;
+  url?: string | null;
+  target?: string | null;
+};
+
+export type ProductSupportLinksField = {
+  productSupportLink?: ProductSupportLink[] | ProductSupportLink | null;
+} | null;
+
+export type GalleryMediaNode = {
+  databaseId?: number | null;
+  sourceUrl?: string | null;
+  altText?: string | null;
+};
+
+export type ProductListContentRow = {
+  singleTemplateOptionalProductListItemImage?: {
+    node?: {
+      databaseId?: number | null;
+      sourceUrl?: string | null;
+    } | null;
+  } | null;
+  singleTemplateOptionalProductListItemTable?: string | null;
+};
+
+export type SingleTemplateOptionalItem = {
+  singleTemplateOptionalSelect?: string | string[] | null;
+  singleTemplateOptionalDesc?: string | null;
+  singleTemplateOptionalDescHtml?: string | null;
+  singleTemplateOptionalCharact?: string | null;
+  singleTemplateOptionalGallery?: {
+    nodes?: (GalleryMediaNode | null)[] | null;
+  } | null;
+  singleTemplateOptionalTableTitle?: string | null;
+  singleTemplateOptionalTable?: string | null;
+  singleTemplateOptionalProductListTitle?: string | null;
+  singleTemplateOptionalProductListSubtitle?: string | null;
+  singleTemplateOptionalProductListRowLabel?: string | null;
+  singleTemplateOptionalProductListContent?:
+    | ProductListContentRow[]
+    | ProductListContentRow
+    | null;
+};
+
 export type ProductPageData = {
   product?: {
-    databaseId?: number | null;
-    slug?: string | null;
-    /** WooGraphQL: product display name */
-    name?: string | null;
+    title?: string | null;
+    productRelatedParts?: {
+      relatedParts?: {
+        nodes?: (RelatedProductNode | null)[] | null;
+      } | null;
+    } | null;
     productSettings?: {
+      fieldPageNumber?: string | null;
       productImagesGroup?: {
         productImagesMain?: ProductPageImageField;
         productImagesBrand?: ProductPageImageField;
       } | null;
+      productSupportGroup?: {
+        productSupportTitle?: string | null;
+        productSupportLinks?: ProductSupportLinksField;
+      } | null;
       productSpecificationGroup?: {
         productSpecification?: string | null;
+      } | null;
+      singleTemplateGroup?: {
+        singleTemplateOptional?:
+          | SingleTemplateOptionalItem[]
+          | SingleTemplateOptionalItem
+          | null;
       } | null;
     } | null;
   } | null;
 };
 
-/**
- * Single product for PDP. Uses slug from the URL (`idType: SLUG`).
- * If your schema only supports `DATABASE_ID`, switch idType and pass id from JSON at build time.
- */
-export const PRODUCT_PAGE_QUERY = /* GraphQL */ `
-  query ProductPage($id: ID!) {
-    product(id: $id, idType: SLUG) {
-      databaseId
-      slug
-      name
+const PRODUCT_PAGE_FIELDS = /* GraphQL */ `
+      title
+      productRelatedParts {
+        relatedParts {
+          nodes {
+            ... on Product {
+              databaseId
+              title
+              uri
+            }
+          }
+        }
+      }
       productSettings {
+        fieldPageNumber
         productImagesGroup {
           productImagesMain {
             node {
@@ -62,10 +130,92 @@ export const PRODUCT_PAGE_QUERY = /* GraphQL */ `
             }
           }
         }
+        productSupportGroup {
+          productSupportTitle
+          productSupportLinks {
+            productSupportLink {
+              title
+              url
+              target
+            }
+          }
+        }
         productSpecificationGroup {
           productSpecification
         }
+        singleTemplateGroup {
+          singleTemplateOptional {
+            singleTemplateOptionalSelect
+            singleTemplateOptionalDesc
+            singleTemplateOptionalDescHtml
+            singleTemplateOptionalCharact
+            singleTemplateOptionalGallery {
+              nodes {
+                databaseId
+                sourceUrl
+                altText
+              }
+            }
+            singleTemplateOptionalTableTitle
+            singleTemplateOptionalTable
+            singleTemplateOptionalProductListTitle
+            singleTemplateOptionalProductListSubtitle
+            singleTemplateOptionalProductListRowLabel
+            singleTemplateOptionalProductListContent {
+              singleTemplateOptionalProductListItemImage {
+                node {
+                  databaseId
+                  sourceUrl
+                }
+              }
+              singleTemplateOptionalProductListItemTable
+            }
+          }
+        }
       }
+`;
+
+export const PRODUCT_PAGE_QUERY_SLUG = /* GraphQL */ `
+  query ProductPage($id: ID!) {
+    product(id: $id, idType: SLUG) {
+${PRODUCT_PAGE_FIELDS}
     }
   }
 `;
+
+export const PRODUCT_PAGE_QUERY_BY_DATABASE_ID = /* GraphQL */ `
+  query ProductPageByDatabaseId($id: ID!) {
+    product(id: $id, idType: DATABASE_ID) {
+${PRODUCT_PAGE_FIELDS}
+    }
+  }
+`;
+
+export function normalizeSingleTemplateOptionalItems(
+  raw:
+    | SingleTemplateOptionalItem[]
+    | SingleTemplateOptionalItem
+    | null
+    | undefined,
+): SingleTemplateOptionalItem[] {
+  if (raw == null) return [];
+  return Array.isArray(raw) ? raw : [raw];
+}
+
+export function normalizeSupportLinks(
+  links: ProductSupportLinksField,
+): ProductSupportLink[] {
+  if (!links?.productSupportLink) return [];
+  const raw = links.productSupportLink;
+  const arr = Array.isArray(raw) ? raw : [raw];
+  return arr.filter(Boolean) as ProductSupportLink[];
+}
+
+export function normalizeProductListContent(
+  raw:
+    | SingleTemplateOptionalItem["singleTemplateOptionalProductListContent"]
+    | undefined,
+): ProductListContentRow[] {
+  if (raw == null) return [];
+  return Array.isArray(raw) ? raw : [raw];
+}

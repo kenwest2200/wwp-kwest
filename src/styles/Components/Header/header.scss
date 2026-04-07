@@ -16,6 +16,7 @@
   position: sticky;
   min-height: px-to-rem(112);
   margin-bottom: px-to-rem(-112);
+
   z-index: 100;
 
   .header__container {
@@ -32,6 +33,7 @@
       background: $white;
 
       border: 1px solid #D0CFCB66;
+
 
       &-link {
         color: $dark-medium;
@@ -52,7 +54,7 @@
     .header__container {
       background: $white;
       padding-bottom: px-to-rem(24);
-      box-shadow: 0px 2px 20px 0px rgba(0, 0, 0, 0.06);
+      box-shadow: 0px 6px 40px 1px rgba(0, 0, 0, 0.06);
       transition: background 0.2s ease, padding-bottom 0s ease;
     }
 

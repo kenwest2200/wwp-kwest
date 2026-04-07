@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-06T14:36:37.528Z",
+  "generatedAt": "2026-04-07T08:28:38.953Z",
   "attributesByCategory": {
     "bath": [],
     "pool": [],
@@ -1799,21 +1799,6 @@
     ]
   },
   "products": [
-    {
-      "title": "Old Faithful Jets – Gunite & Vinyl Liner",
-      "slug": "old-faithful-jets-gunite-vinyl-liner-2",
-      "databaseId": 40265,
-      "date": "2025-08-14T15:28:33",
-      "modified": "2025-08-14T15:47:50",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "gunite-jets"
-      ],
-      "attributeSlugs": []
-    },
     {
       "title": "ClearWater II – D.E. Filter System",
       "slug": "clearwater-ii-d-e-filter-system",

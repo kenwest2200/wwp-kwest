@@ -4,6 +4,7 @@ import IconSearch from "../icons/searchIcon.astro";
 import IconArrowDown from "../icons/arrowDown.astro";
 import IconGridRows from "../icons/gridRowsIcon.astro";
 import IconGridList from "../icons/gridListIcon.astro";
+import ArrowPaginationIcon from "../icons/arrowPaginationIcon.astro";
 ---
 
 <section
@@ -150,66 +151,218 @@ import IconGridList from "../icons/gridListIcon.astro";
         -->
       </div>
 
-      <div
-        class="product-filters__panel"
-        aria-labelledby="product-filters-products-h"
-      >
-        <h2 id="product-filters-products-h" class="product-filters__h2">
-          Products
-        </h2>
-        <div class="product-filters__products-toolbar">
-          <label class="product-filters__toolbar-label">
-            Per page
-            <select
-              id="product-filters-per"
-              class="product-filters__toolbar-select"
-              aria-label="Products per page"
+      <div class="product-filters__panel">
+        <div class="product-filters__products-toolbar-wrapper">
+          <div class="product-filters__products-toolbar">
+            <div
+              id="product-filters-per-dropdown"
+              class="product-filters__custom-select"
             >
-              <option value="12">12</option>
-              <option value="24" selected>24</option>
-            </select>
-          </label>
-          <label class="product-filters__toolbar-label">
-            Sorting by:
-            <select
-              id="product-filters-sort"
-              class="product-filters__toolbar-select"
-              aria-label="Sorting options"
+              <button
+                type="button"
+                id="product-filters-per-trigger"
+                class="product-filters__custom-select-trigger"
+                aria-label="Products per page"
+                aria-haspopup="listbox"
+                aria-expanded="false"
+                aria-controls="product-filters-per-menu"
+              >
+                <span class="product-filters__custom-select-text">
+                  <span class="product-filters__custom-select-fixed">Show:</span
+                  >
+                  <span
+                    id="product-filters-per-value"
+                    class="product-filters__custom-select-variable">24</span
+                  >
+                  <span class="product-filters__custom-select-variable"
+                    >/ page</span
+                  >
+                </span>
+                <span
+                  class="product-filters__custom-select-chevron"
+                  aria-hidden="true"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="10"
+                    height="6"
+                    viewBox="0 0 10 6"
+                    fill="none"
+                  >
+                    <path
+                      d="M0.75 0.75L4.75 4.75L8.75 0.75"
+                      stroke="#9C9C9C"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"></path>
+                  </svg>
+                </span>
+              </button>
+              <ul
+                id="product-filters-per-menu"
+                class="product-filters__custom-select-menu"
+                role="listbox"
+                aria-labelledby="product-filters-per-trigger"
+                hidden
+              >
+                <li role="presentation">
+                  <button
+                    type="button"
+                    class="product-filters__custom-select-option"
+                    role="option"
+                    data-per-value="12"
+                  >
+                    12
+                  </button>
+                </li>
+                <li role="presentation">
+                  <button
+                    type="button"
+                    class="product-filters__custom-select-option"
+                    role="option"
+                    data-per-value="24"
+                  >
+                    24
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <div
+              id="product-filters-sort-dropdown"
+              class="product-filters__custom-select"
             >
-              <option value="updated" selected> Last updated date </option>
-              <option value="name-asc">A–Z by product name</option>
-              <option value="name-desc">Z–A by product name</option>
-            </select>
-          </label>
+              <button
+                type="button"
+                id="product-filters-sort-trigger"
+                class="product-filters__custom-select-trigger"
+                aria-label="Sort products"
+                aria-haspopup="listbox"
+                aria-expanded="false"
+                aria-controls="product-filters-sort-menu"
+              >
+                <span class="product-filters__custom-select-text">
+                  <span class="product-filters__custom-select-fixed"
+                    >Sort by:</span
+                  >
+                  <span
+                    id="product-filters-sort-value"
+                    class="product-filters__custom-select-variable">Newest</span
+                  >
+                </span>
+                <span
+                  class="product-filters__custom-select-chevron"
+                  aria-hidden="true"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="10"
+                    height="6"
+                    viewBox="0 0 10 6"
+                    fill="none"
+                  >
+                    <path
+                      d="M0.75 0.75L4.75 4.75L8.75 0.75"
+                      stroke="#9C9C9C"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"></path>
+                  </svg>
+                </span>
+              </button>
+              <ul
+                id="product-filters-sort-menu"
+                class="product-filters__custom-select-menu"
+                role="listbox"
+                aria-labelledby="product-filters-sort-trigger"
+                hidden
+              >
+                <li role="presentation">
+                  <button
+                    type="button"
+                    class="product-filters__custom-select-option"
+                    role="option"
+                    data-sort-value="updated"
+                  >
+                    Newest
+                  </button>
+                </li>
+                <li role="presentation">
+                  <button
+                    type="button"
+                    class="product-filters__custom-select-option"
+                    role="option"
+                    data-sort-value="name-asc"
+                  >
+                    A–Z
+                  </button>
+                </li>
+                <li role="presentation">
+                  <button
+                    type="button"
+                    class="product-filters__custom-select-option"
+                    role="option"
+                    data-sort-value="name-desc"
+                  >
+                    Z–A
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <div
+              class="product-filters__layout-toggle"
+              role="group"
+              aria-label="Product layout"
+            >
+              <button
+                type="button"
+                id="product-filters-view-grid"
+                class="product-filters__layout-toggle-btn"
+                aria-pressed="true"
+              >
+                <IconGridRows />
+              </button>
+              <button
+                type="button"
+                id="product-filters-view-rows"
+                class="product-filters__layout-toggle-btn"
+                aria-pressed="false"
+              >
+                <IconGridList />
+              </button>
+            </div>
+          </div>
           <div
-            class="product-filters__layout-toggle"
-            role="group"
-            aria-label="Product layout"
+            class="product-filters__toolbar-pager"
+            aria-label="Page navigation"
           >
-            <button
-              type="button"
-              id="product-filters-view-grid"
-              class="product-filters__layout-toggle-btn"
-              aria-pressed="true"
+            <p
+              id="product-filters-products-total"
+              class="product-filters__products-total"
             >
-              <IconGridRows />
-            </button>
-            <button
-              type="button"
-              id="product-filters-view-rows"
-              class="product-filters__layout-toggle-btn"
-              aria-pressed="false"
-            >
-              <IconGridList />
-            </button>
+              Products found: 0
+            </p>
+            <div class="product-filters__toolbar-pager-buttons">
+              <button
+                type="button"
+                id="product-filters-prev-toolbar"
+                class="product-filters__btn product-filters__btn--prev"
+              >
+                <ArrowPaginationIcon
+                  class="product-filters__btn-icon product-filters__btn-icon--prev"
+                />
+              </button>
+              <button
+                type="button"
+                id="product-filters-next-toolbar"
+                class="product-filters__btn product-filters__btn--next"
+              >
+                <ArrowPaginationIcon
+                  class="product-filters__btn-icon product-filters__btn-icon--next"
+                />
+              </button>
+            </div>
           </div>
         </div>
-        <p
-          id="product-filters-products-total"
-          class="product-filters__products-total"
-        >
-          Products found: 0
-        </p>
         <div
           id="product-filters-active-filters"
           class="product-filters__active-filters"
@@ -267,9 +420,11 @@ import IconGridList from "../icons/gridListIcon.astro";
           <button
             type="button"
             id="product-filters-prev"
-            class="product-filters__btn"
+            class="product-filters__btn product-filters__btn--prev"
           >
-            Prev
+            <ArrowPaginationIcon
+              class="product-filters__btn-icon product-filters__btn-icon--prev"
+            />
           </button>
           <span
             id="product-filters-page"
@@ -278,9 +433,11 @@ import IconGridList from "../icons/gridListIcon.astro";
           <button
             type="button"
             id="product-filters-next"
-            class="product-filters__btn"
+            class="product-filters__btn product-filters__btn--next"
           >
-            Next
+            <ArrowPaginationIcon
+              class="product-filters__btn-icon product-filters__btn-icon--next"
+            />
           </button>
         </div>
       </div>

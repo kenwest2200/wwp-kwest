@@ -1,0 +1,132 @@
+---
+import {
+  normalizeProductListContent,
+  type SingleTemplateOptionalItem,
+} from "../../lib/queries/product-detail";
+
+interface Props {
+  item: SingleTemplateOptionalItem;
+  index: number;
+}
+
+const { item, index } = Astro.props;
+const selectRaw = item.singleTemplateOptionalSelect;
+const selectAttr = Array.isArray(selectRaw)
+  ? selectRaw.filter(Boolean).join(",")
+  : (selectRaw ?? "");
+
+const listRows = normalizeProductListContent(
+  item.singleTemplateOptionalProductListContent,
+);
+const galleryNodes =
+  item.singleTemplateOptionalGallery?.nodes?.filter((n) => n?.sourceUrl) ?? [];
+
+const descHtml = item.singleTemplateOptionalDescHtml?.trim();
+const descPlain = item.singleTemplateOptionalDesc?.trim();
+const charactHtml = item.singleTemplateOptionalCharact?.trim();
+const tableTitle = item.singleTemplateOptionalTableTitle?.trim();
+const tableHtml = item.singleTemplateOptionalTable?.trim();
+const plTitle = item.singleTemplateOptionalProductListTitle?.trim();
+const plSubtitle = item.singleTemplateOptionalProductListSubtitle?.trim();
+const plRowLabel = item.singleTemplateOptionalProductListRowLabel?.trim();
+
+const hasAnything =
+  descHtml ||
+  descPlain ||
+  charactHtml ||
+  tableTitle ||
+  tableHtml ||
+  plTitle ||
+  plSubtitle ||
+  plRowLabel ||
+  galleryNodes.length > 0 ||
+  listRows.length > 0;
+---
+
+{
+  hasAnything && (
+    <section
+      class="product-page__optional-block"
+      data-template-select={selectAttr}
+      data-template-index={index}
+    >
+      {descHtml && (
+        <div class="product-page__optional-html" set:html={descHtml} />
+      )}
+      {!descHtml && descPlain && (
+        <p class="product-page__optional-text">{descPlain}</p>
+      )}
+      {charactHtml && (
+        <>
+          <h2 class="product-page__h2 product-page__h2--in-block">Features</h2>
+          <div
+            class="product-page__optional-html product-page__optional-charact"
+            set:html={charactHtml}
+          />
+        </>
+      )}
+      {galleryNodes.length > 0 && (
+        <div class="product-page__gallery-mini">
+          {galleryNodes.map((g) =>
+            g?.sourceUrl ? (
+              <figure class="product-page__figure product-page__figure--mini">
+                <img
+                  src={g.sourceUrl}
+                  alt={g.altText ?? ""}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+            ) : null,
+          )}
+        </div>
+      )}
+      {tableTitle && (
+        <h2 class="product-page__h2 product-page__h2--in-block">
+          {tableTitle}
+        </h2>
+      )}
+      {tableHtml && <div class="product-page__spec" set:html={tableHtml} />}
+      {(plTitle || plSubtitle) && (
+        <div class="product-page__product-list-head">
+          {plTitle && (
+            <h2 class="product-page__h2 product-page__h2--in-block">
+              {plTitle}
+            </h2>
+          )}
+          {plSubtitle && (
+            <p class="product-page__optional-text">{plSubtitle}</p>
+          )}
+        </div>
+      )}
+      {plRowLabel && <p class="product-page__row-label">{plRowLabel}</p>}
+      {listRows.length > 0 && (
+        <ul class="product-page__product-list-rows">
+          {listRows.map((row) => (
+            <li class="product-page__product-list-row">
+              {row.singleTemplateOptionalProductListItemImage?.node
+                ?.sourceUrl && (
+                <img
+                  class="product-page__product-list-thumb"
+                  src={
+                    row.singleTemplateOptionalProductListItemImage.node
+                      .sourceUrl
+                  }
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
+              {row.singleTemplateOptionalProductListItemTable?.trim() && (
+                <div
+                  class="product-page__spec"
+                  set:html={row.singleTemplateOptionalProductListItemTable}
+                />
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  )
+}

@@ -1,77 +1,147 @@
 ---
-import fs from "node:fs";
-import path from "node:path";
 import Layout from "../../layouts/Layout.astro";
+import ProductSingleTemplateBlock from "../../components/Product/ProductSingleTemplateBlock.astro";
+import "../../styles/Pages/product-page.scss";
 import { getGraphQLClient, requestGraphql } from "../../lib/graphql";
 import {
-  PRODUCT_PAGE_QUERY,
+  normalizeSingleTemplateOptionalItems,
+  normalizeSupportLinks,
+  PRODUCT_PAGE_QUERY_BY_DATABASE_ID,
+  PRODUCT_PAGE_QUERY_SLUG,
   type ProductPageData,
 } from "../../lib/queries/product-detail";
+import type { ProductPagePathProps } from "./product-static-paths";
+
+export { getStaticPaths } from "./product-static-paths";
 
 export const prerender = true;
 
-export async function getStaticPaths() {
-  const dataPath = path.join(
-    process.cwd(),
-    "public",
-    "data",
-    "product-filters.json",
-  );
-  if (!fs.existsSync(dataPath)) {
-    return [];
-  }
-  try {
-    const raw = JSON.parse(fs.readFileSync(dataPath, "utf-8")) as {
-      products?: { slug?: string }[];
-    };
-    const products = raw.products ?? [];
-    const seen = new Set<string>();
-    const paths: { params: { slug: string } }[] = [];
-    for (const p of products) {
-      const slug = p?.slug?.trim();
-      if (!slug || seen.has(slug)) continue;
-      seen.add(slug);
-      paths.push({ params: { slug } });
-    }
-    return paths;
-  } catch {
-    return [];
-  }
-}
-
 const slug = Astro.params.slug ?? "";
+
+interface Props extends Partial<ProductPagePathProps> {}
+
+const {
+  databaseId: catalogDatabaseId = null,
+  catalogTitle: catalogTitleProp = "",
+} = Astro.props;
+const databaseIdFromCatalog =
+  typeof catalogDatabaseId === "number" && catalogDatabaseId > 0
+    ? catalogDatabaseId
+    : null;
 
 let product: ProductPageData["product"] | null = null;
 if (getGraphQLClient() && slug) {
   try {
-    const data = await requestGraphql<ProductPageData>(PRODUCT_PAGE_QUERY, {
-      id: slug,
-    });
-    product = data.product ?? null;
+    if (databaseIdFromCatalog != null) {
+      const data = (await requestGraphql(PRODUCT_PAGE_QUERY_BY_DATABASE_ID, {
+        id: String(databaseIdFromCatalog),
+      })) as ProductPageData;
+      product = data.product ?? null;
+    }
+    if (!product) {
+      const data = (await requestGraphql(PRODUCT_PAGE_QUERY_SLUG, {
+        id: slug,
+      })) as ProductPageData;
+      product = data.product ?? null;
+    }
   } catch {
     product = null;
   }
 }
 
-const title =
-  product?.name?.trim() || (slug ? slug.replace(/-/g, " ") : "Product");
+const title = product?.title?.trim() || "Product";
+
 const images = product?.productSettings?.productImagesGroup;
 const mainImg = images?.productImagesMain?.node;
 const brandImg = images?.productImagesBrand?.node;
 const specHtml =
   product?.productSettings?.productSpecificationGroup?.productSpecification?.trim() ??
   "";
+const relatedNodes =
+  product?.productRelatedParts?.relatedParts?.nodes?.filter((n) => n != null) ??
+  [];
+const supportGroup = product?.productSettings?.productSupportGroup;
+const supportTitle = supportGroup?.productSupportTitle?.trim() ?? "";
+const supportLinks = normalizeSupportLinks(
+  supportGroup?.productSupportLinks ?? null,
+);
+const optionalItems = normalizeSingleTemplateOptionalItems(
+  product?.productSettings?.singleTemplateGroup?.singleTemplateOptional,
+);
+
+function relatedLabel(node: (typeof relatedNodes)[number]) {
+  return (node.title ?? "").trim();
+}
+
+function pushSlide(
+  out: { src: string; alt: string }[],
+  seen: { has(v: string): boolean; add(v: string): void },
+  src?: string | null,
+  alt?: string,
+) {
+  const u = src?.trim();
+  if (!u || seen.has(u)) return;
+  seen.add(u);
+  out.push({ src: u, alt: alt ?? "" });
+}
+
+const gallerySlides: { src: string; alt: string }[] = [];
+const seenGalleryUrls = new Set();
+pushSlide(
+  gallerySlides,
+  seenGalleryUrls,
+  mainImg?.sourceUrl,
+  mainImg?.altText ?? title,
+);
+pushSlide(
+  gallerySlides,
+  seenGalleryUrls,
+  brandImg?.sourceUrl,
+  brandImg?.altText ?? "",
+);
+for (const item of optionalItems) {
+  const nodes = item.singleTemplateOptionalGallery?.nodes ?? [];
+  for (const n of nodes) {
+    pushSlide(gallerySlides, seenGalleryUrls, n?.sourceUrl, n?.altText ?? "");
+  }
+}
 ---
 
 <Layout headerType="white">
   <main class="product-page">
     <div class="product-page__inner">
-      <p class="product-page__crumb">
-        <a href="/products/">Products</a>
-        <span aria-hidden="true"> / </span>
-        <span>{slug}</span>
-      </p>
-      <h1 class="product-page__title">{title}</h1>
+      <div class="product-page__hero">
+        <div class="product-page__hero-main">
+          <h1 class="product-page__title">{title}</h1>
+          <nav class="product-page__breadcrumb" aria-label="Breadcrumb">
+            <ol class="product-page__breadcrumb-list">
+              <li>
+                <a href="/">Home</a>
+              </li>
+              <li>
+                <a href="/products/">Products</a>
+              </li>
+              <li aria-current="page">{title}</li>
+            </ol>
+          </nav>
+        </div>
+        {
+          brandImg?.sourceUrl && (
+            <div class="product-page__hero-brand" aria-hidden="true">
+              <img
+                class="product-page__brand-logo"
+                src={brandImg.sourceUrl}
+                alt={brandImg.altText ?? ""}
+                width={brandImg.mediaDetails?.width ?? undefined}
+                height={brandImg.mediaDetails?.height ?? undefined}
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+          )
+        }
+      </div>
+
       {
         !product && (
           <p class="product-page__placeholder">
@@ -80,36 +150,149 @@ const specHtml =
           </p>
         )
       }
+
       {
         product && (
           <div class="product-page__body">
-            <div class="product-page__gallery">
-              {mainImg?.sourceUrl && (
-                <figure class="product-page__figure product-page__figure--main">
+            {gallerySlides.length > 0 && (
+              <section
+                class="product-page__gallery-section"
+                data-product-gallery
+                aria-label="Product images"
+              >
+                <div class="product-page__gallery-frame">
                   <img
-                    src={mainImg.sourceUrl}
-                    alt={mainImg.altText ?? title}
-                    width={mainImg.mediaDetails?.width ?? undefined}
-                    height={mainImg.mediaDetails?.height ?? undefined}
+                    class="product-page__gallery-main-img"
+                    src={gallerySlides[0].src}
+                    alt={gallerySlides[0].alt || title}
+                    width={mainImg?.mediaDetails?.width ?? undefined}
+                    height={mainImg?.mediaDetails?.height ?? undefined}
                     loading="eager"
                     decoding="async"
                   />
-                </figure>
-              )}
-              {brandImg?.sourceUrl && (
-                <figure class="product-page__figure product-page__figure--brand">
-                  <img
-                    src={brandImg.sourceUrl}
-                    alt={brandImg.altText ?? ""}
-                    width={brandImg.mediaDetails?.width ?? undefined}
-                    height={brandImg.mediaDetails?.height ?? undefined}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </figure>
-              )}
-            </div>
-            {specHtml && <div class="product-page__spec" set:html={specHtml} />}
+                </div>
+                {gallerySlides.length > 1 && (
+                  <div class="product-page__gallery-thumbs-row">
+                    <button
+                      type="button"
+                      class="product-page__gallery-arrow"
+                      data-gallery-prev
+                      aria-label="Previous image"
+                    >
+                      <span aria-hidden="true">‹</span>
+                    </button>
+                    <div class="product-page__gallery-thumbs">
+                      {gallerySlides.map((slide, i) => (
+                        <button
+                          type="button"
+                          class:list={[
+                            "product-page__gallery-thumb",
+                            i === 0 && "is-active",
+                          ]}
+                          data-full-src={slide.src}
+                          data-full-alt={slide.alt}
+                          aria-label={`Image ${i + 1} of ${gallerySlides.length}`}
+                          aria-pressed={i === 0}
+                        >
+                          <img
+                            src={slide.src}
+                            alt=""
+                            width="88"
+                            height="88"
+                            loading={i === 0 ? "eager" : "lazy"}
+                            decoding="async"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                    <button
+                      type="button"
+                      class="product-page__gallery-arrow"
+                      data-gallery-next
+                      aria-label="Next image"
+                    >
+                      <span aria-hidden="true">›</span>
+                    </button>
+                  </div>
+                )}
+              </section>
+            )}
+
+            {optionalItems.map((item, idx) => (
+              <ProductSingleTemplateBlock item={item} index={idx} />
+            ))}
+
+            {specHtml && (
+              <section
+                class="product-page__spec-section"
+                aria-labelledby="product-spec-heading"
+              >
+                <h2 id="product-spec-heading" class="product-page__h2">
+                  Specifications
+                </h2>
+                <div class="product-page__spec" set:html={specHtml} />
+              </section>
+            )}
+
+            {(supportTitle || supportLinks.length > 0) && (
+              <section
+                class="product-page__support"
+                aria-labelledby="product-support-heading"
+              >
+                <h2 id="product-support-heading" class="product-page__h2">
+                  {supportTitle || "Technical support"}
+                </h2>
+                {supportLinks.length > 0 && (
+                  <ul class="product-page__link-list">
+                    {supportLinks.map((link) => {
+                      const href = link.url?.trim();
+                      if (!href) return null;
+                      const t = link.title?.trim() || href;
+                      const blank =
+                        link.target?.toLowerCase() === "_blank" ||
+                        link.target?.toLowerCase() === "blank";
+                      return (
+                        <li>
+                          <a
+                            class="product-page__text-link"
+                            href={href}
+                            target={blank ? "_blank" : undefined}
+                            rel={blank ? "noopener noreferrer" : undefined}
+                          >
+                            {t}
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </section>
+            )}
+
+            {relatedNodes.length > 0 && (
+              <section
+                class="product-page__related"
+                aria-labelledby="product-related-heading"
+              >
+                <h2 id="product-related-heading" class="product-page__h2">
+                  Replacement parts
+                </h2>
+                <ul class="product-page__link-list">
+                  {relatedNodes.map((node) => {
+                    const label = relatedLabel(node);
+                    const href = node.uri?.trim();
+                    if (!href) return null;
+                    return (
+                      <li>
+                        <a class="product-page__text-link" href={href}>
+                          {label || href}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            )}
           </div>
         )
       }
@@ -117,90 +300,6 @@ const specHtml =
   </main>
 </Layout>
 
-<style lang="scss">
-  @use "../../styles/functions" as *;
-
-  .product-page {
-    max-width: px-to-rem(1120);
-    margin: 0 auto;
-    padding: px-to-rem(150) px-to-rem(16) px-to-rem(48);
-    box-sizing: border-box;
-  }
-
-  .product-page__crumb {
-    margin: 0 0 px-to-rem(12);
-    font-size: px-to-rem(14);
-    color: #666;
-
-    a {
-      color: inherit;
-    }
-  }
-
-  .product-page__title {
-    margin: 0 0 px-to-rem(16);
-    font-size: px-to-rem(28);
-    font-weight: 600;
-    line-height: 1.2;
-    text-transform: capitalize;
-  }
-
-  .product-page__placeholder {
-    margin: 0;
-    font-size: px-to-rem(15);
-    color: #444;
-
-    code {
-      font-size: 0.9em;
-    }
-  }
-
-  .product-page__body {
-    display: flex;
-    flex-direction: column;
-    gap: px-to-rem(24);
-  }
-
-  .product-page__gallery {
-    display: flex;
-    flex-wrap: wrap;
-    gap: px-to-rem(16);
-    align-items: flex-start;
-  }
-
-  .product-page__figure {
-    margin: 0;
-
-    img {
-      display: block;
-      max-width: 100%;
-      height: auto;
-    }
-  }
-
-  .product-page__figure--main img {
-    max-width: min(100%, px-to-rem(560));
-  }
-
-  .product-page__figure--brand img {
-    max-width: px-to-rem(200);
-  }
-
-  .product-page__spec {
-    font-size: px-to-rem(15);
-    line-height: 1.5;
-    color: #333;
-
-    :global(table) {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    :global(th),
-    :global(td) {
-      border: 1px solid #ddd;
-      padding: px-to-rem(8) px-to-rem(10);
-      text-align: left;
-    }
-  }
-</style>
+<script>
+  import "../../scripts/product-page-gallery.ts";
+</script>

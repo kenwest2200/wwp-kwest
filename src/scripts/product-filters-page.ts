@@ -18,8 +18,20 @@ const activeFiltersRowEl = document.getElementById(
 const activeFiltersToggleEl = document.getElementById(
   "product-filters-active-filters-toggle",
 );
-const prevBtn = document.getElementById("product-filters-prev");
-const nextBtn = document.getElementById("product-filters-next");
+function queryPagerButtons(ids: readonly string[]): HTMLButtonElement[] {
+  return ids
+    .map((id) => document.getElementById(id))
+    .filter((el): el is HTMLButtonElement => el instanceof HTMLButtonElement);
+}
+
+const pagerPrevBtns = queryPagerButtons([
+  "product-filters-prev",
+  "product-filters-prev-toolbar",
+]);
+const pagerNextBtns = queryPagerButtons([
+  "product-filters-next",
+  "product-filters-next-toolbar",
+]);
 const pageEl = document.getElementById("product-filters-page");
 const clearBtn = document.getElementById("product-filters-clear");
 const errEl = document.getElementById("product-filters-api-error");
@@ -27,12 +39,18 @@ const countEl = document.getElementById("product-filters-count");
 const searchInput = document.getElementById(
   "product-filters-search",
 ) as HTMLInputElement | null;
-const perSelect = document.getElementById(
-  "product-filters-per",
-) as HTMLSelectElement | null;
-const sortSelect = document.getElementById(
-  "product-filters-sort",
-) as HTMLSelectElement | null;
+const perDropdownRoot = document.getElementById(
+  "product-filters-per-dropdown",
+);
+const perTrigger = document.getElementById("product-filters-per-trigger");
+const perValueEl = document.getElementById("product-filters-per-value");
+const perMenu = document.getElementById("product-filters-per-menu");
+const sortDropdownRoot = document.getElementById(
+  "product-filters-sort-dropdown",
+);
+const sortTrigger = document.getElementById("product-filters-sort-trigger");
+const sortValueEl = document.getElementById("product-filters-sort-value");
+const sortMenu = document.getElementById("product-filters-sort-menu");
 
 const CATALOG_VIEW_STORAGE_KEY = "product-filters-catalog-view";
 type CatalogViewMode = "grid" | "rows";
@@ -86,6 +104,11 @@ const PAGE_SIZE_OPTIONS = [12, 24] as const;
 let pageSize = 24;
 let searchQuery = "";
 type SortMode = "updated" | "name-asc" | "name-desc";
+const SORT_MODE_LABELS: Record<SortMode, string> = {
+  updated: "Newest",
+  "name-asc": "A–Z",
+  "name-desc": "Z–A",
+};
 let sortMode: SortMode = "updated";
 let rootCategoriesList: { name: string; slug: string }[] = [];
 /** Category slug → display name (roots + every merged sub from all API keys). */
@@ -118,6 +141,35 @@ function parseListParam(params: URLSearchParams, key: string) {
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
+}
+
+function closeToolbarCustomDropdowns() {
+  if (perMenu) perMenu.hidden = true;
+  if (sortMenu) sortMenu.hidden = true;
+  perTrigger?.setAttribute("aria-expanded", "false");
+  sortTrigger?.setAttribute("aria-expanded", "false");
+  perDropdownRoot?.classList.remove("product-filters__custom-select--open");
+  sortDropdownRoot?.classList.remove("product-filters__custom-select--open");
+}
+
+function syncToolbarCustomSelectUi() {
+  if (perValueEl) perValueEl.textContent = String(pageSize);
+  if (sortValueEl) sortValueEl.textContent = SORT_MODE_LABELS[sortMode];
+  perMenu?.querySelectorAll<HTMLButtonElement>("[data-per-value]").forEach(
+    (btn) => {
+      const v = Number(btn.dataset.perValue);
+      btn.setAttribute("aria-selected", String(v === pageSize));
+    },
+  );
+  sortMenu?.querySelectorAll<HTMLButtonElement>("[data-sort-value]").forEach(
+    (btn) => {
+      const v = btn.dataset.sortValue;
+      btn.setAttribute(
+        "aria-selected",
+        String(v === sortMode),
+      );
+    },
+  );
 }
 
 function applyStateFromUrl() {
@@ -161,8 +213,7 @@ function applyStateFromUrl() {
   }
 
   if (searchInput) searchInput.value = searchQuery;
-  if (perSelect) perSelect.value = String(pageSize);
-  if (sortSelect) sortSelect.value = sortMode;
+  syncToolbarCustomSelectUi();
 
   const safePage = Number.isFinite(page) ? Math.max(1, Math.floor(page)) : 1;
   currentOffset = (safePage - 1) * pageSize;
@@ -219,8 +270,8 @@ function setLoading(on: boolean) {
   if (clearBtn instanceof HTMLButtonElement) clearBtn.disabled = on;
   // Prev/Next: only disable while loading; `syncPager()` sets first/last page rules after.
   if (on) {
-    if (prevBtn instanceof HTMLButtonElement) prevBtn.disabled = true;
-    if (nextBtn instanceof HTMLButtonElement) nextBtn.disabled = true;
+    for (const b of pagerPrevBtns) b.disabled = true;
+    for (const b of pagerNextBtns) b.disabled = true;
   }
   // Do not disable search / per-page / sort: data is local; disabling drops focus from the search field on every keystroke.
   [rootEl, subEl, attrsEl].forEach((el) => {
@@ -560,8 +611,8 @@ function renderSubcategories() {
 function syncPager() {
   if (currentTotal === 0) {
     if (pageEl) pageEl.textContent = "—";
-    if (prevBtn instanceof HTMLButtonElement) prevBtn.disabled = true;
-    if (nextBtn instanceof HTMLButtonElement) nextBtn.disabled = true;
+    for (const b of pagerPrevBtns) b.disabled = true;
+    for (const b of pagerNextBtns) b.disabled = true;
     return;
   }
   const page = Math.floor(currentOffset / pageSize) + 1;
@@ -571,11 +622,11 @@ function syncPager() {
   }
   const isFirstPage = page <= 1;
   const isLastPage = page >= totalPages;
-  if (prevBtn instanceof HTMLButtonElement) {
-    prevBtn.disabled = isFirstPage;
+  for (const b of pagerPrevBtns) {
+    b.disabled = isFirstPage;
   }
-  if (nextBtn instanceof HTMLButtonElement) {
-    nextBtn.disabled = isLastPage;
+  for (const b of pagerNextBtns) {
+    b.disabled = isLastPage;
   }
 }
 
@@ -875,7 +926,7 @@ async function fetchProducts() {
     const start = total === 0 ? 0 : currentOffset + 1;
     const end = Math.min(currentOffset + pageSize, total);
     if (productsTotalEl) {
-      productsTotalEl.textContent = `Showing ${start}-${end} of ${total}`;
+      productsTotalEl.innerHTML = `${start}-${end} of <span class="product-filters__products-total--total-count">${total}</span>`;
     }
     // if (countEl) {
     //   const selectedCount =
@@ -1089,8 +1140,7 @@ function clearAllFilters() {
   activeFilterChipsExpanded = false;
   pageSize = 24;
   sortMode = "updated";
-  if (perSelect) perSelect.value = "24";
-  if (sortSelect) sortSelect.value = "updated";
+  syncToolbarCustomSelectUi();
   currentOffset = 0;
   void fetchProducts();
 }
@@ -1291,22 +1341,64 @@ async function init() {
       void fetchProducts();
     });
 
-    perSelect?.addEventListener("change", () => {
-      const v = Number(perSelect.value);
-      if (PAGE_SIZE_OPTIONS.includes(v as (typeof PAGE_SIZE_OPTIONS)[number])) {
-        pageSize = v;
-        currentOffset = 0;
-        void fetchProducts();
+    perTrigger?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = perMenu && !perMenu.hidden;
+      closeToolbarCustomDropdowns();
+      if (!isOpen && perMenu && perTrigger) {
+        perMenu.hidden = false;
+        perTrigger.setAttribute("aria-expanded", "true");
+        perDropdownRoot?.classList.add("product-filters__custom-select--open");
       }
     });
 
-    sortSelect?.addEventListener("change", () => {
-      const v = sortSelect.value;
-      if (v === "updated" || v === "name-asc" || v === "name-desc") {
-        sortMode = v;
-        currentOffset = 0;
-        void fetchProducts();
+    sortTrigger?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = sortMenu && !sortMenu.hidden;
+      closeToolbarCustomDropdowns();
+      if (!isOpen && sortMenu && sortTrigger) {
+        sortMenu.hidden = false;
+        sortTrigger.setAttribute("aria-expanded", "true");
+        sortDropdownRoot?.classList.add("product-filters__custom-select--open");
       }
+    });
+
+    perMenu?.addEventListener("click", (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(
+        "[data-per-value]",
+      );
+      if (!btn) return;
+      const v = Number(btn.dataset.perValue);
+      if (!PAGE_SIZE_OPTIONS.includes(v as (typeof PAGE_SIZE_OPTIONS)[number])) {
+        return;
+      }
+      pageSize = v;
+      currentOffset = 0;
+      closeToolbarCustomDropdowns();
+      syncToolbarCustomSelectUi();
+      void fetchProducts();
+    });
+
+    sortMenu?.addEventListener("click", (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(
+        "[data-sort-value]",
+      );
+      if (!btn) return;
+      const v = btn.dataset.sortValue;
+      if (v !== "updated" && v !== "name-asc" && v !== "name-desc") return;
+      sortMode = v;
+      currentOffset = 0;
+      closeToolbarCustomDropdowns();
+      syncToolbarCustomSelectUi();
+      void fetchProducts();
+    });
+
+    document.addEventListener("click", () => {
+      closeToolbarCustomDropdowns();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeToolbarCustomDropdowns();
     });
 
     document
@@ -1320,17 +1412,18 @@ async function init() {
         setCatalogViewMode("rows", true);
       });
 
-    prevBtn?.addEventListener("click", () => {
+    const goPrevPage = () => {
       if (currentOffset <= 0) return;
       currentOffset = Math.max(0, currentOffset - pageSize);
       void fetchProducts();
-    });
-
-    nextBtn?.addEventListener("click", () => {
+    };
+    const goNextPage = () => {
       if (currentOffset + pageSize >= currentTotal) return;
       currentOffset += pageSize;
       void fetchProducts();
-    });
+    };
+    for (const b of pagerPrevBtns) b.addEventListener("click", goPrevPage);
+    for (const b of pagerNextBtns) b.addEventListener("click", goNextPage);
 
     window.addEventListener("popstate", () => {
       applyStateFromUrl();
