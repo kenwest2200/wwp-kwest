@@ -933,7 +933,7 @@ function renderProductCard(p: Product): string {
   const onErrorAttr = ` onerror="this.onerror=null;this.src='${PRODUCT_IMAGE_PLACEHOLDER}'"`;
 
   return `<li class="product-filters__product-card">
-  <a class="product-filters__product-link" target="_blank" href="${escapeHtml(href)}">
+  <a class="product-filters__product-link" href="${escapeHtml(href)}">
     <span class="product-filters__product-label">${safeDisplayText(subLabel)}</span>
     <span class="product-filters__product-thumb">
       <img src="${imgSrc}" alt="${imgAlt}" width="${imgW}" height="${imgH}" loading="lazy" decoding="async"${rawImg ? onErrorAttr : ""} />
