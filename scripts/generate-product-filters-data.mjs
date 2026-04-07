@@ -56,6 +56,29 @@ function decodeHtmlEntities(raw) {
     });
 }
 
+/** WooCommerce-style labels slugified in API ("1.0" → "1-0") → display "1.0". */
+function formatAttributeValueLabel(raw) {
+  if (typeof raw !== "string") return raw;
+  const t = raw.trim();
+  if (!t) return t;
+  if (/^\d+(-\d+)+$/.test(t)) {
+    return t.split("-").join(".");
+  }
+  return t;
+}
+
+function attributeValueDisplayLabel(attrSlug, apiLabel, valueSlug) {
+  let s =
+    apiLabel != null && String(apiLabel).trim() ? String(apiLabel).trim() : "";
+  if (!s) {
+    s = valueSlug.startsWith(`${attrSlug}-`)
+      ? valueSlug.slice(attrSlug.length + 1)
+      : valueSlug;
+  }
+  s = decodeHtmlEntities(s);
+  return formatAttributeValueLabel(s);
+}
+
 function toBase64Utf8(value) {
   const bytes = new TextEncoder().encode(value);
   const alphabet =
@@ -328,7 +351,7 @@ async function generateFromGraphql(env) {
           values: (row.values ?? [])
             .filter((v) => v?.slug)
             .map((v) => ({
-              label: decodeHtmlEntities(v.label ?? v.slug),
+              label: attributeValueDisplayLabel(row.slug, v.label, v.slug),
               slug: v.slug,
             })),
         }));

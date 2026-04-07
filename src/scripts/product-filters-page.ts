@@ -304,6 +304,41 @@ function safeDisplayText(s: string): string {
   return escapeHtml(decodeHtmlEntities(s));
 }
 
+/**
+ * WooCommerce / GraphQL often expose attribute value labels slugified ("1.0" → "1-0").
+ * Pure digit segments separated by hyphens → join with "." for display (1-0 → 1.0, 1-65 → 1.65).
+ */
+function formatAttributeValueLabel(raw: string): string {
+  const t = raw.trim();
+  if (!t) return t;
+  if (/^\d+(-\d+)+$/.test(t)) {
+    return t.split("-").join(".");
+  }
+  return t;
+}
+
+function attributeValueDisplayLabel(
+  attrSlug: string,
+  apiLabel: string | undefined,
+  valueSlug: string,
+): string {
+  let s = (apiLabel ?? "").trim();
+  if (!s) {
+    s = valueSlug.startsWith(`${attrSlug}-`)
+      ? valueSlug.slice(attrSlug.length + 1)
+      : valueSlug;
+  }
+  s = decodeHtmlEntities(s);
+  return formatAttributeValueLabel(s);
+}
+
+/** Active-filter chip when slug is missing from map: recover numeric suffix (hp-1-0 → 1.0). */
+function fallbackLabelFromValueSlug(slug: string): string {
+  const m = slug.match(/((?:\d+-)+\d+)$/);
+  if (m) return formatAttributeValueLabel(m[1]);
+  return slug.replace(/-/g, " ");
+}
+
 function syncRootMapLegacyShim() {
   rootMap.clear();
   for (const slug of knownRootSlugs) {
@@ -406,7 +441,7 @@ function mergeAttributesForSelection(
       for (const v of attr.values ?? []) {
         if (v.slug)
           entry.valuesMap.set(v.slug, {
-            label: v.label ?? v.slug,
+            label: attributeValueDisplayLabel(attr.slug, v.label, v.slug),
             slug: v.slug,
           });
       }
@@ -677,8 +712,14 @@ function rebuildSearchLabelMaps() {
 
   for (const rows of attributesByCategoryMap.values()) {
     for (const row of rows) {
+      const attrSlug = row.slug;
       for (const v of row.values ?? []) {
-        if (v.slug) attrValueSlugToLabel.set(v.slug, v.label);
+        if (v.slug) {
+          attrValueSlugToLabel.set(
+            v.slug,
+            attributeValueDisplayLabel(attrSlug, v.label, v.slug),
+          );
+        }
       }
     }
   }
@@ -1041,7 +1082,7 @@ function buildActiveFilterChips(): ActiveFilterChip[] {
   );
   for (const slug of sortedAttrs) {
     const label =
-      attrValueSlugToLabel.get(slug)?.trim() || slug.replace(/-/g, " ");
+      attrValueSlugToLabel.get(slug)?.trim() || fallbackLabelFromValueSlug(slug);
     out.push({ kind: "attr", label, attrSlug: slug });
   }
 
