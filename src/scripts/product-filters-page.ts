@@ -32,16 +32,19 @@ const pagerNextBtns = queryPagerButtons([
   "product-filters-next",
   "product-filters-next-toolbar",
 ]);
-const pageEl = document.getElementById("product-filters-page");
+const pagerRangeEl = document.getElementById("product-filters-pager-range");
+const pagerPagesEl = document.getElementById("product-filters-pager-pages");
+const pagerRootEl = document.getElementById("product-filters-pager");
 const clearBtn = document.getElementById("product-filters-clear");
+const noFiltersLabelEl = document.getElementById(
+  "product-filters-no-filters-label",
+);
 const errEl = document.getElementById("product-filters-api-error");
 const countEl = document.getElementById("product-filters-count");
 const searchInput = document.getElementById(
   "product-filters-search",
 ) as HTMLInputElement | null;
-const perDropdownRoot = document.getElementById(
-  "product-filters-per-dropdown",
-);
+const perDropdownRoot = document.getElementById("product-filters-per-dropdown");
 const perTrigger = document.getElementById("product-filters-per-trigger");
 const perValueEl = document.getElementById("product-filters-per-value");
 const perMenu = document.getElementById("product-filters-per-menu");
@@ -82,7 +85,6 @@ type Product = {
   date?: string | null;
   modified?: string | null;
   imageUrl?: string | null;
-  /** From productSettings.productImagesGroup.productImagesMain (catalog / former featured). */
   imageAlt?: string | null;
   imageWidth?: number | null;
   imageHeight?: number | null;
@@ -93,12 +95,8 @@ const PRODUCT_IMAGE_PLACEHOLDER = "/images/no-product-image.svg";
 let allProducts: Product[] = [];
 const mergedSubcategoryGroupsBySelection = new Map<string, MergedSubGroup[]>();
 const attributesByCategoryMap = new Map<string, AttrByCategoryRow[]>();
-/** Slug list from `rootCategories` (used to refresh legacy `rootMap` shim). */
 let knownRootSlugs: string[] = [];
-/**
- * Legacy: flat subs per root (key = single root slug). Kept so cached/old snippets
- * or HMR that still reference `rootMap` do not throw — not used by current UI.
- */
+
 const rootMap = new Map<string, { name: string; slug: string }[]>();
 const PAGE_SIZE_OPTIONS = [12, 24] as const;
 let pageSize = 24;
@@ -111,20 +109,23 @@ const SORT_MODE_LABELS: Record<SortMode, string> = {
 };
 let sortMode: SortMode = "updated";
 let rootCategoriesList: { name: string; slug: string }[] = [];
-/** Category slug → display name (roots + every merged sub from all API keys). */
 const categorySlugToLabel = new Map<string, string>();
-/** Subcategory slug → merged product-type group names (e.g. Pumps). */
 const categorySlugToGroupNames = new Map<string, Set<string>>();
-/** Product attribute value slug → label (all categories in JSON). */
 const attrValueSlugToLabel = new Map<string, string>();
 let currentOffset = 0;
 let currentTotal = 0;
-/** When product-type groups exceed the visible limit, user can expand the rest. */
+let scrollProductListAfterFetch = false;
 let subTypesExtraExpanded = false;
+let rootCategoriesExtraExpanded = false;
 const SUBTYPE_GROUPS_VISIBLE_LIMIT = 10;
-/** Max active-filter chips before Show / Hide toggles the rest. */
+const ROOT_CATEGORIES_VISIBLE_LIMIT = 10;
+const ATTR_VALUES_VISIBLE_LIMIT = 10;
 const ACTIVE_FILTER_CHIPS_VISIBLE = 5;
 let activeFilterChipsExpanded = false;
+const expandedAttrAccordionSlugs = new Set<string>();
+const expandedAttrValuesOverflowSlugs = new Set<string>();
+
+const ATTR_VALUES_MORE_ARROW_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="product-filters__link-btn-icon" aria-hidden="true"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
 type ActiveFilterChip = {
   kind: "root" | "subgroup" | "attr" | "search";
@@ -155,21 +156,18 @@ function closeToolbarCustomDropdowns() {
 function syncToolbarCustomSelectUi() {
   if (perValueEl) perValueEl.textContent = String(pageSize);
   if (sortValueEl) sortValueEl.textContent = SORT_MODE_LABELS[sortMode];
-  perMenu?.querySelectorAll<HTMLButtonElement>("[data-per-value]").forEach(
-    (btn) => {
+  perMenu
+    ?.querySelectorAll<HTMLButtonElement>("[data-per-value]")
+    .forEach((btn) => {
       const v = Number(btn.dataset.perValue);
       btn.setAttribute("aria-selected", String(v === pageSize));
-    },
-  );
-  sortMenu?.querySelectorAll<HTMLButtonElement>("[data-sort-value]").forEach(
-    (btn) => {
+    });
+  sortMenu
+    ?.querySelectorAll<HTMLButtonElement>("[data-sort-value]")
+    .forEach((btn) => {
       const v = btn.dataset.sortValue;
-      btn.setAttribute(
-        "aria-selected",
-        String(v === sortMode),
-      );
-    },
-  );
+      btn.setAttribute("aria-selected", String(v === sortMode));
+    });
 }
 
 function applyStateFromUrl() {
@@ -266,8 +264,25 @@ function setError(text: string | null) {
   }
 }
 
+function hasAnyFilterSelected(): boolean {
+  return (
+    selectedRoot.size > 0 ||
+    selectedSub.size > 0 ||
+    selectedAttrs.size > 0 ||
+    searchQuery.trim().length > 0
+  );
+}
+
+function syncFilterActionsRow() {
+  const has = hasAnyFilterSelected();
+  if (noFiltersLabelEl) noFiltersLabelEl.hidden = has;
+  if (clearBtn instanceof HTMLButtonElement) clearBtn.hidden = !has;
+}
+
 function setLoading(on: boolean) {
-  if (clearBtn instanceof HTMLButtonElement) clearBtn.disabled = on;
+  if (clearBtn instanceof HTMLButtonElement) {
+    clearBtn.disabled = on && hasAnyFilterSelected();
+  }
   // Prev/Next: only disable while loading; `syncPager()` sets first/last page rules after.
   if (on) {
     for (const b of pagerPrevBtns) b.disabled = true;
@@ -290,6 +305,15 @@ function escapeHtml(s: string) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
+}
+
+function escapeHtmlAttr(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 }
 
 /** WP / JSON may ship labels as HTML entities (e.g. &amp;). Decode, then escape for safe HTML. */
@@ -385,7 +409,18 @@ function getSubSlugsAllowedInPanel(): Set<string> {
   );
 }
 
-/** Roots + all sub slugs from merged groups for the active data key (used when roots are selected). */
+function getAllKnownSubSlugsInMergedData(): Set<string> {
+  const out = new Set<string>();
+  for (const groups of mergedSubcategoryGroupsBySelection.values()) {
+    for (const g of groups) {
+      for (const s of g.subcategories ?? []) {
+        if (s.slug) out.add(s.slug);
+      }
+    }
+  }
+  return out;
+}
+
 function getRootScopeForSelection(): Set<string> {
   const key = getMergedDataKey();
   const scope = new Set<string>();
@@ -406,10 +441,35 @@ function getRootScopeForSelection(): Set<string> {
   return scope;
 }
 
-/**
- * Wireframe step 2+: attribute filters only after at least one product type (sub) is selected,
- * not when only root categories are checked.
- */
+/** Root slugs + leaf subs for a hypothetical multi-root selection (facet count scoping). */
+function getRootScopeForVirtualRoots(virtualRoots: Set<string>): Set<string> {
+  if (virtualRoots.size === 0) return new Set();
+  const key = [...virtualRoots].sort().join(",");
+  const scope = new Set<string>();
+  for (const r of virtualRoots) scope.add(r);
+  const groups = mergedSubcategoryGroupsBySelection.get(key) ?? [];
+  for (const g of groups) {
+    for (const s of g.subcategories ?? []) {
+      if (s.slug) scope.add(s.slug);
+    }
+  }
+  return scope;
+}
+
+function getImpliedRootsFromScopedSelectedSubs(): Set<string> {
+  const allowed = getSubSlugsAllowedInPanel();
+  const implied = new Set<string>();
+  for (const subSlug of selectedSub) {
+    if (!allowed.has(subSlug)) continue;
+    for (const rootSlug of knownRootSlugs) {
+      if (getProductTypeSlugsUnderRoot(rootSlug).has(subSlug)) {
+        implied.add(rootSlug);
+      }
+    }
+  }
+  return implied;
+}
+
 function getActiveCategorySlugsForAttributes(): string[] {
   const selectedSubSlugs = [...selectedSub];
   const allowedSubs = getSubSlugsAllowedInPanel();
@@ -454,6 +514,18 @@ function mergeAttributesForSelection(
   }));
 }
 
+function attrAccordionDomIds(
+  attrSlug: string,
+  index: number,
+): { triggerId: string; panelId: string } {
+  const safe =
+    attrSlug.replace(/[^a-zA-Z0-9_-]/g, "-").replace(/^-+|-+$/g, "") || "attr";
+  return {
+    triggerId: `product-filters-attr-tr-${index}-${safe}`,
+    panelId: `product-filters-attr-pn-${index}-${safe}`,
+  };
+}
+
 function renderAttributesPanel() {
   if (!attrsEl) return;
   const slugs = getActiveCategorySlugsForAttributes();
@@ -471,33 +543,73 @@ function renderAttributesPanel() {
     attrsEl.innerHTML = "";
     return;
   }
-  if (attrsSectionEl) {
-    const wasHidden = attrsSectionEl.hidden;
-    attrsSectionEl.hidden = false;
-    if (wasHidden) {
-      document
-        .getElementById("product-filters-attrs-trigger")
-        ?.setAttribute("aria-expanded", "false");
-      const attrsPanel = document.getElementById("product-filters-attrs-panel");
-      if (attrsPanel) attrsPanel.hidden = true;
+  if (attrsSectionEl) attrsSectionEl.hidden = false;
+  const blocks = merged.filter((attr) => attr.values.length > 0);
+  for (const attr of blocks) {
+    if (attr.values.length <= ATTR_VALUES_VISIBLE_LIMIT) {
+      expandedAttrValuesOverflowSlugs.delete(attr.slug);
     }
   }
-  attrsEl.innerHTML = merged
-    .filter((attr) => attr.values.length > 0)
-    .map(
-      (attr) => `
-      <div class="product-filters__attr-block">
-        <h4 class="product-filters__attr-name">${escapeHtml(attr.name)}</h4>
-        <div class="product-filters__chips product-filters__chips--row">
-          ${attr.values
-            .map((v) => {
-              const n = countAttrFacet(v.slug);
-              return `<label class="product-filters__chip"><input class="product-filters__chip-input" type="checkbox" data-group="attr" data-slug="${escapeHtml(v.slug)}" />${escapeHtml(v.label)} <span class="product-filters__count">${n}</span></label>`;
-            })
-            .join("")}
-        </div>
-      </div>`,
-    )
+  const visibleAttrSlugs = new Set(blocks.map((a) => a.slug));
+  for (const s of [...expandedAttrAccordionSlugs]) {
+    if (!visibleAttrSlugs.has(s)) expandedAttrAccordionSlugs.delete(s);
+  }
+  for (const s of [...expandedAttrValuesOverflowSlugs]) {
+    if (!visibleAttrSlugs.has(s)) expandedAttrValuesOverflowSlugs.delete(s);
+  }
+  attrsEl.innerHTML = blocks
+    .map((attr, index) => {
+      const { triggerId, panelId } = attrAccordionDomIds(attr.slug, index);
+      const isExpanded = expandedAttrAccordionSlugs.has(attr.slug);
+      const slugAttr = escapeHtmlAttr(attr.slug);
+      const renderValueChip = (v: { label: string; slug: string }) => {
+        const n = countAttrFacet(v.slug);
+        return `<label class="product-filters__chip"><input class="product-filters__chip-input" type="checkbox" data-group="attr" data-slug="${escapeHtml(v.slug)}" />${escapeHtml(v.label)} <span class="product-filters__count">${n}</span></label>`;
+      };
+      const values = attr.values;
+      const limit = ATTR_VALUES_VISIBLE_LIMIT;
+      let valuesBody: string;
+      if (values.length <= limit) {
+        valuesBody = `<div class="product-filters__attr-values product-filters__chips product-filters__chips--row">${values.map(renderValueChip).join("")}</div>`;
+      } else {
+        const overflowOn = expandedAttrValuesOverflowSlugs.has(attr.slug);
+        const vis = values.slice(0, limit);
+        const extra = values.slice(limit);
+        valuesBody = `<div class="product-filters__attr-values product-filters__chips product-filters__chips--row">
+      ${vis.map(renderValueChip).join("")}
+      <div class="product-filters__chips-overflow"${overflowOn ? "" : " hidden"}>
+        ${extra.map(renderValueChip).join("")}
+      </div>
+    <div class="product-filters__sub-more-row product-filters__attr-more-row">
+      <button type="button" class="product-filters__link-btn product-filters__attr-values-more" data-attr-values-slug="${slugAttr}"${overflowOn ? " hidden" : ""}>
+        Show all
+        ${ATTR_VALUES_MORE_ARROW_SVG}
+      </button>
+      <button type="button" class="product-filters__link-btn product-filters__attr-values-less" data-attr-values-slug="${slugAttr}"${overflowOn ? "" : " hidden"}>
+        Hide
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="product-filters__link-btn-icon product-filters__link-btn-icon--rotate" aria-hidden="true"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>`;
+      }
+      const collapsedClass = isExpanded
+        ? ""
+        : " product-filters__accordion-panel--collapsed";
+      const inertAttr = isExpanded ? "" : " inert";
+      return `<div class="product-filters__group product-filters__accordion">
+  <button type="button" class="product-filters__accordion-trigger" id="${escapeHtml(triggerId)}" aria-expanded="${isExpanded ? "true" : "false"}" aria-controls="${escapeHtml(panelId)}" data-attr-accordion-slug="${slugAttr}">
+    <span class="product-filters__accordion-title">${escapeHtml(attr.name)}</span>
+    <span class="product-filters__accordion-chevron" aria-hidden="true">
+      <span class="product-filters__accordion-chevron-icon"></span>
+    </span>
+  </button>
+  <div id="${escapeHtml(panelId)}" class="product-filters__accordion-panel${collapsedClass}" role="region" aria-labelledby="${escapeHtml(triggerId)}">
+    <div class="product-filters__accordion-panel-inner"${inertAttr}>
+    ${valuesBody}
+    </div>
+  </div>
+</div>`;
+    })
     .join("");
 }
 
@@ -552,12 +664,10 @@ function renderSubgroupBlock(g: MergedSubGroup): string {
   const facetCount = countSubgroupFacet(memberSlugs);
   return `
       <div class="product-filters__subgroup" data-group-slug="${escapeHtml(g.groupSlug)}">
-        <div class="product-filters__chips product-filters__chips--row">
-          <label class="product-filters__chip">
-            <input class="product-filters__chip-input" type="checkbox" data-group="subgroup" data-group-key="${escapeHtml(g.groupSlug)}" data-member-slugs="${escapeHtml(memberEnc)}" />
-            ${safeDisplayText(g.groupName)} <span class="product-filters__count">${facetCount}</span>
-          </label>
-        </div>
+        <label class="product-filters__chip">
+          <input class="product-filters__chip-input" type="checkbox" data-group="subgroup" data-group-key="${escapeHtml(g.groupSlug)}" data-member-slugs="${escapeHtml(memberEnc)}" />
+          ${safeDisplayText(g.groupName)} <span class="product-filters__count">${facetCount}</span>
+        </label>
       </div>`;
 }
 
@@ -608,13 +718,10 @@ function renderSubcategories() {
     return;
   }
   const groups = mergedSubcategoryGroupsBySelection.get(key) ?? [];
-  const allowed = new Set(
-    groups.flatMap((g) =>
-      (g.subcategories ?? []).map((s) => s.slug).filter(Boolean),
-    ),
-  );
+
+  const globallyKnownSubs = getAllKnownSubSlugsInMergedData();
   for (const s of [...selectedSub]) {
-    if (!allowed.has(s)) selectedSub.delete(s);
+    if (!globallyKnownSubs.has(s)) selectedSub.delete(s);
   }
   if (groups.length === 0) {
     subTypesExtraExpanded = false;
@@ -630,31 +737,96 @@ function renderSubcategories() {
   const limit = SUBTYPE_GROUPS_VISIBLE_LIMIT;
   if (blocks.length <= limit) {
     subTypesExtraExpanded = false;
-    subEl.innerHTML = `<div class="product-filters__sub-visible">${blocks.join("")}</div>`;
+    subEl.innerHTML = blocks.join("");
     bindSubShowMoreControls(false);
   } else {
     const visible = blocks.slice(0, limit);
     const extraBlocks = blocks.slice(limit);
     const extraHidden = !subTypesExtraExpanded;
-    subEl.innerHTML = `<div class="product-filters__sub-visible">${visible.join("")}</div><div id="product-filters-sub-extra" class="product-filters__sub-extra"${extraHidden ? " hidden" : ""}>${extraBlocks.join("")}</div>`;
+    subEl.innerHTML = `${visible.join("")}<div id="product-filters-sub-extra" class="product-filters__chips-overflow"${extraHidden ? " hidden" : ""}>${extraBlocks.join("")}</div>`;
     bindSubShowMoreControls(true);
   }
   expandPartialSubgroupSelectionsForMergedKey();
   syncCheckboxes();
 }
 
+/** Page numbers and ellipses for the bottom pager (matches compact “1 2 3 … N” UX). */
+function buildPaginationItems(
+  current: number,
+  total: number,
+): Array<number | "ellipsis"> {
+  if (total <= 0) return [];
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+  const out: Array<number | "ellipsis"> = [];
+  const pushEllipsis = () => {
+    if (out.length && out[out.length - 1] !== "ellipsis") out.push("ellipsis");
+  };
+  const pushPage = (n: number) => out.push(n);
+
+  if (current <= 4) {
+    for (let i = 1; i <= Math.min(5, total); i++) pushPage(i);
+    if (total > 5) {
+      pushEllipsis();
+      pushPage(total);
+    }
+  } else if (current >= total - 3) {
+    pushPage(1);
+    pushEllipsis();
+    for (let i = Math.max(1, total - 4); i <= total; i++) pushPage(i);
+  } else {
+    pushPage(1);
+    pushEllipsis();
+    for (let i = current - 1; i <= current + 1; i++) pushPage(i);
+    pushEllipsis();
+    pushPage(total);
+  }
+  return out;
+}
+
+function renderPaginationPagesHtml(
+  current: number,
+  totalPages: number,
+): string {
+  if (totalPages <= 0) return "";
+  const items = buildPaginationItems(current, totalPages);
+  return items
+    .map((item) => {
+      if (item === "ellipsis") {
+        return `<span class="product-filters__pager-ellipsis" aria-hidden="true">…</span>`;
+      }
+      if (item === current) {
+        return `<span class="product-filters__pager-page product-filters__pager-page--current" aria-current="page">${item}</span>`;
+      }
+      return `<button type="button" class="product-filters__pager-page" data-page="${item}" aria-label="Go to page ${item}">${item}</button>`;
+    })
+    .join("");
+}
+
 function syncPager() {
   if (currentTotal === 0) {
-    if (pageEl) pageEl.textContent = "—";
+    if (pagerRangeEl) pagerRangeEl.textContent = "—";
+    if (pagerPagesEl) pagerPagesEl.innerHTML = "";
+    pagerRootEl?.classList.add("product-filters__pager--empty");
     for (const b of pagerPrevBtns) b.disabled = true;
     for (const b of pagerNextBtns) b.disabled = true;
     return;
   }
+  pagerRootEl?.classList.remove("product-filters__pager--empty");
+
   const page = Math.floor(currentOffset / pageSize) + 1;
   const totalPages = Math.max(1, Math.ceil(currentTotal / pageSize));
-  if (pageEl) {
-    pageEl.textContent = `Page ${page} of ${totalPages}`;
+  const start = currentOffset + 1;
+  const end = Math.min(currentOffset + pageSize, currentTotal);
+
+  if (pagerRangeEl) {
+    pagerRangeEl.innerHTML = `<span class="product-filters__pager-range-of">${start}–${end} of</span> ${currentTotal}`;
   }
+  if (pagerPagesEl) {
+    pagerPagesEl.innerHTML = renderPaginationPagesHtml(page, totalPages);
+  }
+
   const isFirstPage = page <= 1;
   const isLastPage = page >= totalPages;
   for (const b of pagerPrevBtns) {
@@ -679,10 +851,6 @@ async function readJsonSafe(res: Response) {
   }
 }
 
-/**
- * Indexes human-readable names for every product type / root / attribute value
- * in `product-filters.json`, so search matches "Pumps" etc. even when the title does not.
- */
 function rebuildSearchLabelMaps() {
   categorySlugToLabel.clear();
   categorySlugToGroupNames.clear();
@@ -754,7 +922,12 @@ function productMatchesSearch(p: Product): boolean {
 
 function passesCategoryFilters(
   product: Product,
-  opts: { skipRoot?: boolean; skipSub?: boolean; skipAttr?: boolean },
+  opts: {
+    skipRoot?: boolean;
+    skipSub?: boolean;
+    skipAttr?: boolean;
+    impliedRootsForFacet?: Set<string>;
+  },
 ): boolean {
   const categories = new Set(product.categorySlugs ?? []);
   const attrs = new Set(product.attributeSlugs ?? []);
@@ -780,13 +953,29 @@ function passesCategoryFilters(
   );
 
   if (!opts.skipRoot) {
-    const rootMatch = noRootSelected
-      ? true
-      : [...rootScope].some((slug) => categories.has(slug));
+    let rootMatch: boolean;
+    if (!noRootSelected) {
+      rootMatch = [...rootScope].some((slug) => categories.has(slug));
+    } else if (
+      opts.impliedRootsForFacet &&
+      opts.impliedRootsForFacet.size > 0
+    ) {
+      const vScope = getRootScopeForVirtualRoots(opts.impliedRootsForFacet);
+      rootMatch = [...vScope].some((slug) => categories.has(slug));
+    } else {
+      rootMatch = true;
+    }
     if (!rootMatch) return false;
   }
 
   if (!opts.skipSub) {
+    if (
+      selectedRootSlugs.length > 0 &&
+      selectedSubSlugs.length > 0 &&
+      scopedSelectedSubSlugs.length === 0
+    ) {
+      return false;
+    }
     const subMatch =
       scopedSelectedSubSlugs.length === 0 ||
       scopedSelectedSubSlugs.some((slug) => categories.has(slug));
@@ -821,7 +1010,6 @@ function filterProducts(): Product[] {
     .filter(productMatchesSearch);
 }
 
-/** DB last_update equivalent: prefer `modified`, then publish `date`, then id. */
 function parseLastUpdatedTime(p: Product): number {
   const raw = p.modified ?? p.date;
   if (raw && typeof raw === "string") {
@@ -852,10 +1040,6 @@ function getFilteredSortedProducts(): Product[] {
   return sortProductsList(filterProducts());
 }
 
-/**
- * All product-type (leaf) category slugs under one root — same key as merged panel for
- * that root alone (`"pool"` etc.), so counts match “товары в подкатегориях этого root”.
- */
 function getProductTypeSlugsUnderRoot(rootSlug: string): Set<string> {
   const key = [rootSlug].sort().join(",");
   const groups = mergedSubcategoryGroupsBySelection.get(key) ?? [];
@@ -886,8 +1070,19 @@ function countRootFacet(rootSlug: string): number {
 
 function countSubgroupFacet(memberSlugs: string[]): number {
   if (memberSlugs.length === 0) return 0;
+  const impliedRootsForFacet =
+    selectedRoot.size === 0 && selectedSub.size > 0
+      ? getImpliedRootsFromScopedSelectedSubs()
+      : undefined;
+  const facetOpts: {
+    skipSub: true;
+    impliedRootsForFacet?: Set<string>;
+  } = { skipSub: true };
+  if (impliedRootsForFacet && impliedRootsForFacet.size > 0) {
+    facetOpts.impliedRootsForFacet = impliedRootsForFacet;
+  }
   return allProducts
-    .filter((p) => passesCategoryFilters(p, { skipSub: true }))
+    .filter((p) => passesCategoryFilters(p, facetOpts))
     .filter(productMatchesSearch)
     .filter((p) => memberSlugs.some((m) => (p.categorySlugs ?? []).includes(m)))
     .length;
@@ -900,7 +1095,6 @@ function countAttrFacet(valueSlug: string): number {
     .filter((p) => (p.attributeSlugs ?? []).includes(valueSlug)).length;
 }
 
-/** Subcategory label: prefer leaf category, not root slug. */
 function getProductSubcategoryLabel(p: Product): string {
   const slugs = p.categorySlugs ?? [];
   const roots = new Set(knownRootSlugs);
@@ -932,7 +1126,7 @@ function renderProductCard(p: Product): string {
       : 176;
   const onErrorAttr = ` onerror="this.onerror=null;this.src='${PRODUCT_IMAGE_PLACEHOLDER}'"`;
 
-  return `<li class="product-filters__product-card">
+  return `<li class="product-filters__product-card" data-full-title="${escapeHtmlAttr(decodeHtmlEntities(p.title))}">
   <a class="product-filters__product-link" href="${escapeHtml(href)}">
     <span class="product-filters__product-label">${safeDisplayText(subLabel)}</span>
     <span class="product-filters__product-thumb">
@@ -942,6 +1136,122 @@ function renderProductCard(p: Product): string {
     <span class="product-filters__product-cta btn btn--single-outline">View details</span>
   </a>
 </li>`;
+}
+
+let productTitleTooltipEl: HTMLDivElement | null = null;
+let productTitleTooltipActiveCard: HTMLElement | null = null;
+
+function ensureProductTitleTooltipEl(): HTMLDivElement {
+  if (productTitleTooltipEl) return productTitleTooltipEl;
+  const el = document.createElement("div");
+  el.className = "product-filters__product-title-tooltip";
+  el.setAttribute("role", "tooltip");
+  el.hidden = true;
+  document.body.appendChild(el);
+  productTitleTooltipEl = el;
+  return el;
+}
+
+function hideProductTitleTooltip() {
+  productTitleTooltipActiveCard = null;
+  if (productTitleTooltipEl) {
+    productTitleTooltipEl.hidden = true;
+    productTitleTooltipEl.textContent = "";
+  }
+}
+
+function positionProductTitleTooltip(clientX: number, clientY: number) {
+  const el = ensureProductTitleTooltipEl();
+  if (el.hidden) return;
+  const pad = 14;
+  el.style.left = "0px";
+  el.style.top = "0px";
+  void el.offsetHeight;
+  const rect = el.getBoundingClientRect();
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  let x = clientX + pad;
+  let y = clientY + pad;
+  if (x + rect.width > vw - 8) x = Math.max(8, clientX - rect.width - pad);
+  if (y + rect.height > vh - 8) y = Math.max(8, clientY - rect.height - pad);
+  el.style.left = `${x}px`;
+  el.style.top = `${y}px`;
+}
+
+function productTitleIsClamped(titleEl: HTMLElement): boolean {
+  return titleEl.scrollHeight > titleEl.clientHeight + 1;
+}
+
+function setupProductCardTitleTooltips() {
+  if (!productsEl) return;
+  productsEl.addEventListener(
+    "mouseover",
+    (e) => {
+      const card = (e.target as HTMLElement).closest<HTMLElement>(
+        ".product-filters__product-card",
+      );
+      if (!card || !productsEl.contains(card)) return;
+      const titleEl = card.querySelector<HTMLElement>(
+        ".product-filters__product-title",
+      );
+      if (!titleEl || !productTitleIsClamped(titleEl)) {
+        hideProductTitleTooltip();
+        return;
+      }
+      const full = card.getAttribute("data-full-title");
+      if (!full?.trim()) return;
+      productTitleTooltipActiveCard = card;
+      const tip = ensureProductTitleTooltipEl();
+      tip.textContent = full;
+      tip.hidden = false;
+      positionProductTitleTooltip(e.clientX, e.clientY);
+    },
+    true,
+  );
+  productsEl.addEventListener(
+    "mousemove",
+    (e) => {
+      if (!productTitleTooltipActiveCard || productTitleTooltipEl?.hidden)
+        return;
+      const card = (e.target as HTMLElement).closest<HTMLElement>(
+        ".product-filters__product-card",
+      );
+      if (card !== productTitleTooltipActiveCard) return;
+      positionProductTitleTooltip(e.clientX, e.clientY);
+    },
+    true,
+  );
+  productsEl.addEventListener(
+    "mouseout",
+    (e) => {
+      const card = (e.target as HTMLElement).closest<HTMLElement>(
+        ".product-filters__product-card",
+      );
+      if (!card || !productsEl.contains(card)) return;
+      const related = e.relatedTarget as Node | null;
+      if (related && card.contains(related)) return;
+      hideProductTitleTooltip();
+    },
+    true,
+  );
+  window.addEventListener("scroll", hideProductTitleTooltip, {
+    passive: true,
+  });
+}
+
+function requestScrollProductListAfterPagination() {
+  scrollProductListAfterFetch = true;
+}
+
+function scrollProductListIntoView() {
+  const anchor =
+    productsEl ?? document.getElementById("product-filters-catalog");
+  if (!anchor) return;
+  const smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  anchor.scrollIntoView({
+    behavior: smooth ? "smooth" : "auto",
+    block: "start",
+  });
 }
 
 async function fetchProducts() {
@@ -981,6 +1291,7 @@ async function fetchProducts() {
     //       : `Filters selected: ${selectedCount}.${qHint} Found: ${total}`;
     // }
     if (productsEl) {
+      hideProductTitleTooltip();
       if (total === 0) {
         productsEl.innerHTML = "";
         if (productsEmptyEl) productsEmptyEl.hidden = false;
@@ -991,11 +1302,41 @@ async function fetchProducts() {
     }
     renderActiveFilterChips();
   } catch (e) {
+    scrollProductListAfterFetch = false;
     setError(e instanceof Error ? e.message : String(e));
   } finally {
     setLoading(false);
     syncPager();
+    syncFilterActionsRow();
+    if (scrollProductListAfterFetch) {
+      scrollProductListAfterFetch = false;
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => scrollProductListIntoView());
+      });
+    }
   }
+}
+
+function setupAttrValuesOverflowToggle() {
+  if (!attrsEl || attrsEl.dataset.attrOverflowBound === "1") return;
+  attrsEl.dataset.attrOverflowBound = "1";
+  attrsEl.addEventListener("click", (e) => {
+    const more = (e.target as HTMLElement).closest<HTMLButtonElement>(
+      ".product-filters__attr-values-more",
+    );
+    const less = (e.target as HTMLElement).closest<HTMLButtonElement>(
+      ".product-filters__attr-values-less",
+    );
+    const btn = more ?? less;
+    if (!btn) return;
+    const slug = btn.dataset.attrValuesSlug;
+    if (!slug) return;
+    e.preventDefault();
+    if (more) expandedAttrValuesOverflowSlugs.add(slug);
+    else expandedAttrValuesOverflowSlugs.delete(slug);
+    renderAttributesPanel();
+    syncCheckboxes();
+  });
 }
 
 function setupProductFiltersAccordions() {
@@ -1010,8 +1351,24 @@ function setupProductFiltersAccordions() {
     const region = id ? document.getElementById(id) : null;
     if (!region) return;
     const wasExpanded = trigger.getAttribute("aria-expanded") === "true";
-    trigger.setAttribute("aria-expanded", String(!wasExpanded));
-    region.hidden = wasExpanded;
+    const nowExpanded = !wasExpanded;
+    trigger.setAttribute("aria-expanded", String(nowExpanded));
+    region.classList.toggle(
+      "product-filters__accordion-panel--collapsed",
+      !nowExpanded,
+    );
+    const panelInner = region.querySelector<HTMLElement>(
+      ".product-filters__accordion-panel-inner",
+    );
+    if (panelInner) {
+      if (nowExpanded) panelInner.removeAttribute("inert");
+      else panelInner.setAttribute("inert", "");
+    }
+    const attrSlug = trigger.dataset.attrAccordionSlug;
+    if (attrSlug) {
+      if (wasExpanded) expandedAttrAccordionSlugs.delete(attrSlug);
+      else expandedAttrAccordionSlugs.add(attrSlug);
+    }
   });
 }
 
@@ -1082,7 +1439,8 @@ function buildActiveFilterChips(): ActiveFilterChip[] {
   );
   for (const slug of sortedAttrs) {
     const label =
-      attrValueSlugToLabel.get(slug)?.trim() || fallbackLabelFromValueSlug(slug);
+      attrValueSlugToLabel.get(slug)?.trim() ||
+      fallbackLabelFromValueSlug(slug);
     out.push({ kind: "attr", label, attrSlug: slug });
   }
 
@@ -1217,14 +1575,90 @@ function setCatalogViewMode(mode: CatalogViewMode, persist: boolean) {
   }
 }
 
+function bindRootShowMoreControls(hasExtra: boolean) {
+  const more = document.getElementById("product-filters-root-more");
+  const less = document.getElementById("product-filters-root-less");
+  if (!more || !less) {
+    if (more) {
+      more.hidden = true;
+      more.onclick = null;
+    }
+    if (less) {
+      less.hidden = true;
+      less.onclick = null;
+    }
+    return;
+  }
+  if (!hasExtra) {
+    more.hidden = true;
+    less.hidden = true;
+    more.onclick = null;
+    less.onclick = null;
+    return;
+  }
+  const expanded = rootCategoriesExtraExpanded;
+  const extraWrap = rootEl?.querySelector<HTMLElement>(
+    ".product-filters__chips-overflow",
+  );
+  if (extraWrap) {
+    if (expanded) extraWrap.removeAttribute("hidden");
+    else extraWrap.hidden = true;
+  }
+  more.hidden = expanded;
+  less.hidden = !expanded;
+  more.onclick = () => {
+    rootCategoriesExtraExpanded = true;
+    renderRootChips();
+    syncCheckboxes();
+  };
+  less.onclick = () => {
+    rootCategoriesExtraExpanded = false;
+    renderRootChips();
+    syncCheckboxes();
+  };
+}
+
 function renderRootChips() {
   if (!rootEl) return;
-  rootEl.innerHTML = rootCategoriesList
-    .map(
-      (a) =>
-        `<label class="product-filters__chip"><input class="product-filters__chip-input" type="checkbox" data-group="root" data-slug="${escapeHtml(a.slug)}" />${safeDisplayText(a.name)} <span class="product-filters__count">${countRootFacet(a.slug)}</span></label>`,
-    )
-    .join("");
+  const list = rootCategoriesList;
+  const renderChip = (a: { name: string; slug: string }) =>
+    `<label class="product-filters__chip"><input class="product-filters__chip-input" type="checkbox" data-group="root" data-slug="${escapeHtml(a.slug)}" />${safeDisplayText(a.name)} <span class="product-filters__count">${countRootFacet(a.slug)}</span></label>`;
+
+  if (list.length === 0) {
+    rootCategoriesExtraExpanded = false;
+    rootEl.innerHTML = "";
+    bindRootShowMoreControls(false);
+    return;
+  }
+
+  const limit = ROOT_CATEGORIES_VISIBLE_LIMIT;
+  if (list.length <= limit) {
+    rootCategoriesExtraExpanded = false;
+    rootEl.innerHTML = list.map(renderChip).join("");
+    bindRootShowMoreControls(false);
+    return;
+  }
+
+  const overflowOn = rootCategoriesExtraExpanded;
+  const vis = list.slice(0, limit);
+  const extra = list.slice(limit);
+  rootEl.innerHTML = `<div class="product-filters__root-values">
+    ${vis.map(renderChip).join("")}
+    <div class="product-filters__chips-overflow"${overflowOn ? "" : " hidden"}>
+      ${extra.map(renderChip).join("")}
+    </div>
+  <div class="product-filters__sub-more-row product-filters__root-more-row">
+    <button type="button" id="product-filters-root-more" class="product-filters__link-btn product-filters__root-values-more"${overflowOn ? " hidden" : ""}>
+      Show all
+      ${ATTR_VALUES_MORE_ARROW_SVG}
+    </button>
+    <button type="button" id="product-filters-root-less" class="product-filters__link-btn product-filters__root-values-less"${overflowOn ? "" : " hidden"}>
+      Hide
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="product-filters__link-btn-icon product-filters__link-btn-icon--rotate" aria-hidden="true"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</div>`;
+  bindRootShowMoreControls(true);
 }
 
 async function init() {
@@ -1410,7 +1844,9 @@ async function init() {
       );
       if (!btn) return;
       const v = Number(btn.dataset.perValue);
-      if (!PAGE_SIZE_OPTIONS.includes(v as (typeof PAGE_SIZE_OPTIONS)[number])) {
+      if (
+        !PAGE_SIZE_OPTIONS.includes(v as (typeof PAGE_SIZE_OPTIONS)[number])
+      ) {
         return;
       }
       pageSize = v;
@@ -1456,15 +1892,31 @@ async function init() {
     const goPrevPage = () => {
       if (currentOffset <= 0) return;
       currentOffset = Math.max(0, currentOffset - pageSize);
+      requestScrollProductListAfterPagination();
       void fetchProducts();
     };
     const goNextPage = () => {
       if (currentOffset + pageSize >= currentTotal) return;
       currentOffset += pageSize;
+      requestScrollProductListAfterPagination();
       void fetchProducts();
     };
     for (const b of pagerPrevBtns) b.addEventListener("click", goPrevPage);
     for (const b of pagerNextBtns) b.addEventListener("click", goNextPage);
+
+    pagerRootEl?.addEventListener("click", (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(
+        "[data-page]",
+      );
+      if (!btn?.dataset.page) return;
+      const p = Number(btn.dataset.page);
+      if (!Number.isFinite(p)) return;
+      const totalPages = Math.max(1, Math.ceil(currentTotal / pageSize));
+      if (p < 1 || p > totalPages) return;
+      currentOffset = (p - 1) * pageSize;
+      requestScrollProductListAfterPagination();
+      void fetchProducts();
+    });
 
     window.addEventListener("popstate", () => {
       applyStateFromUrl();
@@ -1472,6 +1924,8 @@ async function init() {
     });
 
     setupProductFiltersAccordions();
+    setupAttrValuesOverflowToggle();
+    setupProductCardTitleTooltips();
 
     activeFiltersEl?.addEventListener("click", (e) => {
       const t = e.target as HTMLElement;

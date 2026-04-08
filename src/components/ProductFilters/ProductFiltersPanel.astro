@@ -46,6 +46,23 @@ import ArrowPaginationIcon from "../icons/arrowPaginationIcon.astro";
           </label>
         </div>
 
+        <div class="product-filters__filter-actions" aria-live="polite">
+          <p
+            id="product-filters-no-filters-label"
+            class="product-filters__no-filters-label"
+          >
+            No filters applied
+          </p>
+          <button
+            type="button"
+            id="product-filters-clear"
+            class="product-filters__btn product-filters__filters-clear-all"
+            hidden
+          >
+            Clear all
+          </button>
+        </div>
+
         <div class="product-filters__group product-filters__accordion">
           <button
             type="button"
@@ -65,7 +82,12 @@ import ArrowPaginationIcon from "../icons/arrowPaginationIcon.astro";
             role="region"
             aria-labelledby="product-filters-cat-trigger"
           >
-            <div id="product-filters-root" class="product-filters__chips"></div>
+            <div class="product-filters__accordion-panel-inner">
+              <div
+                id="product-filters-root"
+                class="product-filters__root-mount product-filters__chips product-filters__chips--row"
+              ></div>
+            </div>
           </div>
         </div>
 
@@ -88,67 +110,46 @@ import ArrowPaginationIcon from "../icons/arrowPaginationIcon.astro";
             role="region"
             aria-labelledby="product-filters-sub-trigger"
           >
-            <div id="product-filters-sub" class="product-filters__sub-panels">
-            </div>
-            <div class="product-filters__sub-more-row">
-              <button
-                type="button"
-                id="product-filters-sub-more"
-                class="product-filters__link-btn"
-                hidden
+            <div class="product-filters__accordion-panel-inner">
+              <div
+                id="product-filters-sub"
+                class="product-filters__sub-panels product-filters__chips product-filters__chips--row"
               >
-                Show all
-                <IconArrowDown />
-              </button>
-              <button
-                type="button"
-                id="product-filters-sub-less"
-                class="product-filters__link-btn"
-                hidden
-              >
-                Hide
-                <IconArrowDown
-                  class="product-filters__link-btn-icon product-filters__link-btn-icon--rotate"
-                />
-              </button>
+              </div>
+              <div class="product-filters__sub-more-row">
+                <button
+                  type="button"
+                  id="product-filters-sub-more"
+                  class="product-filters__link-btn"
+                  hidden
+                >
+                  Show all
+                  <IconArrowDown />
+                </button>
+                <button
+                  type="button"
+                  id="product-filters-sub-less"
+                  class="product-filters__link-btn"
+                  hidden
+                >
+                  Hide
+                  <IconArrowDown
+                    class="product-filters__link-btn-icon product-filters__link-btn-icon--rotate"
+                  />
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        <div
+        <section
           id="product-filters-attrs-section"
-          class="product-filters__group product-filters__accordion"
+          class="product-filters__attrs-section"
+          aria-label="Attribute filters"
           hidden
         >
-          <button
-            type="button"
-            class="product-filters__accordion-trigger"
-            id="product-filters-attrs-trigger"
-            aria-expanded="false"
-            aria-controls="product-filters-attrs-panel"
-          >
-            <span class="product-filters__accordion-title">Attributes</span>
-            <span class="product-filters__accordion-chevron" aria-hidden="true">
-              <span class="product-filters__accordion-chevron-icon"></span>
-            </span>
-          </button>
-          <div
-            id="product-filters-attrs-panel"
-            class="product-filters__accordion-panel"
-            role="region"
-            aria-labelledby="product-filters-attrs-trigger"
-            hidden
-          >
-            <div id="product-filters-attrs" class="product-filters__attrs">
-            </div>
-          </div>
-        </div>
-
-        <!-- 
-        <p class="product-filters__meta">
-          <span id="product-filters-count"></span>
-        </p>
-        -->
+          <div id="product-filters-attrs" class="product-filters__attrs"></div>
+        </section>
       </div>
 
       <div class="product-filters__panel">
@@ -368,21 +369,20 @@ import ArrowPaginationIcon from "../icons/arrowPaginationIcon.astro";
           class="product-filters__active-filters"
           hidden
         >
-          <div class="product-filters__active-filters-toolbar">
-            <button
-              type="button"
-              id="product-filters-clear"
-              class="product-filters__btn product-filters__active-filters-clear"
+          <div class="product-filters__active-filters-head">
+            <span
+              class="product-filters__active-filters-selected-label"
+              id="product-filters-active-filters-selected-label"
             >
-              Clear all
-            </button>
-          </div>
-          <div
-            id="product-filters-active-filters-row"
-            class="product-filters__active-filters-row"
-            role="group"
-            aria-label="Active filters"
-          >
+              Selected:
+            </span>
+            <div
+              id="product-filters-active-filters-row"
+              class="product-filters__active-filters-row"
+              role="group"
+              aria-label="Active filters"
+            >
+            </div>
           </div>
           <div
             id="product-filters-active-filters-toggle"
@@ -416,29 +416,49 @@ import ArrowPaginationIcon from "../icons/arrowPaginationIcon.astro";
         >
           No product found
         </p>
-        <div class="product-filters__pager">
-          <button
-            type="button"
-            id="product-filters-prev"
-            class="product-filters__btn product-filters__btn--prev"
+        <div
+          class="product-filters__pager"
+          id="product-filters-pager"
+          aria-label="Page navigation"
+        >
+          <p
+            id="product-filters-pager-range"
+            class="product-filters__pager-range"
           >
-            <ArrowPaginationIcon
-              class="product-filters__btn-icon product-filters__btn-icon--prev"
-            />
-          </button>
-          <span
-            id="product-filters-page"
-            class="product-filters__page-indicator">Page 1</span
-          >
-          <button
-            type="button"
-            id="product-filters-next"
-            class="product-filters__btn product-filters__btn--next"
-          >
-            <ArrowPaginationIcon
-              class="product-filters__btn-icon product-filters__btn-icon--next"
-            />
-          </button>
+            —
+          </p>
+          <div class="product-filters__pager-controls">
+            <button
+              type="button"
+              id="product-filters-prev"
+              class="product-filters__pager-step product-filters__pager-step--prev"
+            >
+              <div class="product-filters__pager-step-icon-wrapper">
+                <ArrowPaginationIcon
+                  class="product-filters__pager-step-icon product-filters__pager-step-icon--prev"
+                />
+              </div>
+              <span class="product-filters__pager-step-text">Previous</span>
+            </button>
+            <div
+              id="product-filters-pager-pages"
+              class="product-filters__pager-pages"
+              role="presentation"
+            >
+            </div>
+            <button
+              type="button"
+              id="product-filters-next"
+              class="product-filters__pager-step product-filters__pager-step--next"
+            >
+              <span class="product-filters__pager-step-text">Next</span>
+              <div class="product-filters__pager-step-icon-wrapper">
+                <ArrowPaginationIcon
+                  class="product-filters__pager-step-icon product-filters__pager-step-icon--next"
+                />
+              </div>
+            </button>
+          </div>
         </div>
       </div>
     </div>
