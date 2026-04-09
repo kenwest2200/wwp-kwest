@@ -54,7 +54,10 @@ async function tryLoadProduct(
         if (import.meta.env.DEV && resp.errors?.length) {
           console.warn(
             "[product-page] GraphQL returned errors; using partial product data:",
-            resp.errors.map((x) => x.message).filter(Boolean).join(" | "),
+            resp.errors
+              .map((x) => x.message)
+              .filter(Boolean)
+              .join(" | "),
           );
         }
         return partial;
@@ -130,8 +133,7 @@ const specGroup = product?.productSettings?.productSpecificationGroup;
 const specHtml = specGroup?.productSpecification?.trim() ?? "";
 const specSectionTitle =
   specGroup?.productSpecificationTitle?.trim() || "Specification";
-const relatedPartsGroup =
-  product?.productSettings?.productRelatedPartsGroup;
+const relatedPartsGroup = product?.productSettings?.productRelatedPartsGroup;
 const relatedPartsTitle =
   relatedPartsGroup?.relatedPartsTitle?.trim() || "Replacement Parts";
 const relatedPartsHtml = relatedPartsHtmlFromApi(
@@ -140,9 +142,15 @@ const relatedPartsHtml = relatedPartsHtmlFromApi(
 const showRelatedSection = Boolean(relatedPartsHtml);
 const supportGroup = product?.productSettings?.productSupportGroup;
 const supportTitle = supportGroup?.productSupportTitle?.trim() ?? "";
+const supportHeading = supportTitle || "Technical support";
 const supportLinks = normalizeSupportLinks(
   supportGroup?.productSupportLinks ?? null,
 );
+const showSupportAccordion =
+  supportLinks.length > 0 || Boolean(supportTitle.trim());
+const showSpecAccordion = Boolean(specHtml);
+const showProductAccordion =
+  showSpecAccordion || showSupportAccordion || showRelatedSection;
 const optionalItems = normalizeSingleTemplateOptionalItems(
   product?.productSettings?.singleTemplateGroup?.singleTemplateOptional,
 );
@@ -229,7 +237,8 @@ for (const item of optionalItems) {
               <>
                 Product details are loaded from the GraphQL API. Set{" "}
                 <code>PUBLIC_GRAPHQL_URL</code> in <code>.env</code> (see{" "}
-                <code>.env.example</code>) and restart the dev server or rebuild.
+                <code>.env.example</code>) and restart the dev server or
+                rebuild.
               </>
             )}
           </p>
@@ -307,66 +316,136 @@ for (const item of optionalItems) {
               <ProductSingleTemplateBlock item={item} index={idx} />
             ))}
 
-            {specHtml && (
-              <section
-                class="product-page__spec-section"
-                aria-labelledby="product-spec-heading"
-              >
-                <h2 id="product-spec-heading" class="product-page__h2">
-                  {specSectionTitle}
-                </h2>
-                <div class="product-page__spec" set:html={specHtml} />
-              </section>
-            )}
-
-            {(supportTitle || supportLinks.length > 0) && (
-              <section
-                class="product-page__support"
-                aria-labelledby="product-support-heading"
-              >
-                <h2 id="product-support-heading" class="product-page__h2">
-                  {supportTitle || "Technical support"}
-                </h2>
-                {supportLinks.length > 0 && (
-                  <ul class="product-page__link-list">
-                    {supportLinks.map((link) => {
-                      const href = link.url?.trim();
-                      if (!href) return null;
-                      const t = link.title?.trim() || href;
-                      const blank =
-                        link.target?.toLowerCase() === "_blank" ||
-                        link.target?.toLowerCase() === "blank";
-                      return (
-                        <li>
-                          <a
-                            class="product-page__text-link"
-                            href={href}
-                            target={blank ? "_blank" : undefined}
-                            rel={blank ? "noopener noreferrer" : undefined}
-                          >
-                            {t}
-                          </a>
-                        </li>
-                      );
-                    })}
-                  </ul>
+            {showProductAccordion && (
+              <div class="product-page__accordion-stack" data-product-accordion>
+                {showSpecAccordion && (
+                  <div class="product-page__accordion">
+                    <button
+                      type="button"
+                      class="product-page__accordion-trigger"
+                      id="product-acc-spec-trigger"
+                      aria-expanded="false"
+                      aria-controls="product-acc-spec-panel"
+                    >
+                      <span class="product-page__accordion-title">
+                        {specSectionTitle}
+                      </span>
+                      <span
+                        class="product-page__accordion-chevron"
+                        aria-hidden="true"
+                      >
+                        <span class="product-page__accordion-chevron-icon" />
+                      </span>
+                    </button>
+                    <div
+                      id="product-acc-spec-panel"
+                      class="product-page__accordion-panel product-page__accordion-panel--collapsed"
+                      role="region"
+                      aria-labelledby="product-acc-spec-trigger"
+                    >
+                      <div class="product-page__accordion-panel-inner" inert>
+                        <div class="product-page__spec" set:html={specHtml} />
+                      </div>
+                    </div>
+                  </div>
                 )}
-              </section>
-            )}
 
-            {showRelatedSection && (
-              <section
-                class="product-page__related"
-                aria-labelledby="product-related-heading"
-              >
-                <h2 id="product-related-heading" class="product-page__h2">
-                  {relatedPartsTitle}
-                </h2>
-                <div
-                  class="product-page__related-body"
-                  set:html={relatedPartsHtml}
-                />
-              </section>
+                {showSupportAccordion && (
+                  <div class="product-page__accordion">
+                    <button
+                      type="button"
+                      class="product-page__accordion-trigger"
+                      id="product-acc-support-trigger"
+                      aria-expanded="false"
+                      aria-controls="product-acc-support-panel"
+                    >
+                      <span class="product-page__accordion-title">
+                        {supportHeading}
+                      </span>
+                      <span
+                        class="product-page__accordion-chevron"
+                        aria-hidden="true"
+                      >
+                        <span class="product-page__accordion-chevron-icon" />
+                      </span>
+                    </button>
+                    <div
+                      id="product-acc-support-panel"
+                      class="product-page__accordion-panel product-page__accordion-panel--collapsed"
+                      role="region"
+                      aria-labelledby="product-acc-support-trigger"
+                    >
+                      <div class="product-page__accordion-panel-inner" inert>
+                        <div class="product-page__support">
+                          {supportLinks.length > 0 && (
+                            <ul class="product-page__link-list">
+                              {supportLinks.map((link) => {
+                                const href = link.url?.trim();
+                                if (!href) return null;
+                                const t = link.title?.trim() || href;
+                                const blank =
+                                  link.target?.toLowerCase() === "_blank" ||
+                                  link.target?.toLowerCase() === "blank";
+                                return (
+                                  <li>
+                                    <a
+                                      class="product-page__text-link"
+                                      href={href}
+                                      target={blank ? "_blank" : undefined}
+                                      rel={
+                                        blank
+                                          ? "noopener noreferrer"
+                                          : undefined
+                                      }
+                                    >
+                                      {t}
+                                    </a>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {showRelatedSection && (
+                  <div class="product-page__accordion">
+                    <button
+                      type="button"
+                      class="product-page__accordion-trigger"
+                      id="product-acc-related-trigger"
+                      aria-expanded="false"
+                      aria-controls="product-acc-related-panel"
+                    >
+                      <span class="product-page__accordion-title">
+                        {relatedPartsTitle}
+                      </span>
+                      <span
+                        class="product-page__accordion-chevron"
+                        aria-hidden="true"
+                      >
+                        <span class="product-page__accordion-chevron-icon" />
+                      </span>
+                    </button>
+                    <div
+                      id="product-acc-related-panel"
+                      class="product-page__accordion-panel product-page__accordion-panel--collapsed"
+                      role="region"
+                      aria-labelledby="product-acc-related-trigger"
+                    >
+                      <div class="product-page__accordion-panel-inner" inert>
+                        <div
+                          class="product-page__related-body"
+                          set:html={relatedPartsHtml}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         )
@@ -377,4 +456,5 @@ for (const item of optionalItems) {
 
 <script>
   import "../../scripts/product-page-gallery.ts";
+  import "../../scripts/product-page-accordion.ts";
 </script>

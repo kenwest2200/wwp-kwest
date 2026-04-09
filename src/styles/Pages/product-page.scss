@@ -221,8 +221,116 @@
   color: $dark;
 }
 
-.product-page__spec-section .product-page__h2 {
-  margin-bottom: px-to-rem(12);
+.product-page__accordion-stack {
+  width: 100%;
+  border-top: 1px solid #e5e8eb;
+  border-bottom: 1px solid #e5e8eb;
+}
+
+.product-page__accordion {
+  border-bottom: 1px solid #e5e8eb;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.product-page__accordion-panel {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.35s ease;
+
+  &--collapsed {
+    grid-template-rows: 0fr;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.product-page__accordion-panel-inner {
+  min-height: 0;
+  overflow: hidden;
+
+  .product-page__related-body {
+    margin-top: 0;
+    padding-bottom: px-to-rem(20);
+  }
+}
+
+.product-page__accordion-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin: 0;
+  padding: px-to-rem(18) 0;
+  font-size: px-to-rem(16);
+  line-height: px-to-rem(24);
+  font-weight: 500;
+  text-align: left;
+  color: $dark;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: px-to-rem(2) solid $dark-teal;
+    outline-offset: px-to-rem(2);
+  }
+}
+
+.product-page__accordion-title {
+  font-size: px-to-rem(16);
+  font-weight: 600;
+  color: $dark;
+  line-height: px-to-rem(24);
+  letter-spacing: 0.02em;
+}
+
+.product-page__accordion-chevron {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: px-to-rem(40);
+  height: px-to-rem(40);
+  flex-shrink: 0;
+  margin-left: px-to-rem(8);
+}
+
+.product-page__accordion-chevron-icon {
+  position: relative;
+  width: px-to-rem(14);
+  height: px-to-rem(14);
+  flex-shrink: 0;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: px-to-rem(14);
+    height: px-to-rem(1);
+    background-color: $dark;
+  }
+
+  &::after {
+    content: none;
+  }
+}
+
+.product-page__accordion-trigger[aria-expanded="false"] .product-page__accordion-chevron-icon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: px-to-rem(1);
+  height: px-to-rem(14);
+  background-color: $dark;
 }
 
 .product-page__optional-block {
@@ -320,6 +428,7 @@
 .product-page__related,
 .product-page__support {
   margin: 0;
+  padding-bottom: px-to-rem(20);
 }
 
 .product-page__related-body {
