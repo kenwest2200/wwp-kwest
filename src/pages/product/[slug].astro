@@ -5,9 +5,9 @@ import "../../styles/Pages/product-page.scss";
 import { ClientError } from "graphql-request";
 import { getGraphQLClient, requestGraphql } from "../../lib/graphql";
 import {
-  normalizeRelatedParts,
   normalizeSingleTemplateOptionalItems,
   normalizeSupportLinks,
+  relatedPartsHtmlFromApi,
   PRODUCT_PAGE_QUERY_BY_DATABASE_ID,
   PRODUCT_PAGE_QUERY_MINIMAL_BY_DATABASE_ID,
   PRODUCT_PAGE_QUERY_MINIMAL_SLUG,
@@ -132,9 +132,12 @@ const specSectionTitle =
   specGroup?.productSpecificationTitle?.trim() || "Specification";
 const relatedPartsGroup =
   product?.productSettings?.productRelatedPartsGroup;
-const relatedNodes = normalizeRelatedParts(relatedPartsGroup?.relatedParts);
 const relatedPartsTitle =
   relatedPartsGroup?.relatedPartsTitle?.trim() || "Replacement Parts";
+const relatedPartsHtml = relatedPartsHtmlFromApi(
+  relatedPartsGroup?.relatedParts,
+);
+const showRelatedSection = Boolean(relatedPartsHtml);
 const supportGroup = product?.productSettings?.productSupportGroup;
 const supportTitle = supportGroup?.productSupportTitle?.trim() ?? "";
 const supportLinks = normalizeSupportLinks(
@@ -143,10 +146,6 @@ const supportLinks = normalizeSupportLinks(
 const optionalItems = normalizeSingleTemplateOptionalItems(
   product?.productSettings?.singleTemplateGroup?.singleTemplateOptional,
 );
-
-function relatedLabel(node: (typeof relatedNodes)[number]) {
-  return (node.title ?? "").trim();
-}
 
 function pushSlide(
   out: { src: string; alt: string }[],
@@ -355,7 +354,7 @@ for (const item of optionalItems) {
               </section>
             )}
 
-            {relatedNodes.length > 0 && (
+            {showRelatedSection && (
               <section
                 class="product-page__related"
                 aria-labelledby="product-related-heading"
@@ -363,20 +362,10 @@ for (const item of optionalItems) {
                 <h2 id="product-related-heading" class="product-page__h2">
                   {relatedPartsTitle}
                 </h2>
-                <ul class="product-page__link-list">
-                  {relatedNodes.map((node) => {
-                    const label = relatedLabel(node);
-                    const href = node.uri?.trim();
-                    if (!href) return null;
-                    return (
-                      <li>
-                        <a class="product-page__text-link" href={href}>
-                          {label || href}
-                        </a>
-                      </li>
-                    );
-                  })}
-                </ul>
+                <div
+                  class="product-page__related-body"
+                  set:html={relatedPartsHtml}
+                />
               </section>
             )}
           </div>

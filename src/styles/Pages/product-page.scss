@@ -322,6 +322,31 @@
   margin: 0;
 }
 
+.product-page__related-body {
+  margin-top: px-to-rem(12);
+  font-size: px-to-rem(14);
+  line-height: px-to-rem(24);
+  color: $dark-medium;
+
+  p {
+    margin: 0 0 px-to-rem(10);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  a {
+    color: $dark-teal;
+    text-decoration: underline;
+    text-underline-offset: px-to-rem(3);
+
+    &:hover {
+      text-decoration-thickness: 2px;
+    }
+  }
+}
+
 .product-page__link-list {
   margin: 0;
   padding: 0;
