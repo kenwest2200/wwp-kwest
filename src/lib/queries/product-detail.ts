@@ -70,11 +70,6 @@ export type SingleTemplateOptionalItem = {
 export type ProductPageData = {
   product?: {
     title?: string | null;
-    productRelatedParts?: {
-      relatedParts?: {
-        nodes?: (RelatedProductNode | null)[] | null;
-      } | null;
-    } | null;
     productSettings?: {
       fieldPageNumber?: string | null;
       productImagesGroup?: {
@@ -86,7 +81,14 @@ export type ProductPageData = {
         productSupportLinks?: ProductSupportLinksField;
       } | null;
       productSpecificationGroup?: {
+        productSpecificationTitle?: string | null;
         productSpecification?: string | null;
+      } | null;
+      productRelatedPartsGroup?: {
+        relatedPartsTitle?: string | null;
+        relatedParts?: {
+          nodes?: (RelatedProductNode | null)[] | null;
+        } | null;
       } | null;
       singleTemplateGroup?: {
         singleTemplateOptional?:
@@ -100,17 +102,6 @@ export type ProductPageData = {
 
 const PRODUCT_PAGE_FIELDS = /* GraphQL */ `
       title
-      productRelatedParts {
-        relatedParts {
-          nodes {
-            ... on Product {
-              databaseId
-              title
-              uri
-            }
-          }
-        }
-      }
       productSettings {
         fieldPageNumber
         productImagesGroup {
@@ -146,7 +137,20 @@ const PRODUCT_PAGE_FIELDS = /* GraphQL */ `
           }
         }
         productSpecificationGroup {
+          productSpecificationTitle
           productSpecification
+        }
+        productRelatedPartsGroup {
+          relatedPartsTitle
+          relatedParts {
+            nodes {
+              ... on Product {
+                databaseId
+                title
+                uri
+              }
+            }
+          }
         }
         singleTemplateGroup {
           singleTemplateOptional {

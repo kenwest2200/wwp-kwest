@@ -54,12 +54,16 @@ const title = product?.title?.trim() || "Product";
 const images = product?.productSettings?.productImagesGroup;
 const mainImg = images?.productImagesMain?.node;
 const brandImg = images?.productImagesBrand?.node;
-const specHtml =
-  product?.productSettings?.productSpecificationGroup?.productSpecification?.trim() ??
-  "";
+const specGroup = product?.productSettings?.productSpecificationGroup;
+const specHtml = specGroup?.productSpecification?.trim() ?? "";
+const specSectionTitle =
+  specGroup?.productSpecificationTitle?.trim() || "Specification";
+const relatedPartsGroup =
+  product?.productSettings?.productRelatedPartsGroup;
 const relatedNodes =
-  product?.productRelatedParts?.relatedParts?.nodes?.filter((n) => n != null) ??
-  [];
+  relatedPartsGroup?.relatedParts?.nodes?.filter((n) => n != null) ?? [];
+const relatedPartsTitle =
+  relatedPartsGroup?.relatedPartsTitle?.trim() || "Replacement Parts";
 const supportGroup = product?.productSettings?.productSupportGroup;
 const supportTitle = supportGroup?.productSupportTitle?.trim() ?? "";
 const supportLinks = normalizeSupportLinks(
@@ -228,7 +232,7 @@ for (const item of optionalItems) {
                 aria-labelledby="product-spec-heading"
               >
                 <h2 id="product-spec-heading" class="product-page__h2">
-                  Specification
+                  {specSectionTitle}
                 </h2>
                 <div class="product-page__spec" set:html={specHtml} />
               </section>
@@ -275,7 +279,7 @@ for (const item of optionalItems) {
                 aria-labelledby="product-related-heading"
               >
                 <h2 id="product-related-heading" class="product-page__h2">
-                  Replacement Parts
+                  {relatedPartsTitle}
                 </h2>
                 <ul class="product-page__link-list">
                   {relatedNodes.map((node) => {

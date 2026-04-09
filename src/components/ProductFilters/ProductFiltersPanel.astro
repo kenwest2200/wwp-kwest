@@ -5,6 +5,7 @@ import IconArrowDown from "../icons/arrowDown.astro";
 import IconGridRows from "../icons/gridRowsIcon.astro";
 import IconGridList from "../icons/gridListIcon.astro";
 import ArrowPaginationIcon from "../icons/arrowPaginationIcon.astro";
+import CloseButtonIcon from "../icons/closeButtonIcon.astro";
 ---
 
 <section
@@ -20,9 +21,24 @@ import ArrowPaginationIcon from "../icons/arrowPaginationIcon.astro";
   <div class="product-filters-catalog__inner">
     <div class="product-filters__layout">
       <div
+        id="product-filters-drawer-backdrop"
+        class="product-filters__drawer-backdrop"
+        aria-hidden="true"
+      >
+      </div>
+      <div
+        id="product-filters-filters-panel"
         class="product-filters__panel product-filters__panel--filters"
         aria-labelledby="product-filters-heading"
       >
+        <button
+          type="button"
+          id="product-filters-drawer-close"
+          class="product-filters__drawer-close"
+          aria-label="Close filters"
+        >
+          <CloseButtonIcon class="product-filters__drawer-close-icon" />
+        </button>
         <h2 id="product-filters-heading" class="product-filters__filters-title">
           Filtering by:
         </h2>
@@ -86,7 +102,8 @@ import ArrowPaginationIcon from "../icons/arrowPaginationIcon.astro";
               <div
                 id="product-filters-root"
                 class="product-filters__root-mount product-filters__chips product-filters__chips--row"
-              ></div>
+              >
+              </div>
             </div>
           </div>
         </div>
@@ -363,47 +380,82 @@ import ArrowPaginationIcon from "../icons/arrowPaginationIcon.astro";
               </button>
             </div>
           </div>
-        </div>
-        <div
-          id="product-filters-active-filters"
-          class="product-filters__active-filters"
-          hidden
-        >
-          <div class="product-filters__active-filters-head">
-            <span
-              class="product-filters__active-filters-selected-label"
-              id="product-filters-active-filters-selected-label"
+          <button
+            type="button"
+            id="product-filters-drawer-open"
+            class="product-filters__drawer-open-btn"
+            aria-expanded="false"
+            aria-controls="product-filters-filters-panel"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
             >
-              Selected:
-            </span>
-            <div
-              id="product-filters-active-filters-row"
-              class="product-filters__active-filters-row"
-              role="group"
-              aria-label="Active filters"
-            >
-            </div>
-          </div>
+              <path
+                d="M1.33337 3.33331H14.6667"
+                stroke="#007D8A"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"></path>
+              <path
+                d="M4 8H12"
+                stroke="#007D8A"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"></path>
+              <path
+                d="M6 12.6667H10"
+                stroke="#007D8A"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"></path>
+            </svg>
+            Filter
+          </button>
           <div
-            id="product-filters-active-filters-toggle"
-            class="product-filters__active-filters-toggle"
+            id="product-filters-active-filters"
+            class="product-filters__active-filters"
             hidden
           >
-            <button
-              type="button"
-              id="product-filters-active-filters-show"
-              class="product-filters__link-btn product-filters__active-filters-toggle-btn"
-            >
-              Show all
-            </button>
-            <button
-              type="button"
-              id="product-filters-active-filters-hide"
-              class="product-filters__link-btn product-filters__active-filters-toggle-btn"
+            <div class="product-filters__active-filters-head">
+              <span
+                class="product-filters__active-filters-selected-label"
+                id="product-filters-active-filters-selected-label"
+              >
+                Selected:
+              </span>
+              <div
+                id="product-filters-active-filters-row"
+                class="product-filters__active-filters-row"
+                role="group"
+                aria-label="Active filters"
+              >
+              </div>
+            </div>
+            <div
+              id="product-filters-active-filters-toggle"
+              class="product-filters__active-filters-toggle"
               hidden
             >
-              Hide
-            </button>
+              <button
+                type="button"
+                id="product-filters-active-filters-show"
+                class="product-filters__link-btn product-filters__active-filters-toggle-btn"
+              >
+                Show all
+              </button>
+              <button
+                type="button"
+                id="product-filters-active-filters-hide"
+                class="product-filters__link-btn product-filters__active-filters-toggle-btn"
+                hidden
+              >
+                Hide
+              </button>
+            </div>
           </div>
         </div>
         <ul id="product-filters-products" class="product-filters__list"></ul>
@@ -460,6 +512,14 @@ import ArrowPaginationIcon from "../icons/arrowPaginationIcon.astro";
             </button>
           </div>
         </div>
+        <button
+          type="button"
+          id="product-filters-load-more"
+          class="btn btn--primary-dark product-filters__load-more"
+          hidden
+        >
+          Load more products
+        </button>
       </div>
     </div>
   </div>

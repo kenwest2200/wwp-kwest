@@ -55,6 +55,20 @@ const sortTrigger = document.getElementById("product-filters-sort-trigger");
 const sortValueEl = document.getElementById("product-filters-sort-value");
 const sortMenu = document.getElementById("product-filters-sort-menu");
 
+const catalogSectionEl = document.getElementById("product-filters-catalog");
+const drawerBackdropEl = document.getElementById(
+  "product-filters-drawer-backdrop",
+);
+const drawerOpenBtn = document.getElementById(
+  "product-filters-drawer-open",
+) as HTMLButtonElement | null;
+const drawerCloseBtn = document.getElementById(
+  "product-filters-drawer-close",
+) as HTMLButtonElement | null;
+const filtersPanelEl = document.getElementById("product-filters-filters-panel");
+
+const DRAWER_OPEN_CLASS = "product-filters-catalog--drawer-open";
+
 const CATALOG_VIEW_STORAGE_KEY = "product-filters-catalog-view";
 type CatalogViewMode = "grid" | "rows";
 
@@ -112,8 +126,42 @@ let rootCategoriesList: { name: string; slug: string }[] = [];
 const categorySlugToLabel = new Map<string, string>();
 const categorySlugToGroupNames = new Map<string, Set<string>>();
 const attrValueSlugToLabel = new Map<string, string>();
+const attrValueSlugToAttrName = new Map<string, string>();
 let currentOffset = 0;
 let currentTotal = 0;
+/** On narrow catalog viewport (max-width 767px), products rendered so far (load-more). */
+let mobileAccumulatedCount = 0;
+
+function isNarrowCatalog(): boolean {
+  return window.matchMedia("(max-width: 767px)").matches;
+}
+
+function updateProductsTotalEl() {
+  if (!productsTotalEl) return;
+  const total = currentTotal;
+  const span = `<span class="product-filters__products-total--total-count">${total}</span>`;
+  if (total === 0) {
+    productsTotalEl.innerHTML = `0-0 of ${span}`;
+    return;
+  }
+  if (isNarrowCatalog()) {
+    productsTotalEl.innerHTML = `${mobileAccumulatedCount} of ${span}`;
+    return;
+  }
+  const start = currentOffset + 1;
+  const end = Math.min(currentOffset + pageSize, total);
+  productsTotalEl.innerHTML = `${start}-${end} of ${span}`;
+}
+
+function syncLoadMoreButton() {
+  const btn = document.getElementById(
+    "product-filters-load-more",
+  ) as HTMLButtonElement | null;
+  if (!btn) return;
+  const narrow = isNarrowCatalog();
+  btn.hidden =
+    !narrow || currentTotal === 0 || mobileAccumulatedCount >= currentTotal;
+}
 let scrollProductListAfterFetch = false;
 let subTypesExtraExpanded = false;
 let rootCategoriesExtraExpanded = false;
@@ -132,6 +180,8 @@ type ActiveFilterChip = {
   label: string;
   rootSlug?: string;
   attrSlug?: string;
+  /** Accordion / attribute name for attr chips (shown before value label). */
+  attrGroupName?: string;
   memberSlugs?: string[];
 };
 
@@ -215,6 +265,9 @@ function applyStateFromUrl() {
 
   const safePage = Number.isFinite(page) ? Math.max(1, Math.floor(page)) : 1;
   currentOffset = (safePage - 1) * pageSize;
+  if (isNarrowCatalog()) {
+    currentOffset = 0;
+  }
 }
 
 function syncUrlState() {
@@ -222,7 +275,7 @@ function syncUrlState() {
   const roots = [...selectedRoot];
   const sub = [...selectedSub];
   const attr = [...selectedAttrs];
-  const page = Math.floor(currentOffset / pageSize) + 1;
+  const page = isNarrowCatalog() ? 1 : Math.floor(currentOffset / pageSize) + 1;
 
   if (roots.length > 0) params.set("root", roots.join(","));
   else params.delete("root");
@@ -288,7 +341,16 @@ function setLoading(on: boolean) {
     for (const b of pagerPrevBtns) b.disabled = true;
     for (const b of pagerNextBtns) b.disabled = true;
   }
-  // Do not disable search / per-page / sort: data is local; disabling drops focus from the search field on every keystroke.
+  const loadMoreBtn = document.getElementById(
+    "product-filters-load-more",
+  ) as HTMLButtonElement | null;
+  if (loadMoreBtn) {
+    if (on) {
+      if (!loadMoreBtn.hidden) loadMoreBtn.disabled = true;
+    } else {
+      loadMoreBtn.disabled = false;
+    }
+  }
   [rootEl, subEl, attrsEl].forEach((el) => {
     if (!el) return;
     el.querySelectorAll<HTMLInputElement>("input[type='checkbox']").forEach(
@@ -855,6 +917,7 @@ function rebuildSearchLabelMaps() {
   categorySlugToLabel.clear();
   categorySlugToGroupNames.clear();
   attrValueSlugToLabel.clear();
+  attrValueSlugToAttrName.clear();
 
   for (const r of rootCategoriesList) {
     categorySlugToLabel.set(r.slug, r.name);
@@ -881,12 +944,16 @@ function rebuildSearchLabelMaps() {
   for (const rows of attributesByCategoryMap.values()) {
     for (const row of rows) {
       const attrSlug = row.slug;
+      const attrName = (row.name ?? "").trim();
       for (const v of row.values ?? []) {
         if (v.slug) {
           attrValueSlugToLabel.set(
             v.slug,
             attributeValueDisplayLabel(attrSlug, v.label, v.slug),
           );
+          if (attrName) {
+            attrValueSlugToAttrName.set(v.slug, attrName);
+          }
         }
       }
     }
@@ -1237,6 +1304,20 @@ function setupProductCardTitleTooltips() {
   window.addEventListener("scroll", hideProductTitleTooltip, {
     passive: true,
   });
+  let resizeHideTooltipTimer: number | null = null;
+  window.addEventListener(
+    "resize",
+    () => {
+      if (resizeHideTooltipTimer != null) {
+        window.clearTimeout(resizeHideTooltipTimer);
+      }
+      resizeHideTooltipTimer = window.setTimeout(() => {
+        resizeHideTooltipTimer = null;
+        hideProductTitleTooltip();
+      }, 120);
+    },
+    { passive: true },
+  );
 }
 
 function requestScrollProductListAfterPagination() {
@@ -1254,7 +1335,50 @@ function scrollProductListIntoView() {
   });
 }
 
-async function fetchProducts() {
+async function fetchProducts(options?: { append?: boolean }) {
+  const append = Boolean(options?.append);
+  const narrow = isNarrowCatalog();
+
+  if (append) {
+    if (!narrow) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const filtered = getFilteredSortedProducts();
+      const total = filtered.length;
+      currentTotal = total;
+      const start = mobileAccumulatedCount;
+      if (start >= total) {
+        updateProductsTotalEl();
+        syncLoadMoreButton();
+        return;
+      }
+      const nextEnd = Math.min(start + pageSize, total);
+      const slice = filtered.slice(start, nextEnd);
+      mobileAccumulatedCount = nextEnd;
+      if (productsEl) {
+        hideProductTitleTooltip();
+        if (slice.length > 0) {
+          productsEl.insertAdjacentHTML(
+            "beforeend",
+            slice.map((p) => renderProductCard(p)).join(""),
+          );
+        }
+        if (productsEmptyEl) productsEmptyEl.hidden = total !== 0;
+      }
+      updateProductsTotalEl();
+    } catch (e) {
+      scrollProductListAfterFetch = false;
+      setError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setLoading(false);
+      syncPager();
+      syncFilterActionsRow();
+      syncLoadMoreButton();
+    }
+    return;
+  }
+
   setLoading(true);
   setError(null);
   refreshAllSet();
@@ -1267,29 +1391,27 @@ async function fetchProducts() {
 
     const filtered = getFilteredSortedProducts();
     const total = filtered.length;
+    currentTotal = total;
+
     if (total === 0) {
       currentOffset = 0;
-    } else if (currentOffset >= total) {
-      currentOffset = Math.floor((total - 1) / pageSize) * pageSize;
+      mobileAccumulatedCount = 0;
+    } else if (narrow) {
+      currentOffset = 0;
+      mobileAccumulatedCount = Math.min(pageSize, total);
+    } else {
+      if (currentOffset >= total) {
+        currentOffset = Math.floor((total - 1) / pageSize) * pageSize;
+      }
+      mobileAccumulatedCount = 0;
     }
-    const items = filtered.slice(currentOffset, currentOffset + pageSize);
-    currentTotal = total;
-    const start = total === 0 ? 0 : currentOffset + 1;
-    const end = Math.min(currentOffset + pageSize, total);
-    if (productsTotalEl) {
-      productsTotalEl.innerHTML = `${start}-${end} of <span class="product-filters__products-total--total-count">${total}</span>`;
-    }
-    // if (countEl) {
-    //   const selectedCount =
-    //     selectedRoot.size + selectedSub.size + selectedAttrs.size;
-    //   const qHint = searchQuery.trim()
-    //     ? ` Search: "${searchQuery.trim()}".`
-    //     : "";
-    //   countEl.textContent =
-    //     selectedCount === 0 && !searchQuery.trim()
-    //       ? `Total: ${total} (no filters selected)`
-    //       : `Filters selected: ${selectedCount}.${qHint} Found: ${total}`;
-    // }
+
+    const items = narrow
+      ? filtered.slice(0, mobileAccumulatedCount)
+      : filtered.slice(currentOffset, currentOffset + pageSize);
+
+    updateProductsTotalEl();
+
     if (productsEl) {
       hideProductTitleTooltip();
       if (total === 0) {
@@ -1308,6 +1430,7 @@ async function fetchProducts() {
     setLoading(false);
     syncPager();
     syncFilterActionsRow();
+    syncLoadMoreButton();
     if (scrollProductListAfterFetch) {
       scrollProductListAfterFetch = false;
       requestAnimationFrame(() => {
@@ -1441,7 +1564,13 @@ function buildActiveFilterChips(): ActiveFilterChip[] {
     const label =
       attrValueSlugToLabel.get(slug)?.trim() ||
       fallbackLabelFromValueSlug(slug);
-    out.push({ kind: "attr", label, attrSlug: slug });
+    const attrGroupName = attrValueSlugToAttrName.get(slug)?.trim() ?? "";
+    out.push({
+      kind: "attr",
+      label,
+      attrSlug: slug,
+      attrGroupName,
+    });
   }
 
   const q = searchQuery.trim();
@@ -1462,10 +1591,19 @@ function renderActiveFilterChipButton(chip: ActiveFilterChip): string {
   } else if (chip.kind === "search") {
     extra += ` data-filter-kind="search"`;
   }
+  const attrTitle =
+    chip.kind === "attr" && chip.attrGroupName
+      ? `<span class="product-filters__active-chip-attr-name">${safeDisplayText(chip.attrGroupName)}</span>`
+      : "";
+  const removePhrase =
+    chip.kind === "attr" && chip.attrGroupName
+      ? `${safeDisplayText(chip.attrGroupName)}: ${safeDisplayText(chip.label)}`
+      : safeDisplayText(chip.label);
   return `<button${extra}>
+  ${attrTitle}
   <span class="product-filters__active-chip-label">${safeDisplayText(chip.label)}</span>
   <span class="product-filters__active-chip-remove" aria-hidden="true">×</span>
-  <span class="visually-hidden">Remove ${safeDisplayText(chip.label)} filter</span>
+  <span class="visually-hidden">Remove ${removePhrase} filter</span>
 </button>`;
 }
 
@@ -1661,8 +1799,88 @@ function renderRootChips() {
   bindRootShowMoreControls(true);
 }
 
+function setupMobileFiltersDrawer() {
+  const cat = catalogSectionEl;
+  const backdrop = drawerBackdropEl;
+  const openBtn = drawerOpenBtn;
+  const closeBtn = drawerCloseBtn;
+  const panel = filtersPanelEl;
+  if (!cat || !backdrop || !openBtn || !closeBtn || !panel) {
+    return;
+  }
+
+  const mqLgg = window.matchMedia("(min-width: 1200px)");
+  let lastFocus: HTMLElement | null = null;
+
+  const isDesktop = () => mqLgg.matches;
+
+  const syncDrawerAria = () => {
+    if (isDesktop()) {
+      cat.classList.remove(DRAWER_OPEN_CLASS);
+      document.body.style.overflow = "";
+      panel.removeAttribute("aria-hidden");
+      backdrop.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      return;
+    }
+
+    const open = cat.classList.contains(DRAWER_OPEN_CLASS);
+    panel.setAttribute("aria-hidden", open ? "false" : "true");
+    backdrop.setAttribute("aria-hidden", "true");
+    openBtn.setAttribute("aria-expanded", open ? "true" : "false");
+  };
+
+  const closeDrawer = () => {
+    if (!cat.classList.contains(DRAWER_OPEN_CLASS)) return;
+    cat.classList.remove(DRAWER_OPEN_CLASS);
+    document.body.style.overflow = "";
+    syncDrawerAria();
+    if (lastFocus && typeof lastFocus.focus === "function") {
+      lastFocus.focus();
+    }
+    lastFocus = null;
+  };
+
+  const openDrawer = () => {
+    if (isDesktop()) return;
+    lastFocus = document.activeElement as HTMLElement;
+    cat.classList.add(DRAWER_OPEN_CLASS);
+    document.body.style.overflow = "hidden";
+    syncDrawerAria();
+    closeBtn.focus();
+  };
+
+  openBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    openDrawer();
+  });
+  closeBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    closeDrawer();
+  });
+  backdrop.addEventListener("click", () => {
+    closeDrawer();
+  });
+
+  mqLgg.addEventListener("change", () => {
+    closeDrawer();
+    syncDrawerAria();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    if (isDesktop()) return;
+    if (!cat.classList.contains(DRAWER_OPEN_CLASS)) return;
+    e.preventDefault();
+    closeDrawer();
+  });
+
+  syncDrawerAria();
+}
+
 async function init() {
   try {
+    setupMobileFiltersDrawer();
     setCatalogViewMode(readStoredCatalogViewMode(), false);
 
     const res = await fetch("/data/product-filters.json");
@@ -1915,6 +2133,19 @@ async function init() {
       if (p < 1 || p > totalPages) return;
       currentOffset = (p - 1) * pageSize;
       requestScrollProductListAfterPagination();
+      void fetchProducts();
+    });
+
+    document
+      .getElementById("product-filters-load-more")
+      ?.addEventListener("click", () => {
+        if (!isNarrowCatalog()) return;
+        void fetchProducts({ append: true });
+      });
+
+    const mqCatalogDesktop = window.matchMedia("(min-width: 768px)");
+    mqCatalogDesktop.addEventListener("change", () => {
+      scrollProductListAfterFetch = false;
       void fetchProducts();
     });
 

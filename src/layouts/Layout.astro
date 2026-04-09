@@ -18,6 +18,13 @@ export interface Props {
 
 const { headerType } = Astro.props;
 
+const PUBLIC_SITE_URL = "https://waterwayplastics.com";
+const siteOrigin = PUBLIC_SITE_URL.replace(/\/+$/, "") ?? "";
+const canonicalHref =
+  siteOrigin.length > 0
+    ? new URL(`${Astro.url.pathname}${Astro.url.search}`, `${siteOrigin}/`).href
+    : null;
+
 let headerData: HeaderLayoutData | null = null;
 let footerData: FooterLayoutData | null = null;
 
@@ -42,6 +49,7 @@ if (getGraphQLClient()) {
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="generator" content={Astro.generator} />
+    {canonicalHref && <link rel="canonical" href={canonicalHref} />}
     <title>Waterway Plastics - Pool & Spa Supplies</title>
   </head>
   <body>
