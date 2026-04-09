@@ -394,8 +394,15 @@ async function generateFromGraphql(env) {
       return {
         title: decodeHtmlEntities(item.title),
         slug: item.slug,
-        databaseId:
-          typeof item.databaseId === "number" ? item.databaseId : null,
+        databaseId: (() => {
+          const id = item.databaseId;
+          if (typeof id === "number" && id > 0) return id;
+          if (typeof id === "string" && /^\d+$/.test(id.trim())) {
+            const n = Number(id.trim());
+            return Number.isFinite(n) && n > 0 ? n : null;
+          }
+          return null;
+        })(),
         date: typeof item.date === "string" ? item.date : null,
         modified: typeof item.modified === "string" ? item.modified : null,
         imageUrl,

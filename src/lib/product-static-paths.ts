@@ -23,7 +23,8 @@ export async function getStaticPaths(): Promise<
       products?: {
         slug?: string;
         title?: string;
-        databaseId?: number | null;
+        /** GraphQL/JSON may ship this as a numeric string. */
+        databaseId?: number | string | null;
       }[];
     };
     const products = raw.products ?? [];
@@ -34,10 +35,14 @@ export async function getStaticPaths(): Promise<
       const slug = p?.slug?.trim();
       if (!slug || seen.has(slug)) continue;
       seen.add(slug);
-      const databaseId =
-        typeof p.databaseId === "number" && p.databaseId > 0
-          ? p.databaseId
-          : null;
+      let databaseId: number | null = null;
+      const rawId = p?.databaseId;
+      if (typeof rawId === "number" && rawId > 0) {
+        databaseId = rawId;
+      } else if (typeof rawId === "string" && /^\d+$/.test(rawId.trim())) {
+        const n = Number(rawId.trim());
+        if (Number.isFinite(n) && n > 0) databaseId = n;
+      }
       const catalogTitle = (p.title ?? "").trim();
       paths.push({
         params: { slug },

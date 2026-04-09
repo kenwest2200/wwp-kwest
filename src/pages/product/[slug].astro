@@ -2,12 +2,17 @@
 import Layout from "../../layouts/Layout.astro";
 import ProductSingleTemplateBlock from "../../components/Product/ProductSingleTemplateBlock.astro";
 import "../../styles/Pages/product-page.scss";
+import { ClientError } from "graphql-request";
 import { getGraphQLClient, requestGraphql } from "../../lib/graphql";
 import {
+  normalizeRelatedParts,
   normalizeSingleTemplateOptionalItems,
   normalizeSupportLinks,
   PRODUCT_PAGE_QUERY_BY_DATABASE_ID,
+  PRODUCT_PAGE_QUERY_MINIMAL_BY_DATABASE_ID,
+  PRODUCT_PAGE_QUERY_MINIMAL_SLUG,
   PRODUCT_PAGE_QUERY_SLUG,
+  PRODUCT_PAGE_QUERY_URI,
   type ProductPageData,
 } from "../../lib/queries/product-detail";
 import type { ProductPagePathProps } from "../../lib/product-static-paths";
@@ -29,27 +34,94 @@ const databaseIdFromCatalog =
     ? catalogDatabaseId
     : null;
 
-let product: ProductPageData["product"] | null = null;
-if (getGraphQLClient() && slug) {
+const graphqlConfigured = Boolean(getGraphQLClient());
+
+async function tryLoadProduct(
+  document: string,
+  variables: Record<string, unknown>,
+): Promise<ProductPageData["product"] | null> {
   try {
-    if (databaseIdFromCatalog != null) {
-      const data = (await requestGraphql(PRODUCT_PAGE_QUERY_BY_DATABASE_ID, {
-        id: String(databaseIdFromCatalog),
-      })) as ProductPageData;
-      product = data.product ?? null;
+    const data = (await requestGraphql(document, variables)) as ProductPageData;
+    return data.product ?? null;
+  } catch (e) {
+    if (e instanceof ClientError) {
+      const resp = e.response as {
+        data?: ProductPageData;
+        errors?: { message?: string }[];
+      };
+      const partial = resp.data?.product ?? null;
+      if (partial) {
+        if (import.meta.env.DEV && resp.errors?.length) {
+          console.warn(
+            "[product-page] GraphQL returned errors; using partial product data:",
+            resp.errors.map((x) => x.message).filter(Boolean).join(" | "),
+          );
+        }
+        return partial;
+      }
+      if (import.meta.env.DEV) {
+        console.warn(
+          "[product-page] GraphQL error:",
+          resp.errors?.[0]?.message ?? e.message,
+        );
+      }
+      return null;
     }
-    if (!product) {
-      const data = (await requestGraphql(PRODUCT_PAGE_QUERY_SLUG, {
-        id: slug,
-      })) as ProductPageData;
-      product = data.product ?? null;
+    if (import.meta.env.DEV) {
+      console.warn("[product-page] GraphQL request failed:", e);
     }
-  } catch {
-    product = null;
+    return null;
   }
 }
 
-const title = product?.title?.trim() || "Product";
+let product: ProductPageData["product"] | null = null;
+const databaseIdsAlreadyTried = new Set<number>();
+if (graphqlConfigured && slug) {
+  if (databaseIdFromCatalog != null) {
+    databaseIdsAlreadyTried.add(databaseIdFromCatalog);
+    product = await tryLoadProduct(PRODUCT_PAGE_QUERY_BY_DATABASE_ID, {
+      id: String(databaseIdFromCatalog),
+    });
+  }
+  if (!product) {
+    product = await tryLoadProduct(PRODUCT_PAGE_QUERY_SLUG, { id: slug });
+  }
+  if (!product) {
+    for (const uri of [`/product/${slug}/`, `/product/${slug}`]) {
+      product = await tryLoadProduct(PRODUCT_PAGE_QUERY_URI, { id: uri });
+      if (product) break;
+    }
+  }
+  if (!product && slug) {
+    let sparse = await tryLoadProduct(PRODUCT_PAGE_QUERY_MINIMAL_SLUG, {
+      id: slug,
+    });
+    if (!sparse && databaseIdFromCatalog != null) {
+      sparse = await tryLoadProduct(PRODUCT_PAGE_QUERY_MINIMAL_BY_DATABASE_ID, {
+        id: String(databaseIdFromCatalog),
+      });
+    }
+    const sparseId =
+      typeof sparse?.databaseId === "number" && sparse.databaseId > 0
+        ? sparse.databaseId
+        : null;
+    if (sparse && sparseId != null && !databaseIdsAlreadyTried.has(sparseId)) {
+      databaseIdsAlreadyTried.add(sparseId);
+      const fullByResolvedId = await tryLoadProduct(
+        PRODUCT_PAGE_QUERY_BY_DATABASE_ID,
+        { id: String(sparseId) },
+      );
+      product = fullByResolvedId ?? sparse;
+    } else if (sparse) {
+      product = sparse;
+    }
+  }
+}
+
+const title =
+  product?.title?.trim() ||
+  catalogTitleProp.trim() ||
+  (slug ? slug.replace(/-/g, " ") : "Product");
 
 const images = product?.productSettings?.productImagesGroup;
 const mainImg = images?.productImagesMain?.node;
@@ -60,8 +132,7 @@ const specSectionTitle =
   specGroup?.productSpecificationTitle?.trim() || "Specification";
 const relatedPartsGroup =
   product?.productSettings?.productRelatedPartsGroup;
-const relatedNodes =
-  relatedPartsGroup?.relatedParts?.nodes?.filter((n) => n != null) ?? [];
+const relatedNodes = normalizeRelatedParts(relatedPartsGroup?.relatedParts);
 const relatedPartsTitle =
   relatedPartsGroup?.relatedPartsTitle?.trim() || "Replacement Parts";
 const supportGroup = product?.productSettings?.productSupportGroup;
@@ -149,8 +220,19 @@ for (const item of optionalItems) {
       {
         !product && (
           <p class="product-page__placeholder">
-            No data from the API for slug <code>{slug}</code> (check{" "}
-            <code>PUBLIC_GRAPHQL_URL</code> and the slug in WordPress).
+            {graphqlConfigured ? (
+              <>
+                No data from the API for slug <code>{slug}</code>. Check that
+                the product exists in WordPress and that GraphQL can resolve it
+                (slug, database ID, or URI <code>/product/{slug}/</code>).
+              </>
+            ) : (
+              <>
+                Product details are loaded from the GraphQL API. Set{" "}
+                <code>PUBLIC_GRAPHQL_URL</code> in <code>.env</code> (see{" "}
+                <code>.env.example</code>) and restart the dev server or rebuild.
+              </>
+            )}
           </p>
         )
       }
