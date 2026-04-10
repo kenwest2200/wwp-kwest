@@ -11,9 +11,30 @@ interface Props {
 
 const { item, index } = Astro.props;
 const selectRaw = item.singleTemplateOptionalSelect;
+const selectValues = (Array.isArray(selectRaw) ? selectRaw : [selectRaw])
+  .filter((value): value is string => typeof value === "string")
+  .map((value) => value.trim().toLowerCase().replace(/[\s_-]+/g, ""))
+  .filter(Boolean);
 const selectAttr = Array.isArray(selectRaw)
   ? selectRaw.filter(Boolean).join(",")
   : (selectRaw ?? "");
+
+function hasSelect(...candidates: string[]): boolean {
+  const candidateSet = candidates.map((v) =>
+    v.trim().toLowerCase().replace(/[\s_-]+/g, ""),
+  );
+  return selectValues.some((value) => candidateSet.includes(value));
+}
+
+const showDescriptionHtml = hasSelect(
+  "descriptionhtml",
+  "deschtml",
+  "description",
+);
+const showGallery = hasSelect("gallery");
+const showTable = hasSelect("table");
+const showProductList = hasSelect("productlist", "productslist", "list");
+const showFeatures = hasSelect("charact", "characteristics", "features");
 
 const listRows = normalizeProductListContent(
   item.singleTemplateOptionalProductListContent,
@@ -30,17 +51,20 @@ const plTitle = item.singleTemplateOptionalProductListTitle?.trim();
 const plSubtitle = item.singleTemplateOptionalProductListSubtitle?.trim();
 const plRowLabel = item.singleTemplateOptionalProductListRowLabel?.trim();
 
+const hasDescriptionContent = Boolean(descHtml || descPlain);
+const hasFeaturesContent = Boolean(charactHtml);
+const hasGalleryContent = galleryNodes.length > 0;
+const hasTableContent = Boolean(tableTitle || tableHtml);
+const hasProductListContent = Boolean(
+  plTitle || plSubtitle || plRowLabel || listRows.length > 0,
+);
+
 const hasAnything =
-  descHtml ||
-  descPlain ||
-  charactHtml ||
-  tableTitle ||
-  tableHtml ||
-  plTitle ||
-  plSubtitle ||
-  plRowLabel ||
-  galleryNodes.length > 0 ||
-  listRows.length > 0;
+  (showDescriptionHtml && hasDescriptionContent) ||
+  (showGallery && hasGalleryContent) ||
+  (showTable && hasTableContent) ||
+  (showProductList && hasProductListContent) ||
+  (showFeatures && hasFeaturesContent);
 ---
 
 {
@@ -50,13 +74,13 @@ const hasAnything =
       data-template-select={selectAttr}
       data-template-index={index}
     >
-      {descHtml && (
+      {showDescriptionHtml && descHtml && (
         <div class="product-page__optional-html" set:html={descHtml} />
       )}
-      {!descHtml && descPlain && (
+      {showDescriptionHtml && !descHtml && descPlain && (
         <p class="product-page__optional-text">{descPlain}</p>
       )}
-      {charactHtml && (
+      {showFeatures && charactHtml && (
         <>
           <h2 class="product-page__h2 product-page__h2--in-block">Features</h2>
           <div
@@ -65,7 +89,7 @@ const hasAnything =
           />
         </>
       )}
-      {galleryNodes.length > 0 && (
+      {showGallery && galleryNodes.length > 0 && (
         <div class="product-page__gallery-mini">
           {galleryNodes.map((g) =>
             g?.sourceUrl ? (
@@ -81,13 +105,15 @@ const hasAnything =
           )}
         </div>
       )}
-      {tableTitle && (
+      {showTable && tableTitle && (
         <h2 class="product-page__h2 product-page__h2--in-block">
           {tableTitle}
         </h2>
       )}
-      {tableHtml && <div class="product-page__spec" set:html={tableHtml} />}
-      {(plTitle || plSubtitle) && (
+      {showTable && tableHtml && (
+        <div class="product-page__spec" set:html={tableHtml} />
+      )}
+      {showProductList && (plTitle || plSubtitle) && (
         <div class="product-page__product-list-head">
           {plTitle && (
             <h2 class="product-page__h2 product-page__h2--in-block">
@@ -99,8 +125,10 @@ const hasAnything =
           )}
         </div>
       )}
-      {plRowLabel && <p class="product-page__row-label">{plRowLabel}</p>}
-      {listRows.length > 0 && (
+      {showProductList && plRowLabel && (
+        <p class="product-page__row-label">{plRowLabel}</p>
+      )}
+      {showProductList && listRows.length > 0 && (
         <ul class="product-page__product-list-rows">
           {listRows.map((row) => (
             <li class="product-page__product-list-row">
