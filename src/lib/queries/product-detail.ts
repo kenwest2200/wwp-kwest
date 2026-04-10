@@ -74,15 +74,12 @@ export type ProductPageData = {
         productImagesBrand?: ProductPageImageField;
       } | null;
       productSupportGroup?: {
-        productSupportTitle?: string | null;
         productSupportLinks?: ProductSupportLinksField;
       } | null;
       productSpecificationGroup?: {
-        productSpecificationTitle?: string | null;
         productSpecification?: string | null;
       } | null;
       productRelatedPartsGroup?: {
-        relatedPartsTitle?: string | null;
         /** ACF / WYSIWYG HTML */
         relatedParts?: string | null;
       } | null;
@@ -126,7 +123,6 @@ const PRODUCT_PAGE_FIELDS = /* GraphQL */ `
           }
         }
         productSupportGroup {
-          productSupportTitle
           productSupportLinks {
             productSupportLink {
               title
@@ -136,11 +132,9 @@ const PRODUCT_PAGE_FIELDS = /* GraphQL */ `
           }
         }
         productSpecificationGroup {
-          productSpecificationTitle
           productSpecification
         }
         productRelatedPartsGroup {
-          relatedPartsTitle
           relatedParts
         }
         singleTemplateGroup {

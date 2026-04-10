@@ -131,21 +131,19 @@ const mainImg = images?.productImagesMain?.node;
 const brandImg = images?.productImagesBrand?.node;
 const specGroup = product?.productSettings?.productSpecificationGroup;
 const specHtml = specGroup?.productSpecification?.trim() ?? "";
-const specSectionTitle = specGroup?.productSpecificationTitle?.trim();
+const specSectionTitle = "Specifications";
 const relatedPartsGroup = product?.productSettings?.productRelatedPartsGroup;
-const relatedPartsTitle = relatedPartsGroup?.relatedPartsTitle?.trim();
+const relatedPartsTitle = "Replacement Parts";
 const relatedPartsHtml = relatedPartsHtmlFromApi(
   relatedPartsGroup?.relatedParts,
 );
 const showRelatedSection = Boolean(relatedPartsHtml);
 const supportGroup = product?.productSettings?.productSupportGroup;
-const supportTitle = supportGroup?.productSupportTitle?.trim() ?? "";
-const supportHeading = supportTitle;
+const supportHeading = "Technical Support";
 const supportLinks = normalizeSupportLinks(
   supportGroup?.productSupportLinks ?? null,
 );
-const showSupportAccordion =
-  supportLinks.length > 0 || Boolean(supportTitle.trim());
+const showSupportAccordion = supportLinks.length > 0;
 const showSpecAccordion = Boolean(specHtml);
 const showProductAccordion =
   showSpecAccordion || showSupportAccordion || showRelatedSection;
