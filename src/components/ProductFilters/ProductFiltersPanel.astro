@@ -6,6 +6,7 @@ import IconGridRows from "../icons/gridRowsIcon.astro";
 import IconGridList from "../icons/gridListIcon.astro";
 import ArrowPaginationIcon from "../icons/arrowPaginationIcon.astro";
 import CloseButtonIcon from "../icons/closeButtonIcon.astro";
+import ProductFiltersOverflowModal from "./ProductFiltersOverflowModal.astro";
 ---
 
 <section
@@ -55,7 +56,7 @@ import CloseButtonIcon from "../icons/closeButtonIcon.astro";
               id="product-filters-search"
               type="search"
               class="product-filters__search-input"
-              placeholder="Search parts"
+              placeholder="Search"
               autocomplete="off"
               spellcheck="false"
             />
@@ -523,4 +524,5 @@ import CloseButtonIcon from "../icons/closeButtonIcon.astro";
       </div>
     </div>
   </div>
+  <ProductFiltersOverflowModal />
 </section>

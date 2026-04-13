@@ -175,6 +175,198 @@ const expandedAttrValuesOverflowSlugs = new Set<string>();
 
 const ATTR_VALUES_MORE_ARROW_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="product-filters__link-btn-icon" aria-hidden="true"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
+type OverflowModalKind = "subcategories" | "attribute-values";
+type OverflowModalState = {
+  kind: OverflowModalKind;
+  title: string;
+  itemsHtml: string;
+  attrSlug?: string;
+};
+const overflowModalRootEl = document.getElementById(
+  "product-filters-overflow-modal",
+) as HTMLDivElement | null;
+const overflowModalTitleEl = document.getElementById(
+  "product-filters-overflow-modal-title",
+) as HTMLHeadingElement | null;
+const overflowModalSearchEl = document.getElementById(
+  "product-filters-overflow-modal-search",
+) as HTMLInputElement | null;
+const overflowModalListEl = document.getElementById(
+  "product-filters-overflow-modal-list",
+) as HTMLDivElement | null;
+let overflowModalState: OverflowModalState | null = null;
+let overflowModalCloseTimer: number | null = null;
+let overflowModalBodyScrollLocked = false;
+let overflowModalPrevBodyOverflow = "";
+
+function lockBodyScrollForOverflowModal() {
+  if (overflowModalBodyScrollLocked) return;
+  overflowModalPrevBodyOverflow = document.body.style.overflow;
+  document.body.style.overflow = "hidden";
+  overflowModalBodyScrollLocked = true;
+}
+
+function unlockBodyScrollForOverflowModal() {
+  if (!overflowModalBodyScrollLocked) return;
+  const drawerIsOpen = Boolean(
+    catalogSectionEl?.classList.contains(DRAWER_OPEN_CLASS),
+  );
+  if (drawerIsOpen) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = overflowModalPrevBodyOverflow;
+  }
+  overflowModalPrevBodyOverflow = "";
+  overflowModalBodyScrollLocked = false;
+}
+
+function isCatalogTabletUp(): boolean {
+  return window.matchMedia("(min-width: 768px)").matches;
+}
+
+function setupOverflowModal() {
+  if (!overflowModalRootEl) return;
+  if (overflowModalRootEl.dataset.bound === "1") return;
+  overflowModalRootEl.dataset.bound = "1";
+  overflowModalListEl?.addEventListener("change", handleFilterCheckboxChange);
+  overflowModalRootEl.addEventListener("click", (e) => {
+    const closeEl = (e.target as HTMLElement).closest(
+      "[data-overflow-modal-close], [data-overflow-modal-back]",
+    );
+    if (!closeEl) return;
+    e.preventDefault();
+    closeOverflowModal();
+  });
+  overflowModalSearchEl?.addEventListener("input", () => {
+    filterOverflowModalItems();
+  });
+}
+
+function closeOverflowModal() {
+  if (!overflowModalRootEl) return;
+  overflowModalRootEl.setAttribute("aria-hidden", "true");
+  overflowModalRootEl.classList.remove("product-filters__overflow-modal--open");
+  overflowModalState = null;
+  unlockBodyScrollForOverflowModal();
+  if (overflowModalCloseTimer != null) {
+    window.clearTimeout(overflowModalCloseTimer);
+  }
+  overflowModalCloseTimer = window.setTimeout(() => {
+    overflowModalCloseTimer = null;
+    if (!overflowModalRootEl) return;
+    if (overflowModalRootEl.classList.contains("product-filters__overflow-modal--open")) {
+      return;
+    }
+    overflowModalRootEl.hidden = true;
+    if (overflowModalSearchEl) overflowModalSearchEl.value = "";
+    if (overflowModalListEl) overflowModalListEl.innerHTML = "";
+  }, 260);
+}
+
+function filterOverflowModalItems() {
+  if (!overflowModalListEl || !overflowModalSearchEl) return;
+  const q = overflowModalSearchEl.value.trim().toLowerCase();
+  overflowModalListEl
+    .querySelectorAll<HTMLElement>(".product-filters__overflow-modal-item")
+    .forEach((item) => {
+      const text = (item.dataset.searchText ?? "").toLowerCase();
+      item.hidden = q.length > 0 && !text.includes(q);
+    });
+}
+
+function openOverflowModal(
+  state: OverflowModalState,
+  options?: { preserveSearch?: boolean },
+) {
+  setupOverflowModal();
+  if (
+    !overflowModalRootEl ||
+    !overflowModalTitleEl ||
+    !overflowModalSearchEl ||
+    !overflowModalListEl
+  ) {
+    return;
+  }
+  if (overflowModalCloseTimer != null) {
+    window.clearTimeout(overflowModalCloseTimer);
+    overflowModalCloseTimer = null;
+  }
+  overflowModalState = state;
+  const prevQuery = options?.preserveSearch ? overflowModalSearchEl.value : "";
+  overflowModalTitleEl.textContent = state.title;
+  overflowModalListEl.innerHTML = state.itemsHtml;
+  overflowModalSearchEl.value = prevQuery;
+  overflowModalRootEl.hidden = false;
+  overflowModalRootEl.setAttribute("aria-hidden", "false");
+  overflowModalRootEl.classList.add("product-filters__overflow-modal--open");
+  lockBodyScrollForOverflowModal();
+  syncCheckboxes();
+  filterOverflowModalItems();
+  if (!options?.preserveSearch) overflowModalSearchEl.focus();
+}
+
+function renderOverflowModalSubgroups(groups: MergedSubGroup[]): string {
+  return groups
+    .map((g) => {
+      const subs = (g.subcategories ?? []).filter((s) => s?.slug && s?.name);
+      if (subs.length === 0) return "";
+      const memberSlugs = subs.map((s) => s.slug).filter(Boolean);
+      const memberEnc = encodeMemberSlugsForAttr(memberSlugs);
+      const facetCount = countSubgroupFacet(memberSlugs);
+      const searchText = `${g.groupName} ${subs.map((s) => s.name).join(" ")}`;
+      return `<div class="product-filters__overflow-modal-item" data-search-text="${escapeHtmlAttr(searchText)}">
+        <label class="product-filters__chip">
+          <input class="product-filters__chip-input" type="checkbox" data-group="subgroup" data-group-key="${escapeHtml(g.groupSlug)}" data-member-slugs="${escapeHtml(memberEnc)}" />
+          ${safeDisplayText(g.groupName)} <span class="product-filters__count">${facetCount}</span>
+        </label>
+      </div>`;
+    })
+    .filter(Boolean)
+    .join("");
+}
+
+function renderOverflowModalAttributeValues(attrSlug: string): OverflowModalState | null {
+  const slugs = getActiveCategorySlugsForAttributes();
+  const merged = mergeAttributesForSelection(slugs, attributesByCategoryMap);
+  const attr = merged.find((item) => item.slug === attrSlug);
+  if (!attr || attr.values.length === 0) return null;
+  const itemsHtml = attr.values
+    .map((v) => {
+      const n = countAttrFacet(v.slug);
+      return `<div class="product-filters__overflow-modal-item" data-search-text="${escapeHtmlAttr(v.label)}">
+        <label class="product-filters__chip">
+          <input class="product-filters__chip-input" type="checkbox" data-group="attr" data-slug="${escapeHtml(v.slug)}" />
+          ${escapeHtml(v.label)} <span class="product-filters__count">${n}</span>
+        </label>
+      </div>`;
+    })
+    .join("");
+  return {
+    kind: "attribute-values",
+    title: attr.name,
+    itemsHtml,
+    attrSlug: attr.slug,
+  };
+}
+
+function refreshOverflowModalIfOpen() {
+  if (!overflowModalState) return;
+  if (overflowModalState.kind === "subcategories") {
+    const key = getMergedDataKey();
+    const groups = key ? mergedSubcategoryGroupsBySelection.get(key) ?? [] : [];
+    openOverflowModal({
+      kind: "subcategories",
+      title: "Product types",
+      itemsHtml: renderOverflowModalSubgroups(groups),
+    }, { preserveSearch: true });
+    return;
+  }
+  if (!overflowModalState.attrSlug) return;
+  const next = renderOverflowModalAttributeValues(overflowModalState.attrSlug);
+  if (next) openOverflowModal(next, { preserveSearch: true });
+  else closeOverflowModal();
+}
+
 type ActiveFilterChip = {
   kind: "root" | "subgroup" | "attr" | "search";
   label: string;
@@ -736,7 +928,6 @@ function renderSubgroupBlock(g: MergedSubGroup): string {
 function bindSubShowMoreControls(hasExtra: boolean) {
   const more = document.getElementById("product-filters-sub-more");
   const less = document.getElementById("product-filters-sub-less");
-  const extra = document.getElementById("product-filters-sub-extra");
   if (!more || !less) return;
   if (!hasExtra) {
     more.hidden = true;
@@ -745,26 +936,21 @@ function bindSubShowMoreControls(hasExtra: boolean) {
     less.onclick = null;
     return;
   }
-  const expanded = subTypesExtraExpanded;
-  if (extra) {
-    if (expanded) extra.removeAttribute("hidden");
-    else extra.hidden = true;
-  }
-  more.hidden = expanded;
-  less.hidden = !expanded;
+  more.hidden = false;
+  less.hidden = true;
   more.onclick = () => {
-    subTypesExtraExpanded = true;
-    if (extra) extra.removeAttribute("hidden");
-    more.hidden = true;
-    less.hidden = false;
-    syncCheckboxes();
+    const key = getMergedDataKey();
+    const groups = key ? mergedSubcategoryGroupsBySelection.get(key) ?? [] : [];
+    openOverflowModal({
+      kind: "subcategories",
+      title: "Product types",
+      itemsHtml: renderOverflowModalSubgroups(groups),
+    });
+    return;
   };
   less.onclick = () => {
-    subTypesExtraExpanded = false;
-    if (extra) extra.hidden = true;
     less.hidden = true;
     more.hidden = false;
-    syncCheckboxes();
   };
 }
 
@@ -1387,6 +1573,7 @@ async function fetchProducts(options?: { append?: boolean }) {
     renderSubcategories();
     renderAttributesPanel();
     syncCheckboxes();
+    refreshOverflowModalIfOpen();
     syncUrlState();
 
     const filtered = getFilteredSortedProducts();
@@ -1455,6 +1642,11 @@ function setupAttrValuesOverflowToggle() {
     const slug = btn.dataset.attrValuesSlug;
     if (!slug) return;
     e.preventDefault();
+    if (more) {
+      const modalState = renderOverflowModalAttributeValues(slug);
+      if (modalState) openOverflowModal(modalState);
+      return;
+    }
     if (more) expandedAttrValuesOverflowSlugs.add(slug);
     else expandedAttrValuesOverflowSlugs.delete(slug);
     renderAttributesPanel();
@@ -1496,7 +1688,7 @@ function setupProductFiltersAccordions() {
 }
 
 function syncCheckboxes() {
-  [rootEl, subEl, attrsEl].forEach((el) => {
+  [rootEl, subEl, attrsEl, overflowModalListEl].forEach((el) => {
     if (!el) return;
     el.querySelectorAll<HTMLInputElement>("input[type='checkbox']").forEach(
       (input) => {
@@ -1519,6 +1711,44 @@ function syncCheckboxes() {
       },
     );
   });
+}
+
+function handleFilterCheckboxChange(e: Event) {
+  const input = (e.target as HTMLElement).closest<HTMLInputElement>(
+    "input[type='checkbox'][data-group]",
+  );
+  if (!input) return;
+  const group = input.dataset.group;
+  if (!group) return;
+
+  if (group === "root") {
+    const slug = input.dataset.slug;
+    if (!slug) return;
+    if (input.checked) selectedRoot.add(slug);
+    else selectedRoot.delete(slug);
+  } else if (group === "subgroup") {
+    input.indeterminate = false;
+    const slugs = parseMemberSlugsFromAttr(input.dataset.memberSlugs);
+    if (slugs.length === 0) return;
+    if (input.checked) {
+      for (const s of slugs) selectedSub.add(s);
+    } else {
+      for (const s of slugs) selectedSub.delete(s);
+    }
+  } else if (group === "sub") {
+    const slug = input.dataset.slug;
+    if (!slug) return;
+    if (input.checked) selectedSub.add(slug);
+    else selectedSub.delete(slug);
+  } else if (group === "attr") {
+    const slug = input.dataset.slug;
+    if (!slug) return;
+    if (input.checked) selectedAttrs.add(slug);
+    else selectedAttrs.delete(slug);
+  }
+
+  currentOffset = 0;
+  void fetchProducts();
 }
 
 function buildActiveFilterChips(): ActiveFilterChip[] {
@@ -1982,47 +2212,9 @@ async function init() {
     rebuildSearchLabelMaps();
     applyStateFromUrl();
 
-    const onChange = (e: Event) => {
-      const input = (e.target as HTMLElement).closest<HTMLInputElement>(
-        "input[type='checkbox'][data-group]",
-      );
-      if (!input) return;
-      const group = input.dataset.group;
-      if (!group) return;
-
-      if (group === "root") {
-        const slug = input.dataset.slug;
-        if (!slug) return;
-        if (input.checked) selectedRoot.add(slug);
-        else selectedRoot.delete(slug);
-      } else if (group === "subgroup") {
-        input.indeterminate = false;
-        const slugs = parseMemberSlugsFromAttr(input.dataset.memberSlugs);
-        if (slugs.length === 0) return;
-        if (input.checked) {
-          for (const s of slugs) selectedSub.add(s);
-        } else {
-          for (const s of slugs) selectedSub.delete(s);
-        }
-      } else if (group === "sub") {
-        const slug = input.dataset.slug;
-        if (!slug) return;
-        if (input.checked) selectedSub.add(slug);
-        else selectedSub.delete(slug);
-      } else if (group === "attr") {
-        const slug = input.dataset.slug;
-        if (!slug) return;
-        if (input.checked) selectedAttrs.add(slug);
-        else selectedAttrs.delete(slug);
-      }
-
-      currentOffset = 0;
-      void fetchProducts();
-    };
-
-    rootEl.addEventListener("change", onChange);
-    subEl.addEventListener("change", onChange);
-    attrsEl.addEventListener("change", onChange);
+    rootEl.addEventListener("change", handleFilterCheckboxChange);
+    subEl.addEventListener("change", handleFilterCheckboxChange);
+    attrsEl.addEventListener("change", handleFilterCheckboxChange);
 
     clearBtn?.addEventListener("click", () => {
       clearAllFilters();
@@ -2093,7 +2285,10 @@ async function init() {
     });
 
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeToolbarCustomDropdowns();
+      if (e.key === "Escape") {
+        closeToolbarCustomDropdowns();
+        closeOverflowModal();
+      }
     });
 
     document
@@ -2145,6 +2340,7 @@ async function init() {
 
     const mqCatalogDesktop = window.matchMedia("(min-width: 768px)");
     mqCatalogDesktop.addEventListener("change", () => {
+      if (!mqCatalogDesktop.matches) closeOverflowModal();
       scrollProductListAfterFetch = false;
       void fetchProducts();
     });
