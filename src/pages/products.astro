@@ -48,9 +48,7 @@ function buildRootNavBlocks(): ProductFiltersRootNavBlock[] {
         for (const s of g.subcategories ?? []) {
           if (!s?.slug || seen.has(s.slug)) continue;
           seen.add(s.slug);
-          const href =
-            s.uri?.trim() ||
-            `?root=${encodeURIComponent(root.slug)}&sub=${encodeURIComponent(s.slug)}#product-filters-catalog`;
+          const href = `?category=${encodeURIComponent(root.slug)}&sub=${encodeURIComponent(s.slug)}`;
           subLinks.push({ name: s.name, href });
           if (subLinks.length >= MAX_SUB_LINKS_PER_CARD) break;
         }
@@ -61,7 +59,7 @@ function buildRootNavBlocks(): ProductFiltersRootNavBlock[] {
         rootName: root.name,
         rootSlug: root.slug,
         subLinks,
-        filterHref: `?root=${encodeURIComponent(root.slug)}#product-filters-catalog`,
+        filterHref: `?category=${encodeURIComponent(root.slug)}`,
       };
     });
   } catch {
@@ -74,7 +72,7 @@ const rootNavBlocks = buildRootNavBlocks();
 
 <Layout>
   <main class="product-filters-page">
-    <ProductFiltersIntro />
+    <ProductFiltersIntro hasRootNav={rootNavBlocks.length > 0} />
     <ProductFiltersRootNav blocks={rootNavBlocks} />
     <ProductFiltersPanel />
   </main>

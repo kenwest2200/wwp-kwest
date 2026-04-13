@@ -44,6 +44,9 @@ const countEl = document.getElementById("product-filters-count");
 const searchInput = document.getElementById(
   "product-filters-search",
 ) as HTMLInputElement | null;
+const introTitleEl = document.getElementById(
+  "product-filters-intro-title",
+) as HTMLHeadingElement | null;
 const perDropdownRoot = document.getElementById("product-filters-per-dropdown");
 const perTrigger = document.getElementById("product-filters-per-trigger");
 const perValueEl = document.getElementById("product-filters-per-value");
@@ -54,6 +57,23 @@ const sortDropdownRoot = document.getElementById(
 const sortTrigger = document.getElementById("product-filters-sort-trigger");
 const sortValueEl = document.getElementById("product-filters-sort-value");
 const sortMenu = document.getElementById("product-filters-sort-menu");
+const rootNavSectionEl = document.querySelector<HTMLElement>(
+  ".product-filters-root-nav",
+);
+const headerEl = document.querySelector<HTMLElement>(".header");
+const introSectionEl = document.querySelector<HTMLElement>(".product-filters-intro");
+const catalogSectionTitleEl = document.querySelector<HTMLElement>(
+  ".product-filters-catalog__section-title",
+);
+const catalogBreadcrumbsEl = document.getElementById(
+  "product-filters-breadcrumbs",
+) as HTMLElement | null;
+const catalogBreadcrumbCategoryItemEl = document.getElementById(
+  "product-filters-breadcrumb-category-item",
+) as HTMLLIElement | null;
+const catalogBreadcrumbCategoryLabelEl = document.getElementById(
+  "product-filters-breadcrumb-category-label",
+) as HTMLSpanElement | null;
 
 const catalogSectionEl = document.getElementById("product-filters-catalog");
 const drawerBackdropEl = document.getElementById(
@@ -254,7 +274,11 @@ function closeOverflowModal() {
   overflowModalCloseTimer = window.setTimeout(() => {
     overflowModalCloseTimer = null;
     if (!overflowModalRootEl) return;
-    if (overflowModalRootEl.classList.contains("product-filters__overflow-modal--open")) {
+    if (
+      overflowModalRootEl.classList.contains(
+        "product-filters__overflow-modal--open",
+      )
+    ) {
       return;
     }
     overflowModalRootEl.hidden = true;
@@ -325,7 +349,9 @@ function renderOverflowModalSubgroups(groups: MergedSubGroup[]): string {
     .join("");
 }
 
-function renderOverflowModalAttributeValues(attrSlug: string): OverflowModalState | null {
+function renderOverflowModalAttributeValues(
+  attrSlug: string,
+): OverflowModalState | null {
   const slugs = getActiveCategorySlugsForAttributes();
   const merged = mergeAttributesForSelection(slugs, attributesByCategoryMap);
   const attr = merged.find((item) => item.slug === attrSlug);
@@ -353,12 +379,17 @@ function refreshOverflowModalIfOpen() {
   if (!overflowModalState) return;
   if (overflowModalState.kind === "subcategories") {
     const key = getMergedDataKey();
-    const groups = key ? mergedSubcategoryGroupsBySelection.get(key) ?? [] : [];
-    openOverflowModal({
-      kind: "subcategories",
-      title: "Product types",
-      itemsHtml: renderOverflowModalSubgroups(groups),
-    }, { preserveSearch: true });
+    const groups = key
+      ? (mergedSubcategoryGroupsBySelection.get(key) ?? [])
+      : [];
+    openOverflowModal(
+      {
+        kind: "subcategories",
+        title: "Product types",
+        itemsHtml: renderOverflowModalSubgroups(groups),
+      },
+      { preserveSearch: true },
+    );
     return;
   }
   if (!overflowModalState.attrSlug) return;
@@ -412,9 +443,70 @@ function syncToolbarCustomSelectUi() {
     });
 }
 
+function syncIntroTitle() {
+  if (!introTitleEl) return;
+  const effectiveRoots = getEffectiveSelectedRootSlugs();
+  if (effectiveRoots.length !== 1) {
+    introTitleEl.textContent = "Catalog";
+    return;
+  }
+  const [slug] = effectiveRoots;
+  const label = categorySlugToLabel.get(slug)?.trim();
+  introTitleEl.textContent = label || "Catalog";
+}
+
+function getEffectiveSelectedRootSlugs(): string[] {
+  if (selectedRoot.size > 0) {
+    // For breadcrumb/category title we prioritize explicit category filters.
+    return [...selectedRoot];
+  }
+  const out = new Set<string>();
+  if (selectedSub.size > 0) {
+    for (const [rootSlug, members] of rootMap.entries()) {
+      if (members.some((m) => selectedSub.has(m.slug))) {
+        out.add(rootSlug);
+      }
+    }
+  }
+  return [...out];
+}
+
+function syncRootNavAndHeaderState() {
+  const hasActiveFilter =
+    selectedRoot.size > 0 ||
+    selectedSub.size > 0 ||
+    selectedAttrs.size > 0 ||
+    searchQuery.trim().length > 0;
+  if (rootNavSectionEl) rootNavSectionEl.hidden = hasActiveFilter;
+  if (introSectionEl) {
+    introSectionEl.classList.toggle(
+      "product-filters-intro--with-root-nav",
+      Boolean(rootNavSectionEl) && !hasActiveFilter,
+    );
+  }
+  if (headerEl) headerEl.classList.toggle("header--white", hasActiveFilter);
+  if (catalogSectionTitleEl) catalogSectionTitleEl.hidden = hasActiveFilter;
+  if (catalogBreadcrumbsEl) catalogBreadcrumbsEl.hidden = !hasActiveFilter;
+  if (!hasActiveFilter) return;
+  const effectiveRoots = getEffectiveSelectedRootSlugs();
+  if (
+    effectiveRoots.length === 1 &&
+    catalogBreadcrumbCategoryItemEl &&
+    catalogBreadcrumbCategoryLabelEl
+  ) {
+    const [slug] = effectiveRoots;
+    const label =
+      categorySlugToLabel.get(slug)?.trim() || slug.replace(/-/g, " ");
+    catalogBreadcrumbCategoryLabelEl.textContent = label;
+    catalogBreadcrumbCategoryItemEl.hidden = false;
+    return;
+  }
+  if (catalogBreadcrumbCategoryItemEl) catalogBreadcrumbCategoryItemEl.hidden = true;
+}
+
 function applyStateFromUrl() {
   const params = new URLSearchParams(window.location.search);
-  const roots = parseListParam(params, "root");
+  const roots = parseListParam(params, "category");
   const sub = parseListParam(params, "sub");
   const attr = parseListParam(params, "attr");
   const page = Number(params.get("page") ?? "1");
@@ -460,6 +552,7 @@ function applyStateFromUrl() {
   if (isNarrowCatalog()) {
     currentOffset = 0;
   }
+  syncRootNavAndHeaderState();
 }
 
 function syncUrlState() {
@@ -469,8 +562,8 @@ function syncUrlState() {
   const attr = [...selectedAttrs];
   const page = isNarrowCatalog() ? 1 : Math.floor(currentOffset / pageSize) + 1;
 
-  if (roots.length > 0) params.set("root", roots.join(","));
-  else params.delete("root");
+  if (roots.length > 0) params.set("category", roots.join(","));
+  else params.delete("category");
 
   if (sub.length > 0) params.set("sub", sub.join(","));
   else params.delete("sub");
@@ -940,7 +1033,9 @@ function bindSubShowMoreControls(hasExtra: boolean) {
   less.hidden = true;
   more.onclick = () => {
     const key = getMergedDataKey();
-    const groups = key ? mergedSubcategoryGroupsBySelection.get(key) ?? [] : [];
+    const groups = key
+      ? (mergedSubcategoryGroupsBySelection.get(key) ?? [])
+      : [];
     openOverflowModal({
       kind: "subcategories",
       title: "Product types",
@@ -1573,6 +1668,8 @@ async function fetchProducts(options?: { append?: boolean }) {
     renderSubcategories();
     renderAttributesPanel();
     syncCheckboxes();
+    syncIntroTitle();
+    syncRootNavAndHeaderState();
     refreshOverflowModalIfOpen();
     syncUrlState();
 

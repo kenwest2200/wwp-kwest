@@ -18,6 +18,30 @@ import ProductFiltersOverflowModal from "./ProductFiltersOverflowModal.astro";
     title="Explore our products"
     className="product-filters-catalog__section-title"
   />
+  <nav
+    id="product-filters-breadcrumbs"
+    class="product-filters-catalog__breadcrumbs"
+    aria-label="Breadcrumb"
+    hidden
+  >
+    <ul class="product-filters-catalog__breadcrumbs-list">
+      <li class="product-filters-catalog__breadcrumbs-item">
+        <a class="product-filters-catalog__breadcrumbs-link" href="/">Home</a>
+      </li>
+      <li class="product-filters-catalog__breadcrumbs-item">
+        <a class="product-filters-catalog__breadcrumbs-link" href="/products"
+          >Products</a
+        >
+      </li>
+      <li
+        id="product-filters-breadcrumb-category-item"
+        class="product-filters-catalog__breadcrumbs-item product-filters-catalog__breadcrumbs-item--current"
+        hidden
+      >
+        <span id="product-filters-breadcrumb-category-label"></span>
+      </li>
+    </ul>
+  </nav>
 
   <div class="product-filters-catalog__inner">
     <div class="product-filters__layout">

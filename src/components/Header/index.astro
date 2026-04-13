@@ -59,10 +59,11 @@ function buildHeaderMenuTree(flatNodes: FlatMenuNode[]): HeaderMenuNode[] {
 
   flatNodes.forEach((node) => {
     if (!node.id || !node.label) return;
+    const normalizedLabel = node.label.trim().toLowerCase();
     byId.set(node.id, {
       id: node.id,
       label: node.label,
-      href: normalizeHref(node),
+      href: normalizedLabel === "products" ? "/products" : normalizeHref(node),
       children: [],
     });
   });
