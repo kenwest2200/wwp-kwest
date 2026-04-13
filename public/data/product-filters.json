@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-09T14:20:13.385Z",
+  "generatedAt": "2026-04-13T13:21:06.242Z",
   "attributesByCategory": {
     "bath": [],
     "pool": [
@@ -223,15 +223,18 @@
   "rootCategories": [
     {
       "name": "Pool",
-      "slug": "pool"
+      "slug": "pool",
+      "description": ""
     },
     {
       "name": "Spa",
-      "slug": "spa"
+      "slug": "spa",
+      "description": ""
     },
     {
       "name": "Bath",
-      "slug": "bath"
+      "slug": "bath",
+      "description": ""
     }
   ],
   "mergedSubcategoryGroupsBySelection": {
@@ -5203,7 +5206,7 @@
       "slug": "santanna-ii-stealth-ii-air-blowers",
       "databaseId": 33454,
       "date": "2023-05-02T12:37:05",
-      "modified": "2026-04-09T14:19:46",
+      "modified": "2026-04-09T15:08:30",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Santanna-II-1.png",
       "imageAlt": null,
       "imageWidth": 793,
@@ -5377,7 +5380,7 @@
       "slug": "stealth-ii-air-blowers",
       "databaseId": 37444,
       "date": "2023-03-27T23:30:24",
-      "modified": "2026-04-07T14:21:42",
+      "modified": "2026-04-09T15:07:40",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Stealth-II-1.png",
       "imageAlt": null,
       "imageWidth": 1920,

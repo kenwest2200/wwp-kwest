@@ -306,12 +306,13 @@ const topMenuItems = {
           class="header__search-panel"
           role="search"
         >
-          <form action="#">
+          <form action="/search" method="get">
             <label class="header__search-label">
               <IconSearch class="header__search-icon" />
               <input
                 class="header__search-input"
-                type="text"
+                type="search"
+                name="q"
                 placeholder="Search for parts"
               />
             </label>

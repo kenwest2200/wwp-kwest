@@ -1,0 +1,39 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ProductFiltersIntro from "../components/ProductFilters/ProductFiltersIntro.astro";
+
+export const prerender = true;
+---
+
+<Layout>
+  <main class="search-results-page">
+    <ProductFiltersIntro
+      title="Search"
+      description="Find products by part name, keyword, or model number."
+      hasRootNav={false}
+    />
+    <section
+      class="search-results-page__inner"
+      aria-labelledby="search-results-title"
+    >
+      <div class="search-results-page__inner-container container">
+        <h1 id="search-results-title" class="search-results-page__title">
+          Search
+        </h1>
+        <p id="search-results-summary" class="search-results-page__summary">
+          Enter a query to search.
+        </p>
+        <p id="search-results-error" class="search-results-page__error" hidden>
+        </p>
+        <ul id="search-results-list" class="search-results-page__list"></ul>
+        <p id="search-results-empty" class="search-results-page__empty" hidden>
+          No results found.
+        </p>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  import "../scripts/search-page.ts";
+</script>
