@@ -65,6 +65,7 @@ export type ProductCategoriesQueryData = {
 export type RootProductCategoryNode = {
   name: string;
   slug: string;
+  description?: string | null;
 };
 
 export type RootProductCategoriesData = {
@@ -93,6 +94,7 @@ export const ROOT_PRODUCT_CATEGORIES_QUERY = /* GraphQL */ `
     rootProductCategories {
       name
       slug
+      description
     }
   }
 `;

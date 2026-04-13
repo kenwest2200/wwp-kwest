@@ -120,6 +120,7 @@ const ROOT_PRODUCT_CATEGORIES_QUERY = `
     rootProductCategories {
       name
       slug
+      description
     }
   }
 `;
@@ -274,6 +275,10 @@ async function generateFromGraphql(env) {
     .map((row) => ({
       name: decodeHtmlEntities(row.name),
       slug: row.slug,
+      description:
+        typeof row.description === "string" && row.description.trim()
+          ? decodeHtmlEntities(row.description.trim())
+          : "",
     }));
 
   const rootSlugsSorted = rootCategories.map((r) => r.slug).sort(); // stable key for merged map

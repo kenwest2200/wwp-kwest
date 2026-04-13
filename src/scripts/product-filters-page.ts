@@ -47,6 +47,10 @@ const searchInput = document.getElementById(
 const introTitleEl = document.getElementById(
   "product-filters-intro-title",
 ) as HTMLHeadingElement | null;
+const introDescriptionEl = document.getElementById(
+  "product-filters-intro-description",
+) as HTMLParagraphElement | null;
+const defaultIntroDescription = introDescriptionEl?.textContent?.trim() ?? "";
 const perDropdownRoot = document.getElementById("product-filters-per-dropdown");
 const perTrigger = document.getElementById("product-filters-per-trigger");
 const perValueEl = document.getElementById("product-filters-per-value");
@@ -142,8 +146,10 @@ const SORT_MODE_LABELS: Record<SortMode, string> = {
   "name-desc": "Z–A",
 };
 let sortMode: SortMode = "updated";
-let rootCategoriesList: { name: string; slug: string }[] = [];
+let rootCategoriesList: { name: string; slug: string; description?: string }[] =
+  [];
 const categorySlugToLabel = new Map<string, string>();
+const categorySlugToDescription = new Map<string, string>();
 const categorySlugToGroupNames = new Map<string, Set<string>>();
 const attrValueSlugToLabel = new Map<string, string>();
 const attrValueSlugToAttrName = new Map<string, string>();
@@ -448,11 +454,17 @@ function syncIntroTitle() {
   const effectiveRoots = getEffectiveSelectedRootSlugs();
   if (effectiveRoots.length !== 1) {
     introTitleEl.textContent = "Catalog";
+    if (introDescriptionEl) {
+      introDescriptionEl.textContent = defaultIntroDescription;
+    }
     return;
   }
   const [slug] = effectiveRoots;
   const label = categorySlugToLabel.get(slug)?.trim();
   introTitleEl.textContent = label || "Catalog";
+  if (!introDescriptionEl) return;
+  const description = categorySlugToDescription.get(slug)?.trim();
+  introDescriptionEl.textContent = description || defaultIntroDescription;
 }
 
 function getEffectiveSelectedRootSlugs(): string[] {
@@ -1196,12 +1208,16 @@ async function readJsonSafe(res: Response) {
 
 function rebuildSearchLabelMaps() {
   categorySlugToLabel.clear();
+  categorySlugToDescription.clear();
   categorySlugToGroupNames.clear();
   attrValueSlugToLabel.clear();
   attrValueSlugToAttrName.clear();
 
   for (const r of rootCategoriesList) {
     categorySlugToLabel.set(r.slug, r.name);
+    if (r.description?.trim()) {
+      categorySlugToDescription.set(r.slug, r.description.trim());
+    }
   }
 
   for (const groups of mergedSubcategoryGroupsBySelection.values()) {
@@ -2217,6 +2233,7 @@ async function init() {
       rootCategories?: {
         name: string;
         slug: string;
+        description?: string | null;
         subcategories?: { name: string; slug: string }[];
       }[];
       mergedSubcategoryGroupsBySelection?: Record<string, MergedSubGroup[]>;
@@ -2256,6 +2273,10 @@ async function init() {
     rootCategoriesList = roots.map((r) => ({
       name: r.name,
       slug: r.slug,
+      description:
+        typeof r.description === "string" && r.description.trim()
+          ? r.description.trim()
+          : undefined,
     }));
     knownRootSlugs = roots.map((r) => r.slug);
     attributesByCategoryMap.clear();
