@@ -2,10 +2,16 @@
 import fs from "node:fs";
 import path from "node:path";
 import Layout from "../layouts/Layout.astro";
+import { getGraphQLClient, requestGraphql } from "../lib/graphql";
 import ProductFiltersIntro from "../components/ProductFilters/ProductFiltersIntro.astro";
 import ProductFiltersRootNav from "../components/ProductFilters/ProductFiltersRootNav.astro";
 import ProductFiltersPanel from "../components/ProductFilters/ProductFiltersPanel.astro";
+import ProductFiltersResources from "../components/ProductFilters/ProductFiltersResources.astro";
 import type { ProductFiltersRootNavBlock } from "../components/ProductFilters/types";
+import {
+  PRODUCTS_RESOURCES_QUERY,
+  type ProductsResourcesData,
+} from "../lib/queries/products-resources";
 
 export const prerender = true;
 
@@ -68,6 +74,16 @@ function buildRootNavBlocks(): ProductFiltersRootNavBlock[] {
 }
 
 const rootNavBlocks = buildRootNavBlocks();
+let resourcesData: ProductsResourcesData | null = null;
+if (getGraphQLClient()) {
+  try {
+    resourcesData = await requestGraphql<ProductsResourcesData>(
+      PRODUCTS_RESOURCES_QUERY,
+    );
+  } catch {
+    resourcesData = null;
+  }
+}
 ---
 
 <Layout>
@@ -75,6 +91,7 @@ const rootNavBlocks = buildRootNavBlocks();
     <ProductFiltersIntro hasRootNav={rootNavBlocks.length > 0} />
     <ProductFiltersRootNav blocks={rootNavBlocks} />
     <ProductFiltersPanel />
+    <ProductFiltersResources data={resourcesData} />
   </main>
 </Layout>
 

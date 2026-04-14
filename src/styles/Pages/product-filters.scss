@@ -231,6 +231,99 @@
   }
 }
 
+.product-filters-resources {
+  padding: px-to-rem(64) 0 px-to-rem(72);
+  background: $white;
+
+  &__inner {
+    max-width: var(--s-max-container-width);
+    margin: 0 auto;
+    padding-left: var(--section-left, var(--s-padding-x));
+    padding-right: var(--section-right, var(--s-padding-x));
+  }
+
+  &__title {
+    margin: 0 0 px-to-rem(40);
+    font-size: px-to-rem(48);
+    line-height: 1.2;
+    letter-spacing: 0.03em;
+    font-weight: 600;
+    color: $dark;
+    text-align: center;
+  }
+
+  &__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: px-to-rem(20);
+  }
+
+  &__card {
+    margin: 0;
+    border: 1px solid $gray-middle;
+    border-radius: px-to-rem(8);
+    background: $white;
+    padding: px-to-rem(28) px-to-rem(20) px-to-rem(20);
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__icon {
+    width: px-to-rem(24);
+    height: px-to-rem(24);
+    object-fit: contain;
+    margin: 0 0 px-to-rem(28);
+  }
+
+  &__card-title {
+    margin: 0 0 px-to-rem(12);
+    font-size: px-to-rem(32);
+    line-height: 1.1;
+    letter-spacing: 0.03em;
+    font-weight: 600;
+    color: $dark;
+  }
+
+  &__card-description {
+    margin: 0 0 px-to-rem(28);
+    font-size: px-to-rem(22);
+    line-height: px-to-rem(32);
+    letter-spacing: 0.02em;
+    color: $dark-medium;
+    font-weight: 400;
+  }
+
+  &__card-link {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: px-to-rem(8);
+    font-size: px-to-rem(12);
+    line-height: px-to-rem(16);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: $light-teal;
+    font-weight: 600;
+
+    svg {
+      width: px-to-rem(16);
+      height: px-to-rem(16);
+      flex-shrink: 0;
+    }
+  }
+
+  @include media-breakpoint-up(md) {
+    &__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: px-to-rem(24);
+    }
+  }
+}
+
 .product-filters__layout {
   display: flex;
   gap: px-to-rem(32);

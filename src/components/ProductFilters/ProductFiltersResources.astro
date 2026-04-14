@@ -1,0 +1,91 @@
+---
+import IconArrowRight from "../icons/IconArrowRight.astro";
+import type {
+  ProductsResourcesData,
+  ProductsResourcesItem,
+} from "../../lib/queries/products-resources";
+
+interface Props {
+  data: ProductsResourcesData | null;
+}
+
+const { data } = Astro.props;
+
+type ResourceCard = {
+  title: string;
+  description: string;
+  iconUrl: string;
+  iconAlt: string;
+  href: string;
+  linkTitle: string;
+  target: string;
+};
+
+function toCard(item: ProductsResourcesItem): ResourceCard | null {
+  const title = (item.title ?? "").trim();
+  const description = (item.description ?? "").trim();
+  const href = (item.link?.url ?? "").trim();
+  if (!title || !href) return null;
+  const iconUrl = (item.icon?.node?.sourceUrl ?? "").trim();
+  const iconAlt = (item.icon?.node?.altText ?? title).trim();
+  const linkTitle = (item.link?.title ?? "Review").trim() || "Review";
+  const target = (item.link?.target ?? "").trim() || "_self";
+  return {
+    title,
+    description,
+    iconUrl,
+    iconAlt,
+    href,
+    linkTitle,
+    target,
+  };
+}
+
+const section = data?.generalSettings?.siteSettings?.siteSettingsSectionsResources;
+const sectionTitle = (section?.title ?? "").trim() || "Resources";
+const cards = (section?.repeater ?? [])
+  .map(toCard)
+  .filter((item): item is ResourceCard => Boolean(item));
+---
+
+{
+  cards.length > 0 && (
+    <section class="product-filters-resources" aria-labelledby="product-filters-resources-heading">
+      <div class="product-filters-resources__inner">
+        <h2 id="product-filters-resources-heading" class="product-filters-resources__title">
+          {sectionTitle}
+        </h2>
+        <ul class="product-filters-resources__grid">
+          {cards.map((item) => (
+            <li class="product-filters-resources__card">
+              {item.iconUrl && (
+                <img
+                  class="product-filters-resources__icon"
+                  src={item.iconUrl}
+                  alt={item.iconAlt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
+              <h3 class="product-filters-resources__card-title">{item.title}</h3>
+              {item.description && (
+                <p class="product-filters-resources__card-description">
+                  {item.description}
+                </p>
+              )}
+              <a
+                class="product-filters-resources__card-link"
+                href={item.href}
+                target={item.target}
+                rel={item.target === "_blank" ? "noopener noreferrer" : undefined}
+              >
+                {item.linkTitle}
+                <IconArrowRight />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}

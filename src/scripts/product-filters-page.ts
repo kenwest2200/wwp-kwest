@@ -189,19 +189,16 @@ function syncLoadMoreButton() {
     !narrow || currentTotal === 0 || mobileAccumulatedCount >= currentTotal;
 }
 let scrollProductListAfterFetch = false;
-let subTypesExtraExpanded = false;
 let rootCategoriesExtraExpanded = false;
-const SUBTYPE_GROUPS_VISIBLE_LIMIT = 10;
 const ROOT_CATEGORIES_VISIBLE_LIMIT = 10;
-const ATTR_VALUES_VISIBLE_LIMIT = 10;
+const ATTR_VALUES_VISIBLE_LIMIT = 5;
 const ACTIVE_FILTER_CHIPS_VISIBLE = 5;
 let activeFilterChipsExpanded = false;
 const expandedAttrAccordionSlugs = new Set<string>();
-const expandedAttrValuesOverflowSlugs = new Set<string>();
 
 const ATTR_VALUES_MORE_ARROW_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="product-filters__link-btn-icon" aria-hidden="true"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
-type OverflowModalKind = "subcategories" | "attribute-values";
+type OverflowModalKind = "attribute-values";
 type OverflowModalState = {
   kind: OverflowModalKind;
   title: string;
@@ -335,26 +332,6 @@ function openOverflowModal(
   if (!options?.preserveSearch) overflowModalSearchEl.focus();
 }
 
-function renderOverflowModalSubgroups(groups: MergedSubGroup[]): string {
-  return groups
-    .map((g) => {
-      const subs = (g.subcategories ?? []).filter((s) => s?.slug && s?.name);
-      if (subs.length === 0) return "";
-      const memberSlugs = subs.map((s) => s.slug).filter(Boolean);
-      const memberEnc = encodeMemberSlugsForAttr(memberSlugs);
-      const facetCount = countSubgroupFacet(memberSlugs);
-      const searchText = `${g.groupName} ${subs.map((s) => s.name).join(" ")}`;
-      return `<div class="product-filters__overflow-modal-item" data-search-text="${escapeHtmlAttr(searchText)}">
-        <label class="product-filters__chip">
-          <input class="product-filters__chip-input" type="checkbox" data-group="subgroup" data-group-key="${escapeHtml(g.groupSlug)}" data-member-slugs="${escapeHtml(memberEnc)}" />
-          ${safeDisplayText(g.groupName)} <span class="product-filters__count">${facetCount}</span>
-        </label>
-      </div>`;
-    })
-    .filter(Boolean)
-    .join("");
-}
-
 function renderOverflowModalAttributeValues(
   attrSlug: string,
 ): OverflowModalState | null {
@@ -383,21 +360,6 @@ function renderOverflowModalAttributeValues(
 
 function refreshOverflowModalIfOpen() {
   if (!overflowModalState) return;
-  if (overflowModalState.kind === "subcategories") {
-    const key = getMergedDataKey();
-    const groups = key
-      ? (mergedSubcategoryGroupsBySelection.get(key) ?? [])
-      : [];
-    openOverflowModal(
-      {
-        kind: "subcategories",
-        title: "Product types",
-        itemsHtml: renderOverflowModalSubgroups(groups),
-      },
-      { preserveSearch: true },
-    );
-    return;
-  }
   if (!overflowModalState.attrSlug) return;
   const next = renderOverflowModalAttributeValues(overflowModalState.attrSlug);
   if (next) openOverflowModal(next, { preserveSearch: true });
@@ -904,17 +866,9 @@ function renderAttributesPanel() {
   }
   if (attrsSectionEl) attrsSectionEl.hidden = false;
   const blocks = merged.filter((attr) => attr.values.length > 0);
-  for (const attr of blocks) {
-    if (attr.values.length <= ATTR_VALUES_VISIBLE_LIMIT) {
-      expandedAttrValuesOverflowSlugs.delete(attr.slug);
-    }
-  }
   const visibleAttrSlugs = new Set(blocks.map((a) => a.slug));
   for (const s of [...expandedAttrAccordionSlugs]) {
     if (!visibleAttrSlugs.has(s)) expandedAttrAccordionSlugs.delete(s);
-  }
-  for (const s of [...expandedAttrValuesOverflowSlugs]) {
-    if (!visibleAttrSlugs.has(s)) expandedAttrValuesOverflowSlugs.delete(s);
   }
   attrsEl.innerHTML = blocks
     .map((attr, index) => {
@@ -931,22 +885,13 @@ function renderAttributesPanel() {
       if (values.length <= limit) {
         valuesBody = `<div class="product-filters__attr-values product-filters__chips product-filters__chips--row">${values.map(renderValueChip).join("")}</div>`;
       } else {
-        const overflowOn = expandedAttrValuesOverflowSlugs.has(attr.slug);
         const vis = values.slice(0, limit);
-        const extra = values.slice(limit);
         valuesBody = `<div class="product-filters__attr-values product-filters__chips product-filters__chips--row">
       ${vis.map(renderValueChip).join("")}
-      <div class="product-filters__chips-overflow"${overflowOn ? "" : " hidden"}>
-        ${extra.map(renderValueChip).join("")}
-      </div>
     <div class="product-filters__sub-more-row product-filters__attr-more-row">
-      <button type="button" class="product-filters__link-btn product-filters__attr-values-more" data-attr-values-slug="${slugAttr}"${overflowOn ? " hidden" : ""}>
+      <button type="button" class="product-filters__link-btn product-filters__attr-values-more" data-attr-values-slug="${slugAttr}">
         Show all
         ${ATTR_VALUES_MORE_ARROW_SVG}
-      </button>
-      <button type="button" class="product-filters__link-btn product-filters__attr-values-less" data-attr-values-slug="${slugAttr}"${overflowOn ? "" : " hidden"}>
-        Hide
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" class="product-filters__link-btn-icon product-filters__link-btn-icon--rotate" aria-hidden="true"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>
   </div>`;
@@ -1030,45 +975,12 @@ function renderSubgroupBlock(g: MergedSubGroup): string {
       </div>`;
 }
 
-function bindSubShowMoreControls(hasExtra: boolean) {
-  const more = document.getElementById("product-filters-sub-more");
-  const less = document.getElementById("product-filters-sub-less");
-  if (!more || !less) return;
-  if (!hasExtra) {
-    more.hidden = true;
-    less.hidden = true;
-    more.onclick = null;
-    less.onclick = null;
-    return;
-  }
-  more.hidden = false;
-  less.hidden = true;
-  more.onclick = () => {
-    const key = getMergedDataKey();
-    const groups = key
-      ? (mergedSubcategoryGroupsBySelection.get(key) ?? [])
-      : [];
-    openOverflowModal({
-      kind: "subcategories",
-      title: "Product types",
-      itemsHtml: renderOverflowModalSubgroups(groups),
-    });
-    return;
-  };
-  less.onclick = () => {
-    less.hidden = true;
-    more.hidden = false;
-  };
-}
-
 function renderSubcategories() {
   if (!subEl) return;
   const key = getMergedDataKey();
   if (!key) {
-    subTypesExtraExpanded = false;
     subEl.innerHTML =
       '<p class="product-filters__hint">Subcategory groups are not available yet.</p>';
-    bindSubShowMoreControls(false);
     syncCheckboxes();
     return;
   }
@@ -1079,28 +991,15 @@ function renderSubcategories() {
     if (!globallyKnownSubs.has(s)) selectedSub.delete(s);
   }
   if (groups.length === 0) {
-    subTypesExtraExpanded = false;
     subEl.innerHTML =
       '<p class="product-filters__hint">No subcategory groups for this combination.</p>';
-    bindSubShowMoreControls(false);
     syncCheckboxes();
     return;
   }
-  const blocks = groups
+  subEl.innerHTML = groups
     .map((g) => renderSubgroupBlock(g))
-    .filter((html) => html.length > 0);
-  const limit = SUBTYPE_GROUPS_VISIBLE_LIMIT;
-  if (blocks.length <= limit) {
-    subTypesExtraExpanded = false;
-    subEl.innerHTML = blocks.join("");
-    bindSubShowMoreControls(false);
-  } else {
-    const visible = blocks.slice(0, limit);
-    const extraBlocks = blocks.slice(limit);
-    const extraHidden = !subTypesExtraExpanded;
-    subEl.innerHTML = `${visible.join("")}<div id="product-filters-sub-extra" class="product-filters__chips-overflow"${extraHidden ? " hidden" : ""}>${extraBlocks.join("")}</div>`;
-    bindSubShowMoreControls(true);
-  }
+    .filter((html) => html.length > 0)
+    .join("");
   expandPartialSubgroupSelectionsForMergedKey();
   syncCheckboxes();
 }
@@ -1747,23 +1646,12 @@ function setupAttrValuesOverflowToggle() {
     const more = (e.target as HTMLElement).closest<HTMLButtonElement>(
       ".product-filters__attr-values-more",
     );
-    const less = (e.target as HTMLElement).closest<HTMLButtonElement>(
-      ".product-filters__attr-values-less",
-    );
-    const btn = more ?? less;
-    if (!btn) return;
-    const slug = btn.dataset.attrValuesSlug;
+    if (!more) return;
+    const slug = more.dataset.attrValuesSlug;
     if (!slug) return;
     e.preventDefault();
-    if (more) {
-      const modalState = renderOverflowModalAttributeValues(slug);
-      if (modalState) openOverflowModal(modalState);
-      return;
-    }
-    if (more) expandedAttrValuesOverflowSlugs.add(slug);
-    else expandedAttrValuesOverflowSlugs.delete(slug);
-    renderAttributesPanel();
-    syncCheckboxes();
+    const modalState = renderOverflowModalAttributeValues(slug);
+    if (modalState) openOverflowModal(modalState);
   });
 }
 
