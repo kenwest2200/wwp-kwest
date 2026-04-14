@@ -216,7 +216,7 @@
 }
 
 .product-filters-catalog {
-  padding-bottom: px-to-rem(100);
+  padding-bottom: px-to-rem(0);
 
   &__inner {
     max-width: px-to-rem(1376);
@@ -227,12 +227,13 @@
   }
 
   @include media-breakpoint-up(md) {
+    padding-bottom: px-to-rem(100);
     padding-left: var(--section-left, var(--s-padding-x));
   }
 }
 
 .product-filters-resources {
-  padding: px-to-rem(64) 0 px-to-rem(72);
+  padding: px-to-rem(36) 0 px-to-rem(36);
   background: $white;
 
   &__inner {
@@ -244,10 +245,10 @@
 
   &__title {
     margin: 0 0 px-to-rem(40);
-    font-size: px-to-rem(48);
-    line-height: 1.2;
+    font-size: px-to-rem(28);
+    line-height: 1.3;
     letter-spacing: 0.03em;
-    font-weight: 600;
+    font-weight: 500;
     color: $dark;
     text-align: center;
   }
@@ -258,7 +259,7 @@
     padding: 0;
     display: grid;
     grid-template-columns: 1fr;
-    gap: px-to-rem(20);
+    gap: px-to-rem(24);
   }
 
   &__card {
@@ -266,33 +267,33 @@
     border: 1px solid $gray-middle;
     border-radius: px-to-rem(8);
     background: $white;
-    padding: px-to-rem(28) px-to-rem(20) px-to-rem(20);
+    padding: px-to-rem(32);
     display: flex;
     flex-direction: column;
   }
 
   &__icon {
-    width: px-to-rem(24);
-    height: px-to-rem(24);
+    width: px-to-rem(40);
+    height: px-to-rem(40);
     object-fit: contain;
-    margin: 0 0 px-to-rem(28);
+    margin: 0 0 px-to-rem(32);
   }
 
   &__card-title {
-    margin: 0 0 px-to-rem(12);
-    font-size: px-to-rem(32);
-    line-height: 1.1;
+    margin: 0 0 px-to-rem(16);
+    font-size: px-to-rem(16);
+    line-height: px-to-rem(24);
     letter-spacing: 0.03em;
     font-weight: 600;
     color: $dark;
   }
 
   &__card-description {
-    margin: 0 0 px-to-rem(28);
-    font-size: px-to-rem(22);
-    line-height: px-to-rem(32);
+    margin: 0 0 px-to-rem(32);
+    font-size: px-to-rem(14);
+    line-height: px-to-rem(24);
     letter-spacing: 0.02em;
-    color: $dark-medium;
+    color: $dark-medium-2;
     font-weight: 400;
   }
 
@@ -302,12 +303,12 @@
     align-items: center;
     gap: px-to-rem(8);
     font-size: px-to-rem(12);
-    line-height: px-to-rem(16);
-    letter-spacing: 0.08em;
+    line-height: px-to-rem(14);
+    letter-spacing: 0.010em;
     text-transform: uppercase;
     text-decoration: none;
-    color: $light-teal;
-    font-weight: 600;
+    color: $medium-teal;
+    font-weight: 500;
 
     svg {
       width: px-to-rem(16);
@@ -317,9 +318,47 @@
   }
 
   @include media-breakpoint-up(md) {
+    padding: px-to-rem(0) 0 px-to-rem(72);
+
     &__grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: px-to-rem(24);
+      gap: px-to-rem(32);
+    }
+
+    &__title {
+      font-size: px-to-rem(48);
+      margin: 0 0 px-to-rem(60);
+    }
+
+    &__card {
+      &-title {
+        font-size: px-to-rem(20);
+      }
+
+      &-description {
+        font-size: px-to-rem(16);
+      }
+    }
+  }
+
+  @include media-breakpoint-up(lg) {
+    padding: px-to-rem(0) 0 px-to-rem(80);
+
+
+    &__card {
+      &-description {
+        font-size: px-to-rem(17);
+      }
+    }
+  }
+
+  @include media-breakpoint-up(xl) {
+    padding: px-to-rem(0) 0 px-to-rem(100);
+
+    &__card {
+      &-title {
+        font-size: px-to-rem(24);
+      }
     }
   }
 }
@@ -1798,8 +1837,8 @@ $product-filters-check-svg: "%3Csvg xmlns='http://www.w3.org/2000/svg' width='9'
   display: none;
   flex-wrap: wrap;
   align-items: center;
-  padding-left: px-to-rem(20);
-  padding-right: px-to-rem(20);
+  padding-left: px-to-rem(0);
+  padding-right: px-to-rem(0);
   gap: px-to-rem(16) px-to-rem(24);
 
   @include media-breakpoint-up(md) {

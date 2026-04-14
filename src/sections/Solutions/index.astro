@@ -50,37 +50,37 @@ function mapFromApi(nodes: SolutionPostNode[]): SolutionCard[] {
 const mockSolutionItems: SolutionCard[] = [
   {
     title: "Pumps",
-    href: "#",
+    href: "/products?sub=pumps%2Cpool-pumps-in-ground%2Cspa-pumps-spa",
     imageUrl: img1,
     imageAlt: "Pool systems",
   },
   {
     title: "Lighting",
-    href: "#",
+    href: "/products?sub=lighting",
     imageUrl: img2,
     imageAlt: "Spa and bath",
   },
   {
     title: "Jets & Hydrotherapy",
-    href: "#",
+    href: "/products?sub=jets%2Cspa-jets",
     imageUrl: img3,
     imageAlt: "Commercial solutions",
   },
   {
     title: "Air Systems",
-    href: "#",
+    href: "/products?sub=air-systems%2Cair-systems-spa",
     imageUrl: img4,
     imageAlt: "Pool systems",
   },
   {
     title: "Filters",
-    href: "#",
+    href: "/products?sub=pool-filters-in-ground-above-ground",
     imageUrl: img5,
     imageAlt: "Spa and bath",
   },
   {
     title: "Controls",
-    href: "#",
+    href: "/products?sub=pool-control-system%2Cspa-control-system",
     imageUrl: img6,
     imageAlt: "Commercial solutions",
   },
@@ -121,7 +121,7 @@ const items = apiItems.length > 0 ? apiItems : mockSolutionItems;
         ))
       }
     </ul>
-    <a href="#" class="btn btn--primary-dark solutions__button">
+    <a href="/products" class="btn btn--primary-dark solutions__button">
       Browse full catalog
       <IconArrowRight />
     </a>
