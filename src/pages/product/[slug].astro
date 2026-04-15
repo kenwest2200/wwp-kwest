@@ -127,7 +127,6 @@ const title =
   (slug ? slug.replace(/-/g, " ") : "Product");
 
 const images = product?.productSettings?.productImagesGroup;
-const mainImg = images?.productImagesMain?.node;
 const brandImg = images?.productImagesBrand?.node;
 const specGroup = product?.productSettings?.productSpecificationGroup;
 const specHtml = specGroup?.productSpecification?.trim() ?? "";
@@ -150,39 +149,6 @@ const showProductAccordion =
 const optionalItems = normalizeSingleTemplateOptionalItems(
   product?.productSettings?.singleTemplateGroup?.singleTemplateOptional,
 );
-
-function pushSlide(
-  out: { src: string; alt: string }[],
-  seen: { has(v: string): boolean; add(v: string): void },
-  src?: string | null,
-  alt?: string,
-) {
-  const u = src?.trim();
-  if (!u || seen.has(u)) return;
-  seen.add(u);
-  out.push({ src: u, alt: alt ?? "" });
-}
-
-const gallerySlides: { src: string; alt: string }[] = [];
-const seenGalleryUrls = new Set();
-pushSlide(
-  gallerySlides,
-  seenGalleryUrls,
-  mainImg?.sourceUrl,
-  mainImg?.altText ?? title,
-);
-pushSlide(
-  gallerySlides,
-  seenGalleryUrls,
-  brandImg?.sourceUrl,
-  brandImg?.altText ?? "",
-);
-for (const item of optionalItems) {
-  const nodes = item.singleTemplateOptionalGallery?.nodes ?? [];
-  for (const n of nodes) {
-    pushSlide(gallerySlides, seenGalleryUrls, n?.sourceUrl, n?.altText ?? "");
-  }
-}
 ---
 
 <Layout headerType="white">
@@ -205,16 +171,23 @@ for (const item of optionalItems) {
         </div>
         {
           brandImg?.sourceUrl && (
-            <div class="product-page__hero-brand" aria-hidden="true">
-              <img
-                class="product-page__brand-logo"
-                src={brandImg.sourceUrl}
-                alt={brandImg.altText ?? ""}
-                width={brandImg.mediaDetails?.width ?? undefined}
-                height={brandImg.mediaDetails?.height ?? undefined}
-                loading="eager"
-                decoding="async"
-              />
+            <div class="product-page__hero-brand">
+              <figure class="product-page__hero-brand-figure">
+                <img
+                  class="product-page__brand-logo"
+                  src={brandImg.sourceUrl}
+                  alt={brandImg.altText ?? ""}
+                  width={brandImg.mediaDetails?.width ?? undefined}
+                  height={brandImg.mediaDetails?.height ?? undefined}
+                  loading="eager"
+                  decoding="async"
+                />
+                {brandImg.title?.trim() && (
+                  <figcaption class="product-page__image-caption">
+                    {brandImg.title.trim()}
+                  </figcaption>
+                )}
+              </figure>
             </div>
           )
         }
@@ -244,70 +217,6 @@ for (const item of optionalItems) {
       {
         product && (
           <div class="product-page__body">
-            {gallerySlides.length > 0 && (
-              <section
-                class="product-page__gallery-section"
-                data-product-gallery
-                aria-label="Product images"
-              >
-                <div class="product-page__gallery-frame">
-                  <img
-                    class="product-page__gallery-main-img"
-                    src={gallerySlides[0].src}
-                    alt={gallerySlides[0].alt || title}
-                    width={mainImg?.mediaDetails?.width ?? undefined}
-                    height={mainImg?.mediaDetails?.height ?? undefined}
-                    loading="eager"
-                    decoding="async"
-                  />
-                </div>
-                {gallerySlides.length > 1 && (
-                  <div class="product-page__gallery-thumbs-row">
-                    <button
-                      type="button"
-                      class="product-page__gallery-arrow"
-                      data-gallery-prev
-                      aria-label="Previous image"
-                    >
-                      <span aria-hidden="true">‹</span>
-                    </button>
-                    <div class="product-page__gallery-thumbs">
-                      {gallerySlides.map((slide, i) => (
-                        <button
-                          type="button"
-                          class:list={[
-                            "product-page__gallery-thumb",
-                            i === 0 && "is-active",
-                          ]}
-                          data-full-src={slide.src}
-                          data-full-alt={slide.alt}
-                          aria-label={`Image ${i + 1} of ${gallerySlides.length}`}
-                          aria-pressed={i === 0}
-                        >
-                          <img
-                            src={slide.src}
-                            alt=""
-                            width="88"
-                            height="88"
-                            loading={i === 0 ? "eager" : "lazy"}
-                            decoding="async"
-                          />
-                        </button>
-                      ))}
-                    </div>
-                    <button
-                      type="button"
-                      class="product-page__gallery-arrow"
-                      data-gallery-next
-                      aria-label="Next image"
-                    >
-                      <span aria-hidden="true">›</span>
-                    </button>
-                  </div>
-                )}
-              </section>
-            )}
-
             {optionalItems.map((item, idx) => (
               <ProductSingleTemplateBlock item={item} index={idx} />
             ))}

@@ -1,6 +1,8 @@
 export type ProductPageMediaNode = {
   sourceUrl?: string | null;
   altText?: string | null;
+  /** Media library title (WP attachment title), shown as caption when needed */
+  title?: string | null;
   mediaDetails?: {
     width?: number | null;
     height?: number | null;
@@ -26,10 +28,68 @@ export type ProductSupportLinksField =
   | ProductSupportLinkRow[]
   | null;
 
+const WP_THUMB_SIZE_ORDER = [
+  "thumbnail",
+  "woocommerce_thumbnail",
+  "shop_thumbnail",
+  "medium",
+  "medium_large",
+  "large",
+] as const;
+
+export type WPMediaSizeRow = {
+  name?: string | null;
+  sourceUrl?: string | null;
+  width?: number | null;
+};
+
+export type WPMediaNodeWithSizes = {
+  sourceUrl?: string | null;
+  mediaDetails?: {
+    sizes?: (WPMediaSizeRow | null)[] | null;
+  } | null;
+};
+
+
+export function wpPreferredThumbSrc(
+  node: WPMediaNodeWithSizes | null | undefined,
+): string {
+  const full = node?.sourceUrl?.trim() ?? "";
+  if (!full) return "";
+  const sizes = node?.mediaDetails?.sizes;
+  if (!Array.isArray(sizes) || sizes.length === 0) return full;
+
+  const byName = new Map<string, string>();
+  for (const s of sizes) {
+    const name = String(s?.name ?? "").toLowerCase();
+    const url = s?.sourceUrl?.trim();
+    if (name && url) byName.set(name, url);
+  }
+  for (const key of WP_THUMB_SIZE_ORDER) {
+    const hit = byName.get(key);
+    if (hit) return hit;
+  }
+
+  const sorted = sizes
+    .filter((s): s is WPMediaSizeRow & { sourceUrl: string } =>
+      Boolean(s?.sourceUrl?.trim()),
+    )
+    .map((s) => ({
+      url: s.sourceUrl!.trim(),
+      w: Number(s.width),
+    }))
+    .sort((a, b) => (Number.isFinite(a.w) ? a.w : 1e9) - (Number.isFinite(b.w) ? b.w : 1e9));
+  return sorted[0]?.url ?? full;
+}
+
 export type GalleryMediaNode = {
   databaseId?: number | null;
   sourceUrl?: string | null;
   altText?: string | null;
+  title?: string | null;
+  mediaDetails?: {
+    sizes?: (WPMediaSizeRow | null)[] | null;
+  } | null;
 };
 
 export type ProductListContentRow = {
@@ -37,6 +97,12 @@ export type ProductListContentRow = {
     node?: {
       databaseId?: number | null;
       sourceUrl?: string | null;
+      title?: string | null;
+      mediaDetails?: {
+        width?: number | null;
+        height?: number | null;
+        sizes?: (WPMediaSizeRow | null)[] | null;
+      } | null;
     } | null;
   } | null;
   singleTemplateOptionalProductListItemTable?: string | null;
@@ -105,6 +171,7 @@ const PRODUCT_PAGE_FIELDS = /* GraphQL */ `
             node {
               sourceUrl
               altText
+              title
               mediaDetails {
                 width
                 height
@@ -115,6 +182,7 @@ const PRODUCT_PAGE_FIELDS = /* GraphQL */ `
             node {
               sourceUrl
               altText
+              title
               mediaDetails {
                 width
                 height
@@ -148,6 +216,14 @@ const PRODUCT_PAGE_FIELDS = /* GraphQL */ `
                 databaseId
                 sourceUrl
                 altText
+                title
+                mediaDetails {
+                  sizes {
+                    name
+                    sourceUrl
+                    width
+                  }
+                }
               }
             }
             singleTemplateOptionalTableTitle
@@ -160,6 +236,14 @@ const PRODUCT_PAGE_FIELDS = /* GraphQL */ `
                 node {
                   databaseId
                   sourceUrl
+                  title
+                  mediaDetails {
+                    sizes {
+                      name
+                      sourceUrl
+                      width
+                    }
+                  }
                 }
               }
               singleTemplateOptionalProductListItemTable
@@ -228,6 +312,30 @@ export function normalizeSingleTemplateOptionalItems(
 ): SingleTemplateOptionalItem[] {
   if (raw == null) return [];
   return Array.isArray(raw) ? raw : [raw];
+}
+
+/** Same normalization as optional template blocks (e.g. `gallery` select). */
+export function singleTemplateOptionalNormalizedSelectValues(
+  item: SingleTemplateOptionalItem,
+): string[] {
+  const selectRaw = item.singleTemplateOptionalSelect;
+  return (Array.isArray(selectRaw) ? selectRaw : [selectRaw])
+    .filter((v): v is string => typeof v === "string")
+    .map((value) => value.trim().toLowerCase().replace(/[\s_-]+/g, ""))
+    .filter(Boolean);
+}
+
+export function singleTemplateOptionalShowsGallery(
+  item: SingleTemplateOptionalItem,
+): boolean {
+  return singleTemplateOptionalNormalizedSelectValues(item).includes("gallery");
+}
+
+export function singleTemplateOptionalGalleryUrlCount(
+  item: SingleTemplateOptionalItem,
+): number {
+  const nodes = item.singleTemplateOptionalGallery?.nodes ?? [];
+  return nodes.filter((n) => Boolean(n?.sourceUrl?.trim())).length;
 }
 
 function linksFromRow(

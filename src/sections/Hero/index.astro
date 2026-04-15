@@ -104,6 +104,9 @@ const fallbackDescription =
               alt={image.alt}
               width={image.width}
               height={image.height}
+              loading={index === 0 ? "eager" : "lazy"}
+              fetchpriority={index === 0 ? "high" : "low"}
+              decoding="async"
             />
           ))}
         </div>

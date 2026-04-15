@@ -1,6 +1,8 @@
 ---
 import {
   normalizeProductListContent,
+  singleTemplateOptionalShowsGallery,
+  wpPreferredThumbSrc,
   type SingleTemplateOptionalItem,
 } from "../../lib/queries/product-detail";
 
@@ -13,7 +15,12 @@ const { item, index } = Astro.props;
 const selectRaw = item.singleTemplateOptionalSelect;
 const selectValues = (Array.isArray(selectRaw) ? selectRaw : [selectRaw])
   .filter((value): value is string => typeof value === "string")
-  .map((value) => value.trim().toLowerCase().replace(/[\s_-]+/g, ""))
+  .map((value) =>
+    value
+      .trim()
+      .toLowerCase()
+      .replace(/[\s_-]+/g, ""),
+  )
   .filter(Boolean);
 const selectAttr = Array.isArray(selectRaw)
   ? selectRaw.filter(Boolean).join(",")
@@ -21,7 +28,10 @@ const selectAttr = Array.isArray(selectRaw)
 
 function hasSelect(...candidates: string[]): boolean {
   const candidateSet = candidates.map((v) =>
-    v.trim().toLowerCase().replace(/[\s_-]+/g, ""),
+    v
+      .trim()
+      .toLowerCase()
+      .replace(/[\s_-]+/g, ""),
   );
   return selectValues.some((value) => candidateSet.includes(value));
 }
@@ -31,7 +41,7 @@ const showDescriptionHtml = hasSelect(
   "deschtml",
   "description",
 );
-const showGallery = hasSelect("gallery");
+const showGallery = singleTemplateOptionalShowsGallery(item);
 const showTable = hasSelect("table");
 const showProductList = hasSelect("productlist", "productslist", "list");
 const showFeatures = hasSelect("charact", "characteristics", "features");
@@ -54,6 +64,8 @@ const plRowLabel = item.singleTemplateOptionalProductListRowLabel?.trim();
 const hasDescriptionContent = Boolean(descHtml || descPlain);
 const hasFeaturesContent = Boolean(charactHtml);
 const hasGalleryContent = galleryNodes.length > 0;
+const isGallerySlider = showGallery && galleryNodes.length > 1;
+const isGalleryMini = showGallery && galleryNodes.length === 1;
 const hasTableContent = Boolean(tableTitle || tableHtml);
 const hasProductListContent = Boolean(
   plTitle || plSubtitle || plRowLabel || listRows.length > 0,
@@ -89,17 +101,115 @@ const hasAnything =
           />
         </>
       )}
-      {showGallery && galleryNodes.length > 0 && (
+      {isGallerySlider && (
+        <section
+          class="product-page__gallery-section product-page__gallery-section--slider"
+          data-product-gallery
+          aria-label="Gallery"
+        >
+          <div class="product-page__gallery-frame product-page__gallery-frame--slider">
+            <figure class="product-page__gallery-main-figure">
+              <img
+                class="product-page__gallery-main-img"
+                src={galleryNodes[0]?.sourceUrl ?? ""}
+                alt={galleryNodes[0]?.altText?.trim() ?? ""}
+                loading="eager"
+                decoding="async"
+              />
+              <figcaption
+                class="product-page__image-caption"
+                data-gallery-caption
+                hidden={!Boolean(galleryNodes[0]?.title?.trim())}
+              >
+                {galleryNodes[0]?.title?.trim() ?? ""}
+              </figcaption>
+            </figure>
+          </div>
+          <div class="product-page__gallery-thumbs-row">
+            <button
+              type="button"
+              class="product-page__gallery-arrow"
+              data-gallery-prev
+              aria-label="Previous image"
+            >
+              <span aria-hidden="true">‹</span>
+            </button>
+            <div class="product-page__gallery-thumbs">
+              {galleryNodes.map((g, i) =>
+                g?.sourceUrl ? (
+                  <button
+                    type="button"
+                    class:list={[
+                      "product-page__gallery-thumb",
+                      i === 0 && "is-active",
+                    ]}
+                    data-full-src={g.sourceUrl}
+                    data-full-alt={g.altText ?? ""}
+                    data-full-title={g.title?.trim() ?? ""}
+                    aria-label={`Image ${i + 1} of ${galleryNodes.length}`}
+                    aria-pressed={i === 0}
+                  >
+                    <img
+                      src={wpPreferredThumbSrc(g)}
+                      alt=""
+                      loading={i === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                    />
+                  </button>
+                ) : null,
+              )}
+            </div>
+            <button
+              type="button"
+              class="product-page__gallery-arrow"
+              data-gallery-next
+              aria-label="Next image"
+            >
+              <span aria-hidden="true">›</span>
+            </button>
+          </div>
+          <div class="product-page__gallery-pagination" aria-live="polite">
+            <button
+              type="button"
+              class="product-page__gallery-pagination-btn"
+              data-gallery-prev
+              aria-label="Previous image"
+            >
+              <span aria-hidden="true">‹</span>
+            </button>
+            <span class="product-page__gallery-pagination-text">
+              <span data-gallery-current>1</span>
+              <span class="product-page__gallery-pagination-sep"> / </span>
+              <span data-gallery-total>{galleryNodes.length}</span>
+            </span>
+            <button
+              type="button"
+              class="product-page__gallery-pagination-btn"
+              data-gallery-next
+              aria-label="Next image"
+            >
+              <span aria-hidden="true">›</span>
+            </button>
+          </div>
+        </section>
+      )}
+      {isGalleryMini && (
         <div class="product-page__gallery-mini">
           {galleryNodes.map((g) =>
             g?.sourceUrl ? (
-              <figure class="product-page__figure product-page__figure--mini">
+              <figure class="product-page__gallery-mini-figure">
                 <img
+                  class="product-page__gallery-mini-img"
                   src={g.sourceUrl}
-                  alt={g.altText ?? ""}
+                  alt={g.altText?.trim() ?? ""}
                   loading="lazy"
                   decoding="async"
                 />
+                {g.title?.trim() && (
+                  <figcaption class="product-page__image-caption">
+                    {g.title.trim()}
+                  </figcaption>
+                )}
               </figure>
             ) : null,
           )}
@@ -130,20 +240,25 @@ const hasAnything =
       )}
       {showProductList && listRows.length > 0 && (
         <ul class="product-page__product-list-rows">
-          {listRows.map((row) => (
+          {listRows.map((row) => {
+            const plNode = row.singleTemplateOptionalProductListItemImage?.node;
+            return (
             <li class="product-page__product-list-row">
-              {row.singleTemplateOptionalProductListItemImage?.node
-                ?.sourceUrl && (
-                <img
-                  class="product-page__product-list-thumb"
-                  src={
-                    row.singleTemplateOptionalProductListItemImage.node
-                      .sourceUrl
-                  }
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                />
+              {plNode?.sourceUrl && (
+                <figure class="product-page__product-list-figure">
+                  <img
+                    class="product-page__product-list-thumb"
+                    src={wpPreferredThumbSrc(plNode)}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  {plNode.title?.trim() && (
+                    <figcaption class="product-page__image-caption">
+                      {plNode.title.trim()}
+                    </figcaption>
+                  )}
+                </figure>
               )}
               {row.singleTemplateOptionalProductListItemTable?.trim() && (
                 <div
@@ -152,7 +267,8 @@ const hasAnything =
                 />
               )}
             </li>
-          ))}
+            );
+          })}
         </ul>
       )}
     </section>

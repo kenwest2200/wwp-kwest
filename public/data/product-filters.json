@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T10:53:09.350Z",
+  "generatedAt": "2026-04-15T11:49:29.070Z",
   "attributesByCategory": {
     "bath": [],
     "pool": [
@@ -91,14 +91,22 @@
       }
     ],
     "spa": [],
+    "pumps": [],
+    "jets": [],
     "air-components": [],
     "drains-suctions-bath": [],
-    "fittings-bath": [],
-    "jets": [],
     "manifolds": [],
-    "miscellaneous-accessories": [],
-    "pumps": [],
+    "fittings-bath": [],
     "unions": [],
+    "miscellaneous-accessories": [],
+    "pool-pumps-in-ground": [],
+    "hose-tubing-pool": [],
+    "pool-filters-in-ground-above-ground": [],
+    "pool-control-system": [],
+    "international": [],
+    "drains-suctions": [],
+    "pool-valves": [],
+    "fittings": [],
     "air-systems": [
       {
         "name": "Amps",
@@ -187,38 +195,30 @@
         ]
       }
     ],
-    "pool-chlorinators-accessories": [],
-    "pool-control-system": [],
-    "drains-suctions": [],
-    "pool-ells-tees-wyes": [],
-    "pool-filters-in-ground-above-ground": [],
-    "fittings": [],
-    "gunite-jets": [],
-    "hose-tubing-pool": [],
-    "international": [],
-    "pool-miscellaneous-accessories": [],
-    "pool-pumps-in-ground": [],
     "pool-skimmers-skim-filters": [],
+    "pool-chlorinators-accessories": [],
     "pool-unions": [],
-    "pool-valves": [],
-    "air-controls": [],
-    "air-systems-spa": [],
-    "spa-control-system": [],
-    "spa-drains-suctions": [],
-    "spa-ells-tees-wyes": [],
-    "fittings-spa": [],
+    "pool-ells-tees-wyes": [],
+    "gunite-jets": [],
+    "pool-miscellaneous-accessories": [],
+    "spa-pumps-spa": [],
     "hose-and-tubing": [],
     "spa-jets": [],
-    "lighting": [],
+    "spa-control-system": [],
+    "spa-drains-suctions": [],
     "spa-manifolds": [],
-    "spa-miscellaneous-accessories": [],
-    "spa-pumps-spa": [],
-    "spa-skimmers-and-filters": [],
-    "speakers": [],
-    "spa-unions": [],
+    "wet-ends-bases": [],
     "top-side-valves": [],
+    "air-controls": [],
+    "fittings-spa": [],
     "water-features": [],
-    "wet-ends-bases": []
+    "air-systems-spa": [],
+    "lighting": [],
+    "spa-skimmers-and-filters": [],
+    "spa-unions": [],
+    "spa-ells-tees-wyes": [],
+    "spa-miscellaneous-accessories": [],
+    "speakers": []
   },
   "rootCategories": [
     {
@@ -240,6 +240,30 @@
   "mergedSubcategoryGroupsBySelection": {
     "bath": [
       {
+        "groupSlug": "pumps",
+        "groupName": "Pumps",
+        "subcategories": [
+          {
+            "databaseId": 376,
+            "slug": "pumps",
+            "name": "Pumps",
+            "uri": "/product_category/pumps/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "jets",
+        "groupName": "Jets",
+        "subcategories": [
+          {
+            "databaseId": 373,
+            "slug": "jets",
+            "name": "Jets",
+            "uri": "/product_category/jets/"
+          }
+        ]
+      },
+      {
         "groupSlug": "air-components",
         "groupName": "Air Components",
         "subcategories": [
@@ -264,30 +288,6 @@
         ]
       },
       {
-        "groupSlug": "fittings",
-        "groupName": "Fittings",
-        "subcategories": [
-          {
-            "databaseId": 372,
-            "slug": "fittings-bath",
-            "name": "Fittings",
-            "uri": "/product_category/fittings-bath/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "jets",
-        "groupName": "Jets",
-        "subcategories": [
-          {
-            "databaseId": 373,
-            "slug": "jets",
-            "name": "Jets",
-            "uri": "/product_category/jets/"
-          }
-        ]
-      },
-      {
         "groupSlug": "manifolds",
         "groupName": "Manifolds",
         "subcategories": [
@@ -300,26 +300,14 @@
         ]
       },
       {
-        "groupSlug": "miscellaneous-accessories",
-        "groupName": "Miscellaneous / Accessories",
+        "groupSlug": "fittings",
+        "groupName": "Fittings",
         "subcategories": [
           {
-            "databaseId": 375,
-            "slug": "miscellaneous-accessories",
-            "name": "Miscellaneous / Accessories",
-            "uri": "/product_category/miscellaneous-accessories/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "pumps",
-        "groupName": "Pumps",
-        "subcategories": [
-          {
-            "databaseId": 376,
-            "slug": "pumps",
-            "name": "Pumps",
-            "uri": "/product_category/pumps/"
+            "databaseId": 372,
+            "slug": "fittings-bath",
+            "name": "Fittings",
+            "uri": "/product_category/fittings-bath/"
           }
         ]
       },
@@ -332,104 +320,32 @@
             "slug": "unions",
             "name": "Unions",
             "uri": "/product_category/unions/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "miscellaneous-accessories",
+        "groupName": "Miscellaneous / Accessories",
+        "subcategories": [
+          {
+            "databaseId": 375,
+            "slug": "miscellaneous-accessories",
+            "name": "Miscellaneous / Accessories",
+            "uri": "/product_category/miscellaneous-accessories/"
           }
         ]
       }
     ],
     "pool": [
       {
-        "groupSlug": "air-systems",
-        "groupName": "Air Systems",
+        "groupSlug": "pumps",
+        "groupName": "Pumps",
         "subcategories": [
           {
-            "databaseId": 310,
-            "slug": "air-systems",
-            "name": "Air Systems",
-            "uri": "/product_category/air-systems/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "chlorinators-accessories",
-        "groupName": "Chlorinators & Accessories",
-        "subcategories": [
-          {
-            "databaseId": 318,
-            "slug": "pool-chlorinators-accessories",
-            "name": "Chlorinators & Accessories",
-            "uri": "/product_category/pool-chlorinators-accessories/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "control-systems",
-        "groupName": "Control Systems",
-        "subcategories": [
-          {
-            "databaseId": 319,
-            "slug": "pool-control-system",
-            "name": "Control Systems",
-            "uri": "/product_category/pool-control-system/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "drains-suctions",
-        "groupName": "Drains & Suctions",
-        "subcategories": [
-          {
-            "databaseId": 312,
-            "slug": "drains-suctions",
-            "name": "Drains & Suctions",
-            "uri": "/product_category/drains-suctions/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "ells-tees-wyes",
-        "groupName": "Ells / Tees / Wyes",
-        "subcategories": [
-          {
-            "databaseId": 316,
-            "slug": "pool-ells-tees-wyes",
-            "name": "Ells / Tees / Wyes",
-            "uri": "/product_category/pool-ells-tees-wyes/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "filters-filter-systems",
-        "groupName": "Filters & Filter Systems",
-        "subcategories": [
-          {
-            "databaseId": 323,
-            "slug": "pool-filters-in-ground-above-ground",
-            "name": "Filters & Filter Systems",
-            "uri": "/product_category/pool-filters-in-ground-above-ground/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "fittings",
-        "groupName": "Fittings",
-        "subcategories": [
-          {
-            "databaseId": 314,
-            "slug": "fittings",
-            "name": "Fittings",
-            "uri": "/product_category/fittings/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "gunite-jets",
-        "groupName": "Gunite Jets",
-        "subcategories": [
-          {
-            "databaseId": 315,
-            "slug": "gunite-jets",
-            "name": "Gunite Jets",
-            "uri": "/product_category/gunite-jets/"
+            "databaseId": 327,
+            "slug": "pool-pumps-in-ground",
+            "name": "Pumps",
+            "uri": "/product_category/pool-pumps-in-ground/"
           }
         ]
       },
@@ -446,6 +362,30 @@
         ]
       },
       {
+        "groupSlug": "filters-filter-systems",
+        "groupName": "Filters & Filter Systems",
+        "subcategories": [
+          {
+            "databaseId": 323,
+            "slug": "pool-filters-in-ground-above-ground",
+            "name": "Filters & Filter Systems",
+            "uri": "/product_category/pool-filters-in-ground-above-ground/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "control-systems",
+        "groupName": "Control Systems",
+        "subcategories": [
+          {
+            "databaseId": 319,
+            "slug": "pool-control-system",
+            "name": "Control Systems",
+            "uri": "/product_category/pool-control-system/"
+          }
+        ]
+      },
+      {
         "groupSlug": "international-csa",
         "groupName": "International & CSA",
         "subcategories": [
@@ -458,26 +398,50 @@
         ]
       },
       {
-        "groupSlug": "miscellaneous-accessories",
-        "groupName": "Miscellaneous / Accessories",
+        "groupSlug": "drains-suctions",
+        "groupName": "Drains & Suctions",
         "subcategories": [
           {
-            "databaseId": 324,
-            "slug": "pool-miscellaneous-accessories",
-            "name": "Miscellaneous / Accessories",
-            "uri": "/product_category/pool-miscellaneous-accessories/"
+            "databaseId": 312,
+            "slug": "drains-suctions",
+            "name": "Drains & Suctions",
+            "uri": "/product_category/drains-suctions/"
           }
         ]
       },
       {
-        "groupSlug": "pumps",
-        "groupName": "Pumps",
+        "groupSlug": "valves",
+        "groupName": "Valves",
         "subcategories": [
           {
-            "databaseId": 327,
-            "slug": "pool-pumps-in-ground",
-            "name": "Pumps",
-            "uri": "/product_category/pool-pumps-in-ground/"
+            "databaseId": 329,
+            "slug": "pool-valves",
+            "name": "Valves",
+            "uri": "/product_category/pool-valves/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "fittings",
+        "groupName": "Fittings",
+        "subcategories": [
+          {
+            "databaseId": 314,
+            "slug": "fittings",
+            "name": "Fittings",
+            "uri": "/product_category/fittings/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "air-systems",
+        "groupName": "Air Systems",
+        "subcategories": [
+          {
+            "databaseId": 310,
+            "slug": "air-systems",
+            "name": "Air Systems",
+            "uri": "/product_category/air-systems/"
           }
         ]
       },
@@ -494,6 +458,18 @@
         ]
       },
       {
+        "groupSlug": "chlorinators-accessories",
+        "groupName": "Chlorinators & Accessories",
+        "subcategories": [
+          {
+            "databaseId": 318,
+            "slug": "pool-chlorinators-accessories",
+            "name": "Chlorinators & Accessories",
+            "uri": "/product_category/pool-chlorinators-accessories/"
+          }
+        ]
+      },
+      {
         "groupSlug": "unions",
         "groupName": "Unions",
         "subcategories": [
@@ -506,52 +482,94 @@
         ]
       },
       {
-        "groupSlug": "valves",
-        "groupName": "Valves",
+        "groupSlug": "ells-tees-wyes",
+        "groupName": "Ells / Tees / Wyes",
         "subcategories": [
           {
-            "databaseId": 329,
-            "slug": "pool-valves",
-            "name": "Valves",
-            "uri": "/product_category/pool-valves/"
+            "databaseId": 316,
+            "slug": "pool-ells-tees-wyes",
+            "name": "Ells / Tees / Wyes",
+            "uri": "/product_category/pool-ells-tees-wyes/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "gunite-jets",
+        "groupName": "Gunite Jets",
+        "subcategories": [
+          {
+            "databaseId": 315,
+            "slug": "gunite-jets",
+            "name": "Gunite Jets",
+            "uri": "/product_category/gunite-jets/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "miscellaneous-accessories",
+        "groupName": "Miscellaneous / Accessories",
+        "subcategories": [
+          {
+            "databaseId": 324,
+            "slug": "pool-miscellaneous-accessories",
+            "name": "Miscellaneous / Accessories",
+            "uri": "/product_category/pool-miscellaneous-accessories/"
           }
         ]
       }
     ],
     "bath,pool": [
       {
-        "groupSlug": "air-components",
-        "groupName": "Air Components",
+        "groupSlug": "pumps",
+        "groupName": "Pumps",
         "subcategories": [
           {
-            "databaseId": 369,
-            "slug": "air-components",
-            "name": "Air Components",
-            "uri": "/product_category/air-components/"
+            "databaseId": 376,
+            "slug": "pumps",
+            "name": "Pumps",
+            "uri": "/product_category/pumps/"
+          },
+          {
+            "databaseId": 327,
+            "slug": "pool-pumps-in-ground",
+            "name": "Pumps",
+            "uri": "/product_category/pool-pumps-in-ground/"
           }
         ]
       },
       {
-        "groupSlug": "air-systems",
-        "groupName": "Air Systems",
+        "groupSlug": "hose-tubing",
+        "groupName": "Hose & Tubing",
         "subcategories": [
           {
-            "databaseId": 310,
-            "slug": "air-systems",
-            "name": "Air Systems",
-            "uri": "/product_category/air-systems/"
+            "databaseId": 355,
+            "slug": "hose-tubing-pool",
+            "name": "Hose & Tubing",
+            "uri": "/product_category/hose-tubing-pool/"
           }
         ]
       },
       {
-        "groupSlug": "chlorinators-accessories",
-        "groupName": "Chlorinators & Accessories",
+        "groupSlug": "filters-filter-systems",
+        "groupName": "Filters & Filter Systems",
         "subcategories": [
           {
-            "databaseId": 318,
-            "slug": "pool-chlorinators-accessories",
-            "name": "Chlorinators & Accessories",
-            "uri": "/product_category/pool-chlorinators-accessories/"
+            "databaseId": 323,
+            "slug": "pool-filters-in-ground-above-ground",
+            "name": "Filters & Filter Systems",
+            "uri": "/product_category/pool-filters-in-ground-above-ground/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "jets",
+        "groupName": "Jets",
+        "subcategories": [
+          {
+            "databaseId": 373,
+            "slug": "jets",
+            "name": "Jets",
+            "uri": "/product_category/jets/"
           }
         ]
       },
@@ -564,6 +582,30 @@
             "slug": "pool-control-system",
             "name": "Control Systems",
             "uri": "/product_category/pool-control-system/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "air-components",
+        "groupName": "Air Components",
+        "subcategories": [
+          {
+            "databaseId": 369,
+            "slug": "air-components",
+            "name": "Air Components",
+            "uri": "/product_category/air-components/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "international-csa",
+        "groupName": "International & CSA",
+        "subcategories": [
+          {
+            "databaseId": 365,
+            "slug": "international",
+            "name": "International & CSA",
+            "uri": "/product_category/international/"
           }
         ]
       },
@@ -586,26 +628,26 @@
         ]
       },
       {
-        "groupSlug": "ells-tees-wyes",
-        "groupName": "Ells / Tees / Wyes",
+        "groupSlug": "manifolds",
+        "groupName": "Manifolds",
         "subcategories": [
           {
-            "databaseId": 316,
-            "slug": "pool-ells-tees-wyes",
-            "name": "Ells / Tees / Wyes",
-            "uri": "/product_category/pool-ells-tees-wyes/"
+            "databaseId": 374,
+            "slug": "manifolds",
+            "name": "Manifolds",
+            "uri": "/product_category/manifolds/"
           }
         ]
       },
       {
-        "groupSlug": "filters-filter-systems",
-        "groupName": "Filters & Filter Systems",
+        "groupSlug": "valves",
+        "groupName": "Valves",
         "subcategories": [
           {
-            "databaseId": 323,
-            "slug": "pool-filters-in-ground-above-ground",
-            "name": "Filters & Filter Systems",
-            "uri": "/product_category/pool-filters-in-ground-above-ground/"
+            "databaseId": 329,
+            "slug": "pool-valves",
+            "name": "Valves",
+            "uri": "/product_category/pool-valves/"
           }
         ]
       },
@@ -628,98 +670,14 @@
         ]
       },
       {
-        "groupSlug": "gunite-jets",
-        "groupName": "Gunite Jets",
+        "groupSlug": "air-systems",
+        "groupName": "Air Systems",
         "subcategories": [
           {
-            "databaseId": 315,
-            "slug": "gunite-jets",
-            "name": "Gunite Jets",
-            "uri": "/product_category/gunite-jets/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "hose-tubing",
-        "groupName": "Hose & Tubing",
-        "subcategories": [
-          {
-            "databaseId": 355,
-            "slug": "hose-tubing-pool",
-            "name": "Hose & Tubing",
-            "uri": "/product_category/hose-tubing-pool/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "international-csa",
-        "groupName": "International & CSA",
-        "subcategories": [
-          {
-            "databaseId": 365,
-            "slug": "international",
-            "name": "International & CSA",
-            "uri": "/product_category/international/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "jets",
-        "groupName": "Jets",
-        "subcategories": [
-          {
-            "databaseId": 373,
-            "slug": "jets",
-            "name": "Jets",
-            "uri": "/product_category/jets/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "manifolds",
-        "groupName": "Manifolds",
-        "subcategories": [
-          {
-            "databaseId": 374,
-            "slug": "manifolds",
-            "name": "Manifolds",
-            "uri": "/product_category/manifolds/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "miscellaneous-accessories",
-        "groupName": "Miscellaneous / Accessories",
-        "subcategories": [
-          {
-            "databaseId": 375,
-            "slug": "miscellaneous-accessories",
-            "name": "Miscellaneous / Accessories",
-            "uri": "/product_category/miscellaneous-accessories/"
-          },
-          {
-            "databaseId": 324,
-            "slug": "pool-miscellaneous-accessories",
-            "name": "Miscellaneous / Accessories",
-            "uri": "/product_category/pool-miscellaneous-accessories/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "pumps",
-        "groupName": "Pumps",
-        "subcategories": [
-          {
-            "databaseId": 376,
-            "slug": "pumps",
-            "name": "Pumps",
-            "uri": "/product_category/pumps/"
-          },
-          {
-            "databaseId": 327,
-            "slug": "pool-pumps-in-ground",
-            "name": "Pumps",
-            "uri": "/product_category/pool-pumps-in-ground/"
+            "databaseId": 310,
+            "slug": "air-systems",
+            "name": "Air Systems",
+            "uri": "/product_category/air-systems/"
           }
         ]
       },
@@ -732,6 +690,18 @@
             "slug": "pool-skimmers-skim-filters",
             "name": "Skimmers / Skim Filters",
             "uri": "/product_category/pool-skimmers-skim-filters/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "chlorinators-accessories",
+        "groupName": "Chlorinators & Accessories",
+        "subcategories": [
+          {
+            "databaseId": 318,
+            "slug": "pool-chlorinators-accessories",
+            "name": "Chlorinators & Accessories",
+            "uri": "/product_category/pool-chlorinators-accessories/"
           }
         ]
       },
@@ -754,88 +724,58 @@
         ]
       },
       {
-        "groupSlug": "valves",
-        "groupName": "Valves",
+        "groupSlug": "ells-tees-wyes",
+        "groupName": "Ells / Tees / Wyes",
         "subcategories": [
           {
-            "databaseId": 329,
-            "slug": "pool-valves",
-            "name": "Valves",
-            "uri": "/product_category/pool-valves/"
+            "databaseId": 316,
+            "slug": "pool-ells-tees-wyes",
+            "name": "Ells / Tees / Wyes",
+            "uri": "/product_category/pool-ells-tees-wyes/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "gunite-jets",
+        "groupName": "Gunite Jets",
+        "subcategories": [
+          {
+            "databaseId": 315,
+            "slug": "gunite-jets",
+            "name": "Gunite Jets",
+            "uri": "/product_category/gunite-jets/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "miscellaneous-accessories",
+        "groupName": "Miscellaneous / Accessories",
+        "subcategories": [
+          {
+            "databaseId": 375,
+            "slug": "miscellaneous-accessories",
+            "name": "Miscellaneous / Accessories",
+            "uri": "/product_category/miscellaneous-accessories/"
+          },
+          {
+            "databaseId": 324,
+            "slug": "pool-miscellaneous-accessories",
+            "name": "Miscellaneous / Accessories",
+            "uri": "/product_category/pool-miscellaneous-accessories/"
           }
         ]
       }
     ],
     "spa": [
       {
-        "groupSlug": "air-controls",
-        "groupName": "Air Controls",
+        "groupSlug": "pumps",
+        "groupName": "Pumps",
         "subcategories": [
           {
-            "databaseId": 332,
-            "slug": "air-controls",
-            "name": "Air Controls",
-            "uri": "/product_category/air-controls/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "air-systems",
-        "groupName": "Air Systems",
-        "subcategories": [
-          {
-            "databaseId": 333,
-            "slug": "air-systems-spa",
-            "name": "Air Systems",
-            "uri": "/product_category/air-systems-spa/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "control-systems",
-        "groupName": "Control Systems",
-        "subcategories": [
-          {
-            "databaseId": 339,
-            "slug": "spa-control-system",
-            "name": "Control Systems",
-            "uri": "/product_category/spa-control-system/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "drains-suctions",
-        "groupName": "Drains & Suctions",
-        "subcategories": [
-          {
-            "databaseId": 340,
-            "slug": "spa-drains-suctions",
-            "name": "Drains & Suctions",
-            "uri": "/product_category/spa-drains-suctions/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "ells-tees-wyes",
-        "groupName": "Ells / Tees / Wyes",
-        "subcategories": [
-          {
-            "databaseId": 337,
-            "slug": "spa-ells-tees-wyes",
-            "name": "Ells / Tees / Wyes",
-            "uri": "/product_category/spa-ells-tees-wyes/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "fittings",
-        "groupName": "Fittings",
-        "subcategories": [
-          {
-            "databaseId": 371,
-            "slug": "fittings-spa",
-            "name": "Fittings",
-            "uri": "/product_category/fittings-spa/"
+            "databaseId": 344,
+            "slug": "spa-pumps-spa",
+            "name": "Pumps",
+            "uri": "/product_category/spa-pumps-spa/"
           }
         ]
       },
@@ -864,14 +804,26 @@
         ]
       },
       {
-        "groupSlug": "lighting",
-        "groupName": "Lighting",
+        "groupSlug": "control-systems",
+        "groupName": "Control Systems",
         "subcategories": [
           {
-            "databaseId": 335,
-            "slug": "lighting",
-            "name": "Lighting",
-            "uri": "/product_category/lighting/"
+            "databaseId": 339,
+            "slug": "spa-control-system",
+            "name": "Control Systems",
+            "uri": "/product_category/spa-control-system/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "drains-suctions",
+        "groupName": "Drains & Suctions",
+        "subcategories": [
+          {
+            "databaseId": 340,
+            "slug": "spa-drains-suctions",
+            "name": "Drains & Suctions",
+            "uri": "/product_category/spa-drains-suctions/"
           }
         ]
       },
@@ -888,62 +840,14 @@
         ]
       },
       {
-        "groupSlug": "miscellaneous-accessories",
-        "groupName": "Miscellaneous / Accessories",
+        "groupSlug": "wet-ends-accessories",
+        "groupName": "Wet Ends & Accessories",
         "subcategories": [
           {
-            "databaseId": 343,
-            "slug": "spa-miscellaneous-accessories",
-            "name": "Miscellaneous / Accessories",
-            "uri": "/product_category/spa-miscellaneous-accessories/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "pumps",
-        "groupName": "Pumps",
-        "subcategories": [
-          {
-            "databaseId": 344,
-            "slug": "spa-pumps-spa",
-            "name": "Pumps",
-            "uri": "/product_category/spa-pumps-spa/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "skimmers-skim-filters",
-        "groupName": "Skimmers / Skim Filters",
-        "subcategories": [
-          {
-            "databaseId": 345,
-            "slug": "spa-skimmers-and-filters",
-            "name": "Skimmers / Skim Filters",
-            "uri": "/product_category/spa-skimmers-and-filters/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "speakers",
-        "groupName": "Speakers",
-        "subcategories": [
-          {
-            "databaseId": 346,
-            "slug": "speakers",
-            "name": "Speakers",
-            "uri": "/product_category/speakers/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "unions",
-        "groupName": "Unions",
-        "subcategories": [
-          {
-            "databaseId": 338,
-            "slug": "spa-unions",
-            "name": "Unions",
-            "uri": "/product_category/spa-unions/"
+            "databaseId": 349,
+            "slug": "wet-ends-bases",
+            "name": "Wet Ends & Accessories",
+            "uri": "/product_category/wet-ends-bases/"
           }
         ]
       },
@@ -960,6 +864,30 @@
         ]
       },
       {
+        "groupSlug": "air-controls",
+        "groupName": "Air Controls",
+        "subcategories": [
+          {
+            "databaseId": 332,
+            "slug": "air-controls",
+            "name": "Air Controls",
+            "uri": "/product_category/air-controls/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "fittings",
+        "groupName": "Fittings",
+        "subcategories": [
+          {
+            "databaseId": 371,
+            "slug": "fittings-spa",
+            "name": "Fittings",
+            "uri": "/product_category/fittings-spa/"
+          }
+        ]
+      },
+      {
         "groupSlug": "water-features",
         "groupName": "Water Features",
         "subcategories": [
@@ -972,112 +900,106 @@
         ]
       },
       {
-        "groupSlug": "wet-ends-accessories",
-        "groupName": "Wet Ends & Accessories",
+        "groupSlug": "air-systems",
+        "groupName": "Air Systems",
         "subcategories": [
           {
-            "databaseId": 349,
-            "slug": "wet-ends-bases",
-            "name": "Wet Ends & Accessories",
-            "uri": "/product_category/wet-ends-bases/"
+            "databaseId": 333,
+            "slug": "air-systems-spa",
+            "name": "Air Systems",
+            "uri": "/product_category/air-systems-spa/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "lighting",
+        "groupName": "Lighting",
+        "subcategories": [
+          {
+            "databaseId": 335,
+            "slug": "lighting",
+            "name": "Lighting",
+            "uri": "/product_category/lighting/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "skimmers-skim-filters",
+        "groupName": "Skimmers / Skim Filters",
+        "subcategories": [
+          {
+            "databaseId": 345,
+            "slug": "spa-skimmers-and-filters",
+            "name": "Skimmers / Skim Filters",
+            "uri": "/product_category/spa-skimmers-and-filters/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "unions",
+        "groupName": "Unions",
+        "subcategories": [
+          {
+            "databaseId": 338,
+            "slug": "spa-unions",
+            "name": "Unions",
+            "uri": "/product_category/spa-unions/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "ells-tees-wyes",
+        "groupName": "Ells / Tees / Wyes",
+        "subcategories": [
+          {
+            "databaseId": 337,
+            "slug": "spa-ells-tees-wyes",
+            "name": "Ells / Tees / Wyes",
+            "uri": "/product_category/spa-ells-tees-wyes/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "miscellaneous-accessories",
+        "groupName": "Miscellaneous / Accessories",
+        "subcategories": [
+          {
+            "databaseId": 343,
+            "slug": "spa-miscellaneous-accessories",
+            "name": "Miscellaneous / Accessories",
+            "uri": "/product_category/spa-miscellaneous-accessories/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "speakers",
+        "groupName": "Speakers",
+        "subcategories": [
+          {
+            "databaseId": 346,
+            "slug": "speakers",
+            "name": "Speakers",
+            "uri": "/product_category/speakers/"
           }
         ]
       }
     ],
     "bath,spa": [
       {
-        "groupSlug": "air-components",
-        "groupName": "Air Components",
+        "groupSlug": "pumps",
+        "groupName": "Pumps",
         "subcategories": [
           {
-            "databaseId": 369,
-            "slug": "air-components",
-            "name": "Air Components",
-            "uri": "/product_category/air-components/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "air-controls",
-        "groupName": "Air Controls",
-        "subcategories": [
-          {
-            "databaseId": 332,
-            "slug": "air-controls",
-            "name": "Air Controls",
-            "uri": "/product_category/air-controls/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "air-systems",
-        "groupName": "Air Systems",
-        "subcategories": [
-          {
-            "databaseId": 333,
-            "slug": "air-systems-spa",
-            "name": "Air Systems",
-            "uri": "/product_category/air-systems-spa/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "control-systems",
-        "groupName": "Control Systems",
-        "subcategories": [
-          {
-            "databaseId": 339,
-            "slug": "spa-control-system",
-            "name": "Control Systems",
-            "uri": "/product_category/spa-control-system/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "drains-suctions",
-        "groupName": "Drains & Suctions",
-        "subcategories": [
-          {
-            "databaseId": 370,
-            "slug": "drains-suctions-bath",
-            "name": "Drains & Suctions",
-            "uri": "/product_category/drains-suctions-bath/"
+            "databaseId": 376,
+            "slug": "pumps",
+            "name": "Pumps",
+            "uri": "/product_category/pumps/"
           },
           {
-            "databaseId": 340,
-            "slug": "spa-drains-suctions",
-            "name": "Drains & Suctions",
-            "uri": "/product_category/spa-drains-suctions/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "ells-tees-wyes",
-        "groupName": "Ells / Tees / Wyes",
-        "subcategories": [
-          {
-            "databaseId": 337,
-            "slug": "spa-ells-tees-wyes",
-            "name": "Ells / Tees / Wyes",
-            "uri": "/product_category/spa-ells-tees-wyes/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "fittings",
-        "groupName": "Fittings",
-        "subcategories": [
-          {
-            "databaseId": 372,
-            "slug": "fittings-bath",
-            "name": "Fittings",
-            "uri": "/product_category/fittings-bath/"
-          },
-          {
-            "databaseId": 371,
-            "slug": "fittings-spa",
-            "name": "Fittings",
-            "uri": "/product_category/fittings-spa/"
+            "databaseId": 344,
+            "slug": "spa-pumps-spa",
+            "name": "Pumps",
+            "uri": "/product_category/spa-pumps-spa/"
           }
         ]
       },
@@ -1112,14 +1034,44 @@
         ]
       },
       {
-        "groupSlug": "lighting",
-        "groupName": "Lighting",
+        "groupSlug": "control-systems",
+        "groupName": "Control Systems",
         "subcategories": [
           {
-            "databaseId": 335,
-            "slug": "lighting",
-            "name": "Lighting",
-            "uri": "/product_category/lighting/"
+            "databaseId": 339,
+            "slug": "spa-control-system",
+            "name": "Control Systems",
+            "uri": "/product_category/spa-control-system/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "air-components",
+        "groupName": "Air Components",
+        "subcategories": [
+          {
+            "databaseId": 369,
+            "slug": "air-components",
+            "name": "Air Components",
+            "uri": "/product_category/air-components/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "drains-suctions",
+        "groupName": "Drains & Suctions",
+        "subcategories": [
+          {
+            "databaseId": 370,
+            "slug": "drains-suctions-bath",
+            "name": "Drains & Suctions",
+            "uri": "/product_category/drains-suctions-bath/"
+          },
+          {
+            "databaseId": 340,
+            "slug": "spa-drains-suctions",
+            "name": "Drains & Suctions",
+            "uri": "/product_category/spa-drains-suctions/"
           }
         ]
       },
@@ -1142,38 +1094,92 @@
         ]
       },
       {
-        "groupSlug": "miscellaneous-accessories",
-        "groupName": "Miscellaneous / Accessories",
+        "groupSlug": "wet-ends-accessories",
+        "groupName": "Wet Ends & Accessories",
         "subcategories": [
           {
-            "databaseId": 375,
-            "slug": "miscellaneous-accessories",
-            "name": "Miscellaneous / Accessories",
-            "uri": "/product_category/miscellaneous-accessories/"
-          },
-          {
-            "databaseId": 343,
-            "slug": "spa-miscellaneous-accessories",
-            "name": "Miscellaneous / Accessories",
-            "uri": "/product_category/spa-miscellaneous-accessories/"
+            "databaseId": 349,
+            "slug": "wet-ends-bases",
+            "name": "Wet Ends & Accessories",
+            "uri": "/product_category/wet-ends-bases/"
           }
         ]
       },
       {
-        "groupSlug": "pumps",
-        "groupName": "Pumps",
+        "groupSlug": "valves",
+        "groupName": "Valves",
         "subcategories": [
           {
-            "databaseId": 376,
-            "slug": "pumps",
-            "name": "Pumps",
-            "uri": "/product_category/pumps/"
+            "databaseId": 347,
+            "slug": "top-side-valves",
+            "name": "Valves",
+            "uri": "/product_category/top-side-valves/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "air-controls",
+        "groupName": "Air Controls",
+        "subcategories": [
+          {
+            "databaseId": 332,
+            "slug": "air-controls",
+            "name": "Air Controls",
+            "uri": "/product_category/air-controls/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "fittings",
+        "groupName": "Fittings",
+        "subcategories": [
+          {
+            "databaseId": 372,
+            "slug": "fittings-bath",
+            "name": "Fittings",
+            "uri": "/product_category/fittings-bath/"
           },
           {
-            "databaseId": 344,
-            "slug": "spa-pumps-spa",
-            "name": "Pumps",
-            "uri": "/product_category/spa-pumps-spa/"
+            "databaseId": 371,
+            "slug": "fittings-spa",
+            "name": "Fittings",
+            "uri": "/product_category/fittings-spa/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "water-features",
+        "groupName": "Water Features",
+        "subcategories": [
+          {
+            "databaseId": 348,
+            "slug": "water-features",
+            "name": "Water Features",
+            "uri": "/product_category/water-features/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "air-systems",
+        "groupName": "Air Systems",
+        "subcategories": [
+          {
+            "databaseId": 333,
+            "slug": "air-systems-spa",
+            "name": "Air Systems",
+            "uri": "/product_category/air-systems-spa/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "lighting",
+        "groupName": "Lighting",
+        "subcategories": [
+          {
+            "databaseId": 335,
+            "slug": "lighting",
+            "name": "Lighting",
+            "uri": "/product_category/lighting/"
           }
         ]
       },
@@ -1186,18 +1192,6 @@
             "slug": "spa-skimmers-and-filters",
             "name": "Skimmers / Skim Filters",
             "uri": "/product_category/spa-skimmers-and-filters/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "speakers",
-        "groupName": "Speakers",
-        "subcategories": [
-          {
-            "databaseId": 346,
-            "slug": "speakers",
-            "name": "Speakers",
-            "uri": "/product_category/speakers/"
           }
         ]
       },
@@ -1220,178 +1214,64 @@
         ]
       },
       {
-        "groupSlug": "valves",
-        "groupName": "Valves",
+        "groupSlug": "ells-tees-wyes",
+        "groupName": "Ells / Tees / Wyes",
         "subcategories": [
           {
-            "databaseId": 347,
-            "slug": "top-side-valves",
-            "name": "Valves",
-            "uri": "/product_category/top-side-valves/"
+            "databaseId": 337,
+            "slug": "spa-ells-tees-wyes",
+            "name": "Ells / Tees / Wyes",
+            "uri": "/product_category/spa-ells-tees-wyes/"
           }
         ]
       },
       {
-        "groupSlug": "water-features",
-        "groupName": "Water Features",
+        "groupSlug": "miscellaneous-accessories",
+        "groupName": "Miscellaneous / Accessories",
         "subcategories": [
           {
-            "databaseId": 348,
-            "slug": "water-features",
-            "name": "Water Features",
-            "uri": "/product_category/water-features/"
+            "databaseId": 375,
+            "slug": "miscellaneous-accessories",
+            "name": "Miscellaneous / Accessories",
+            "uri": "/product_category/miscellaneous-accessories/"
+          },
+          {
+            "databaseId": 343,
+            "slug": "spa-miscellaneous-accessories",
+            "name": "Miscellaneous / Accessories",
+            "uri": "/product_category/spa-miscellaneous-accessories/"
           }
         ]
       },
       {
-        "groupSlug": "wet-ends-accessories",
-        "groupName": "Wet Ends & Accessories",
+        "groupSlug": "speakers",
+        "groupName": "Speakers",
         "subcategories": [
           {
-            "databaseId": 349,
-            "slug": "wet-ends-bases",
-            "name": "Wet Ends & Accessories",
-            "uri": "/product_category/wet-ends-bases/"
+            "databaseId": 346,
+            "slug": "speakers",
+            "name": "Speakers",
+            "uri": "/product_category/speakers/"
           }
         ]
       }
     ],
     "pool,spa": [
       {
-        "groupSlug": "air-controls",
-        "groupName": "Air Controls",
+        "groupSlug": "pumps",
+        "groupName": "Pumps",
         "subcategories": [
           {
-            "databaseId": 332,
-            "slug": "air-controls",
-            "name": "Air Controls",
-            "uri": "/product_category/air-controls/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "air-systems",
-        "groupName": "Air Systems",
-        "subcategories": [
-          {
-            "databaseId": 310,
-            "slug": "air-systems",
-            "name": "Air Systems",
-            "uri": "/product_category/air-systems/"
+            "databaseId": 327,
+            "slug": "pool-pumps-in-ground",
+            "name": "Pumps",
+            "uri": "/product_category/pool-pumps-in-ground/"
           },
           {
-            "databaseId": 333,
-            "slug": "air-systems-spa",
-            "name": "Air Systems",
-            "uri": "/product_category/air-systems-spa/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "chlorinators-accessories",
-        "groupName": "Chlorinators & Accessories",
-        "subcategories": [
-          {
-            "databaseId": 318,
-            "slug": "pool-chlorinators-accessories",
-            "name": "Chlorinators & Accessories",
-            "uri": "/product_category/pool-chlorinators-accessories/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "control-systems",
-        "groupName": "Control Systems",
-        "subcategories": [
-          {
-            "databaseId": 319,
-            "slug": "pool-control-system",
-            "name": "Control Systems",
-            "uri": "/product_category/pool-control-system/"
-          },
-          {
-            "databaseId": 339,
-            "slug": "spa-control-system",
-            "name": "Control Systems",
-            "uri": "/product_category/spa-control-system/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "drains-suctions",
-        "groupName": "Drains & Suctions",
-        "subcategories": [
-          {
-            "databaseId": 312,
-            "slug": "drains-suctions",
-            "name": "Drains & Suctions",
-            "uri": "/product_category/drains-suctions/"
-          },
-          {
-            "databaseId": 340,
-            "slug": "spa-drains-suctions",
-            "name": "Drains & Suctions",
-            "uri": "/product_category/spa-drains-suctions/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "ells-tees-wyes",
-        "groupName": "Ells / Tees / Wyes",
-        "subcategories": [
-          {
-            "databaseId": 316,
-            "slug": "pool-ells-tees-wyes",
-            "name": "Ells / Tees / Wyes",
-            "uri": "/product_category/pool-ells-tees-wyes/"
-          },
-          {
-            "databaseId": 337,
-            "slug": "spa-ells-tees-wyes",
-            "name": "Ells / Tees / Wyes",
-            "uri": "/product_category/spa-ells-tees-wyes/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "filters-filter-systems",
-        "groupName": "Filters & Filter Systems",
-        "subcategories": [
-          {
-            "databaseId": 323,
-            "slug": "pool-filters-in-ground-above-ground",
-            "name": "Filters & Filter Systems",
-            "uri": "/product_category/pool-filters-in-ground-above-ground/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "fittings",
-        "groupName": "Fittings",
-        "subcategories": [
-          {
-            "databaseId": 314,
-            "slug": "fittings",
-            "name": "Fittings",
-            "uri": "/product_category/fittings/"
-          },
-          {
-            "databaseId": 371,
-            "slug": "fittings-spa",
-            "name": "Fittings",
-            "uri": "/product_category/fittings-spa/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "gunite-jets",
-        "groupName": "Gunite Jets",
-        "subcategories": [
-          {
-            "databaseId": 315,
-            "slug": "gunite-jets",
-            "name": "Gunite Jets",
-            "uri": "/product_category/gunite-jets/"
+            "databaseId": 344,
+            "slug": "spa-pumps-spa",
+            "name": "Pumps",
+            "uri": "/product_category/spa-pumps-spa/"
           }
         ]
       },
@@ -1414,14 +1294,14 @@
         ]
       },
       {
-        "groupSlug": "international-csa",
-        "groupName": "International & CSA",
+        "groupSlug": "filters-filter-systems",
+        "groupName": "Filters & Filter Systems",
         "subcategories": [
           {
-            "databaseId": 365,
-            "slug": "international",
-            "name": "International & CSA",
-            "uri": "/product_category/international/"
+            "databaseId": 323,
+            "slug": "pool-filters-in-ground-above-ground",
+            "name": "Filters & Filter Systems",
+            "uri": "/product_category/pool-filters-in-ground-above-ground/"
           }
         ]
       },
@@ -1438,14 +1318,50 @@
         ]
       },
       {
-        "groupSlug": "lighting",
-        "groupName": "Lighting",
+        "groupSlug": "control-systems",
+        "groupName": "Control Systems",
         "subcategories": [
           {
-            "databaseId": 335,
-            "slug": "lighting",
-            "name": "Lighting",
-            "uri": "/product_category/lighting/"
+            "databaseId": 319,
+            "slug": "pool-control-system",
+            "name": "Control Systems",
+            "uri": "/product_category/pool-control-system/"
+          },
+          {
+            "databaseId": 339,
+            "slug": "spa-control-system",
+            "name": "Control Systems",
+            "uri": "/product_category/spa-control-system/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "international-csa",
+        "groupName": "International & CSA",
+        "subcategories": [
+          {
+            "databaseId": 365,
+            "slug": "international",
+            "name": "International & CSA",
+            "uri": "/product_category/international/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "drains-suctions",
+        "groupName": "Drains & Suctions",
+        "subcategories": [
+          {
+            "databaseId": 312,
+            "slug": "drains-suctions",
+            "name": "Drains & Suctions",
+            "uri": "/product_category/drains-suctions/"
+          },
+          {
+            "databaseId": 340,
+            "slug": "spa-drains-suctions",
+            "name": "Drains & Suctions",
+            "uri": "/product_category/spa-drains-suctions/"
           }
         ]
       },
@@ -1462,86 +1378,14 @@
         ]
       },
       {
-        "groupSlug": "miscellaneous-accessories",
-        "groupName": "Miscellaneous / Accessories",
+        "groupSlug": "wet-ends-accessories",
+        "groupName": "Wet Ends & Accessories",
         "subcategories": [
           {
-            "databaseId": 324,
-            "slug": "pool-miscellaneous-accessories",
-            "name": "Miscellaneous / Accessories",
-            "uri": "/product_category/pool-miscellaneous-accessories/"
-          },
-          {
-            "databaseId": 343,
-            "slug": "spa-miscellaneous-accessories",
-            "name": "Miscellaneous / Accessories",
-            "uri": "/product_category/spa-miscellaneous-accessories/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "pumps",
-        "groupName": "Pumps",
-        "subcategories": [
-          {
-            "databaseId": 327,
-            "slug": "pool-pumps-in-ground",
-            "name": "Pumps",
-            "uri": "/product_category/pool-pumps-in-ground/"
-          },
-          {
-            "databaseId": 344,
-            "slug": "spa-pumps-spa",
-            "name": "Pumps",
-            "uri": "/product_category/spa-pumps-spa/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "skimmers-skim-filters",
-        "groupName": "Skimmers / Skim Filters",
-        "subcategories": [
-          {
-            "databaseId": 328,
-            "slug": "pool-skimmers-skim-filters",
-            "name": "Skimmers / Skim Filters",
-            "uri": "/product_category/pool-skimmers-skim-filters/"
-          },
-          {
-            "databaseId": 345,
-            "slug": "spa-skimmers-and-filters",
-            "name": "Skimmers / Skim Filters",
-            "uri": "/product_category/spa-skimmers-and-filters/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "speakers",
-        "groupName": "Speakers",
-        "subcategories": [
-          {
-            "databaseId": 346,
-            "slug": "speakers",
-            "name": "Speakers",
-            "uri": "/product_category/speakers/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "unions",
-        "groupName": "Unions",
-        "subcategories": [
-          {
-            "databaseId": 317,
-            "slug": "pool-unions",
-            "name": "Unions",
-            "uri": "/product_category/pool-unions/"
-          },
-          {
-            "databaseId": 338,
-            "slug": "spa-unions",
-            "name": "Unions",
-            "uri": "/product_category/spa-unions/"
+            "databaseId": 349,
+            "slug": "wet-ends-bases",
+            "name": "Wet Ends & Accessories",
+            "uri": "/product_category/wet-ends-bases/"
           }
         ]
       },
@@ -1564,44 +1408,6 @@
         ]
       },
       {
-        "groupSlug": "water-features",
-        "groupName": "Water Features",
-        "subcategories": [
-          {
-            "databaseId": 348,
-            "slug": "water-features",
-            "name": "Water Features",
-            "uri": "/product_category/water-features/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "wet-ends-accessories",
-        "groupName": "Wet Ends & Accessories",
-        "subcategories": [
-          {
-            "databaseId": 349,
-            "slug": "wet-ends-bases",
-            "name": "Wet Ends & Accessories",
-            "uri": "/product_category/wet-ends-bases/"
-          }
-        ]
-      }
-    ],
-    "bath,pool,spa": [
-      {
-        "groupSlug": "air-components",
-        "groupName": "Air Components",
-        "subcategories": [
-          {
-            "databaseId": 369,
-            "slug": "air-components",
-            "name": "Air Components",
-            "uri": "/product_category/air-components/"
-          }
-        ]
-      },
-      {
         "groupSlug": "air-controls",
         "groupName": "Air Controls",
         "subcategories": [
@@ -1610,6 +1416,36 @@
             "slug": "air-controls",
             "name": "Air Controls",
             "uri": "/product_category/air-controls/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "fittings",
+        "groupName": "Fittings",
+        "subcategories": [
+          {
+            "databaseId": 314,
+            "slug": "fittings",
+            "name": "Fittings",
+            "uri": "/product_category/fittings/"
+          },
+          {
+            "databaseId": 371,
+            "slug": "fittings-spa",
+            "name": "Fittings",
+            "uri": "/product_category/fittings-spa/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "water-features",
+        "groupName": "Water Features",
+        "subcategories": [
+          {
+            "databaseId": 348,
+            "slug": "water-features",
+            "name": "Water Features",
+            "uri": "/product_category/water-features/"
           }
         ]
       },
@@ -1632,6 +1468,36 @@
         ]
       },
       {
+        "groupSlug": "lighting",
+        "groupName": "Lighting",
+        "subcategories": [
+          {
+            "databaseId": 335,
+            "slug": "lighting",
+            "name": "Lighting",
+            "uri": "/product_category/lighting/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "skimmers-skim-filters",
+        "groupName": "Skimmers / Skim Filters",
+        "subcategories": [
+          {
+            "databaseId": 328,
+            "slug": "pool-skimmers-skim-filters",
+            "name": "Skimmers / Skim Filters",
+            "uri": "/product_category/pool-skimmers-skim-filters/"
+          },
+          {
+            "databaseId": 345,
+            "slug": "spa-skimmers-and-filters",
+            "name": "Skimmers / Skim Filters",
+            "uri": "/product_category/spa-skimmers-and-filters/"
+          }
+        ]
+      },
+      {
         "groupSlug": "chlorinators-accessories",
         "groupName": "Chlorinators & Accessories",
         "subcategories": [
@@ -1640,6 +1506,158 @@
             "slug": "pool-chlorinators-accessories",
             "name": "Chlorinators & Accessories",
             "uri": "/product_category/pool-chlorinators-accessories/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "unions",
+        "groupName": "Unions",
+        "subcategories": [
+          {
+            "databaseId": 317,
+            "slug": "pool-unions",
+            "name": "Unions",
+            "uri": "/product_category/pool-unions/"
+          },
+          {
+            "databaseId": 338,
+            "slug": "spa-unions",
+            "name": "Unions",
+            "uri": "/product_category/spa-unions/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "ells-tees-wyes",
+        "groupName": "Ells / Tees / Wyes",
+        "subcategories": [
+          {
+            "databaseId": 316,
+            "slug": "pool-ells-tees-wyes",
+            "name": "Ells / Tees / Wyes",
+            "uri": "/product_category/pool-ells-tees-wyes/"
+          },
+          {
+            "databaseId": 337,
+            "slug": "spa-ells-tees-wyes",
+            "name": "Ells / Tees / Wyes",
+            "uri": "/product_category/spa-ells-tees-wyes/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "gunite-jets",
+        "groupName": "Gunite Jets",
+        "subcategories": [
+          {
+            "databaseId": 315,
+            "slug": "gunite-jets",
+            "name": "Gunite Jets",
+            "uri": "/product_category/gunite-jets/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "miscellaneous-accessories",
+        "groupName": "Miscellaneous / Accessories",
+        "subcategories": [
+          {
+            "databaseId": 324,
+            "slug": "pool-miscellaneous-accessories",
+            "name": "Miscellaneous / Accessories",
+            "uri": "/product_category/pool-miscellaneous-accessories/"
+          },
+          {
+            "databaseId": 343,
+            "slug": "spa-miscellaneous-accessories",
+            "name": "Miscellaneous / Accessories",
+            "uri": "/product_category/spa-miscellaneous-accessories/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "speakers",
+        "groupName": "Speakers",
+        "subcategories": [
+          {
+            "databaseId": 346,
+            "slug": "speakers",
+            "name": "Speakers",
+            "uri": "/product_category/speakers/"
+          }
+        ]
+      }
+    ],
+    "bath,pool,spa": [
+      {
+        "groupSlug": "pumps",
+        "groupName": "Pumps",
+        "subcategories": [
+          {
+            "databaseId": 376,
+            "slug": "pumps",
+            "name": "Pumps",
+            "uri": "/product_category/pumps/"
+          },
+          {
+            "databaseId": 327,
+            "slug": "pool-pumps-in-ground",
+            "name": "Pumps",
+            "uri": "/product_category/pool-pumps-in-ground/"
+          },
+          {
+            "databaseId": 344,
+            "slug": "spa-pumps-spa",
+            "name": "Pumps",
+            "uri": "/product_category/spa-pumps-spa/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "hose-tubing",
+        "groupName": "Hose & Tubing",
+        "subcategories": [
+          {
+            "databaseId": 355,
+            "slug": "hose-tubing-pool",
+            "name": "Hose & Tubing",
+            "uri": "/product_category/hose-tubing-pool/"
+          },
+          {
+            "databaseId": 354,
+            "slug": "hose-and-tubing",
+            "name": "Hose & Tubing",
+            "uri": "/product_category/hose-and-tubing/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "filters-filter-systems",
+        "groupName": "Filters & Filter Systems",
+        "subcategories": [
+          {
+            "databaseId": 323,
+            "slug": "pool-filters-in-ground-above-ground",
+            "name": "Filters & Filter Systems",
+            "uri": "/product_category/pool-filters-in-ground-above-ground/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "jets",
+        "groupName": "Jets",
+        "subcategories": [
+          {
+            "databaseId": 373,
+            "slug": "jets",
+            "name": "Jets",
+            "uri": "/product_category/jets/"
+          },
+          {
+            "databaseId": 341,
+            "slug": "spa-jets",
+            "name": "Jets",
+            "uri": "/product_category/spa-jets/"
           }
         ]
       },
@@ -1658,6 +1676,30 @@
             "slug": "spa-control-system",
             "name": "Control Systems",
             "uri": "/product_category/spa-control-system/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "air-components",
+        "groupName": "Air Components",
+        "subcategories": [
+          {
+            "databaseId": 369,
+            "slug": "air-components",
+            "name": "Air Components",
+            "uri": "/product_category/air-components/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "international-csa",
+        "groupName": "International & CSA",
+        "subcategories": [
+          {
+            "databaseId": 365,
+            "slug": "international",
+            "name": "International & CSA",
+            "uri": "/product_category/international/"
           }
         ]
       },
@@ -1686,32 +1728,62 @@
         ]
       },
       {
-        "groupSlug": "ells-tees-wyes",
-        "groupName": "Ells / Tees / Wyes",
+        "groupSlug": "manifolds",
+        "groupName": "Manifolds",
         "subcategories": [
           {
-            "databaseId": 316,
-            "slug": "pool-ells-tees-wyes",
-            "name": "Ells / Tees / Wyes",
-            "uri": "/product_category/pool-ells-tees-wyes/"
+            "databaseId": 374,
+            "slug": "manifolds",
+            "name": "Manifolds",
+            "uri": "/product_category/manifolds/"
           },
           {
-            "databaseId": 337,
-            "slug": "spa-ells-tees-wyes",
-            "name": "Ells / Tees / Wyes",
-            "uri": "/product_category/spa-ells-tees-wyes/"
+            "databaseId": 342,
+            "slug": "spa-manifolds",
+            "name": "Manifolds",
+            "uri": "/product_category/spa-manifolds/"
           }
         ]
       },
       {
-        "groupSlug": "filters-filter-systems",
-        "groupName": "Filters & Filter Systems",
+        "groupSlug": "wet-ends-accessories",
+        "groupName": "Wet Ends & Accessories",
         "subcategories": [
           {
-            "databaseId": 323,
-            "slug": "pool-filters-in-ground-above-ground",
-            "name": "Filters & Filter Systems",
-            "uri": "/product_category/pool-filters-in-ground-above-ground/"
+            "databaseId": 349,
+            "slug": "wet-ends-bases",
+            "name": "Wet Ends & Accessories",
+            "uri": "/product_category/wet-ends-bases/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "valves",
+        "groupName": "Valves",
+        "subcategories": [
+          {
+            "databaseId": 329,
+            "slug": "pool-valves",
+            "name": "Valves",
+            "uri": "/product_category/pool-valves/"
+          },
+          {
+            "databaseId": 347,
+            "slug": "top-side-valves",
+            "name": "Valves",
+            "uri": "/product_category/top-side-valves/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "air-controls",
+        "groupName": "Air Controls",
+        "subcategories": [
+          {
+            "databaseId": 332,
+            "slug": "air-controls",
+            "name": "Air Controls",
+            "uri": "/product_category/air-controls/"
           }
         ]
       },
@@ -1740,62 +1812,32 @@
         ]
       },
       {
-        "groupSlug": "gunite-jets",
-        "groupName": "Gunite Jets",
+        "groupSlug": "water-features",
+        "groupName": "Water Features",
         "subcategories": [
           {
-            "databaseId": 315,
-            "slug": "gunite-jets",
-            "name": "Gunite Jets",
-            "uri": "/product_category/gunite-jets/"
+            "databaseId": 348,
+            "slug": "water-features",
+            "name": "Water Features",
+            "uri": "/product_category/water-features/"
           }
         ]
       },
       {
-        "groupSlug": "hose-tubing",
-        "groupName": "Hose & Tubing",
+        "groupSlug": "air-systems",
+        "groupName": "Air Systems",
         "subcategories": [
           {
-            "databaseId": 355,
-            "slug": "hose-tubing-pool",
-            "name": "Hose & Tubing",
-            "uri": "/product_category/hose-tubing-pool/"
+            "databaseId": 310,
+            "slug": "air-systems",
+            "name": "Air Systems",
+            "uri": "/product_category/air-systems/"
           },
           {
-            "databaseId": 354,
-            "slug": "hose-and-tubing",
-            "name": "Hose & Tubing",
-            "uri": "/product_category/hose-and-tubing/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "international-csa",
-        "groupName": "International & CSA",
-        "subcategories": [
-          {
-            "databaseId": 365,
-            "slug": "international",
-            "name": "International & CSA",
-            "uri": "/product_category/international/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "jets",
-        "groupName": "Jets",
-        "subcategories": [
-          {
-            "databaseId": 373,
-            "slug": "jets",
-            "name": "Jets",
-            "uri": "/product_category/jets/"
-          },
-          {
-            "databaseId": 341,
-            "slug": "spa-jets",
-            "name": "Jets",
-            "uri": "/product_category/spa-jets/"
+            "databaseId": 333,
+            "slug": "air-systems-spa",
+            "name": "Air Systems",
+            "uri": "/product_category/air-systems-spa/"
           }
         ]
       },
@@ -1808,72 +1850,6 @@
             "slug": "lighting",
             "name": "Lighting",
             "uri": "/product_category/lighting/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "manifolds",
-        "groupName": "Manifolds",
-        "subcategories": [
-          {
-            "databaseId": 374,
-            "slug": "manifolds",
-            "name": "Manifolds",
-            "uri": "/product_category/manifolds/"
-          },
-          {
-            "databaseId": 342,
-            "slug": "spa-manifolds",
-            "name": "Manifolds",
-            "uri": "/product_category/spa-manifolds/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "miscellaneous-accessories",
-        "groupName": "Miscellaneous / Accessories",
-        "subcategories": [
-          {
-            "databaseId": 375,
-            "slug": "miscellaneous-accessories",
-            "name": "Miscellaneous / Accessories",
-            "uri": "/product_category/miscellaneous-accessories/"
-          },
-          {
-            "databaseId": 324,
-            "slug": "pool-miscellaneous-accessories",
-            "name": "Miscellaneous / Accessories",
-            "uri": "/product_category/pool-miscellaneous-accessories/"
-          },
-          {
-            "databaseId": 343,
-            "slug": "spa-miscellaneous-accessories",
-            "name": "Miscellaneous / Accessories",
-            "uri": "/product_category/spa-miscellaneous-accessories/"
-          }
-        ]
-      },
-      {
-        "groupSlug": "pumps",
-        "groupName": "Pumps",
-        "subcategories": [
-          {
-            "databaseId": 376,
-            "slug": "pumps",
-            "name": "Pumps",
-            "uri": "/product_category/pumps/"
-          },
-          {
-            "databaseId": 327,
-            "slug": "pool-pumps-in-ground",
-            "name": "Pumps",
-            "uri": "/product_category/pool-pumps-in-ground/"
-          },
-          {
-            "databaseId": 344,
-            "slug": "spa-pumps-spa",
-            "name": "Pumps",
-            "uri": "/product_category/spa-pumps-spa/"
           }
         ]
       },
@@ -1896,14 +1872,14 @@
         ]
       },
       {
-        "groupSlug": "speakers",
-        "groupName": "Speakers",
+        "groupSlug": "chlorinators-accessories",
+        "groupName": "Chlorinators & Accessories",
         "subcategories": [
           {
-            "databaseId": 346,
-            "slug": "speakers",
-            "name": "Speakers",
-            "uri": "/product_category/speakers/"
+            "databaseId": 318,
+            "slug": "pool-chlorinators-accessories",
+            "name": "Chlorinators & Accessories",
+            "uri": "/product_category/pool-chlorinators-accessories/"
           }
         ]
       },
@@ -1932,44 +1908,68 @@
         ]
       },
       {
-        "groupSlug": "valves",
-        "groupName": "Valves",
+        "groupSlug": "ells-tees-wyes",
+        "groupName": "Ells / Tees / Wyes",
         "subcategories": [
           {
-            "databaseId": 329,
-            "slug": "pool-valves",
-            "name": "Valves",
-            "uri": "/product_category/pool-valves/"
+            "databaseId": 316,
+            "slug": "pool-ells-tees-wyes",
+            "name": "Ells / Tees / Wyes",
+            "uri": "/product_category/pool-ells-tees-wyes/"
           },
           {
-            "databaseId": 347,
-            "slug": "top-side-valves",
-            "name": "Valves",
-            "uri": "/product_category/top-side-valves/"
+            "databaseId": 337,
+            "slug": "spa-ells-tees-wyes",
+            "name": "Ells / Tees / Wyes",
+            "uri": "/product_category/spa-ells-tees-wyes/"
           }
         ]
       },
       {
-        "groupSlug": "water-features",
-        "groupName": "Water Features",
+        "groupSlug": "gunite-jets",
+        "groupName": "Gunite Jets",
         "subcategories": [
           {
-            "databaseId": 348,
-            "slug": "water-features",
-            "name": "Water Features",
-            "uri": "/product_category/water-features/"
+            "databaseId": 315,
+            "slug": "gunite-jets",
+            "name": "Gunite Jets",
+            "uri": "/product_category/gunite-jets/"
           }
         ]
       },
       {
-        "groupSlug": "wet-ends-accessories",
-        "groupName": "Wet Ends & Accessories",
+        "groupSlug": "miscellaneous-accessories",
+        "groupName": "Miscellaneous / Accessories",
         "subcategories": [
           {
-            "databaseId": 349,
-            "slug": "wet-ends-bases",
-            "name": "Wet Ends & Accessories",
-            "uri": "/product_category/wet-ends-bases/"
+            "databaseId": 375,
+            "slug": "miscellaneous-accessories",
+            "name": "Miscellaneous / Accessories",
+            "uri": "/product_category/miscellaneous-accessories/"
+          },
+          {
+            "databaseId": 324,
+            "slug": "pool-miscellaneous-accessories",
+            "name": "Miscellaneous / Accessories",
+            "uri": "/product_category/pool-miscellaneous-accessories/"
+          },
+          {
+            "databaseId": 343,
+            "slug": "spa-miscellaneous-accessories",
+            "name": "Miscellaneous / Accessories",
+            "uri": "/product_category/spa-miscellaneous-accessories/"
+          }
+        ]
+      },
+      {
+        "groupSlug": "speakers",
+        "groupName": "Speakers",
+        "subcategories": [
+          {
+            "databaseId": 346,
+            "slug": "speakers",
+            "name": "Speakers",
+            "uri": "/product_category/speakers/"
           }
         ]
       }
@@ -5165,8 +5165,8 @@
       "imageWidth": null,
       "imageHeight": null,
       "categorySlugs": [
-        "international",
-        "pool-pumps-in-ground"
+        "pool-pumps-in-ground",
+        "international"
       ],
       "attributeSlugs": []
     },
@@ -5181,8 +5181,8 @@
       "imageWidth": null,
       "imageHeight": null,
       "categorySlugs": [
-        "international",
-        "pool-pumps-in-ground"
+        "pool-pumps-in-ground",
+        "international"
       ],
       "attributeSlugs": []
     },
