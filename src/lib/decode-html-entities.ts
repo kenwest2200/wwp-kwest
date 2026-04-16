@@ -1,41 +1,48 @@
-/** Named refs commonly returned by WP / JSON as literals (e.g. `&amp;` for `&`). */
+function decodeHtmlEntitiesServer(text: string): string {
+  let s = text;
+  s = s.replace(/&#x([0-9a-fA-F]{1,6});/gi, (_, hex: string) => {
+    const cp = Number.parseInt(hex, 16);
+    return Number.isFinite(cp) && cp >= 0 && cp <= 0x10ffff
+      ? String.fromCodePoint(cp)
+      : `&#x${hex};`;
+  });
+  s = s.replace(/&#(\d{1,7});/g, (_, dec: string) => {
+    const cp = Number.parseInt(dec, 10);
+    return Number.isFinite(cp) && cp >= 0 && cp <= 0x10ffff
+      ? String.fromCodePoint(cp)
+      : `&#${dec};`;
+  });
 
-const NAMED_ENTITIES: Record<string, string> = {
-  amp: "&",
-  lt: "<",
-  gt: ">",
-  quot: '"',
-  apos: "'",
-  nbsp: "\u00A0",
-};
-
-/**
- * Decodes minimal HTML character references. Safe for SSR (no DOM).
- */
-export function decodeHtmlEntities(text: string): string {
-  if (!text.includes("&")) {
-    return text;
+  for (let i = 0; i < 12; i++) {
+    const prev = s;
+    s = s
+      .replace(/&nbsp;/gi, "\u00a0")
+      .replace(/&quot;/g, '"')
+      .replace(/&apos;/g, "'")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&ndash;/g, "\u2013")
+      .replace(/&mdash;/g, "\u2014")
+      .replace(/&hellip;/g, "\u2026")
+      .replace(/&amp;/g, "&");
+    if (s === prev) break;
   }
 
-  return text.replace(
-    /&(#(?:x[\da-fA-F]+|\d+)|[a-zA-Z][a-zA-Z0-9]*);/g,
-    (full, ref: string) => {
-      if (ref[0] === "#") {
-        const cp =
-          ref[1] === "x" || ref[1] === "X"
-            ? parseInt(ref.slice(2), 16)
-            : parseInt(ref.slice(1), 10);
-        if (Number.isNaN(cp)) {
-          return full;
-        }
-        try {
-          return String.fromCodePoint(cp);
-        } catch {
-          return full;
-        }
-      }
-      const named = NAMED_ENTITIES[ref.toLowerCase()];
-      return named ?? full;
-    },
-  );
+  return s;
+}
+
+export function decodeHtmlEntities(text: string): string {
+  if (!text) return text;
+  const doc =
+    typeof globalThis !== "undefined" ? globalThis.document : undefined;
+  if (doc && typeof doc.createElement === "function") {
+    try {
+      const el = doc.createElement("textarea");
+      el.innerHTML = text;
+      return el.value;
+    } catch {
+      return decodeHtmlEntitiesServer(text);
+    }
+  }
+  return decodeHtmlEntitiesServer(text);
 }

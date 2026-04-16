@@ -1,6 +1,7 @@
 ---
 import {
   normalizeProductListContent,
+  parseSingleTemplateOptionalCharact,
   singleTemplateOptionalShowsGallery,
   wpPreferredThumbSrc,
   type SingleTemplateOptionalItem,
@@ -54,7 +55,11 @@ const galleryNodes =
 
 const descHtml = item.singleTemplateOptionalDescHtml?.trim();
 const descPlain = item.singleTemplateOptionalDesc?.trim();
-const charactHtml = item.singleTemplateOptionalCharact?.trim();
+const charactParsed = parseSingleTemplateOptionalCharact(
+  item.singleTemplateOptionalCharact,
+);
+const charactHeading = charactParsed?.title?.replace(/\r\n/g, "\n").trim();
+const charactBullets = charactParsed?.bullets ?? [];
 const tableTitle = item.singleTemplateOptionalTableTitle?.trim();
 const tableHtml = item.singleTemplateOptionalTable?.trim();
 const plTitle = item.singleTemplateOptionalProductListTitle?.trim();
@@ -62,7 +67,7 @@ const plSubtitle = item.singleTemplateOptionalProductListSubtitle?.trim();
 const plRowLabel = item.singleTemplateOptionalProductListRowLabel?.trim();
 
 const hasDescriptionContent = Boolean(descHtml || descPlain);
-const hasFeaturesContent = Boolean(charactHtml);
+const hasFeaturesContent = Boolean(charactParsed);
 const hasGalleryContent = galleryNodes.length > 0;
 const isGallerySlider = showGallery && galleryNodes.length > 1;
 const isGalleryMini = showGallery && galleryNodes.length === 1;
@@ -81,7 +86,7 @@ const hasAnything =
 
 {
   hasAnything && (
-    <section
+    <div
       class="product-page__optional-block"
       data-template-select={selectAttr}
       data-template-index={index}
@@ -92,17 +97,22 @@ const hasAnything =
       {showDescriptionHtml && !descHtml && descPlain && (
         <p class="product-page__optional-text">{descPlain}</p>
       )}
-      {showFeatures && charactHtml && (
+      {showFeatures && hasFeaturesContent && charactParsed && (
         <>
-          <h2 class="product-page__h2 product-page__h2--in-block">Features</h2>
-          <div
-            class="product-page__optional-html product-page__optional-charact"
-            set:html={charactHtml}
-          />
+          <h2 class="product-page__h2 product-page__h2--in-block">
+            {charactHeading}
+          </h2>
+          {charactBullets.length > 0 && (
+            <ul class="product-page__optional-charact-list">
+              {charactBullets.map((text) => (
+                <li>{text}</li>
+              ))}
+            </ul>
+          )}
         </>
       )}
       {isGallerySlider && (
-        <section
+        <div
           class="product-page__gallery-section product-page__gallery-section--slider"
           data-product-gallery
           aria-label="Gallery"
@@ -191,7 +201,7 @@ const hasAnything =
               <span aria-hidden="true">›</span>
             </button>
           </div>
-        </section>
+        </div>
       )}
       {isGalleryMini && (
         <div class="product-page__gallery-mini">
@@ -243,34 +253,34 @@ const hasAnything =
           {listRows.map((row) => {
             const plNode = row.singleTemplateOptionalProductListItemImage?.node;
             return (
-            <li class="product-page__product-list-row">
-              {plNode?.sourceUrl && (
-                <figure class="product-page__product-list-figure">
-                  <img
-                    class="product-page__product-list-thumb"
-                    src={wpPreferredThumbSrc(plNode)}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
+              <li class="product-page__product-list-row">
+                {plNode?.sourceUrl && (
+                  <figure class="product-page__product-list-figure">
+                    <img
+                      class="product-page__product-list-thumb"
+                      src={wpPreferredThumbSrc(plNode)}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    {plNode.title?.trim() && (
+                      <figcaption class="product-page__image-caption">
+                        {plNode.title.trim()}
+                      </figcaption>
+                    )}
+                  </figure>
+                )}
+                {row.singleTemplateOptionalProductListItemTable?.trim() && (
+                  <div
+                    class="product-page__spec"
+                    set:html={row.singleTemplateOptionalProductListItemTable}
                   />
-                  {plNode.title?.trim() && (
-                    <figcaption class="product-page__image-caption">
-                      {plNode.title.trim()}
-                    </figcaption>
-                  )}
-                </figure>
-              )}
-              {row.singleTemplateOptionalProductListItemTable?.trim() && (
-                <div
-                  class="product-page__spec"
-                  set:html={row.singleTemplateOptionalProductListItemTable}
-                />
-              )}
-            </li>
+                )}
+              </li>
             );
           })}
         </ul>
       )}
-    </section>
+    </div>
   )
 }

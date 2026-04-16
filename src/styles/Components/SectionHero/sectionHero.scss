@@ -1,0 +1,40 @@
+@use "../../variables.scss" as *;
+
+.section-hero {
+    background: linear-gradient(180deg, #007d8a 0%, #00aec7 100%);
+    padding: px-to-rem(56.5) 0;
+    min-height: px-to-rem(300);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+    &__container {
+        max-width: px-to-rem(1192);
+        margin: 0 auto;
+        padding-left: var(--section-left, var(--s-padding-x));
+        padding-right: var(--section-right, var(--s-padding-x));
+        text-align: center;
+    }
+
+    &__title {
+        margin: 0 0 px-to-rem(32);
+        font-size: px-to-rem(48);
+        font-weight: 500;
+        letter-spacing: 0.03em;
+        line-height: 1.3;
+        color: $white;
+        text-transform: uppercase;
+
+    }
+
+    &__description {
+        margin: 0 auto;
+        max-width: px-to-rem(764);
+        font-size: px-to-rem(22);
+        line-height: px-to-rem(32);
+        font-weight: 400;
+        letter-spacing: 0.03em;
+        color: $white;
+    }
+}

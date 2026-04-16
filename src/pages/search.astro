@@ -1,31 +1,102 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import ProductFiltersIntro from "../components/ProductFilters/ProductFiltersIntro.astro";
 
 export const prerender = true;
 ---
 
-<Layout>
-  <main class="search-results-page">
-    <ProductFiltersIntro
-      title="Search"
-      description="Find products by part name, keyword, or model number."
-      hasRootNav={false}
-    />
+<Layout headerType="white">
+  <main class="search-results-page" data-search-page>
     <section
       class="search-results-page__inner"
       aria-labelledby="search-results-title"
     >
       <div class="search-results-page__inner-container container">
         <h1 id="search-results-title" class="search-results-page__title">
-          Search
+          <span
+            id="search-results-heading-primary"
+            class="search-results-page__title-primary"
+            >Search</span>
+          <span
+            id="search-results-heading-query"
+            class="search-results-page__title-query"
+            hidden></span>
         </h1>
         <p id="search-results-summary" class="search-results-page__summary">
           Enter a query to search.
         </p>
         <p id="search-results-error" class="search-results-page__error" hidden>
         </p>
-        <ul id="search-results-list" class="search-results-page__list"></ul>
+        <div
+          id="search-results-tabs-wrap"
+          class="search-results-page__tabs-wrap"
+          hidden
+        >
+          <div
+            class="search-results-page__tabs"
+            role="tablist"
+            aria-label="Results by type"
+          >
+            <button
+              type="button"
+              id="search-tab-btn-products"
+              class="search-results-page__tab is-active"
+              role="tab"
+              aria-selected="true"
+              aria-controls="search-tabpanel-products"
+            >
+              Products
+            </button>
+            <button
+              type="button"
+              id="search-tab-btn-pages"
+              class="search-results-page__tab"
+              role="tab"
+              aria-selected="false"
+              aria-controls="search-tabpanel-pages"
+            >
+              Pages
+            </button>
+          </div>
+          <div
+            id="search-tabpanel-products"
+            class="search-results-page__tabpanel"
+            role="tabpanel"
+            aria-labelledby="search-tab-btn-products"
+          >
+            <ul
+              id="search-results-list-products"
+              class="search-results-page__list search-results-page__list--cards"
+            >
+            </ul>
+            <p
+              id="search-results-empty-products"
+              class="search-results-page__empty search-results-page__empty--tab"
+              hidden
+            >
+              No products in these results.
+            </p>
+          </div>
+          <div
+            id="search-tabpanel-pages"
+            class="search-results-page__tabpanel"
+            role="tabpanel"
+            aria-labelledby="search-tab-btn-pages"
+            hidden
+          >
+            <ul
+              id="search-results-list-pages"
+              class="search-results-page__list search-results-page__list--cards"
+            >
+            </ul>
+            <p
+              id="search-results-empty-pages"
+              class="search-results-page__empty search-results-page__empty--tab"
+              hidden
+            >
+              No pages in these results.
+            </p>
+          </div>
+        </div>
         <p id="search-results-empty" class="search-results-page__empty" hidden>
           No results found.
         </p>

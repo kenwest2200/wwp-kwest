@@ -8,6 +8,9 @@ export default {
     if (url.pathname === "/api/search") {
       return handleSearchApi(request, env);
     }
+    if (url.pathname === "/api/search-autocomplete") {
+      return handleSearchAutocompleteApi(request, env);
+    }
 
     return handleFrontend(request, env);
   },
@@ -18,15 +21,39 @@ type PurgeCacheResponse = {
   errors?: Array<{ message?: string }>;
 };
 
+type SearchImage = {
+  url?: string | null;
+  thumbnails?: {
+    small?: string | null;
+    medium?: string | null;
+  } | null;
+} | null;
+
+type SearchItemRaw = {
+  title?: string | null;
+  uri?: string | null;
+  image?: SearchImage;
+  subcategory?: string | null;
+  description?: string | null;
+  type?: string | null;
+};
+
 type GlobalSearchPayload = {
   data?: {
     search?: {
       total?: number | null;
+      items?: SearchItemRaw[] | null;
+    } | null;
+  };
+  errors?: Array<{ message?: string }>;
+};
+
+type SearchAutocompletePayload = {
+  data?: {
+    searchAutocomplete?: {
       items?: Array<{
-        id?: string | null;
-        databaseId?: number | null;
         title?: string | null;
-        slug?: string | null;
+        uri?: string | null;
       }> | null;
     } | null;
   };
@@ -38,10 +65,29 @@ const GLOBAL_SEARCH_QUERY = `
     search(search: $search, limit: $limit, offset: $offset) {
       total
       items {
-        id
-        databaseId
         title
-        slug
+        uri
+        image {
+          url
+          thumbnails {
+            small
+            medium
+          }
+        }
+        subcategory
+        description
+        type
+      }
+    }
+  }
+`;
+
+const GLOBAL_SEARCH_AUTOCOMPLETE_QUERY = `
+  query SearchAutocomplete($search: String!, $limit: Int!) {
+    searchAutocomplete(search: $search, limit: $limit) {
+      items {
+        title
+        uri
       }
     }
   }
@@ -152,18 +198,124 @@ async function handleSearchApi(request: Request, env: Env): Promise<Response> {
     }
     const total = Number(payload.data?.search?.total ?? 0);
     const items = (payload.data?.search?.items ?? [])
-      .filter((item) => item?.slug && item?.title)
+      .filter((item) => item?.uri && item?.title)
       .map((item) => ({
-        id: item.id ?? null,
-        databaseId: item.databaseId ?? null,
         title: String(item.title ?? "").trim(),
-        slug: String(item.slug ?? "").trim(),
+        uri: String(item.uri ?? "").trim(),
+        image: item.image
+          ? {
+              url: item.image.url ?? null,
+              thumbnails: item.image.thumbnails
+                ? {
+                    small: item.image.thumbnails.small ?? null,
+                    medium: item.image.thumbnails.medium ?? null,
+                  }
+                : null,
+            }
+          : null,
+        subcategory: item.subcategory
+          ? String(item.subcategory).trim()
+          : null,
+        description: item.description
+          ? String(item.description).trim()
+          : null,
+        type: normalizeSearchItemType(item.type),
       }));
     return jsonResponse({ total, items }, { origin });
   } catch (error) {
     return jsonResponse(
       {
         total: 0,
+        items: [],
+        error: error instanceof Error ? error.message : String(error),
+      },
+      { status: 500, origin },
+    );
+  }
+}
+
+function normalizeSearchItemType(
+  raw: string | null | undefined,
+): "product" | "page" | null {
+  const t = (raw ?? "").trim().toLowerCase();
+  if (t === "product" || t === "page") return t;
+  return null;
+}
+
+async function handleSearchAutocompleteApi(
+  request: Request,
+  env: Env,
+): Promise<Response> {
+  const origin = request.headers.get("Origin");
+  if (request.method === "OPTIONS") {
+    const headers = new Headers();
+    headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
+    headers.set("Access-Control-Allow-Headers", "Content-Type");
+    headers.set("Access-Control-Max-Age", "86400");
+    if (origin) headers.set("Access-Control-Allow-Origin", origin);
+    return new Response(null, { status: 204, headers });
+  }
+  if (request.method !== "GET") {
+    return jsonResponse({ items: [], error: "Method Not Allowed" }, {
+      status: 405,
+      origin,
+    });
+  }
+
+  const url = new URL(request.url);
+  const query = (url.searchParams.get("q") ?? "").trim();
+  const limitRaw = Number(url.searchParams.get("limit") ?? "5");
+  const limit = Number.isFinite(limitRaw)
+    ? Math.max(1, Math.min(10, Math.floor(limitRaw)))
+    : 5;
+
+  if (query.length < 2) {
+    return jsonResponse({ items: [] }, { origin });
+  }
+
+  const endpoint = env.PUBLIC_GRAPHQL_URL;
+  if (!endpoint) {
+    return jsonResponse(
+      { items: [], error: "PUBLIC_GRAPHQL_URL is not configured" },
+      { status: 500, origin },
+    );
+  }
+  const user = env.GRAPHQL_BASIC_USER || "api";
+  const pass = env.GRAPHQL_BASIC_PASSWORD || "apiwaterway";
+  const auth = btoa(`${user}:${pass}`);
+
+  try {
+    const gqlRes = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Basic ${auth}`,
+      },
+      body: JSON.stringify({
+        query: GLOBAL_SEARCH_AUTOCOMPLETE_QUERY,
+        variables: { search: query, limit },
+      }),
+    });
+    const payload = (await gqlRes.json()) as SearchAutocompletePayload;
+    if (!gqlRes.ok || payload.errors?.length) {
+      const message =
+        payload.errors?.[0]?.message ||
+        `GraphQL searchAutocomplete failed with status ${gqlRes.status}`;
+      return jsonResponse(
+        { items: [], error: message },
+        { status: 502, origin },
+      );
+    }
+    const items = (payload.data?.searchAutocomplete?.items ?? [])
+      .filter((item) => item?.uri && item?.title)
+      .map((item) => ({
+        title: String(item.title ?? "").trim(),
+        uri: String(item.uri ?? "").trim(),
+      }));
+    return jsonResponse({ items }, { origin });
+  } catch (error) {
+    return jsonResponse(
+      {
         items: [],
         error: error instanceof Error ? error.message : String(error),
       },

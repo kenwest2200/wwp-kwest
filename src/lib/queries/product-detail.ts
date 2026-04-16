@@ -50,7 +50,6 @@ export type WPMediaNodeWithSizes = {
   } | null;
 };
 
-
 export function wpPreferredThumbSrc(
   node: WPMediaNodeWithSizes | null | undefined,
 ): string {
@@ -78,7 +77,10 @@ export function wpPreferredThumbSrc(
       url: s.sourceUrl!.trim(),
       w: Number(s.width),
     }))
-    .sort((a, b) => (Number.isFinite(a.w) ? a.w : 1e9) - (Number.isFinite(b.w) ? b.w : 1e9));
+    .sort(
+      (a, b) =>
+        (Number.isFinite(a.w) ? a.w : 1e9) - (Number.isFinite(b.w) ? b.w : 1e9),
+    );
   return sorted[0]?.url ?? full;
 }
 
@@ -106,6 +108,11 @@ export type ProductListContentRow = {
     } | null;
   } | null;
   singleTemplateOptionalProductListItemTable?: string | null;
+};
+
+export type SingleTemplateOptionalCharactJson = {
+  title?: string | null;
+  content?: string | string[] | null;
 };
 
 export type SingleTemplateOptionalItem = {
@@ -303,6 +310,94 @@ export function relatedPartsHtmlFromApi(raw: unknown): string {
   return typeof raw === "string" ? raw.trim() : "";
 }
 
+function charactBulletFromEntry(x: unknown): string | null {
+  if (typeof x === "string") {
+    const line = x.trim();
+    return line || null;
+  }
+  if (x && typeof x === "object" && !Array.isArray(x)) {
+    const t = (x as Record<string, unknown>).text;
+    if (typeof t === "string" && t.trim()) return t.trim();
+    const l = (x as Record<string, unknown>).line;
+    if (typeof l === "string" && l.trim()) return l.trim();
+  }
+  return null;
+}
+
+export function parseSingleTemplateOptionalCharact(
+  raw: string | null | undefined,
+): { title?: string; bullets: string[] } | null {
+  try {
+    if (raw == null) return null;
+
+    let obj: unknown = raw;
+
+    if (typeof raw === "string") {
+      let t = raw.trim();
+      if (!t) return null;
+      obj = JSON.parse(t) as unknown;
+      if (typeof obj === "string") {
+        const inner = obj.trim();
+        if (!inner.startsWith("{")) return null;
+        obj = JSON.parse(inner) as unknown;
+      }
+    }
+
+    if (Array.isArray(obj)) {
+      const first = obj.find(
+        (x) => x && typeof x === "object" && !Array.isArray(x),
+      );
+      if (!first) return null;
+      obj = first;
+    }
+
+    if (!obj || typeof obj !== "object" || Array.isArray(obj)) return null;
+    const o = obj as Record<string, unknown>;
+
+    const titleRaw = o.title;
+    const title =
+      typeof titleRaw === "string"
+        ? titleRaw.replace(/\r\n/g, "\n").trim() || undefined
+        : undefined;
+
+    const bullets: string[] = [];
+    const pushLines = (arr: unknown[]) => {
+      for (const x of arr) {
+        const line = charactBulletFromEntry(x);
+        if (line) bullets.push(line);
+      }
+    };
+
+    const c = o.content;
+    if (Array.isArray(c)) {
+      pushLines(c);
+    } else if (typeof c === "string") {
+      const s = c.trim();
+      if (!s) {
+        /* empty */
+      } else if (s.startsWith("[")) {
+        try {
+          const arr = JSON.parse(s) as unknown;
+          if (Array.isArray(arr)) pushLines(arr);
+          else {
+            const line = charactBulletFromEntry(arr);
+            if (line) bullets.push(line);
+          }
+        } catch {
+          bullets.push(s);
+        }
+      } else {
+        bullets.push(s);
+      }
+    }
+
+    if (!title && bullets.length === 0) return null;
+    return { title, bullets };
+  } catch {
+    return null;
+  }
+}
+
 export function normalizeSingleTemplateOptionalItems(
   raw:
     | SingleTemplateOptionalItem[]
@@ -321,7 +416,12 @@ export function singleTemplateOptionalNormalizedSelectValues(
   const selectRaw = item.singleTemplateOptionalSelect;
   return (Array.isArray(selectRaw) ? selectRaw : [selectRaw])
     .filter((v): v is string => typeof v === "string")
-    .map((value) => value.trim().toLowerCase().replace(/[\s_-]+/g, ""))
+    .map((value) =>
+      value
+        .trim()
+        .toLowerCase()
+        .replace(/[\s_-]+/g, ""),
+    )
     .filter(Boolean);
 }
 

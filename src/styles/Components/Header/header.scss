@@ -16,24 +16,26 @@
   position: sticky;
   min-height: px-to-rem(112);
   margin-bottom: px-to-rem(-112);
+  width: 100%;
 
   z-index: 100;
 
-  .header__container {
+  &__container {
     padding-bottom: 0;
     background: transparent;
-    transition: background 0.2s ease, padding-bottom 0s ease;
+    transition: background 0.2s linear, padding-bottom 0.1s linear;
   }
 
   &.is-scrolling,
   &.header--white {
     top: calc(-1 * var(--header-top-height, 0px));
+    transition: top 0.2s ease;
 
     .header__top {
       background: $white;
 
-      border: 1px solid #D0CFCB66;
-
+      border-bottom: 1px solid #D0CFCB66;
+      transition: background 0.2s linear, padding-bottom 0s linear;
 
       &-link {
         color: $dark-medium;
@@ -445,6 +447,44 @@
       display: flex;
       align-items: center;
       min-width: 0;
+    }
+
+    &-field {
+      position: relative;
+      width: 100%;
+      min-width: 0;
+    }
+
+    &-suggest {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + #{px-to-rem(6)});
+      z-index: 70;
+      margin: 0;
+      padding: px-to-rem(4) 0;
+      list-style: none;
+      background: $white;
+      border-radius: px-to-rem(4);
+      box-shadow: 0 px-to-rem(8) px-to-rem(24) rgba(13, 39, 37, 0.14);
+      border: 1px solid $gray-middle;
+      max-height: min(70vh, #{px-to-rem(320)});
+      overflow-y: auto;
+    }
+
+    &-suggest-item {
+      display: block;
+      padding: px-to-rem(10) px-to-rem(14);
+      font-size: px-to-rem(14);
+      line-height: px-to-rem(20);
+      color: $dark;
+      text-decoration: none;
+
+      &:hover,
+      &:focus-visible {
+        color: $light-teal;
+        outline: none;
+      }
     }
 
     &-label {

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-15T11:49:29.070Z",
+  "generatedAt": "2026-04-16T13:53:01.540Z",
   "attributesByCategory": {
     "bath": [],
     "pool": [
@@ -54,6 +54,58 @@
         ]
       },
       {
+        "name": "Body",
+        "slug": "body",
+        "values": [
+          {
+            "label": "type-90-body",
+            "slug": "body-type-90-body"
+          },
+          {
+            "label": "type-stright",
+            "slug": "body-type-stright"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "slug": "color",
+        "values": [
+          {
+            "label": "black",
+            "slug": "color-black"
+          },
+          {
+            "label": "gray",
+            "slug": "color-gray"
+          },
+          {
+            "label": "white",
+            "slug": "color-white"
+          }
+        ]
+      },
+      {
+        "name": "Filter",
+        "slug": "filter",
+        "values": [
+          {
+            "label": "type-d-e",
+            "slug": "filter-type-d-e"
+          }
+        ]
+      },
+      {
+        "name": "Gpm",
+        "slug": "gpm",
+        "values": [
+          {
+            "label": "175.90",
+            "slug": "gpm-175-90"
+          }
+        ]
+      },
+      {
         "name": "Hp",
         "slug": "hp",
         "values": [
@@ -68,6 +120,40 @@
           {
             "label": "2.0",
             "slug": "hp-2-0"
+          }
+        ]
+      },
+      {
+        "name": "Internal",
+        "slug": "internal",
+        "values": [
+          {
+            "label": "type-directional",
+            "slug": "internal-type-directional"
+          }
+        ]
+      },
+      {
+        "name": "Jet",
+        "slug": "jet",
+        "values": [
+          {
+            "label": "style-scalloped",
+            "slug": "jet-style-scalloped"
+          },
+          {
+            "label": "style-smooth",
+            "slug": "jet-style-smooth"
+          }
+        ]
+      },
+      {
+        "name": "Pool",
+        "slug": "pool",
+        "values": [
+          {
+            "label": "type-above-ground",
+            "slug": "pool-type-above-ground"
           }
         ]
       },
@@ -88,6 +174,56 @@
             "slug": "psi-4-2"
           }
         ]
+      },
+      {
+        "name": "Socket",
+        "slug": "socket",
+        "values": [
+          {
+            "label": "1.2",
+            "slug": "socket-1-2"
+          },
+          {
+            "label": "2",
+            "slug": "socket-2"
+          }
+        ]
+      },
+      {
+        "name": "Speed",
+        "slug": "speed",
+        "values": [
+          {
+            "label": "1-speed",
+            "slug": "speed-1-speed"
+          }
+        ]
+      },
+      {
+        "name": "Sq",
+        "slug": "sq",
+        "values": [
+          {
+            "label": "ft-100",
+            "slug": "sq-ft-100"
+          },
+          {
+            "label": "ft-125",
+            "slug": "sq-ft-125"
+          },
+          {
+            "label": "ft-150",
+            "slug": "sq-ft-150"
+          },
+          {
+            "label": "ft-75",
+            "slug": "sq-ft-75"
+          },
+          {
+            "label": "ft-200",
+            "slug": "sq-ft-200"
+          }
+        ]
       }
     ],
     "spa": [],
@@ -101,7 +237,78 @@
     "miscellaneous-accessories": [],
     "pool-pumps-in-ground": [],
     "hose-tubing-pool": [],
-    "pool-filters-in-ground-above-ground": [],
+    "pool-filters-in-ground-above-ground": [
+      {
+        "name": "Filter",
+        "slug": "filter",
+        "values": [
+          {
+            "label": "type-d-e",
+            "slug": "filter-type-d-e"
+          }
+        ]
+      },
+      {
+        "name": "Hp",
+        "slug": "hp",
+        "values": [
+          {
+            "label": "1.0",
+            "slug": "hp-1-0"
+          },
+          {
+            "label": "2.0",
+            "slug": "hp-2-0"
+          }
+        ]
+      },
+      {
+        "name": "Pool",
+        "slug": "pool",
+        "values": [
+          {
+            "label": "type-above-ground",
+            "slug": "pool-type-above-ground"
+          }
+        ]
+      },
+      {
+        "name": "Speed",
+        "slug": "speed",
+        "values": [
+          {
+            "label": "1-speed",
+            "slug": "speed-1-speed"
+          }
+        ]
+      },
+      {
+        "name": "Sq",
+        "slug": "sq",
+        "values": [
+          {
+            "label": "ft-100",
+            "slug": "sq-ft-100"
+          },
+          {
+            "label": "ft-125",
+            "slug": "sq-ft-125"
+          },
+          {
+            "label": "ft-150",
+            "slug": "sq-ft-150"
+          },
+          {
+            "label": "ft-75",
+            "slug": "sq-ft-75"
+          },
+          {
+            "label": "ft-200",
+            "slug": "sq-ft-200"
+          }
+        ]
+      }
+    ],
     "pool-control-system": [],
     "international": [],
     "drains-suctions": [],
@@ -199,7 +406,88 @@
     "pool-chlorinators-accessories": [],
     "pool-unions": [],
     "pool-ells-tees-wyes": [],
-    "gunite-jets": [],
+    "gunite-jets": [
+      {
+        "name": "Body",
+        "slug": "body",
+        "values": [
+          {
+            "label": "type-90-body",
+            "slug": "body-type-90-body"
+          },
+          {
+            "label": "type-stright",
+            "slug": "body-type-stright"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "slug": "color",
+        "values": [
+          {
+            "label": "black",
+            "slug": "color-black"
+          },
+          {
+            "label": "gray",
+            "slug": "color-gray"
+          },
+          {
+            "label": "white",
+            "slug": "color-white"
+          }
+        ]
+      },
+      {
+        "name": "Gpm",
+        "slug": "gpm",
+        "values": [
+          {
+            "label": "175.90",
+            "slug": "gpm-175-90"
+          }
+        ]
+      },
+      {
+        "name": "Internal",
+        "slug": "internal",
+        "values": [
+          {
+            "label": "type-directional",
+            "slug": "internal-type-directional"
+          }
+        ]
+      },
+      {
+        "name": "Jet",
+        "slug": "jet",
+        "values": [
+          {
+            "label": "style-scalloped",
+            "slug": "jet-style-scalloped"
+          },
+          {
+            "label": "style-smooth",
+            "slug": "jet-style-smooth"
+          }
+        ]
+      },
+      {
+        "name": "Socket",
+        "slug": "socket",
+        "values": [
+          {
+            "label": "1.2",
+            "slug": "socket-1-2"
+          },
+          {
+            "label": "2",
+            "slug": "socket-2"
+          }
+        ]
+      }
+    ],
     "pool-miscellaneous-accessories": [],
     "spa-pumps-spa": [],
     "hose-and-tubing": [],
@@ -1977,19 +2265,56 @@
   },
   "products": [
     {
+      "title": "Old Faithful Jets – Gunite & Vinyl Liner",
+      "slug": "old-faithful-jets-gunite-vinyl-liner-2",
+      "databaseId": 40265,
+      "date": "2025-08-14T15:28:33",
+      "modified": "2026-04-15T19:15:32",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/210-7350.png",
+      "imageAlt": null,
+      "imageWidth": 1783,
+      "imageHeight": 1224,
+      "categorySlugs": [
+        "gunite-jets"
+      ],
+      "attributeSlugs": [
+        "body-type-90-body",
+        "body-type-stright",
+        "color-black",
+        "color-gray",
+        "color-white",
+        "gpm-175-90",
+        "internal-type-directional",
+        "jet-style-scalloped",
+        "jet-style-smooth",
+        "socket-1-2"
+      ]
+    },
+    {
       "title": "ClearWater II – D.E. Filter System",
       "slug": "clearwater-ii-d-e-filter-system",
       "databaseId": 40169,
       "date": "2025-06-02T17:08:07",
-      "modified": "2026-04-02T09:38:48",
-      "imageUrl": null,
+      "modified": "2026-04-15T23:03:58",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/520-5187-3S_ClearWaterII-DE_StandSys_Hi-FloII_newplug_sil_xsm_flat_2025.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 689,
+      "imageHeight": 1200,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "filter-type-d-e",
+        "hp-1-0",
+        "hp-2-0",
+        "pool-type-above-ground",
+        "speed-1-speed",
+        "sq-ft-100",
+        "sq-ft-125",
+        "sq-ft-150",
+        "sq-ft-75",
+        "sq-ft-200"
+      ]
     },
     {
       "title": "Carefree Top-Mount – Sand Filter",

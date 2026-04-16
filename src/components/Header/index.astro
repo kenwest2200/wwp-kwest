@@ -307,15 +307,29 @@ const topMenuItems = {
           role="search"
         >
           <form action="/search" method="get">
-            <label class="header__search-label">
-              <IconSearch class="header__search-icon" />
-              <input
-                class="header__search-input"
-                type="search"
-                name="q"
-                placeholder="Search for parts"
+            <div class="header__search-field">
+              <label class="header__search-label">
+                <IconSearch class="header__search-icon" />
+                <input
+                  class="header__search-input"
+                  type="search"
+                  name="q"
+                  placeholder="Search for parts"
+                  autocomplete="off"
+                  aria-autocomplete="list"
+                  aria-expanded="false"
+                  aria-controls="header-search-suggest"
+                  data-header-search-input
+                />
+              </label>
+              <div
+                id="header-search-suggest"
+                class="header__search-suggest"
+                role="listbox"
+                aria-label="Search suggestions"
+                hidden
               />
-            </label>
+            </div>
           </form>
         </div>
       </div>
@@ -556,6 +570,7 @@ const topMenuItems = {
     initHeaderStickyScroll,
   } from "./header-mobile";
   initHeaderStickyScroll();
+  initHeaderMobile();
   initHeaderMobile();
   initHeaderSearch();
 </script>

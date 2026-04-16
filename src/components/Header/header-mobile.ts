@@ -1,4 +1,8 @@
+import { decodeHtmlEntities } from "../../lib/decode-html-entities";
+
 const SEARCH_MQ = "(min-width: 768px)";
+const AUTOCOMPLETE_MIN_CHARS = 2;
+const AUTOCOMPLETE_DEBOUNCE_MS = 150;
 
 let mobileMenuForcesHeaderTopZero = false;
 
@@ -97,11 +101,136 @@ export function initHeaderStickyScroll(): void {
   }
 }
 
+function normalizeSearchHref(uri: string): string {
+  const u = uri.trim();
+  if (!u) return "#";
+  if (u.startsWith("http://") || u.startsWith("https://")) return u;
+  return u.startsWith("/") ? u : `/${u}`;
+}
+
+function bindHeaderSearchAutocomplete(
+  panel: HTMLElement,
+  input: HTMLInputElement,
+): void {
+  const box = panel.querySelector("#header-search-suggest");
+  if (!(box instanceof HTMLElement)) return;
+
+  let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+  let requestSeq = 0;
+  let abort: AbortController | null = null;
+
+  const hideSuggest = () => {
+    box.hidden = true;
+    box.innerHTML = "";
+    input.setAttribute("aria-expanded", "false");
+    input.removeAttribute("aria-activedescendant");
+  };
+
+  const showSuggest = (items: { title: string; uri: string }[]) => {
+    box.innerHTML = "";
+    if (items.length === 0) {
+      hideSuggest();
+      return;
+    }
+    items.forEach((item, i) => {
+      const a = document.createElement("a");
+      a.className = "header__search-suggest-item";
+      a.role = "option";
+      a.id = `header-search-suggest-${i}`;
+      a.href = normalizeSearchHref(item.uri);
+      a.textContent = item.title;
+      box.appendChild(a);
+    });
+    box.hidden = false;
+    input.setAttribute("aria-expanded", "true");
+  };
+
+  const scheduleFetch = () => {
+    if (debounceTimer !== null) {
+      clearTimeout(debounceTimer);
+      debounceTimer = null;
+    }
+    abort?.abort();
+
+    const q = input.value.trim();
+    if (q.length < AUTOCOMPLETE_MIN_CHARS) {
+      hideSuggest();
+      return;
+    }
+
+    debounceTimer = setTimeout(async () => {
+      debounceTimer = null;
+      const seq = ++requestSeq;
+      abort = new AbortController();
+      try {
+        const res = await fetch(
+          `/api/search-autocomplete?q=${encodeURIComponent(q)}&limit=5`,
+          { signal: abort.signal },
+        );
+        const data = (await res.json()) as {
+          items?: { title?: string; uri?: string }[];
+          error?: string;
+        };
+        if (seq !== requestSeq) return;
+        if (!res.ok) {
+          hideSuggest();
+          return;
+        }
+        const raw = Array.isArray(data.items) ? data.items : [];
+        const items = raw
+          .filter((x) => x?.title && x?.uri)
+          .map((x) => ({
+            title: decodeHtmlEntities(String(x.title).trim()),
+            uri: String(x.uri).trim(),
+          }));
+        showSuggest(items);
+      } catch {
+        if (seq === requestSeq) hideSuggest();
+      }
+    }, AUTOCOMPLETE_DEBOUNCE_MS);
+  };
+
+  input.addEventListener("input", scheduleFetch);
+
+  input.addEventListener("focus", () => {
+    if (
+      input.value.trim().length >= AUTOCOMPLETE_MIN_CHARS &&
+      box.childNodes.length > 0
+    ) {
+      box.hidden = false;
+      input.setAttribute("aria-expanded", "true");
+    }
+  });
+
+  input.addEventListener("blur", () => {
+    window.setTimeout(() => {
+      const ae = document.activeElement;
+      if (box.contains(ae) || ae === input) return;
+      hideSuggest();
+    }, 150);
+  });
+
+  box.addEventListener("pointerdown", (e) => {
+    if ((e.target as HTMLElement).closest("a")) {
+      e.preventDefault();
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    if (!box.hidden) {
+      hideSuggest();
+    }
+  });
+}
+
 export function initHeaderSearch(): void {
   const root = document.querySelector("[data-header-search]");
   const toggle = document.querySelector("[data-search-toggle]");
   const panel = document.getElementById("header-search-panel");
-  const input = panel?.querySelector<HTMLInputElement>(".header__search-input");
+  const input = panel?.querySelector<HTMLInputElement>(
+    "[data-header-search-input]",
+  );
 
   if (!(root instanceof HTMLElement) || !(toggle instanceof HTMLElement)) {
     return;
@@ -144,6 +273,10 @@ export function initHeaderSearch(): void {
       toggle.setAttribute("aria-expanded", "false");
     }
   });
+
+  if (panel instanceof HTMLElement && input) {
+    bindHeaderSearchAutocomplete(panel, input);
+  }
 }
 
 export function initHeaderMobile(): void {

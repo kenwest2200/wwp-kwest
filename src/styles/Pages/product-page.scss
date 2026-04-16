@@ -547,6 +547,45 @@
   }
 }
 
+.product-page__optional-block h2 {
+  margin-bottom: px-to-rem(24);
+  font-size: px-to-rem(16);
+  font-weight: 500;
+  line-height: px-to-rem(24);
+  color: $dark;
+  letter-spacing: 0.02em;
+
+  @include media-breakpoint-up(lg) {
+    font-size: px-to-rem(20);
+    line-height: px-to-rem(28);
+  }
+
+}
+
+.product-page__optional-charact-list {
+  margin: 0;
+  padding-left: px-to-rem(22);
+  list-style: disc;
+  font-size: px-to-rem(14);
+  line-height: px-to-rem(24);
+  color: $dark;
+  letter-spacing: 0.02em;
+
+  @include media-breakpoint-up(lg) {
+    font-size: px-to-rem(16);
+    line-height: px-to-rem(28);
+  }
+
+  li {
+    margin-bottom: 0;
+    padding-left: px-to-rem(4);
+  }
+
+  li:last-child {
+    margin-bottom: 0;
+  }
+}
+
 .product-page__spec {
   font-size: px-to-rem(14);
   line-height: px-to-rem(24);

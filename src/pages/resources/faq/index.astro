@@ -1,0 +1,183 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import SectionHero from "../../../components/SectionHero/SectionHero.astro";
+import IconSearch from "../../../components/icons/searchIcon.astro";
+import { getGraphQLClient, requestGraphql } from "../../../lib/graphql";
+import {
+  FAQ_PAGE_QUERY,
+  FAQ_PAGE_URI,
+  faqCategoryAnchorId,
+  normalizeFaqSections,
+  type FaqPageData,
+} from "../../../lib/queries/faq-page";
+
+export const prerender = true;
+
+const graphqlConfigured = Boolean(getGraphQLClient());
+
+const introDefault =
+  "Find answers to common questions about Waterway products, including installation, maintenance, and troubleshooting. Browse by category or use search to quickly find what you need.";
+
+async function loadFaqPage(): Promise<FaqPageData["page"] | null> {
+  if (!graphqlConfigured) return null;
+  const client = getGraphQLClient();
+  if (!client) return null;
+  const uris = [FAQ_PAGE_URI, FAQ_PAGE_URI.replace(/\/$/, ""), "/faq/"];
+  for (const id of uris) {
+    try {
+      const data = await requestGraphql<FaqPageData>(FAQ_PAGE_QUERY, { id });
+      if (data.page?.title) return data.page;
+    } catch {
+      /* try next */
+    }
+  }
+  return null;
+}
+
+const pageNode = await loadFaqPage();
+const pageTitle = pageNode?.title?.trim() || "FAQ";
+const sidebarTitle = pageNode?.faqPageContent?.sidebarSectionTitle?.trim();
+const sections = normalizeFaqSections(pageNode?.faqPageContent ?? null);
+const hasContent = sections.length > 0;
+---
+
+<Layout headerType="white">
+  <main class="faq-page" data-faq-page>
+    <SectionHero title={pageTitle} intro={introDefault} />
+
+    <div class="faq-page__body">
+      <div class="faq-page__body-inner">
+        {
+          !graphqlConfigured && (
+            <p class="faq-page__notice">
+              GraphQL is not configured. Set <code>PUBLIC_GRAPHQL_URL</code> in{" "}
+              <code>.env</code> to load FAQ content.
+            </p>
+          )
+        }
+        {
+          graphqlConfigured && !hasContent && (
+            <p class="faq-page__notice">
+              No FAQ sections were returned for <code>{FAQ_PAGE_URI}</code>.
+              Check the page URI in WordPress and the GraphQL field names.
+            </p>
+          )
+        }
+        {
+          hasContent && (
+            <div class="faq-page__layout" data-faq-root>
+              <aside class="faq-page__sidebar" aria-label="FAQ categories">
+                <div class="faq-page__search-wrap">
+                  <label
+                    class="faq-page__search-label visually-hidden"
+                    for="faq-sidebar-search"
+                  >
+                    Search FAQ
+                  </label>
+                  <span class="faq-page__search-icon" aria-hidden="true">
+                    <IconSearch class="faq-page__search-svg" />
+                  </span>
+                  <input
+                    id="faq-sidebar-search"
+                    class="faq-page__search-input"
+                    type="search"
+                    placeholder="Search"
+                    autocomplete="off"
+                    data-faq-search
+                  />
+                </div>
+                {/* {sidebarTitle && (
+                  <p class="faq-page__sidebar-heading">{sidebarTitle}</p>
+                )} */}
+                <nav class="faq-page__nav" aria-label="FAQ categories">
+                  <ul class="faq-page__nav-list">
+                    {sections.map((s, navIdx) => (
+                      <li class="faq-page__nav-item">
+                        <a
+                          class:list={[
+                            "faq-page__nav-link",
+                            navIdx === 0 && "is-active",
+                          ]}
+                          href={`#${faqCategoryAnchorId(s.category)}`}
+                          data-faq-nav-link
+                        >
+                          {s.category}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              </aside>
+
+              <div class="faq-page__main">
+                {sections.map((s) => (
+                  <div
+                    class="faq-page__section"
+                    id={faqCategoryAnchorId(s.category)}
+                    data-faq-section
+                    data-faq-category={s.category}
+                  >
+                    <h2 class="faq-page__section-title">{s.category}</h2>
+                    <div class="faq-page__accordion">
+                      {s.questions.map((q) => (
+                        <details class="faq-page__details" data-faq-item>
+                          <summary class="faq-page__summary">
+                            <span class="faq-page__question">{q.question}</span>
+                            <span class="faq-page__toggle" aria-hidden="true">
+                              <svg
+                                class="faq-page__toggle-icon"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                aria-hidden="true"
+                              >
+                                <path
+                                  class="faq-page__toggle-line faq-page__toggle-line--h"
+                                  d="M5 12H19"
+                                  stroke="currentColor"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <path
+                                  class="faq-page__toggle-line faq-page__toggle-line--v"
+                                  d="M12 5V19"
+                                  stroke="currentColor"
+                                  stroke-width="1.5"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </svg>
+                            </span>
+                          </summary>
+                          <div class="faq-page__details-body">
+                            {q.answerHtml ? (
+                              <div
+                                class="faq-page__answer product-page__optional-html"
+                                set:html={q.answerHtml}
+                              />
+                            ) : (
+                              <p class="faq-page__answer faq-page__answer--empty">
+                                No answer provided.
+                              </p>
+                            )}
+                          </div>
+                        </details>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import "../../../scripts/faq-page.ts";
+</script>
