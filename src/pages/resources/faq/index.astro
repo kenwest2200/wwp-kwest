@@ -110,7 +110,7 @@ const hasContent = sections.length > 0;
               </aside>
 
               <div class="faq-page__main">
-                {sections.map((s) => (
+                {sections.map((s, secIdx) => (
                   <div
                     class="faq-page__section"
                     id={faqCategoryAnchorId(s.category)}
@@ -119,53 +119,70 @@ const hasContent = sections.length > 0;
                   >
                     <h2 class="faq-page__section-title">{s.category}</h2>
                     <div class="faq-page__accordion">
-                      {s.questions.map((q) => (
-                        <details class="faq-page__details" data-faq-item>
-                          <summary class="faq-page__summary">
-                            <span class="faq-page__question">{q.question}</span>
-                            <span class="faq-page__toggle" aria-hidden="true">
-                              <svg
-                                class="faq-page__toggle-icon"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                aria-hidden="true"
-                              >
-                                <path
-                                  class="faq-page__toggle-line faq-page__toggle-line--h"
-                                  d="M5 12H19"
-                                  stroke="currentColor"
-                                  stroke-width="1.5"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                />
-                                <path
-                                  class="faq-page__toggle-line faq-page__toggle-line--v"
-                                  d="M12 5V19"
-                                  stroke="currentColor"
-                                  stroke-width="1.5"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                />
-                              </svg>
-                            </span>
-                          </summary>
-                          <div class="faq-page__details-body">
-                            {q.answerHtml ? (
-                              <div
-                                class="faq-page__answer product-page__optional-html"
-                                set:html={q.answerHtml}
-                              />
-                            ) : (
-                              <p class="faq-page__answer faq-page__answer--empty">
-                                No answer provided.
-                              </p>
-                            )}
+                      {s.questions.map((q, qIdx) => {
+                        const panelId = `faq-panel-${secIdx}-${qIdx}`;
+                        const btnId = `faq-btn-${secIdx}-${qIdx}`;
+                        return (
+                          <div class="faq-page__details" data-faq-item>
+                            <button
+                              type="button"
+                              class="faq-page__summary"
+                              id={btnId}
+                              aria-expanded="false"
+                              aria-controls={panelId}
+                            >
+                              <span class="faq-page__question">{q.question}</span>
+                              <span class="faq-page__toggle" aria-hidden="true">
+                                <svg
+                                  class="faq-page__toggle-icon"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  aria-hidden="true"
+                                >
+                                  <path
+                                    class="faq-page__toggle-line faq-page__toggle-line--h"
+                                    d="M5 12H19"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  />
+                                  <path
+                                    class="faq-page__toggle-line faq-page__toggle-line--v"
+                                    d="M12 5V19"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  />
+                                </svg>
+                              </span>
+                            </button>
+                            <div
+                              class="faq-page__details-body"
+                              id={panelId}
+                              role="region"
+                              aria-labelledby={btnId}
+                            >
+                              <div class="faq-page__details-inner">
+                                {q.answerHtml ? (
+                                  <div
+                                    class="faq-page__answer product-page__optional-html"
+                                    set:html={q.answerHtml}
+                                  />
+                                ) : (
+                                  <p class="faq-page__answer faq-page__answer--empty">
+                                    No answer provided.
+                                  </p>
+                                )}
+                              </div>
+                            </div>
                           </div>
-                        </details>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 ))}

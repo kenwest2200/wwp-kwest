@@ -123,94 +123,38 @@ if (!faqPageHost) {
       ),
     ];
 
-    function syncFaqDetailsBodyMaxHeight(): void {
-      if (prefersReducedMotion()) return;
+    function syncFaqAccordionFilter(): void {
       for (const el of items) {
-        if (!(el instanceof HTMLDetailsElement)) continue;
-        const body = el.querySelector<HTMLElement>(".faq-page__details-body");
-        if (!body) continue;
-        if (el.hidden) {
-          body.style.maxHeight = "";
-          continue;
-        }
-        if (!el.open) body.style.maxHeight = "0px";
-        else body.style.maxHeight = `${Math.max(0, body.scrollHeight)}px`;
+        if (!el.hidden) continue;
+        el.classList.remove("is-open");
+        el.querySelector<HTMLButtonElement>(".faq-page__summary")?.setAttribute(
+          "aria-expanded",
+          "false",
+        );
       }
     }
 
-    function syncOpenFaqDetailsHeightsOnResize(): void {
-      if (prefersReducedMotion()) return;
-      for (const details of items) {
-        if (
-          !(details instanceof HTMLDetailsElement) ||
-          !details.open ||
-          details.hidden
-        )
-          continue;
-        const body = details.querySelector<HTMLElement>(
-          ".faq-page__details-body",
-        );
-        if (!body) continue;
-        body.style.maxHeight = `${Math.max(0, body.scrollHeight)}px`;
-      }
-    }
+    function setupFaqAccordion(): void {
+      for (const item of items) {
+        const btn = item.querySelector<HTMLButtonElement>(".faq-page__summary");
+        if (!btn) continue;
 
-    function setupFaqDetailsAccordionHeight(): void {
-      if (prefersReducedMotion()) return;
+        btn.addEventListener("click", () => {
+          if (item.hidden) return;
+          const willOpen = !item.classList.contains("is-open");
 
-      let resizeTimer = 0;
-      window.addEventListener(
-        "resize",
-        () => {
-          window.clearTimeout(resizeTimer);
-          resizeTimer = window.setTimeout(
-            syncOpenFaqDetailsHeightsOnResize,
-            100,
-          );
-        },
-        { passive: true },
-      );
-
-      for (const details of items) {
-        if (!(details instanceof HTMLDetailsElement)) continue;
-        const body = details.querySelector<HTMLElement>(
-          ".faq-page__details-body",
-        );
-        if (!body) continue;
-
-        body.style.overflow = "hidden";
-
-        let closeHeightPx = 0;
-
-        details.addEventListener("beforetoggle", (ev) => {
-          const t = ev as ToggleEvent;
-          if (t.newState === "closed") {
-            closeHeightPx = body.scrollHeight;
-          }
-        });
-
-        details.addEventListener("toggle", () => {
-          if (details.hidden) return;
-          if (details.open) {
-            closeHeightPx = 0;
-            body.style.maxHeight = "0px";
-            void body.offsetHeight;
-            body.style.maxHeight = `${Math.max(0, body.scrollHeight)}px`;
-          } else {
-            let h = closeHeightPx;
-            closeHeightPx = 0;
-            if (!h) {
-              const mh = getComputedStyle(body).maxHeight;
-              if (mh.endsWith("px")) {
-                const parsed = Number.parseFloat(mh);
-                if (Number.isFinite(parsed)) h = Math.round(parsed);
-              }
+          if (willOpen) {
+            for (const other of items) {
+              if (other === item || other.hidden) continue;
+              other.classList.remove("is-open");
+              other
+                .querySelector<HTMLButtonElement>(".faq-page__summary")
+                ?.setAttribute("aria-expanded", "false");
             }
-            if (!h) h = Math.max(body.scrollHeight, body.offsetHeight);
-            body.style.maxHeight = `${h}px`;
-            void body.offsetHeight;
-            body.style.maxHeight = "0px";
           }
+
+          item.classList.toggle("is-open", willOpen);
+          btn.setAttribute("aria-expanded", willOpen ? "true" : "false");
         });
       }
     }
@@ -228,10 +172,10 @@ if (!faqPageHost) {
         sec.hidden = !any;
       }
       syncNavActive();
-      syncFaqDetailsBodyMaxHeight();
+      syncFaqAccordionFilter();
     };
 
-    setupFaqDetailsAccordionHeight();
+    setupFaqAccordion();
 
     function syncNavActive() {
       const hash = window.location.hash.slice(1);
