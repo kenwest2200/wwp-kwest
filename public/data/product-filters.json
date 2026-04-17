@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-16T13:53:01.540Z",
+  "generatedAt": "2026-04-17T12:38:49.718Z",
   "attributesByCategory": {
     "bath": [],
     "pool": [
@@ -96,12 +96,50 @@
         ]
       },
       {
+        "name": "Filtration",
+        "slug": "filtration",
+        "values": [
+          {
+            "label": "area-1-4-sq-ft",
+            "slug": "filtration-area-1-4-sq-ft"
+          },
+          {
+            "label": "area-2-0-sq-ft",
+            "slug": "filtration-area-2-0-sq-ft"
+          },
+          {
+            "label": "area-2-6-sq-ft",
+            "slug": "filtration-area-2-6-sq-ft"
+          },
+          {
+            "label": "area-3-5-sq-ft",
+            "slug": "filtration-area-3-5-sq-ft"
+          }
+        ]
+      },
+      {
         "name": "Gpm",
         "slug": "gpm",
         "values": [
           {
             "label": "175.90",
             "slug": "gpm-175-90"
+          },
+          {
+            "label": "35",
+            "slug": "gpm-35"
+          },
+          {
+            "label": "45",
+            "slug": "gpm-45"
+          },
+          {
+            "label": "55",
+            "slug": "gpm-55"
+          },
+          {
+            "label": "70",
+            "slug": "gpm-70"
           }
         ]
       },
@@ -151,6 +189,22 @@
         "name": "Pool",
         "slug": "pool",
         "values": [
+          {
+            "label": "turnover-6hr-8hr-10hr-12600-16800-21000",
+            "slug": "pool-turnover-6hr-8hr-10hr-12600-16800-21000"
+          },
+          {
+            "label": "turnover-6hr-8hr-10hr-16200-21600-27000",
+            "slug": "pool-turnover-6hr-8hr-10hr-16200-21600-27000"
+          },
+          {
+            "label": "turnover-6hr-8hr-10hr-19800-26400-33000",
+            "slug": "pool-turnover-6hr-8hr-10hr-19800-26400-33000"
+          },
+          {
+            "label": "turnover-6hr-8hr-10hr-25200-33600-42000",
+            "slug": "pool-turnover-6hr-8hr-10hr-25200-33600-42000"
+          },
           {
             "label": "type-above-ground",
             "slug": "pool-type-above-ground"
@@ -224,6 +278,28 @@
             "slug": "sq-ft-200"
           }
         ]
+      },
+      {
+        "name": "Tank",
+        "slug": "tank",
+        "values": [
+          {
+            "label": "size-16",
+            "slug": "tank-size-16"
+          },
+          {
+            "label": "size-19",
+            "slug": "tank-size-19"
+          },
+          {
+            "label": "size-22",
+            "slug": "tank-size-22"
+          },
+          {
+            "label": "size-26",
+            "slug": "tank-size-26"
+          }
+        ]
       }
     ],
     "spa": [],
@@ -249,6 +325,50 @@
         ]
       },
       {
+        "name": "Filtration",
+        "slug": "filtration",
+        "values": [
+          {
+            "label": "area-1-4-sq-ft",
+            "slug": "filtration-area-1-4-sq-ft"
+          },
+          {
+            "label": "area-2-0-sq-ft",
+            "slug": "filtration-area-2-0-sq-ft"
+          },
+          {
+            "label": "area-2-6-sq-ft",
+            "slug": "filtration-area-2-6-sq-ft"
+          },
+          {
+            "label": "area-3-5-sq-ft",
+            "slug": "filtration-area-3-5-sq-ft"
+          }
+        ]
+      },
+      {
+        "name": "Gpm",
+        "slug": "gpm",
+        "values": [
+          {
+            "label": "35",
+            "slug": "gpm-35"
+          },
+          {
+            "label": "45",
+            "slug": "gpm-45"
+          },
+          {
+            "label": "55",
+            "slug": "gpm-55"
+          },
+          {
+            "label": "70",
+            "slug": "gpm-70"
+          }
+        ]
+      },
+      {
         "name": "Hp",
         "slug": "hp",
         "values": [
@@ -266,6 +386,22 @@
         "name": "Pool",
         "slug": "pool",
         "values": [
+          {
+            "label": "turnover-6hr-8hr-10hr-12600-16800-21000",
+            "slug": "pool-turnover-6hr-8hr-10hr-12600-16800-21000"
+          },
+          {
+            "label": "turnover-6hr-8hr-10hr-16200-21600-27000",
+            "slug": "pool-turnover-6hr-8hr-10hr-16200-21600-27000"
+          },
+          {
+            "label": "turnover-6hr-8hr-10hr-19800-26400-33000",
+            "slug": "pool-turnover-6hr-8hr-10hr-19800-26400-33000"
+          },
+          {
+            "label": "turnover-6hr-8hr-10hr-25200-33600-42000",
+            "slug": "pool-turnover-6hr-8hr-10hr-25200-33600-42000"
+          },
           {
             "label": "type-above-ground",
             "slug": "pool-type-above-ground"
@@ -305,6 +441,28 @@
           {
             "label": "ft-200",
             "slug": "sq-ft-200"
+          }
+        ]
+      },
+      {
+        "name": "Tank",
+        "slug": "tank",
+        "values": [
+          {
+            "label": "size-16",
+            "slug": "tank-size-16"
+          },
+          {
+            "label": "size-19",
+            "slug": "tank-size-19"
+          },
+          {
+            "label": "size-22",
+            "slug": "tank-size-22"
+          },
+          {
+            "label": "size-26",
+            "slug": "tank-size-26"
           }
         ]
       }
@@ -2295,7 +2453,7 @@
       "slug": "clearwater-ii-d-e-filter-system",
       "databaseId": 40169,
       "date": "2025-06-02T17:08:07",
-      "modified": "2026-04-15T23:03:58",
+      "modified": "2026-04-16T15:38:57",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/520-5187-3S_ClearWaterII-DE_StandSys_Hi-FloII_newplug_sil_xsm_flat_2025.png",
       "imageAlt": null,
       "imageWidth": 689,
@@ -2317,19 +2475,30 @@
       ]
     },
     {
-      "title": "Carefree Top-Mount – Sand Filter",
+      "title": "Carefree Top-Mount – Sand Filter Only",
       "slug": "carefree-top-mount-sand-filter-inground",
       "databaseId": 39535,
       "date": "2023-11-30T14:30:19",
-      "modified": "2026-04-02T09:42:40",
-      "imageUrl": null,
+      "modified": "2026-04-16T23:50:45",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Carefree_Sand-Filter2025_sil_xsm_flat.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 633,
+      "imageHeight": 1200,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "filtration-area-1-4-sq-ft",
+        "filtration-area-2-0-sq-ft",
+        "filtration-area-2-6-sq-ft",
+        "filtration-area-3-5-sq-ft",
+        "gpm-35",
+        "gpm-45",
+        "gpm-55",
+        "gpm-70",
+        "pool-turnover-6hr-8hr-10hr-12600-16800-21000",
+        "pool-turnover-6hr-8hr-10hr-16200-21600-27000"
+      ]
     },
     {
       "title": "Pulsar Foot Massage Jets & Power Pulsar Foot & Back Message Jets",

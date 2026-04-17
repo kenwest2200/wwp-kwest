@@ -1,0 +1,94 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import PageHeaderOffset from "../../../components/PageHeaderOffset.astro";
+import SectionHero from "../../../components/SectionHero/SectionHero.astro";
+import { getGraphQLClient, requestGraphql } from "../../../lib/graphql";
+import {
+  INSTRUCTIONAL_VIDEOS_PAGE_QUERY,
+  INSTRUCTIONAL_VIDEOS_PAGE_URI,
+  normalizeInstructionalVideos,
+  type InstructionalVideosPageData,
+} from "../../../lib/queries/instructional-videos-page";
+
+export const prerender = true;
+
+const graphqlConfigured = Boolean(getGraphQLClient());
+
+const introDefault =
+  "Step-by-step instructional videos for Waterway products and installations.";
+
+async function loadPage(): Promise<InstructionalVideosPageData["page"] | null> {
+  if (!graphqlConfigured) return null;
+  const uris = [
+    INSTRUCTIONAL_VIDEOS_PAGE_URI,
+    INSTRUCTIONAL_VIDEOS_PAGE_URI.replace(/\/$/, ""),
+  ];
+  for (const id of uris) {
+    try {
+      const data = await requestGraphql<InstructionalVideosPageData>(
+        INSTRUCTIONAL_VIDEOS_PAGE_QUERY,
+        { id },
+      );
+      if (data.page?.title) return data.page;
+    } catch {
+      /* try next */
+    }
+  }
+  return null;
+}
+
+const pageNode = await loadPage();
+const pageTitle = pageNode?.title?.trim() || "Instructional videos";
+const videos = normalizeInstructionalVideos(pageNode?.instructionalVideos ?? null);
+---
+
+<Layout headerType="white">
+  <main class="iv-page" data-page-header-offset>
+    <SectionHero title={pageTitle} intro={introDefault} />
+
+    <div class="iv-page__body">
+      <div class="iv-page__body-inner">
+        {
+          videos.length === 0 ? (
+            <p class="iv-page__empty">
+              {graphqlConfigured
+                ? "No videos are configured for this page yet."
+                : "GraphQL is not configured."}
+            </p>
+          ) : (
+            <div class="iv-page__grid">
+              {videos.map((v) => (
+                <a
+                  class="iv-page__card"
+                  href={v.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={v.textOnHover || v.title}
+                >
+                  <div class="iv-page__card-media">
+                    {v.imageUrl ? (
+                      <img
+                        class="iv-page__card-img"
+                        src={v.imageUrl}
+                        alt={v.imageAlt}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      <div class="iv-page__card-img" aria-hidden="true" />
+                    )}
+                  </div>
+                  <div class="iv-page__card-body">
+                    <h2 class="iv-page__card-title">{v.title}</h2>
+                  </div>
+                </a>
+              ))}
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<PageHeaderOffset />

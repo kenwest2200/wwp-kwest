@@ -11,6 +11,9 @@ export default {
     if (url.pathname === "/api/search-autocomplete") {
       return handleSearchAutocompleteApi(request, env);
     }
+    if (url.pathname === "/api/store-locations") {
+      return handleStoreLocationsApi(request, env);
+    }
 
     return handleFrontend(request, env);
   },
@@ -93,6 +96,27 @@ const GLOBAL_SEARCH_AUTOCOMPLETE_QUERY = `
   }
 `;
 
+function mapSearchApiItem(item: SearchItemRaw) {
+  return {
+    title: String(item.title ?? "").trim(),
+    uri: String(item.uri ?? "").trim(),
+    image: item.image
+      ? {
+          url: item.image.url ?? null,
+          thumbnails: item.image.thumbnails
+            ? {
+                small: item.image.thumbnails.small ?? null,
+                medium: item.image.thumbnails.medium ?? null,
+              }
+            : null,
+        }
+      : null,
+    subcategory: item.subcategory ? String(item.subcategory).trim() : null,
+    description: item.description ? String(item.description).trim() : null,
+    type: normalizeSearchItemType(item.type),
+  };
+}
+
 async function handleWebhook(request: Request, env: Env): Promise<Response> {
   if (request.method !== "POST") {
     return new Response("Method Not Allowed", { status: 405 });
@@ -153,7 +177,7 @@ async function handleSearchApi(request: Request, env: Env): Promise<Response> {
   const limitRaw = Number(url.searchParams.get("limit") ?? "20");
   const offsetRaw = Number(url.searchParams.get("offset") ?? "0");
   const limit = Number.isFinite(limitRaw)
-    ? Math.max(1, Math.min(50, Math.floor(limitRaw)))
+    ? Math.max(1, Math.min(100, Math.floor(limitRaw)))
     : 20;
   const offset = Number.isFinite(offsetRaw)
     ? Math.max(0, Math.floor(offsetRaw))
@@ -162,6 +186,10 @@ async function handleSearchApi(request: Request, env: Env): Promise<Response> {
   if (!query) {
     return jsonResponse({ total: 0, items: [] }, { origin });
   }
+
+  const typeParam = (url.searchParams.get("type") ?? "").trim().toLowerCase();
+  const onlyType: "product" | "page" | null =
+    typeParam === "product" || typeParam === "page" ? typeParam : null;
 
   const endpoint = env.PUBLIC_GRAPHQL_URL;
   if (!endpoint) {
@@ -175,53 +203,85 @@ async function handleSearchApi(request: Request, env: Env): Promise<Response> {
   const auth = btoa(`${user}:${pass}`);
 
   try {
-    const gqlRes = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Basic ${auth}`,
-      },
-      body: JSON.stringify({
-        query: GLOBAL_SEARCH_QUERY,
-        variables: { search: query, limit, offset },
-      }),
-    });
-    const payload = (await gqlRes.json()) as GlobalSearchPayload;
-    if (!gqlRes.ok || payload.errors?.length) {
-      const message =
-        payload.errors?.[0]?.message ||
-        `GraphQL search failed with status ${gqlRes.status}`;
-      return jsonResponse(
-        { total: 0, items: [], error: message },
-        { status: 502, origin },
-      );
+    if (!onlyType) {
+      const gqlRes = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Basic ${auth}`,
+        },
+        body: JSON.stringify({
+          query: GLOBAL_SEARCH_QUERY,
+          variables: { search: query, limit, offset },
+        }),
+      });
+      const payload = (await gqlRes.json()) as GlobalSearchPayload;
+      if (!gqlRes.ok || payload.errors?.length) {
+        const message =
+          payload.errors?.[0]?.message ||
+          `GraphQL search failed with status ${gqlRes.status}`;
+        return jsonResponse(
+          { total: 0, items: [], error: message },
+          { status: 502, origin },
+        );
+      }
+      const total = Number(payload.data?.search?.total ?? 0);
+      const items = (payload.data?.search?.items ?? [])
+        .filter((item) => item?.uri && item?.title)
+        .map((item) => mapSearchApiItem(item));
+      return jsonResponse({ total, items }, { origin });
     }
-    const total = Number(payload.data?.search?.total ?? 0);
-    const items = (payload.data?.search?.items ?? [])
+
+    const SEARCH_TYPE_FILTER_MAX_SCAN = 600;
+    const rawAccum: SearchItemRaw[] = [];
+    let gqlOffset = 0;
+    while (rawAccum.length < SEARCH_TYPE_FILTER_MAX_SCAN) {
+      const batchLimit = Math.min(
+        100,
+        SEARCH_TYPE_FILTER_MAX_SCAN - rawAccum.length,
+      );
+      const gqlRes = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Basic ${auth}`,
+        },
+        body: JSON.stringify({
+          query: GLOBAL_SEARCH_QUERY,
+          variables: {
+            search: query,
+            limit: batchLimit,
+            offset: gqlOffset,
+          },
+        }),
+      });
+      const payload = (await gqlRes.json()) as GlobalSearchPayload;
+      if (!gqlRes.ok || payload.errors?.length) {
+        const message =
+          payload.errors?.[0]?.message ||
+          `GraphQL search failed with status ${gqlRes.status}`;
+        return jsonResponse(
+          { total: 0, items: [], error: message },
+          { status: 502, origin },
+        );
+      }
+      const batch = payload.data?.search?.items ?? [];
+      if (!batch.length) break;
+      rawAccum.push(...batch);
+      gqlOffset += batch.length;
+      if (batch.length < batchLimit) break;
+    }
+
+    const mapped = rawAccum
       .filter((item) => item?.uri && item?.title)
-      .map((item) => ({
-        title: String(item.title ?? "").trim(),
-        uri: String(item.uri ?? "").trim(),
-        image: item.image
-          ? {
-              url: item.image.url ?? null,
-              thumbnails: item.image.thumbnails
-                ? {
-                    small: item.image.thumbnails.small ?? null,
-                    medium: item.image.thumbnails.medium ?? null,
-                  }
-                : null,
-            }
-          : null,
-        subcategory: item.subcategory
-          ? String(item.subcategory).trim()
-          : null,
-        description: item.description
-          ? String(item.description).trim()
-          : null,
-        type: normalizeSearchItemType(item.type),
-      }));
-    return jsonResponse({ total, items }, { origin });
+      .map((item) => mapSearchApiItem(item));
+    const filtered = mapped.filter((item) => {
+      const kind = item.type === "page" ? "page" : "product";
+      return kind === onlyType;
+    });
+    const total = filtered.length;
+    const sliced = filtered.slice(offset, offset + limit);
+    return jsonResponse({ total, items: sliced }, { origin });
   } catch (error) {
     return jsonResponse(
       {
@@ -320,6 +380,67 @@ async function handleSearchAutocompleteApi(
         error: error instanceof Error ? error.message : String(error),
       },
       { status: 500, origin },
+    );
+  }
+}
+
+async function handleStoreLocationsApi(
+  request: Request,
+  env: Env,
+): Promise<Response> {
+  const origin = request.headers.get("Origin");
+  if (request.method === "OPTIONS") {
+    const headers = new Headers();
+    headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
+    headers.set("Access-Control-Allow-Headers", "Content-Type");
+    headers.set("Access-Control-Max-Age", "86400");
+    if (origin) headers.set("Access-Control-Allow-Origin", origin);
+    return new Response(null, { status: 204, headers });
+  }
+  if (request.method !== "GET") {
+    return jsonResponse({ error: "Method Not Allowed" }, {
+      status: 405,
+      origin,
+    });
+  }
+
+  const wpOrigin = env.PUBLIC_WORDPRESS_ORIGIN;
+  if (!wpOrigin?.trim()) {
+    return jsonResponse(
+      { error: "PUBLIC_WORDPRESS_ORIGIN is not configured" },
+      { status: 500, origin },
+    );
+  }
+
+  const url = new URL(request.url);
+  const limitRaw = Number(url.searchParams.get("limit") ?? "10");
+  const offsetRaw = Number(url.searchParams.get("offset") ?? "0");
+  const limit = Number.isFinite(limitRaw)
+    ? Math.max(1, Math.min(100, Math.floor(limitRaw)))
+    : 10;
+  const offset = Number.isFinite(offsetRaw) ? Math.max(0, Math.floor(offsetRaw)) : 0;
+
+  const base = wpOrigin.replace(/\/+$/, "");
+  const upstream = `${base}/wp-json/restapi/v2/store-locations?limit=${encodeURIComponent(String(limit))}&offset=${encodeURIComponent(String(offset))}`;
+
+  try {
+    const res = await fetch(upstream);
+    const text = await res.text();
+    const headers = new Headers({
+      "Content-Type": res.headers.get("Content-Type") ?? "application/json",
+      "Cache-Control": "public, max-age=60",
+    });
+    if (origin) {
+      headers.set("Access-Control-Allow-Origin", origin);
+      headers.set("Vary", "Origin");
+    }
+    return new Response(text, { status: res.status, headers });
+  } catch (error) {
+    return jsonResponse(
+      {
+        error: error instanceof Error ? error.message : String(error),
+      },
+      { status: 502, origin },
     );
   }
 }

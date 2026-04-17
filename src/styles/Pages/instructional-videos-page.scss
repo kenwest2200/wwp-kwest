@@ -1,0 +1,82 @@
+@use "../variables" as *;
+@use "../functions" as *;
+@use "../breakpoints" as *;
+
+.iv-page {
+  padding-top: var(--page-header-offset, #{px-to-rem(112)});
+  padding-bottom: px-to-rem(80);
+
+
+  &__body {
+    padding-top: px-to-rem(60);
+  }
+
+  &__body-inner {
+    max-width: px-to-rem(1192);
+    margin: 0 auto;
+    padding-left: var(--section-left, var(--s-padding-x));
+    padding-right: var(--section-right, var(--s-padding-x));
+  }
+
+  &__grid {
+    display: grid;
+    gap: px-to-rem(24);
+    grid-template-columns: 1fr;
+
+    @include media-breakpoint-up(md) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include media-breakpoint-up(lg) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    border-radius: px-to-rem(8);
+    overflow: hidden;
+    background: $white;
+    box-shadow: 0 px-to-rem(4) px-to-rem(24) rgba(13, 39, 37, 0.08);
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+      box-shadow: 0 px-to-rem(8) px-to-rem(32) rgba(13, 39, 37, 0.12);
+      transform: translateY(px-to-rem(-2));
+    }
+  }
+
+  &__card-media {
+    aspect-ratio: 16 / 9;
+    background: $light-gray;
+    overflow: hidden;
+  }
+
+  &__card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__card-body {
+    padding: px-to-rem(16) px-to-rem(20) px-to-rem(20);
+  }
+
+  &__card-title {
+    margin: 0;
+    font-size: px-to-rem(18);
+    font-weight: 600;
+    line-height: px-to-rem(26);
+    color: $dark;
+  }
+
+  &__empty {
+    margin: 0;
+    color: $dark-medium;
+    font-size: px-to-rem(16);
+  }
+}

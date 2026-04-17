@@ -1,11 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import PageHeaderOffset from "../components/PageHeaderOffset.astro";
+import ArrowPaginationIcon from "../components/icons/arrowPaginationIcon.astro";
 
 export const prerender = true;
 ---
 
 <Layout headerType="white">
-  <main class="search-results-page" data-search-page>
+  <main class="search-results-page" data-search-page data-page-header-offset>
     <section
       class="search-results-page__inner"
       aria-labelledby="search-results-title"
@@ -14,8 +16,8 @@ export const prerender = true;
         <h1 id="search-results-title" class="search-results-page__title">
           <span
             id="search-results-heading-primary"
-            class="search-results-page__title-primary"
-            >Search</span>
+            class="search-results-page__title-primary">Search</span
+          >
           <span
             id="search-results-heading-query"
             class="search-results-page__title-query"
@@ -44,7 +46,7 @@ export const prerender = true;
               aria-selected="true"
               aria-controls="search-tabpanel-products"
             >
-              Products
+              <span class="search-results-page__tab-label">Products</span>
             </button>
             <button
               type="button"
@@ -54,27 +56,161 @@ export const prerender = true;
               aria-selected="false"
               aria-controls="search-tabpanel-pages"
             >
-              Pages
+              <span class="search-results-page__tab-label">Related pages</span>
             </button>
           </div>
+
+          <div
+            id="search-toolbar-products"
+            class="product-filters__products-toolbar-wrapper search-results-page__catalog-toolbar"
+            aria-label="Search results toolbar"
+          >
+            <div
+              class="product-filters__products-toolbar search-results-page__catalog-toolbar__tools"
+            >
+              <div
+                id="search-per-dropdown"
+                class="product-filters__custom-select"
+                data-search-per-root
+              >
+                <button
+                  type="button"
+                  id="search-per-trigger"
+                  class="product-filters__custom-select-trigger"
+                  aria-label="Results per page"
+                  aria-haspopup="listbox"
+                  aria-expanded="false"
+                  aria-controls="search-per-menu"
+                  data-search-per-trigger
+                >
+                  <span class="product-filters__custom-select-text">
+                    <span class="product-filters__custom-select-fixed"
+                      >Show:</span
+                    >
+                    <span
+                      id="search-per-value"
+                      class="product-filters__custom-select-variable">12</span
+                    >
+                    <span class="product-filters__custom-select-variable"
+                      >/ page</span
+                    >
+                  </span>
+                  <span
+                    class="product-filters__custom-select-chevron"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="10"
+                      height="6"
+                      viewBox="0 0 10 6"
+                      fill="none"
+                    >
+                      <path
+                        d="M0.75 0.75L4.75 4.75L8.75 0.75"
+                        stroke="#9C9C9C"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"></path>
+                    </svg>
+                  </span>
+                </button>
+                <ul
+                  id="search-per-menu"
+                  class="product-filters__custom-select-menu"
+                  role="listbox"
+                  aria-labelledby="search-per-trigger"
+                  hidden
+                  data-search-per-menu
+                >
+                  <li role="presentation">
+                    <button
+                      type="button"
+                      class="product-filters__custom-select-option"
+                      role="option"
+                      data-search-per-value="12"
+                    >
+                      12
+                    </button>
+                  </li>
+                  <li role="presentation">
+                    <button
+                      type="button"
+                      class="product-filters__custom-select-option"
+                      role="option"
+                      data-search-per-value="24"
+                    >
+                      24
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="product-filters__toolbar-pager">
+              <p
+                class="product-filters__pager-range search-js-pager-range-toolbar"
+                data-search-range-slot="toolbar"
+              ></p>
+              <div class="product-filters__toolbar-pager-buttons">
+                <button
+                  type="button"
+                  class="product-filters__btn product-filters__btn--prev"
+                  data-search-nav="prev"
+                  aria-label="Previous page"
+                >
+                  <ArrowPaginationIcon
+                    class="product-filters__btn-icon product-filters__btn-icon--prev"
+                  />
+                </button>
+                <button
+                  type="button"
+                  class="product-filters__btn product-filters__btn--next"
+                  data-search-nav="next"
+                  aria-label="Next page"
+                >
+                  <ArrowPaginationIcon
+                    class="product-filters__btn-icon product-filters__btn-icon--next"
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+
           <div
             id="search-tabpanel-products"
             class="search-results-page__tabpanel"
             role="tabpanel"
             aria-labelledby="search-tab-btn-products"
           >
-            <ul
-              id="search-results-list-products"
-              class="search-results-page__list search-results-page__list--cards"
+            <div
+              class="search-results-page__panel-body"
+              data-search-panel-body="products"
             >
-            </ul>
-            <p
-              id="search-results-empty-products"
-              class="search-results-page__empty search-results-page__empty--tab"
-              hidden
-            >
-              No products in these results.
-            </p>
+              <div
+                class="search-results-page__panel-loader"
+                data-search-panel-loader="products"
+                hidden
+              >
+                <span
+                  class="search-results-page__panel-loader-spinner"
+                  aria-hidden="true"></span>
+                <span class="search-results-page__panel-loader-text"
+                  >Loading…</span
+                >
+              </div>
+              <ul
+                id="search-results-list-products"
+                class="product-filters__list search-results-page__results-grid"
+              >
+              </ul>
+              <p
+                id="search-results-empty-products"
+                class="search-results-page__empty search-results-page__empty--tab"
+                hidden
+              >
+                No products in these results.
+              </p>
+            </div>
           </div>
           <div
             id="search-tabpanel-pages"
@@ -83,27 +219,149 @@ export const prerender = true;
             aria-labelledby="search-tab-btn-pages"
             hidden
           >
-            <ul
-              id="search-results-list-pages"
-              class="search-results-page__list search-results-page__list--cards"
+            <div
+              class="search-results-page__panel-body"
+              data-search-panel-body="pages"
             >
-            </ul>
-            <p
-              id="search-results-empty-pages"
-              class="search-results-page__empty search-results-page__empty--tab"
-              hidden
+              <div
+                class="search-results-page__panel-loader"
+                data-search-panel-loader="pages"
+                hidden
+              >
+                <span
+                  class="search-results-page__panel-loader-spinner"
+                  aria-hidden="true"></span>
+                <span class="search-results-page__panel-loader-text"
+                  >Loading…</span
+                >
+              </div>
+              <ul
+                id="search-results-list-pages"
+                class="search-results-page__pages-list"
+              >
+              </ul>
+              <p
+                id="search-results-empty-pages"
+                class="search-results-page__empty search-results-page__empty--tab"
+                hidden
+              >
+                No pages in these results.
+              </p>
+            </div>
+          </div>
+
+          <div
+            id="search-bottom-pager-wrap"
+            class="search-results-page__bottom-pager-wrap"
+          >
+            <div
+              id="search-results-pager"
+              class="product-filters__pager search-results-page__bottom-pager"
+              aria-label="Page navigation"
             >
-              No pages in these results.
-            </p>
+              <p
+                class="product-filters__pager-range search-js-pager-range-footer"
+                data-search-range-slot="footer"
+              ></p>
+              <div class="product-filters__pager-controls">
+                <button
+                  type="button"
+                  class="product-filters__pager-step product-filters__pager-step--prev"
+                  data-search-nav="prev"
+                  aria-label="Previous page"
+                >
+                  <div class="product-filters__pager-step-icon-wrapper">
+                    <ArrowPaginationIcon
+                      class="product-filters__pager-step-icon product-filters__pager-step-icon--prev"
+                    />
+                  </div>
+                  <span class="product-filters__pager-step-text">Previous</span>
+                </button>
+                <div
+                  id="search-pager-pages"
+                  class="product-filters__pager-pages"
+                  role="presentation"
+                >
+                </div>
+                <button
+                  type="button"
+                  class="product-filters__pager-step product-filters__pager-step--next"
+                  data-search-nav="next"
+                  aria-label="Next page"
+                >
+                  <span class="product-filters__pager-step-text">Next</span>
+                  <div class="product-filters__pager-step-icon-wrapper">
+                    <ArrowPaginationIcon
+                      class="product-filters__pager-step-icon product-filters__pager-step-icon--next"
+                    />
+                  </div>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
         <p id="search-results-empty" class="search-results-page__empty" hidden>
           No results found.
         </p>
+
+        <template id="search-page-hit-template">
+          <li class="search-results-page__page-hit" data-search-page-hit-root>
+            <article class="search-results-page__page-hit-inner">
+              <h3
+                class="search-results-page__page-hit-title"
+                data-search-page-hit-title
+              >
+              </h3>
+              <p
+                class="search-results-page__page-hit-desc"
+                data-search-page-hit-desc
+              >
+              </p>
+              <a
+                class="search-results-page__page-hit-readmore"
+                data-search-page-hit-link
+                href="#">Read more</a
+              >
+            </article>
+            <hr class="search-results-page__page-hit-rule" />
+          </li>
+        </template>
+
+        <template id="search-card-template">
+          <li class="product-filters__product-card" data-search-card-root>
+            <a
+              class="product-filters__product-link"
+              href="#"
+              data-search-card-link
+            >
+              <span
+                class="product-filters__product-label"
+                data-search-card-label></span>
+              <span class="product-filters__product-thumb">
+                <img
+                  data-search-card-img
+                  src="/images/no-product-image.svg"
+                  alt=""
+                  width="268"
+                  height="176"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </span>
+              <h3 class="product-filters__product-title" data-search-card-title>
+              </h3>
+              <span class="product-filters__product-cta btn btn--single-outline"
+                >View details</span
+              >
+            </a>
+          </li>
+        </template>
       </div>
     </section>
   </main>
 </Layout>
+
+<PageHeaderOffset />
 
 <script>
   import "../scripts/search-page.ts";

@@ -1,0 +1,185 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PageHeaderOffset from "../../components/PageHeaderOffset.astro";
+import SectionHero from "../../components/SectionHero/SectionHero.astro";
+import { getGraphQLClient, requestGraphql } from "../../lib/graphql";
+import {
+  DISTRIBUTOR_LOCATOR_PAGE_QUERY,
+  DISTRIBUTOR_LOCATOR_PAGE_URI,
+  normalizeDistributorLocatorSidebar,
+  type DistributorLocatorPageData,
+} from "../../lib/queries/distributor-locator-page";
+import {
+  fetchStoreLocationsPage,
+  getWordPressOrigin,
+  storeLocationDisplayLines,
+} from "../../lib/store-locations";
+
+export const prerender = true;
+
+const graphqlConfigured = Boolean(getGraphQLClient());
+const STORE_PAGE_SIZE = 10;
+
+const introDefault =
+  "Find authorized distributors and dealers. Use the list below or browse by region.";
+
+async function loadPage(): Promise<DistributorLocatorPageData["page"] | null> {
+  if (!graphqlConfigured) return null;
+  const uris = [
+    DISTRIBUTOR_LOCATOR_PAGE_URI,
+    DISTRIBUTOR_LOCATOR_PAGE_URI.replace(/\/$/, ""),
+  ];
+  for (const id of uris) {
+    try {
+      const data = await requestGraphql<DistributorLocatorPageData>(
+        DISTRIBUTOR_LOCATOR_PAGE_QUERY,
+        { id },
+      );
+      if (data.page?.title) return data.page;
+    } catch {
+      /* try next */
+    }
+  }
+  return null;
+}
+
+const pageNode = await loadPage();
+const pageTitle = pageNode?.title?.trim() || "Dealer locator";
+const mainHtml = (pageNode?.content ?? "").trim();
+const sidebarColumns = normalizeDistributorLocatorSidebar(
+  pageNode?.distributorLocatorSidebarContent ?? null,
+);
+
+const wpOrigin = getWordPressOrigin();
+const initialStores = wpOrigin
+  ? await fetchStoreLocationsPage({
+      origin: wpOrigin,
+      limit: STORE_PAGE_SIZE,
+      offset: 0,
+    })
+  : { rows: [], total: null, raw: null };
+
+const storeHasMore =
+  initialStores.rows.length > 0 &&
+  (typeof initialStores.total === "number"
+    ? initialStores.total > initialStores.rows.length
+    : initialStores.rows.length >= STORE_PAGE_SIZE);
+---
+
+<Layout headerType="white">
+  <main
+    class="dl-page"
+    data-page-header-offset
+    data-dl-locator
+    data-limit={String(STORE_PAGE_SIZE)}
+    data-next-offset={String(initialStores.rows.length)}
+    data-has-more={storeHasMore ? "1" : "0"}
+  >
+    <SectionHero title={pageTitle} intro={introDefault} />
+
+    <div class="dl-page__body">
+      <div class="dl-page__body-inner">
+        <div class="dl-page__layout">
+          <div class="dl-page__main">
+            {
+              mainHtml ? (
+                <div
+                  class="product-page__optional-html"
+                  set:html={mainHtml}
+                />
+              ) : (
+                <p class="sr-page__empty">
+                  {graphqlConfigured
+                    ? "No main content for this page."
+                    : "GraphQL is not configured."}
+                </p>
+              )
+            }
+          </div>
+
+          {
+            sidebarColumns.length > 0 && (
+              <aside class="dl-page__sidebar" aria-label="Locator sidebar">
+                {sidebarColumns.map((col) => (
+                  <div class="dl-page__sidebar-col">
+                    {col.columnTitle && (
+                      <h2 class="dl-page__sidebar-col-title">{col.columnTitle}</h2>
+                    )}
+                    {col.sections.map((sec) => (
+                      <section class="dl-page__sidebar-section">
+                        {sec.title && (
+                          <h3 class="dl-page__sidebar-section-title">{sec.title}</h3>
+                        )}
+                        {sec.subsections.map((sub) => (
+                          <div class="dl-page__sidebar-sub">
+                            {sub.title && (
+                              <h4 class="dl-page__sidebar-sub-title">{sub.title}</h4>
+                            )}
+                            {sub.contentHtml && (
+                              <div
+                                class="dl-page__sidebar-sub-html product-page__optional-html"
+                                set:html={sub.contentHtml}
+                              />
+                            )}
+                          </div>
+                        ))}
+                      </section>
+                    ))}
+                  </div>
+                ))}
+              </aside>
+            )
+          }
+        </div>
+
+        <section class="dl-page__locations" aria-labelledby="dl-locations-heading">
+          <h2 class="dl-page__locations-title" id="dl-locations-heading">
+            Locations
+          </h2>
+          {
+            !wpOrigin ? (
+              <p class="sr-page__empty">
+                Set <code>PUBLIC_WORDPRESS_ORIGIN</code> in <code>.env</code> to load
+                store locations (same origin as the WordPress site with the plugin).
+              </p>
+            ) : initialStores.rows.length === 0 ? (
+              <p class="sr-page__empty">No locations returned from the store API.</p>
+            ) : (
+              <>
+                <ul class="dl-page__locations-list" data-dl-list>
+                  {initialStores.rows.map((row) => (
+                    <li class="dl-page__location">
+                      {storeLocationDisplayLines(row).map((line) => (
+                        <p class="dl-page__location-line">{line}</p>
+                      ))}
+                    </li>
+                  ))}
+                </ul>
+                {storeHasMore && (
+                  <div class="dl-page__more-wrap">
+                    <button
+                      type="button"
+                      class="btn btn--primary-dark dl-page__more-btn"
+                      data-dl-more
+                    >
+                      Load more
+                    </button>
+                    <p class="dl-page__hint">
+                      Loads the next {STORE_PAGE_SIZE} locations from the catalog.
+                    </p>
+                  </div>
+                )}
+              </>
+            )
+          }
+        </section>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<PageHeaderOffset />
+
+<script>
+  import "../../scripts/distributor-locator-page.ts";
+</script>

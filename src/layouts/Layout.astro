@@ -1,5 +1,6 @@
 ---
 import "../styles/global.scss";
+import { SEO } from "astro-seo";
 import Header from "../components/Header/index.astro";
 import Footer from "../components/Footer/index.astro";
 import { getGraphQLClient, requestGraphql } from "../lib/graphql";
@@ -14,16 +15,31 @@ import {
 
 export interface Props {
   headerType?: "white";
+  pageTitle?: string;
+  description?: string;
+  robotsNoIndex?: boolean;
 }
 
-const { headerType } = Astro.props;
+const { headerType, pageTitle, description, robotsNoIndex } = Astro.props;
+const shortTitle = pageTitle?.trim() ?? "";
+const hasPageTitle = shortTitle.length > 0;
+const titleDefault = "Waterway Plastics - Pool & Spa Supplies";
+const documentTitle = hasPageTitle
+  ? `${shortTitle} | Waterway Plastics`
+  : titleDefault;
 
 const PUBLIC_SITE_URL = "https://waterwayplastics.com";
 const siteOrigin = PUBLIC_SITE_URL.replace(/\/+$/, "") ?? "";
-const canonicalHref =
-  siteOrigin.length > 0
-    ? new URL(`${Astro.url.pathname}${Astro.url.search}`, `${siteOrigin}/`).href
-    : null;
+const originForAbsolute = siteOrigin.length > 0 ? siteOrigin : Astro.url.origin;
+const canonicalHref = new URL(
+  `${Astro.url.pathname}${Astro.url.search}`,
+  `${originForAbsolute}/`,
+).href;
+
+const metaDescription =
+  description?.trim() ||
+  "Pool and spa supplies, parts, and equipment from Waterway Plastics.";
+const ogImageUrl = `${originForAbsolute}/favicon.png`;
 
 let headerData: HeaderLayoutData | null = null;
 let footerData: FooterLayoutData | null = null;
@@ -45,12 +61,42 @@ if (getGraphQLClient()) {
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <SEO
+      charset="UTF-8"
+      title={hasPageTitle ? shortTitle : undefined}
+      titleTemplate={hasPageTitle ? "%s | Waterway Plastics" : undefined}
+      titleDefault={titleDefault}
+      description={metaDescription}
+      canonical={canonicalHref}
+      noindex={Boolean(robotsNoIndex)}
+      nofollow={Boolean(robotsNoIndex)}
+      openGraph={{
+        basic: {
+          title: documentTitle,
+          type: "website",
+          image: ogImageUrl,
+          url: canonicalHref,
+        },
+        optional: {
+          siteName: "Waterway Plastics",
+          description: metaDescription,
+          locale: "en_US",
+        },
+        image: {
+          alt: "Waterway Plastics",
+        },
+      }}
+      twitter={{
+        card: "summary_large_image",
+        title: documentTitle,
+        description: metaDescription,
+        image: ogImageUrl,
+        imageAlt: "Waterway Plastics",
+      }}
+    />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="generator" content={Astro.generator} />
-    {canonicalHref && <link rel="canonical" href={canonicalHref} />}
-    <title>Waterway Plastics - Pool & Spa Supplies</title>
   </head>
   <body>
     <Header data={headerData} headerType={headerType} />

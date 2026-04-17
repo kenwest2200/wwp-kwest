@@ -1,0 +1,37 @@
+@use "../variables" as *;
+@use "../functions" as *;
+
+.sr-page {
+  padding-top: var(--page-header-offset, #{px-to-rem(112)});
+  padding-bottom: px-to-rem(80);
+
+
+  &__body {
+    padding-top: px-to-rem(60);
+  }
+
+  &__body-inner {
+    max-width: px-to-rem(1192);
+    margin: 0 auto;
+    padding-left: var(--section-left, var(--s-padding-x));
+    padding-right: var(--section-right, var(--s-padding-x));
+  }
+
+  &__content {
+    font-size: px-to-rem(16);
+    line-height: px-to-rem(28);
+    color: $dark;
+
+    img {
+      max-width: 100%;
+      height: auto;
+      width: 100%;
+    }
+  }
+
+  &__empty {
+    margin: 0;
+    color: $dark-medium;
+    font-size: px-to-rem(16);
+  }
+}

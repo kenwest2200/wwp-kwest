@@ -1,13 +1,8 @@
 export {};
 
 import { decodeHtmlEntities } from "../lib/decode-html-entities";
-import { subscribePageHeaderOffset } from "../lib/subscribe-page-header-offset";
 
-const searchPageHost =
-  document.querySelector<HTMLElement>("[data-search-page]");
-if (searchPageHost) {
-  subscribePageHeaderOffset(searchPageHost, "--search-page-header-offset");
-}
+const PER_PAGE_STORAGE_KEY = "wwp-search-per-page";
 
 const titlePrimaryEl = document.getElementById(
   "search-results-heading-primary",
@@ -50,9 +45,22 @@ const emptyPagesEl = document.getElementById(
   "search-results-empty-pages",
 ) as HTMLParagraphElement | null;
 const tabsWrapEl = document.getElementById("search-results-tabs-wrap");
+const cardTemplateEl = document.getElementById(
+  "search-card-template",
+) as HTMLTemplateElement | null;
+const pageHitTemplateEl = document.getElementById(
+  "search-page-hit-template",
+) as HTMLTemplateElement | null;
+
+const bottomPagerWrapEl = document.getElementById("search-bottom-pager-wrap");
+
+const pagerRootEl = document.getElementById("search-results-pager");
+const pagerPagesEl = document.getElementById("search-pager-pages");
 
 const params = new URLSearchParams(window.location.search);
 const query = (params.get("q") ?? "").trim();
+
+type SearchTab = "products" | "pages";
 
 type SearchItemType = "product" | "page";
 
@@ -61,6 +69,7 @@ type SearchApiItem = {
   uri?: string;
   image?: {
     url?: string | null;
+    alt?: string | null;
     thumbnails?: {
       small?: string | null;
       medium?: string | null;
@@ -77,6 +86,33 @@ type SearchApiPayload = {
   error?: string;
 };
 
+let activeTab: SearchTab = "products";
+let currentPageProducts = 1;
+let currentPagePages = 1;
+let perPage = readPerPage();
+let lastTotalProducts = 0;
+let lastTotalPages = 0;
+
+function readPerPage(): number {
+  try {
+    const raw = localStorage.getItem(PER_PAGE_STORAGE_KEY);
+    const n = Number(raw);
+    if (n === 12 || n === 24) return n;
+  } catch {
+    /* ignore */
+  }
+  return 12;
+}
+
+function writePerPage(n: 12 | 24): void {
+  perPage = n;
+  try {
+    localStorage.setItem(PER_PAGE_STORAGE_KEY, String(n));
+  } catch {
+    /* ignore */
+  }
+}
+
 function normalizeSearchHref(uri: string): string {
   const u = uri.trim();
   if (!u) return "#";
@@ -85,24 +121,21 @@ function normalizeSearchHref(uri: string): string {
 }
 
 function itemImageSrc(item: SearchApiItem): string | null {
+  const full = item.image?.url?.trim();
+  if (full) return full;
   const t = item.image?.thumbnails;
   const fromThumb = t?.small || t?.medium;
   if (fromThumb) return fromThumb;
-  const u = item.image?.url;
-  return u && u.trim() ? u.trim() : null;
+  return null;
 }
 
-function stripHtmlToText(html: string): string {
-  if (!html.trim()) return "";
-  const d = document.createElement("div");
-  d.innerHTML = html;
-  return (d.textContent ?? "").replace(/\s+/g, " ").trim();
+function itemImageAlt(item: SearchApiItem, titlePlain: string): string {
+  const a = item.image?.alt?.trim();
+  if (a) return decodeHtmlEntities(a);
+  return titlePlain;
 }
 
-function truncate(text: string, max: number): string {
-  if (text.length <= max) return text;
-  return `${text.slice(0, max - 1)}…`;
-}
+const PRODUCT_IMAGE_PLACEHOLDER = "/images/no-product-image.svg";
 
 function classifyItem(item: SearchApiItem): SearchItemType {
   const t = (item.type ?? "").toString().trim().toLowerCase();
@@ -110,7 +143,61 @@ function classifyItem(item: SearchApiItem): SearchItemType {
   return "product";
 }
 
-function resetLists() {
+function cardKindLabel(item: SearchApiItem): string {
+  if (classifyItem(item) === "page") return "Page";
+  const sub = (item.subcategory ?? "").toString().trim();
+  return sub || "Product";
+}
+
+function stripHtmlToText(html: string): string {
+  if (!html.trim()) return "";
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const text = doc.body.textContent ?? "";
+  return text.replace(/\s+/g, " ").trim();
+}
+
+function truncateText(s: string, max: number): string {
+  if (s.length <= max) return s;
+  return `${s.slice(0, max - 1).trimEnd()}…`;
+}
+
+function perRoots(): NodeListOf<HTMLElement> {
+  return document.querySelectorAll<HTMLElement>("[data-search-per-root]");
+}
+
+function setPerMenuOpenFor(root: HTMLElement | null, open: boolean): void {
+  if (!root) return;
+  root.classList.toggle("product-filters__custom-select--open", open);
+  root
+    .querySelector<HTMLElement>("[data-search-per-trigger]")
+    ?.setAttribute("aria-expanded", open ? "true" : "false");
+  const menu = root.querySelector<HTMLElement>("[data-search-per-menu]");
+  if (menu) menu.hidden = !open;
+}
+
+function closeAllPerMenus(): void {
+  for (const r of perRoots()) setPerMenuOpenFor(r, false);
+}
+
+function updatePerValueLabels(): void {
+  const el = document.getElementById("search-per-value");
+  if (el) el.textContent = String(perPage);
+}
+
+function panelLoaderEl(tab: SearchTab): HTMLElement | null {
+  return document.querySelector<HTMLElement>(
+    `[data-search-panel-loader="${tab}"]`,
+  );
+}
+
+function setPanelLoading(tab: SearchTab, loading: boolean): void {
+  const loader = panelLoaderEl(tab);
+  const panel = tab === "products" ? tabProductsPanel : tabPagesPanel;
+  if (loader) loader.hidden = !loading;
+  if (panel) panel.setAttribute("aria-busy", loading ? "true" : "false");
+}
+
+function resetListsFull(): void {
   if (listProductsEl) listProductsEl.innerHTML = "";
   if (listPagesEl) listPagesEl.innerHTML = "";
   if (emptyGlobalEl) emptyGlobalEl.hidden = true;
@@ -120,6 +207,11 @@ function resetLists() {
     errorEl.hidden = true;
     errorEl.textContent = "";
   }
+}
+
+function clearListFor(tab: SearchTab): void {
+  if (tab === "products" && listProductsEl) listProductsEl.innerHTML = "";
+  if (tab === "pages" && listPagesEl) listPagesEl.innerHTML = "";
 }
 
 function setError(message: string) {
@@ -147,7 +239,8 @@ function setSearchHeading(main: string, queryLine: string | null): void {
   }
 }
 
-function setActiveTab(which: "products" | "pages") {
+function setActiveTab(which: SearchTab): void {
+  activeTab = which;
   const isProducts = which === "products";
   if (tabProductsBtn) {
     tabProductsBtn.classList.toggle("is-active", isProducts);
@@ -159,88 +252,383 @@ function setActiveTab(which: "products" | "pages") {
   }
   if (tabProductsPanel) tabProductsPanel.hidden = !isProducts;
   if (tabPagesPanel) tabPagesPanel.hidden = isProducts;
+
+  if (bottomPagerWrapEl) bottomPagerWrapEl.hidden = !isProducts;
+
+  syncPagerUi();
 }
 
-function renderCard(item: SearchApiItem): HTMLLIElement {
-  const li = document.createElement("li");
-  li.className = "search-results-page__card";
+function cloneSearchResultCard(item: SearchApiItem): HTMLLIElement | null {
+  if (!cardTemplateEl) return null;
+  const node = cardTemplateEl.content.cloneNode(true) as DocumentFragment;
+  const li = node.querySelector(
+    "[data-search-card-root]",
+  ) as HTMLLIElement | null;
+  const link = node.querySelector<HTMLAnchorElement>("[data-search-card-link]");
+  const labelEl = node.querySelector<HTMLElement>("[data-search-card-label]");
+  const img = node.querySelector<HTMLImageElement>("[data-search-card-img]");
+  const titleEl = node.querySelector<HTMLElement>("[data-search-card-title]");
 
+  if (!li || !link || !labelEl || !img || !titleEl) return null;
+
+  const titlePlain =
+    decodeHtmlEntities((item.title ?? "").trim()) || "Untitled";
   const href = item.uri ? normalizeSearchHref(item.uri) : "#";
-  const link = document.createElement("a");
-  link.className = "search-results-page__card-link";
   link.href = href;
 
-  const imgSrc = itemImageSrc(item);
-  if (imgSrc) {
-    const figure = document.createElement("div");
-    figure.className = "search-results-page__card-media";
-    const img = document.createElement("img");
-    img.className = "search-results-page__card-img";
-    img.src = imgSrc;
-    img.alt = "";
-    img.loading = "lazy";
-    img.decoding = "async";
-    figure.appendChild(img);
-    link.appendChild(figure);
-  }
+  labelEl.textContent = cardKindLabel(item);
 
-  const body = document.createElement("div");
-  body.className = "search-results-page__card-body";
+  const rawImg = itemImageSrc(item)?.trim();
+  img.onerror = () => {
+    img.onerror = null;
+    img.src = PRODUCT_IMAGE_PLACEHOLDER;
+  };
+  img.src = rawImg && rawImg.length > 0 ? rawImg : PRODUCT_IMAGE_PLACEHOLDER;
+  img.alt = itemImageAlt(item, titlePlain);
 
-  const h = document.createElement("h2");
-  h.className = "search-results-page__card-title";
-  h.textContent = decodeHtmlEntities((item.title ?? "").trim()) || "Untitled";
-  body.appendChild(h);
+  titleEl.textContent = titlePlain;
+  li.setAttribute("data-full-title", titlePlain);
 
-  const sub = (item.subcategory ?? "").toString().trim();
-  if (sub) {
-    const meta = document.createElement("p");
-    meta.className = "search-results-page__card-meta";
-    meta.textContent = sub;
-    body.appendChild(meta);
-  }
-
-  const descRaw = (item.description ?? "").toString().trim();
-  if (descRaw) {
-    const plain = stripHtmlToText(descRaw);
-    if (plain) {
-      const p = document.createElement("p");
-      p.className = "search-results-page__card-desc";
-      p.textContent = truncate(plain, 220);
-      body.appendChild(p);
-    }
-  }
-
-  link.appendChild(body);
-  li.appendChild(link);
   return li;
 }
 
-function bindTabs() {
-  tabProductsBtn?.addEventListener("click", () => setActiveTab("products"));
-  tabPagesBtn?.addEventListener("click", () => setActiveTab("pages"));
+function clonePageHitCard(item: SearchApiItem): HTMLLIElement | null {
+  if (!pageHitTemplateEl) return null;
+  const node = pageHitTemplateEl.content.cloneNode(true) as DocumentFragment;
+  const li = node.querySelector(
+    "[data-search-page-hit-root]",
+  ) as HTMLLIElement | null;
+  const titleEl = node.querySelector<HTMLElement>(
+    "[data-search-page-hit-title]",
+  );
+  const descEl = node.querySelector<HTMLElement>("[data-search-page-hit-desc]");
+  const link = node.querySelector<HTMLAnchorElement>(
+    "[data-search-page-hit-link]",
+  );
+
+  if (!li || !titleEl || !descEl || !link) return null;
+
+  const titlePlain =
+    decodeHtmlEntities((item.title ?? "").trim()) || "Untitled";
+  const href = item.uri ? normalizeSearchHref(item.uri) : "#";
+  link.href = href;
+  link.setAttribute("aria-label", `Read more: ${titlePlain}`);
+
+  titleEl.textContent = titlePlain;
+
+  const rawDesc = (item.description ?? "").toString();
+  const plain = stripHtmlToText(rawDesc);
+  const excerpt = plain
+    ? truncateText(plain, 220)
+    : "Open this page for more information.";
+  descEl.textContent = excerpt;
+
+  return li;
 }
 
-async function runSearch() {
-  resetLists();
+function totalPagesFor(tab: SearchTab): number {
+  const total = tab === "products" ? lastTotalProducts : lastTotalPages;
+  if (total <= 0) return 1;
+  return Math.max(1, Math.ceil(total / perPage));
+}
 
-  if (!query) {
-    setSearchHeading("Search", null);
-    setSummary("Enter a query to search.");
-    if (tabProductsBtn) tabProductsBtn.textContent = "Products";
-    if (tabPagesBtn) tabPagesBtn.textContent = "Pages";
-    tabsWrapEl?.setAttribute("hidden", "");
-    return;
+function currentPageFor(tab: SearchTab): number {
+  return tab === "products" ? currentPageProducts : currentPagePages;
+}
+
+function setCurrentPageFor(tab: SearchTab, p: number): void {
+  if (tab === "products") currentPageProducts = p;
+  else currentPagePages = p;
+}
+
+function clampCurrentPageFor(tab: SearchTab): void {
+  const tp = totalPagesFor(tab);
+  let cur = currentPageFor(tab);
+  if (cur > tp) cur = tp;
+  if (cur < 1) cur = 1;
+  setCurrentPageFor(tab, cur);
+}
+
+function buildPaginationItems(
+  current: number,
+  pages: number,
+): Array<number | "ellipsis"> {
+  if (pages <= 0) return [];
+  if (pages <= 7) {
+    return Array.from({ length: pages }, (_, i) => i + 1);
+  }
+  const out: Array<number | "ellipsis"> = [];
+  const pushEllipsis = () => {
+    if (out.length && out[out.length - 1] !== "ellipsis") out.push("ellipsis");
+  };
+  const pushPage = (n: number) => out.push(n);
+
+  if (current <= 4) {
+    for (let i = 1; i <= Math.min(5, pages); i++) pushPage(i);
+    if (pages > 5) {
+      pushEllipsis();
+      pushPage(pages);
+    }
+  } else if (current >= pages - 3) {
+    pushPage(1);
+    pushEllipsis();
+    for (let i = Math.max(1, pages - 4); i <= pages; i++) pushPage(i);
+  } else {
+    pushPage(1);
+    pushEllipsis();
+    for (let i = current - 1; i <= current + 1; i++) pushPage(i);
+    pushEllipsis();
+    pushPage(pages);
+  }
+  return out;
+}
+
+function renderPaginationPagesHtml(
+  current: number,
+  pages: number,
+): string {
+  if (pages <= 0) return "";
+  const items = buildPaginationItems(current, pages);
+  return items
+    .map((item) => {
+      if (item === "ellipsis") {
+        return `<span class="product-filters__pager-ellipsis" aria-hidden="true">…</span>`;
+      }
+      if (item === current) {
+        return `<span class="product-filters__pager-page product-filters__pager-page--current" aria-current="page">${item}</span>`;
+      }
+      return `<button type="button" class="product-filters__pager-page" data-search-page="${item}" aria-label="Go to page ${item}">${item}</button>`;
+    })
+    .join("");
+}
+
+function formatRangeHtml(total: number, cur: number): string {
+  if (total <= 0) return "";
+  const start = (cur - 1) * perPage + 1;
+  const end = Math.min(cur * perPage, total);
+  return `<span class="product-filters__pager-range-of">${start}–${end} of</span> ${total}`;
+}
+
+function syncToolbarRange(): void {
+  const tab = activeTab;
+  const total = tab === "products" ? lastTotalProducts : lastTotalPages;
+  const cur = currentPageFor(tab);
+  const el = document.querySelector<HTMLElement>(
+    ".search-js-pager-range-toolbar",
+  );
+  if (el) el.innerHTML = formatRangeHtml(total, cur);
+}
+
+function syncFooterRange(): void {
+  const el = document.querySelector<HTMLElement>(
+    ".search-js-pager-range-footer",
+  );
+  if (el) {
+    el.innerHTML = formatRangeHtml(lastTotalProducts, currentPageProducts);
+  }
+}
+
+function syncTopToolbarNav(): void {
+  const tab = activeTab;
+  const tp = totalPagesFor(tab);
+  const cur = currentPageFor(tab);
+  const total = tab === "products" ? lastTotalProducts : lastTotalPages;
+  const first = cur <= 1 || total === 0;
+  const last = cur >= tp || total === 0;
+  const btns = document.querySelectorAll<HTMLButtonElement>(
+    "#search-toolbar-products [data-search-nav]",
+  );
+  for (const b of btns) {
+    const dir = b.dataset.searchNav;
+    if (dir === "prev") b.disabled = first;
+    if (dir === "next") b.disabled = last;
+  }
+}
+
+function syncFooterPagerNav(): void {
+  const tab: SearchTab = "products";
+  const tp = totalPagesFor(tab);
+  const cur = currentPageFor(tab);
+  const total = lastTotalProducts;
+  const first = cur <= 1 || total === 0;
+  const last = cur >= tp || total === 0;
+  const btns = document.querySelectorAll<HTMLButtonElement>(
+    "#search-results-pager [data-search-nav]",
+  );
+  for (const b of btns) {
+    const dir = b.dataset.searchNav;
+    if (dir === "prev") b.disabled = first;
+    if (dir === "next") b.disabled = last;
+  }
+}
+
+function syncPagerUi(): void {
+  clampCurrentPageFor("products");
+  clampCurrentPageFor("pages");
+
+  syncToolbarRange();
+  syncFooterRange();
+  syncTopToolbarNav();
+  syncFooterPagerNav();
+
+  const tpProd = totalPagesFor("products");
+  if (pagerPagesEl) {
+    pagerPagesEl.innerHTML =
+      lastTotalProducts === 0
+        ? ""
+        : renderPaginationPagesHtml(currentPageProducts, tpProd);
   }
 
-  tabsWrapEl?.removeAttribute("hidden");
+  updatePerValueLabels();
 
-  setSearchHeading("Search results", `For "${decodeHtmlEntities(query)}"`);
-  setSummary("Loading…");
+  if (pagerRootEl) {
+    pagerRootEl.classList.toggle(
+      "product-filters__pager--empty",
+      lastTotalProducts === 0,
+    );
+  }
+}
+
+function bindTabs() {
+  tabProductsBtn?.addEventListener("click", () => {
+    if (activeTab === "products") return;
+    setActiveTab("products");
+    void fetchAndRender("products", { showLoader: true });
+  });
+  tabPagesBtn?.addEventListener("click", () => {
+    if (activeTab === "pages") return;
+    setActiveTab("pages");
+    void fetchAndRender("pages", { showLoader: true });
+  });
+}
+
+function bindPagerNav() {
+  document.body.addEventListener("click", (e) => {
+    const t = (e.target as HTMLElement).closest<HTMLButtonElement>(
+      "[data-search-nav]",
+    );
+    if (!t) return;
+    const dir = t.dataset.searchNav;
+    if (dir !== "prev" && dir !== "next") return;
+
+    let tab: SearchTab | null = null;
+    if (t.closest("#search-toolbar-products")) {
+      tab = activeTab;
+    } else if (t.closest("#search-results-pager")) {
+      tab = "products";
+    }
+    if (!tab) return;
+
+    const tp = totalPagesFor(tab);
+    let cur = currentPageFor(tab);
+    if (dir === "prev") {
+      if (cur <= 1) return;
+      cur -= 1;
+    } else {
+      if (cur >= tp) return;
+      cur += 1;
+    }
+    setCurrentPageFor(tab, cur);
+    void fetchAndRender(tab, { showLoader: true });
+  });
+}
+
+function bindPerPageSelect() {
+  for (const root of perRoots()) {
+    root.addEventListener("click", (e) => e.stopPropagation());
+    root.querySelector("[data-search-per-trigger]")?.addEventListener(
+      "click",
+      (e) => {
+        e.stopPropagation();
+        const open = !root.classList.contains(
+          "product-filters__custom-select--open",
+        );
+        closeAllPerMenus();
+        setPerMenuOpenFor(root, open);
+      },
+    );
+    root.querySelector("[data-search-per-menu]")?.addEventListener(
+      "click",
+      (e) => {
+        const t = (e.target as HTMLElement).closest<HTMLButtonElement>(
+          "[data-search-per-value]",
+        );
+        if (!t) return;
+        const v = Number(t.dataset.searchPerValue);
+        if (v !== 12 && v !== 24) return;
+        writePerPage(v as 12 | 24);
+        currentPageProducts = 1;
+        currentPagePages = 1;
+        closeAllPerMenus();
+        void fetchAndRender(activeTab, { showLoader: true });
+      },
+    );
+  }
+
+  document.addEventListener("click", () => closeAllPerMenus());
+}
+
+function bindPagerPages() {
+  pagerPagesEl?.addEventListener("click", (e) => {
+    const t = (e.target as HTMLElement).closest<HTMLButtonElement>(
+      "[data-search-page]",
+    );
+    if (!t) return;
+    const p = Number(t.dataset.searchPage);
+    if (!Number.isFinite(p) || p < 1) return;
+    currentPageProducts = p;
+    void fetchAndRender("products", { showLoader: true });
+  });
+}
+
+function setSummaryForTab(tab: SearchTab): void {
+  const n = tab === "products" ? lastTotalProducts : lastTotalPages;
+  const label = tab === "products" ? "product" : "related page";
+  if (n === 0) {
+    setSummary(`No ${label} results for "${decodeHtmlEntities(query)}".`);
+    return;
+  }
+  setSummary(
+    `${lastTotalProducts} product result${lastTotalProducts === 1 ? "" : "s"}, ${lastTotalPages} page result${lastTotalPages === 1 ? "" : "s"} for "${decodeHtmlEntities(query)}".`,
+  );
+}
+
+async function fetchTabTotal(tab: SearchTab): Promise<number> {
+  if (!query) return 0;
+  const type = tab === "products" ? "product" : "page";
+  const res = await fetch(
+    `/api/search?q=${encodeURIComponent(query)}&type=${type}&limit=1&offset=0`,
+  );
+  const payload = (await res.json()) as SearchApiPayload;
+  if (!res.ok) {
+    throw new Error(payload.error || "Search request failed.");
+  }
+  return Number(payload.total ?? 0);
+}
+
+async function fetchAndRender(
+  tab: SearchTab,
+  opts?: { showLoader?: boolean },
+): Promise<void> {
+  if (!query) return;
+
+  const showLoader = opts?.showLoader !== false;
+  const pageBeforeFetch = currentPageFor(tab);
+  const type = tab === "products" ? "product" : "page";
+
+  clearListFor(tab);
+  if (showLoader) setPanelLoading(tab, true);
+
+  clampCurrentPageFor(tab);
+  syncPagerUi();
+
+  const offset = (currentPageFor(tab) - 1) * perPage;
 
   try {
     const res = await fetch(
-      `/api/search?q=${encodeURIComponent(query)}&limit=50&offset=0`,
+      `/api/search?q=${encodeURIComponent(
+        query,
+      )}&type=${type}&limit=${perPage}&offset=${offset}`,
     );
     const payload = (await res.json()) as SearchApiPayload;
     if (!res.ok) {
@@ -249,53 +637,107 @@ async function runSearch() {
 
     const items = Array.isArray(payload.items) ? payload.items : [];
     const total = Number(payload.total ?? items.length);
+    if (tab === "products") lastTotalProducts = total;
+    else lastTotalPages = total;
 
-    const products = items.filter((i) => classifyItem(i) === "product");
-    const pages = items.filter((i) => classifyItem(i) === "page");
-
-    if (tabProductsBtn) {
-      tabProductsBtn.innerHTML = `Products <span class="search-results-page__tab-badge" aria-hidden="true">${products.length}</span>`;
-    }
-    if (tabPagesBtn) {
-      tabPagesBtn.innerHTML = `Pages <span class="search-results-page__tab-badge" aria-hidden="true">${pages.length}</span>`;
-    }
-
-    const parts: string[] = [];
-    parts.push(`${total} result${total === 1 ? "" : "s"}`);
-    if (products.length || pages.length) {
-      parts.push(`(${products.length} products, ${pages.length} pages)`);
-    }
-    setSummary(parts.join(" "));
-
-    if (items.length === 0) {
-      if (emptyGlobalEl) emptyGlobalEl.hidden = false;
+    clampCurrentPageFor(tab);
+    if (currentPageFor(tab) !== pageBeforeFetch) {
+      if (showLoader) setPanelLoading(tab, false);
+      void fetchAndRender(tab, opts);
       return;
     }
 
-    if (listProductsEl) {
-      for (const item of products) {
+    setSummaryForTab(tab);
+
+    const hasAny = lastTotalProducts > 0 || lastTotalPages > 0;
+    if (emptyGlobalEl) emptyGlobalEl.hidden = hasAny;
+
+    if (tab === "products" && listProductsEl) {
+      for (const item of items) {
         if (!item?.uri || !item.title) continue;
-        listProductsEl.appendChild(renderCard(item));
+        const row = cloneSearchResultCard(item);
+        if (row) listProductsEl.appendChild(row);
       }
-    }
-    if (listPagesEl) {
-      for (const item of pages) {
-        if (!item?.uri || !item.title) continue;
-        listPagesEl.appendChild(renderCard(item));
+      if (emptyProductsEl) {
+        emptyProductsEl.hidden = items.length > 0;
       }
     }
 
-    if (emptyProductsEl) {
-      emptyProductsEl.hidden = products.length > 0;
-    }
-    if (emptyPagesEl) {
-      emptyPagesEl.hidden = pages.length > 0;
+    if (tab === "pages" && listPagesEl) {
+      for (const item of items) {
+        if (!item?.uri || !item.title) continue;
+        const row = clonePageHitCard(item);
+        if (row) listPagesEl.appendChild(row);
+      }
+      if (emptyPagesEl) {
+        emptyPagesEl.hidden = items.length > 0;
+      }
     }
 
-    if (products.length === 0 && pages.length > 0) {
+    syncPagerUi();
+  } catch (e) {
+    lastTotalProducts = 0;
+    lastTotalPages = 0;
+    setSummary("");
+    setError(e instanceof Error ? e.message : String(e));
+    tabsWrapEl?.setAttribute("hidden", "");
+    syncPagerUi();
+    setPanelLoading("products", false);
+    setPanelLoading("pages", false);
+  } finally {
+    if (showLoader) setPanelLoading(tab, false);
+  }
+}
+
+async function runSearch() {
+  resetListsFull();
+  currentPageProducts = 1;
+  currentPagePages = 1;
+  perPage = readPerPage();
+  activeTab = "products";
+  lastTotalProducts = 0;
+  lastTotalPages = 0;
+
+  if (!query) {
+    setSearchHeading("Search", null);
+    setSummary("Enter a query to search.");
+    tabsWrapEl?.setAttribute("hidden", "");
+    closeAllPerMenus();
+    updatePerValueLabels();
+    return;
+  }
+
+  tabsWrapEl?.removeAttribute("hidden");
+  setSearchHeading("Search results", `For "${decodeHtmlEntities(query)}"`);
+  setSummary("Loading…");
+  syncPagerUi();
+  closeAllPerMenus();
+  updatePerValueLabels();
+
+  try {
+    const [prodTotal, pageTotal] = await Promise.all([
+      fetchTabTotal("products"),
+      fetchTabTotal("pages"),
+    ]);
+    lastTotalProducts = prodTotal;
+    lastTotalPages = pageTotal;
+    syncPagerUi();
+
+    const hasAny = lastTotalProducts > 0 || lastTotalPages > 0;
+    if (emptyGlobalEl) emptyGlobalEl.hidden = hasAny;
+    if (!hasAny) {
+      setSummary(`No results for "${decodeHtmlEntities(query)}".`);
+      return;
+    }
+
+    if (lastTotalProducts === 0 && lastTotalPages > 0) {
       setActiveTab("pages");
+      await fetchAndRender("pages", { showLoader: true });
     } else {
       setActiveTab("products");
+      setPanelLoading("products", true);
+      await fetchAndRender("products", { showLoader: false });
+      setPanelLoading("products", false);
     }
   } catch (e) {
     setSummary("");
@@ -305,4 +747,7 @@ async function runSearch() {
 }
 
 bindTabs();
+bindPagerNav();
+bindPerPageSelect();
+bindPagerPages();
 void runSearch();

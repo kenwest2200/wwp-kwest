@@ -1,0 +1,144 @@
+@use "../variables" as *;
+@use "../functions" as *;
+@use "../breakpoints" as *;
+
+.dl-page {
+  padding-top: var(--page-header-offset, #{px-to-rem(112)});
+  padding-bottom: px-to-rem(80);
+
+
+  &__body {
+    padding-top: px-to-rem(60);
+  }
+
+  &__body-inner {
+    max-width: px-to-rem(1192);
+    margin: 0 auto;
+    padding-left: var(--section-left, var(--s-padding-x));
+    padding-right: var(--section-right, var(--s-padding-x));
+  }
+
+  &__layout {
+    display: grid;
+    gap: px-to-rem(40);
+    align-items: start;
+
+    @include media-breakpoint-up(lg) {
+      grid-template-columns: 1fr minmax(px-to-rem(280), px-to-rem(360));
+    }
+  }
+
+  &__main {
+    min-width: 0;
+    font-size: px-to-rem(16);
+    line-height: px-to-rem(28);
+    color: $dark;
+  }
+
+  &__sidebar {
+    min-width: 0;
+  }
+
+  &__sidebar-col {
+    margin-bottom: px-to-rem(32);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__sidebar-col-title {
+    margin: 0 0 px-to-rem(16);
+    font-size: px-to-rem(20);
+    font-weight: 600;
+    color: $dark;
+  }
+
+  &__sidebar-section {
+    margin-bottom: px-to-rem(24);
+    padding-bottom: px-to-rem(24);
+    border-bottom: 1px solid #e5e8eb;
+
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  &__sidebar-section-title {
+    margin: 0 0 px-to-rem(12);
+    font-size: px-to-rem(16);
+    font-weight: 600;
+    color: $dark-medium;
+  }
+
+  &__sidebar-sub {
+    margin-bottom: px-to-rem(16);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__sidebar-sub-title {
+    margin: 0 0 px-to-rem(6);
+    font-size: px-to-rem(15);
+    font-weight: 600;
+    color: $dark;
+  }
+
+  &__sidebar-sub-html {
+    font-size: px-to-rem(14);
+    line-height: px-to-rem(24);
+    color: $dark-medium;
+  }
+
+  &__locations {
+    margin-top: px-to-rem(48);
+    padding-top: px-to-rem(32);
+    border-top: 1px solid #e5e8eb;
+  }
+
+  &__locations-title {
+    margin: 0 0 px-to-rem(20);
+    font-size: px-to-rem(22);
+    font-weight: 600;
+    color: $dark;
+  }
+
+  &__locations-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: px-to-rem(16);
+  }
+
+  &__location {
+    padding: px-to-rem(16) px-to-rem(20);
+    border-radius: px-to-rem(8);
+    background: $light-gray;
+    font-size: px-to-rem(14);
+    line-height: px-to-rem(22);
+    color: $dark;
+  }
+
+  &__location-line {
+    margin: 0;
+
+    &+& {
+      margin-top: px-to-rem(4);
+    }
+  }
+
+  &__more-wrap {
+    margin-top: px-to-rem(24);
+  }
+
+  &__hint {
+    margin: px-to-rem(12) 0 0;
+    font-size: px-to-rem(14);
+    color: $dark-medium;
+  }
+}

@@ -1,7 +1,7 @@
 export {};
 
 import { readHeaderPageInsetPx } from "../lib/header-page-inset";
-import { subscribePageHeaderOffset } from "../lib/subscribe-page-header-offset";
+import { subscribePageHeaderInset } from "../lib/page-header-offset";
 
 const SCROLL_GAP_PX = 16;
 
@@ -102,7 +102,7 @@ if (!faqPageHost) {
 } else {
   const faqPage = faqPageHost;
 
-  subscribePageHeaderOffset(faqPage, "--faq-page-header-offset", () => {
+  subscribePageHeaderInset(faqPage, () => {
     if (faqRoot) applyFaqAnchorScrollChrome(faqPage);
   });
 

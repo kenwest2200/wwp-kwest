@@ -1,0 +1,25 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHeaderOffset from "../components/PageHeaderOffset.astro";
+
+export const prerender = true;
+---
+
+<Layout headerType="white" pageTitle="Page not found" robotsNoIndex>
+  <main class="page-404" data-404-page data-page-header-offset>
+    <div class="page-404__inner">
+      <p class="page-404__code" aria-hidden="true">404</p>
+      <h1 class="page-404__title">This page doesn’t exist</h1>
+      <p class="page-404__text">
+        The link may be broken or the page was removed. Try the home page or open the menu to find
+        what you need.
+      </p>
+      <div class="page-404__actions">
+        <a class="page-404__link page-404__link--primary" href="/">Back to home</a>
+        <a class="page-404__link page-404__link--ghost" href="/products">Browse products</a>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<PageHeaderOffset />

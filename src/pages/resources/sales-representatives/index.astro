@@ -1,0 +1,69 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import PageHeaderOffset from "../../../components/PageHeaderOffset.astro";
+import SectionHero from "../../../components/SectionHero/SectionHero.astro";
+import { getGraphQLClient, requestGraphql } from "../../../lib/graphql";
+import {
+  SALES_REPRESENTATIVES_PAGE_QUERY,
+  SALES_REPRESENTATIVES_PAGE_URI,
+  type SalesRepresentativesPageData,
+} from "../../../lib/queries/sales-representatives-page";
+
+export const prerender = true;
+
+const graphqlConfigured = Boolean(getGraphQLClient());
+
+const introDefault =
+  "Regional sales representatives and contact information for Waterway Plastics.";
+
+async function loadPage(): Promise<SalesRepresentativesPageData["page"] | null> {
+  if (!graphqlConfigured) return null;
+  const uris = [
+    SALES_REPRESENTATIVES_PAGE_URI,
+    SALES_REPRESENTATIVES_PAGE_URI.replace(/\/$/, ""),
+  ];
+  for (const id of uris) {
+    try {
+      const data = await requestGraphql<SalesRepresentativesPageData>(
+        SALES_REPRESENTATIVES_PAGE_QUERY,
+        { id },
+      );
+      if (data.page?.title) return data.page;
+    } catch {
+      /* try next */
+    }
+  }
+  return null;
+}
+
+const pageNode = await loadPage();
+const pageTitle = pageNode?.title?.trim() || "Sales representatives";
+const contentHtml = (pageNode?.content ?? "").trim();
+---
+
+<Layout headerType="white">
+  <main class="sr-page" data-page-header-offset>
+    <SectionHero title={pageTitle} intro={introDefault} />
+
+    <div class="sr-page__body">
+      <div class="sr-page__body-inner">
+        {
+          contentHtml ? (
+            <div
+              class="sr-page__content product-page__optional-html"
+              set:html={contentHtml}
+            />
+          ) : (
+            <p class="sr-page__empty">
+              {graphqlConfigured
+                ? "No content is published for this page yet."
+                : "GraphQL is not configured."}
+            </p>
+          )
+        }
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<PageHeaderOffset />
