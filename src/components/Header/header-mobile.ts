@@ -6,18 +6,37 @@ const AUTOCOMPLETE_DEBOUNCE_MS = 150;
 
 let mobileMenuForcesHeaderTopZero = false;
 
+/** Rounded height of `[data-header-top]` only — matches CSS `top: calc(-1 * var(--header-top-height))`. */
+function headerTopStripHeightPx(): number {
+  const topEl = document.querySelector("[data-header-top]");
+  if (!(topEl instanceof HTMLElement)) return 0;
+  return Math.max(0, Math.round(topEl.getBoundingClientRect().height));
+}
+
+/** Sum of `[data-header-top]` and `.js-header-container` (scroll threshold for `is-scrolling`). */
+function sumHeaderTopHeightsPx(): number {
+  const topEl = document.querySelector("[data-header-top]");
+  const containerEl = document.querySelector(".js-header-container");
+  let sum = 0;
+  if (topEl instanceof HTMLElement) {
+    sum += Math.round(topEl.getBoundingClientRect().height);
+  }
+  if (containerEl instanceof HTMLElement) {
+    sum += Math.round(containerEl.getBoundingClientRect().height);
+  }
+  return Math.max(0, sum);
+}
+
 function applyHeaderTopHeight(): void {
   const header = document.querySelector(".header");
-  const topEl = document.querySelector("[data-header-top]");
-  if (!(header instanceof HTMLElement) || !(topEl instanceof HTMLElement)) {
+  if (!(header instanceof HTMLElement)) {
     return;
   }
   if (mobileMenuForcesHeaderTopZero) {
     header.style.setProperty("--header-top-height", "0px");
     return;
   }
-  const h = Math.round(topEl.getBoundingClientRect().height);
-  header.style.setProperty("--header-top-height", `${Math.max(0, h)}px`);
+  header.style.setProperty("--header-top-height", `${headerTopStripHeightPx()}px`);
 }
 
 function getDocumentScrollY(): number {
@@ -40,14 +59,18 @@ function getDocumentScrollY(): number {
 function bindHeaderStickyScroll(): void {
   const header = document.querySelector(".header");
   const topEl = document.querySelector("[data-header-top]");
-  if (!(header instanceof HTMLElement) || !(topEl instanceof HTMLElement)) {
+  const containerEl = document.querySelector(".js-header-container");
+  if (!(header instanceof HTMLElement)) {
+    return;
+  }
+  if (!(topEl instanceof HTMLElement) && !(containerEl instanceof HTMLElement)) {
     return;
   }
 
   const onScroll = () => {
     const threshold = mobileMenuForcesHeaderTopZero
       ? 0
-      : Math.round(topEl.getBoundingClientRect().height);
+      : sumHeaderTopHeightsPx();
     header.classList.toggle("is-scrolling", getDocumentScrollY() > threshold);
   };
 
@@ -77,8 +100,12 @@ function bindHeaderStickyScroll(): void {
   window.addEventListener("load", applyHeaderTopHeight);
 
   if (typeof ResizeObserver !== "undefined") {
-    const ro = new ResizeObserver(() => applyHeaderTopHeight());
-    ro.observe(topEl);
+    const ro = new ResizeObserver(() => {
+      applyHeaderTopHeight();
+      onScroll();
+    });
+    if (topEl instanceof HTMLElement) ro.observe(topEl);
+    if (containerEl instanceof HTMLElement) ro.observe(containerEl);
   }
 
   requestAnimationFrame(() => {

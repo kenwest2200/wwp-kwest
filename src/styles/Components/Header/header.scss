@@ -14,11 +14,14 @@
 .header {
   $header: #{&};
   position: sticky;
+  /* Sticky needs a non-auto inset; white / scrolling states override below. */
+  top: 0;
   min-height: px-to-rem(112);
   margin-bottom: px-to-rem(-112);
   width: 100%;
 
   z-index: 100;
+  transition: top 0.2s ease;
 
   &__container {
     padding-bottom: 0;
@@ -28,6 +31,7 @@
 
   &.is-scrolling,
   &.header--white {
+    /* `--header-top-height` = height of `[data-header-top]` (see header-mobile.ts). */
     top: calc(-1 * var(--header-top-height, 0px));
     transition: top 0.2s ease;
 

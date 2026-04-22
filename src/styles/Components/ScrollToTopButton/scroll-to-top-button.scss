@@ -1,0 +1,53 @@
+@use "../../variables.scss" as *;
+
+.scroll-to-top {
+  position: fixed;
+  right: max(#{px-to-rem(24)}, env(safe-area-inset-right, 0px));
+  bottom: max(#{px-to-rem(16)}, env(safe-area-inset-bottom, 0px));
+  z-index: 30;
+  width: px-to-rem(44);
+  height: px-to-rem(44);
+  padding: 0;
+  border: 1px solid $gray-middle;
+  border-radius: 50%;
+  background: $white;
+  color: $dark;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+
+  &--visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  &--visible:hover {
+    background: $light-gray;
+    color: $dark-teal;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $medium-teal;
+    outline-offset: 2px;
+  }
+
+  &__icon {
+    display: block;
+    width: px-to-rem(22);
+    height: px-to-rem(22);
+  }
+}

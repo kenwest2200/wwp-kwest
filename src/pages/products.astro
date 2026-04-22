@@ -2,6 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import Layout from "../layouts/Layout.astro";
+import ScrollToTopButton from "../components/ScrollToTopButton/ScrollToTopButton.astro";
 import { getGraphQLClient, requestGraphql } from "../lib/graphql";
 import ProductFiltersIntro from "../components/ProductFilters/ProductFiltersIntro.astro";
 import ProductFiltersRootNav from "../components/ProductFilters/ProductFiltersRootNav.astro";
@@ -92,6 +93,7 @@ if (getGraphQLClient()) {
     <ProductFiltersRootNav blocks={rootNavBlocks} />
     <ProductFiltersPanel />
     <ProductFiltersResources data={resourcesData} />
+    <ScrollToTopButton />
   </main>
 </Layout>
 

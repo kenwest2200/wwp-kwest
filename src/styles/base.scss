@@ -14,7 +14,8 @@ body {
 
 html {
     min-height: 100%;
-    overflow: hidden;
+    /* `overflow: hidden` on the root breaks `position: sticky` on descendants (e.g. header). */
+    overflow-x: hidden;
 }
 
 body {

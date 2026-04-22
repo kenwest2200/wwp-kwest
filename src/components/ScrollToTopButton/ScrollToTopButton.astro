@@ -1,0 +1,56 @@
+---
+export interface Props {
+  /** Accessible name (screen readers). */
+  ariaLabel?: string;
+  /** Show the button after the page is scrolled down by this many pixels. */
+  thresholdPx?: number;
+  /** Extra classes on the button. */
+  class?: string;
+}
+
+const {
+  ariaLabel = "Back to top",
+  thresholdPx = 320,
+  class: className = "",
+} = Astro.props;
+
+const thresholdAttr =
+  typeof thresholdPx === "number" &&
+  Number.isFinite(thresholdPx) &&
+  thresholdPx >= 0
+    ? String(Math.round(thresholdPx))
+    : "320";
+---
+
+<button
+  type="button"
+  class:list={["scroll-to-top", className.trim() || undefined]}
+  data-scroll-to-top
+  data-scroll-to-top-threshold={thresholdAttr}
+  aria-label={ariaLabel}
+  aria-hidden="true"
+  tabindex="-1"
+>
+  <svg
+    class="scroll-to-top__icon"
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+  >
+    <path
+      d="M12 19V5M12 5l-6 6M12 5l6 6"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+</button>
+
+<script>
+  import { initScrollToTopButtons } from "../../scripts/scroll-to-top-button.ts";
+  requestAnimationFrame(() => initScrollToTopButtons());
+</script>

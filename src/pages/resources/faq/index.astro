@@ -1,5 +1,6 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
+import ScrollToTopButton from "../../../components/ScrollToTopButton/ScrollToTopButton.astro";
 import SectionHero from "../../../components/SectionHero/SectionHero.astro";
 import IconSearch from "../../../components/icons/searchIcon.astro";
 import { getGraphQLClient, requestGraphql } from "../../../lib/graphql";
@@ -192,6 +193,8 @@ const hasContent = sections.length > 0;
         }
       </div>
     </div>
+
+    <ScrollToTopButton />
   </main>
 </Layout>
 

@@ -1,0 +1,609 @@
+@use "../variables" as *;
+@use "../functions" as *;
+@use "../breakpoints" as *;
+
+.pool-calc {
+  padding-top: var(--page-header-offset, #{px-to-rem(112)});
+  padding-bottom: px-to-rem(80);
+  color: $dark;
+
+  &__hero {
+    background: $light-gray;
+    padding: px-to-rem(60) 0;
+  }
+
+  &__hero-inner {
+    max-width: px-to-rem(1192);
+    margin: 0 auto;
+    padding-left: var(--section-left, var(--s-padding-x));
+    padding-right: var(--section-right, var(--s-padding-x));
+    display: flex;
+    gap: px-to-rem(56);
+    align-items: center;
+    justify-content: center;
+
+    @include media-breakpoint-up(md) {
+      align-items: center;
+    }
+  }
+
+  &__hero-img {
+    width: px-to-rem(270);
+    height: px-to-rem(180);
+    object-fit: cover;
+    border-radius: px-to-rem(8);
+    flex-shrink: 0;
+  }
+
+  &__hero-title {
+    margin: 0 0 px-to-rem(32);
+    font-size: px-to-rem(40);
+    font-weight: 500;
+    line-height: px-to-rem(64);
+    color: $dark;
+    letter-spacing: 0.03em;
+
+    @include media-breakpoint-up(md) {
+      font-size: px-to-rem(48);
+    }
+  }
+
+  &__hero-intro {
+    margin: 0;
+    font-size: px-to-rem(22);
+    line-height: px-to-rem(32);
+    color: $dark;
+    max-width: px-to-rem(764);
+    letter-spacing: 0.03em;
+  }
+
+  &__body {
+    padding-top: px-to-rem(40);
+  }
+
+  &__body-inner {
+    max-width: px-to-rem(1192);
+    margin: 0 auto;
+    padding-left: var(--section-left, var(--s-padding-x));
+    padding-right: var(--section-right, var(--s-padding-x));
+  }
+
+  &__stepper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-bottom: px-to-rem(80);
+    padding-top: px-to-rem(40);
+    flex-wrap: wrap;
+  }
+
+  &__stepper-line {
+    height: 1px;
+    width: 100%;
+    max-width: px-to-rem(80);
+    background: $gray-middle;
+    margin-top: px-to-rem(16);
+  }
+
+  &__stepper-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: px-to-rem(12);
+    max-width: px-to-rem(170);
+    width: 100%;
+    padding-left: px-to-rem(23);
+    padding-right: px-to-rem(23);
+
+
+    text-align: center;
+    transition: opacity 0.2s ease;
+
+    &--current {}
+
+    &--done {
+
+      .pool-calc__stepper-num {
+        background: $success;
+        color: $white;
+      }
+
+      .pool-calc__stepper-label {
+        color: $dark;
+        font-weight: 600;
+      }
+    }
+
+    &--skip {
+      opacity: 0.35;
+    }
+  }
+
+  &__stepper-num {
+    width: px-to-rem(28);
+    height: px-to-rem(28);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: px-to-rem(17);
+    font-weight: 500;
+    background: $light-gray;
+    color: $dark-medium;
+  }
+
+  &__stepper-item--current .pool-calc__stepper-num {
+    color: $dark;
+  }
+
+  &__stepper-label {
+    font-size: px-to-rem(16);
+    line-height: px-to-rem(24);
+    letter-spacing: 0.02em;
+    color: $dark-gray;
+    font-weight: 400;
+    max-width: px-to-rem(124);
+
+  }
+
+  &__stepper-item--current .pool-calc__stepper-label {
+    color: $dark;
+  }
+
+  &__panel-title {
+    margin: 0 0 px-to-rem(40);
+    text-align: center;
+    font-size: px-to-rem(36);
+    font-weight: 600;
+    line-height: px-to-rem(48);
+    color: $dark;
+  }
+
+  &__shape-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: px-to-rem(960);
+    width: 100%;
+    gap: px-to-rem(32);
+    margin: 0 auto px-to-rem(60) auto;
+
+    @include media-breakpoint-up(md) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  &__shape-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: px-to-rem(316);
+    max-width: px-to-rem(299);
+    width: 100%;
+    padding: px-to-rem(32);
+    border: 1px solid $gray-middle;
+    border-radius: px-to-rem(8);
+    background: $light-gray;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    transition:
+      border-color 0.15s ease,
+      background-color 0.15s ease;
+
+    &:hover {
+      border-color: $medium-teal;
+    }
+
+    &.is-selected {
+      background: $medium-teal;
+      border-color: $medium-teal;
+      color: $white;
+      box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.12);
+
+      .pool-calc__shape-name {
+        color: $white;
+      }
+
+    }
+  }
+
+  &__shape-name {
+    font-size: px-to-rem(20);
+    font-weight: 500;
+    color: $dark;
+    line-height: px-to-rem(28);
+    letter-spacing: 0.02em;
+    margin-bottom: px-to-rem(32);
+  }
+
+  &__shape-icon {
+    display: block;
+    margin: auto;
+    width: px-to-rem(236);
+    height: px-to-rem(192);
+    max-width: 100%;
+    object-fit: contain;
+  }
+
+  &__alt-path {
+    margin: px-to-rem(28) 0 0;
+    text-align: center;
+  }
+
+  &__linkish {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    font-size: px-to-rem(14);
+    color: $dark-teal;
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover {
+      color: $medium-teal;
+    }
+  }
+
+  &__badge {
+    display: inline-block;
+    margin: 0 auto px-to-rem(24) 0;
+    padding: px-to-rem(4) px-to-rem(12);
+    background: $white;
+    border-radius: px-to-rem(40);
+    border: 1px solid $gray-middle;
+    color: $dark;
+    font-size: px-to-rem(12);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: px-to-rem(16);
+    text-align: center;
+    max-width: px-to-rem(686);
+  }
+
+  &__panel[data-pool-panel="2"] .pool-calc__badge,
+  &__panel[data-pool-panel="3"] .pool-calc__badge,
+  &__panel[data-pool-panel="4"] .pool-calc__badge {
+    display: table;
+  }
+
+  &__dimensions {
+    display: flex;
+    flex-direction: column;
+    gap: px-to-rem(20);
+    max-width: px-to-rem(686);
+    margin: 0 auto;
+    background: $white;
+    border: 1px solid $gray-middle;
+    border-radius: px-to-rem(8);
+    padding: px-to-rem(24);
+  }
+
+  &__dim-row {
+    display: flex;
+    flex-direction: column;
+    gap: px-to-rem(10);
+  }
+
+  &__dim-label {
+    font-size: px-to-rem(14);
+    font-weight: 600;
+    color: $dark;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  &__dim-req {
+    color: $medium-teal;
+    margin-left: px-to-rem(2);
+  }
+
+  &__dim-label-wrap {
+    flex: 0 0 auto;
+    min-width: 0;
+  }
+
+  &__dim-inputs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: px-to-rem(16);
+    flex: 1 1 auto;
+  }
+
+  &__dim-field {
+    flex: 1 1 px-to-rem(120);
+    min-width: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  &__dim-control {
+    position: relative;
+    display: block;
+  }
+
+  &__dim-sublabel {
+    position: absolute;
+    left: px-to-rem(12);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    font-size: px-to-rem(12);
+    font-weight: 400;
+    color: $dark-medium;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  &__dim-unit {
+    position: absolute;
+    right: px-to-rem(12);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    font-size: px-to-rem(12);
+    font-weight: 400;
+    color: $dark-medium;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  &__dim-control input {
+    box-sizing: border-box;
+    width: 100%;
+    padding-top: px-to-rem(10);
+    padding-bottom: px-to-rem(10);
+    padding-right: px-to-rem(36);
+    border: 1px solid $gray-middle;
+    border-radius: px-to-rem(4);
+    font: inherit;
+    font-size: px-to-rem(16);
+    color: $dark;
+    background: $light-gray-2;
+  }
+
+  &__dim-control--ft input {
+    padding-left: px-to-rem(52);
+  }
+
+  &__dim-control--in input {
+    padding-left: px-to-rem(60);
+  }
+
+  &__inline-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: px-to-rem(16);
+    justify-content: center;
+    margin-top: px-to-rem(32);
+  }
+
+  &__result-card {
+    max-width: px-to-rem(480);
+    margin: 0 auto;
+    padding: px-to-rem(28);
+    border: 1px solid $gray-middle;
+    border-radius: px-to-rem(8);
+    background: $white;
+    text-align: center;
+
+    &--wide {
+      max-width: none;
+    }
+  }
+
+  &__result-line {
+    margin: 0 0 px-to-rem(16);
+    font-size: px-to-rem(18);
+    line-height: px-to-rem(26);
+    color: $dark;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__result-card .pool-calc__btn-outline {
+    margin-top: px-to-rem(8);
+  }
+
+  &__gpm-form {
+    max-width: px-to-rem(400);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: px-to-rem(24);
+  }
+
+  &__gpm-field {
+    display: flex;
+    flex-direction: column;
+    gap: px-to-rem(8);
+  }
+
+  &__gpm-label {
+    font-size: px-to-rem(14);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: $dark-medium;
+  }
+
+  &__gpm-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &__gpm-input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: px-to-rem(12) px-to-rem(100) px-to-rem(12) px-to-rem(14);
+    border: 1px solid $gray-middle;
+    border-radius: px-to-rem(4);
+    font: inherit;
+    font-size: px-to-rem(16);
+    background: $light-gray-2;
+  }
+
+  &__gpm-suffix {
+    position: absolute;
+    right: px-to-rem(14);
+    font-size: px-to-rem(14);
+    color: $dark-medium;
+    pointer-events: none;
+  }
+
+  &__gpm-select {
+    box-sizing: border-box;
+    width: 100%;
+    padding: px-to-rem(12) px-to-rem(36) px-to-rem(12) px-to-rem(14);
+    border: 1px solid $gray-middle;
+    border-radius: px-to-rem(4);
+    font: inherit;
+    font-size: px-to-rem(16);
+    background: $light-gray-2;
+    color: $dark;
+  }
+
+  &__footer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: px-to-rem(16);
+    margin-top: px-to-rem(40);
+    width: 100%;
+    max-width: px-to-rem(960);
+    margin-left: auto;
+    margin-right: auto;
+
+    button[hidden] {
+      display: none !important;
+    }
+  }
+
+  &__footer-left,
+  &__footer-right {
+    display: flex;
+    flex-wrap: wrap;
+    gap: px-to-rem(16);
+    align-items: center;
+    min-height: px-to-rem(48);
+  }
+
+  &__footer-right {
+    margin-left: auto;
+    justify-content: flex-end;
+  }
+
+  &__btn-outline {
+    border: 1px solid $dark-teal;
+    color: $dark-teal;
+    background: $white;
+    padding: px-to-rem(12) px-to-rem(32);
+    border-radius: px-to-rem(4);
+    font-weight: 600;
+    cursor: pointer;
+    font: inherit;
+    font-size: px-to-rem(14);
+    line-height: px-to-rem(24);
+    letter-spacing: 0.03em;
+
+    &:hover {
+      border-color: $dark-teal;
+      color: $dark-teal;
+    }
+  }
+
+  &__btn-next-text {
+    display: flex;
+    align-items: center;
+    gap: px-to-rem(12);
+  }
+
+  &__btn-solid {
+    padding: px-to-rem(12) px-to-rem(24);
+    line-height: px-to-rem(24);
+    letter-spacing: 0.03em;
+    font-weight: 600;
+    font-size: px-to-rem(14);
+    padding-right: px-to-rem(12) px-to-rem(32);
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+  }
+
+  &__footer-right .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  &__badges-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: px-to-rem(12);
+    justify-content: center;
+    margin-bottom: px-to-rem(20);
+  }
+
+  &__parts-title {
+    margin: px-to-rem(40) 0 px-to-rem(16);
+    text-align: center;
+    font-size: px-to-rem(18);
+    font-weight: 600;
+    color: $dark;
+  }
+
+  &__accordion {
+    border-top: 1px solid $gray-middle;
+  }
+
+  &__accordion-item {
+    border-bottom: 1px solid $gray-middle;
+  }
+
+  &__accordion-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: px-to-rem(16);
+    padding: px-to-rem(18) 0;
+    border: none;
+    background: none;
+    font: inherit;
+    font-size: px-to-rem(16);
+    font-weight: 500;
+    color: $dark;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+      color: $dark-teal;
+    }
+  }
+
+  &__accordion-icon {
+    font-size: px-to-rem(22);
+    font-weight: 400;
+    color: $dark-medium;
+    flex-shrink: 0;
+  }
+
+  &__accordion-item.is-open .pool-calc__accordion-icon {
+    transform: rotate(45deg);
+  }
+
+  &__accordion-panel {
+    padding-bottom: px-to-rem(16);
+    color: $dark-medium;
+    font-size: px-to-rem(14);
+  }
+}

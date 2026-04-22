@@ -2,6 +2,7 @@
 import Layout from "../../../layouts/Layout.astro";
 import PageHeaderOffset from "../../../components/PageHeaderOffset.astro";
 import SectionHero from "../../../components/SectionHero/SectionHero.astro";
+import IconArrowRight from "../../../components/icons/IconArrowRight.astro";
 import { getGraphQLClient, requestGraphql } from "../../../lib/graphql";
 import {
   INSTRUCTIONAL_VIDEOS_PAGE_QUERY,
@@ -39,7 +40,9 @@ async function loadPage(): Promise<InstructionalVideosPageData["page"] | null> {
 
 const pageNode = await loadPage();
 const pageTitle = pageNode?.title?.trim() || "Instructional videos";
-const videos = normalizeInstructionalVideos(pageNode?.instructionalVideos ?? null);
+const videos = normalizeInstructionalVideos(
+  pageNode?.instructionalVideos ?? null,
+);
 ---
 
 <Layout headerType="white">
@@ -57,35 +60,72 @@ const videos = normalizeInstructionalVideos(pageNode?.instructionalVideos ?? nul
             </p>
           ) : (
             <div class="iv-page__grid">
-              {videos.map((v) => (
-                <a
-                  class="iv-page__card"
-                  href={v.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title={v.textOnHover || v.title}
-                >
-                  <div class="iv-page__card-media">
-                    {v.imageUrl ? (
-                      <img
-                        class="iv-page__card-img"
-                        src={v.imageUrl}
-                        alt={v.imageAlt}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ) : (
-                      <div class="iv-page__card-img" aria-hidden="true" />
-                    )}
-                  </div>
-                  <div class="iv-page__card-body">
-                    <h2 class="iv-page__card-title">{v.title}</h2>
-                  </div>
-                </a>
-              ))}
+              {videos.map((v, idx) => {
+                const playClipId = `iv-play-clip-${idx}`;
+                return (
+                  <a
+                    class="iv-page__card"
+                    href={v.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={v.textOnHover || v.title}
+                  >
+                    <div class="iv-page__card-media">
+                      {v.imageUrl ? (
+                        <img
+                          class="iv-page__card-img"
+                          src={v.imageUrl}
+                          alt={v.imageAlt}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : (
+                        <div class="iv-page__card-img" aria-hidden="true" />
+                      )}
+                      <div
+                        class="iv-page__card-media-overlay"
+                        aria-hidden="true"
+                      >
+                        <span class="iv-page__card-play">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="60"
+                            height="60"
+                            viewBox="0 0 60 60"
+                            fill="none"
+                            aria-hidden="true"
+                          >
+                            <g clip-path={`url(#${playClipId})`}>
+                              <circle cx="30" cy="30" r="30" fill="#00AEC7" />
+                              <path
+                                d="M36.5 30L27.5 35.5V24.5L36.5 30Z"
+                                fill="white"
+                              />
+                            </g>
+                            <defs>
+                              <clipPath id={playClipId}>
+                                <rect width="60" height="60" fill="white" />
+                              </clipPath>
+                            </defs>
+                          </svg>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="iv-page__card-body">
+                      <h2 class="iv-page__card-title">{v.title}</h2>
+                    </div>
+                  </a>
+                );
+              })}
             </div>
           )
         }
+
+        <a
+          href="https://www.youtube.com/@waterwayplastics8666/"
+          class="iv-page__view-all btn btn--primary-dark"
+          >Watch on YouTube <IconArrowRight /></a
+        >
       </div>
     </div>
   </main>

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-17T12:38:49.718Z",
+  "generatedAt": "2026-04-22T12:52:00.459Z",
   "attributesByCategory": {
     "bath": [],
     "pool": [
@@ -72,8 +72,20 @@
         "slug": "color",
         "values": [
           {
+            "label": "beige",
+            "slug": "color-beige"
+          },
+          {
             "label": "black",
             "slug": "color-black"
+          },
+          {
+            "label": "clear",
+            "slug": "color-clear"
+          },
+          {
+            "label": "dark-gray",
+            "slug": "color-dark-gray"
           },
           {
             "label": "gray",
@@ -176,12 +188,46 @@
         "slug": "jet",
         "values": [
           {
+            "label": "seat-1",
+            "slug": "jet-seat-1"
+          },
+          {
+            "label": "seat-2",
+            "slug": "jet-seat-2"
+          },
+          {
+            "label": "seat-3",
+            "slug": "jet-seat-3"
+          },
+          {
+            "label": "size-poly-jets",
+            "slug": "jet-size-poly-jets"
+          },
+          {
             "label": "style-scalloped",
             "slug": "jet-style-scalloped"
           },
           {
             "label": "style-smooth",
             "slug": "jet-style-smooth"
+          },
+          {
+            "label": "type-6-spoke",
+            "slug": "jet-type-6-spoke"
+          }
+        ]
+      },
+      {
+        "name": "Kit",
+        "slug": "kit",
+        "values": [
+          {
+            "label": "size-7",
+            "slug": "kit-size-7"
+          },
+          {
+            "label": "size-9",
+            "slug": "kit-size-9"
           }
         ]
       },
@@ -226,6 +272,20 @@
           {
             "label": "4.2",
             "slug": "psi-4-2"
+          }
+        ]
+      },
+      {
+        "name": "Shape",
+        "slug": "shape",
+        "values": [
+          {
+            "label": "round",
+            "slug": "shape-round"
+          },
+          {
+            "label": "square",
+            "slug": "shape-square"
           }
         ]
       },
@@ -302,7 +362,344 @@
         ]
       }
     ],
-    "spa": [],
+    "spa": [
+      {
+        "name": "Amp",
+        "slug": "amp",
+        "values": [
+          {
+            "label": "1",
+            "slug": "amp-1"
+          }
+        ]
+      },
+      {
+        "name": "Barb",
+        "slug": "barb",
+        "values": [
+          {
+            "label": "type-ribbed",
+            "slug": "barb-type-ribbed"
+          }
+        ]
+      },
+      {
+        "name": "Body",
+        "slug": "body",
+        "values": [
+          {
+            "label": "style-extra-short",
+            "slug": "body-style-extra-short"
+          },
+          {
+            "label": "style-short",
+            "slug": "body-style-short"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "slug": "color",
+        "values": [
+          {
+            "label": "abs-black",
+            "slug": "color-abs-black"
+          },
+          {
+            "label": "bark",
+            "slug": "color-bark"
+          },
+          {
+            "label": "black",
+            "slug": "color-black"
+          },
+          {
+            "label": "black-clear",
+            "slug": "color-black-clear"
+          },
+          {
+            "label": "charcoal",
+            "slug": "color-charcoal"
+          },
+          {
+            "label": "clear",
+            "slug": "color-clear"
+          },
+          {
+            "label": "coastal-gray",
+            "slug": "color-coastal-gray"
+          },
+          {
+            "label": "dsg",
+            "slug": "color-dsg"
+          },
+          {
+            "label": "dsg-clear",
+            "slug": "color-dsg-clear"
+          },
+          {
+            "label": "dsg-silver",
+            "slug": "color-dsg-silver"
+          },
+          {
+            "label": "dsg-titanium",
+            "slug": "color-dsg-titanium"
+          },
+          {
+            "label": "graphite",
+            "slug": "color-graphite"
+          },
+          {
+            "label": "gray",
+            "slug": "color-gray"
+          },
+          {
+            "label": "mocha",
+            "slug": "color-mocha"
+          },
+          {
+            "label": "white",
+            "slug": "color-white"
+          }
+        ]
+      },
+      {
+        "name": "Ell",
+        "slug": "ell",
+        "values": [
+          {
+            "label": "90",
+            "slug": "ell-90"
+          }
+        ]
+      },
+      {
+        "name": "Handle",
+        "slug": "handle",
+        "values": [
+          {
+            "label": "style-6-spoke",
+            "slug": "handle-style-6-spoke"
+          },
+          {
+            "label": "style-s-shaped",
+            "slug": "handle-style-s-shaped"
+          }
+        ]
+      },
+      {
+        "name": "Hertz",
+        "slug": "hertz",
+        "values": [
+          {
+            "label": "50.60",
+            "slug": "hertz-50-60"
+          },
+          {
+            "label": "60",
+            "slug": "hertz-60"
+          }
+        ]
+      },
+      {
+        "name": "Jet",
+        "slug": "jet",
+        "values": [
+          {
+            "label": "type-massage",
+            "slug": "jet-type-massage"
+          }
+        ]
+      },
+      {
+        "name": "Kw",
+        "slug": "kw",
+        "values": [
+          {
+            "label": "4.0",
+            "slug": "kw-4-0"
+          },
+          {
+            "label": "5.5",
+            "slug": "kw-5-5"
+          }
+        ]
+      },
+      {
+        "name": "Material",
+        "slug": "material",
+        "values": [
+          {
+            "label": "stainless-steel",
+            "slug": "material-stainless-steel"
+          },
+          {
+            "label": "standard",
+            "slug": "material-standard"
+          }
+        ]
+      },
+      {
+        "name": "Size",
+        "slug": "size",
+        "values": [
+          {
+            "label": "1",
+            "slug": "size-1"
+          },
+          {
+            "label": "1.2",
+            "slug": "size-1-2"
+          },
+          {
+            "label": "11",
+            "slug": "size-11"
+          },
+          {
+            "label": "13",
+            "slug": "size-13"
+          },
+          {
+            "label": "14",
+            "slug": "size-14"
+          },
+          {
+            "label": "16",
+            "slug": "size-16"
+          },
+          {
+            "label": "18",
+            "slug": "size-18"
+          },
+          {
+            "label": "2",
+            "slug": "size-2"
+          },
+          {
+            "label": "20",
+            "slug": "size-20"
+          },
+          {
+            "label": "3-5-sq-in",
+            "slug": "size-3-5-sq-in"
+          },
+          {
+            "label": "3-5-x-6-25",
+            "slug": "size-3-5-x-6-25"
+          },
+          {
+            "label": "3.4",
+            "slug": "size-3-4"
+          },
+          {
+            "label": "3.8",
+            "slug": "size-3-8"
+          },
+          {
+            "label": "33",
+            "slug": "size-33"
+          },
+          {
+            "label": "4.3.4",
+            "slug": "size-4-3-4"
+          },
+          {
+            "label": "5",
+            "slug": "size-5"
+          },
+          {
+            "label": "6",
+            "slug": "size-6"
+          }
+        ]
+      },
+      {
+        "name": "Socket",
+        "slug": "socket",
+        "values": [
+          {
+            "label": "1.1.2",
+            "slug": "socket-1-1-2"
+          },
+          {
+            "label": "1",
+            "slug": "socket-1"
+          },
+          {
+            "label": "1.2",
+            "slug": "socket-1-2"
+          },
+          {
+            "label": "2",
+            "slug": "socket-2"
+          }
+        ]
+      },
+      {
+        "name": "Spigot",
+        "slug": "spigot",
+        "values": [
+          {
+            "label": "1.1.2",
+            "slug": "spigot-1-1-2"
+          },
+          {
+            "label": "1.1.4",
+            "slug": "spigot-1-1-4"
+          },
+          {
+            "label": "1",
+            "slug": "spigot-1"
+          },
+          {
+            "label": "1.2",
+            "slug": "spigot-1-2"
+          },
+          {
+            "label": "2",
+            "slug": "spigot-2"
+          },
+          {
+            "label": "3.4",
+            "slug": "spigot-3-4"
+          },
+          {
+            "label": "3.8",
+            "slug": "spigot-3-8"
+          }
+        ]
+      },
+      {
+        "name": "Volatge",
+        "slug": "volatge",
+        "values": [
+          {
+            "label": "230v-12v",
+            "slug": "volatge-230v-12v"
+          }
+        ]
+      },
+      {
+        "name": "Voltage",
+        "slug": "voltage",
+        "values": [
+          {
+            "label": "110v-12v",
+            "slug": "voltage-110v-12v"
+          }
+        ]
+      },
+      {
+        "name": "Volts",
+        "slug": "volts",
+        "values": [
+          {
+            "label": "115v-230v",
+            "slug": "volts-115v-230v"
+          }
+        ]
+      }
+    ],
     "pumps": [],
     "jets": [],
     "air-components": [],
@@ -560,7 +957,52 @@
         ]
       }
     ],
-    "pool-skimmers-skim-filters": [],
+    "pool-skimmers-skim-filters": [
+      {
+        "name": "Color",
+        "slug": "color",
+        "values": [
+          {
+            "label": "beige",
+            "slug": "color-beige"
+          },
+          {
+            "label": "black",
+            "slug": "color-black"
+          },
+          {
+            "label": "clear",
+            "slug": "color-clear"
+          },
+          {
+            "label": "dark-gray",
+            "slug": "color-dark-gray"
+          },
+          {
+            "label": "gray",
+            "slug": "color-gray"
+          },
+          {
+            "label": "white",
+            "slug": "color-white"
+          }
+        ]
+      },
+      {
+        "name": "Shape",
+        "slug": "shape",
+        "values": [
+          {
+            "label": "round",
+            "slug": "shape-round"
+          },
+          {
+            "label": "square",
+            "slug": "shape-square"
+          }
+        ]
+      }
+    ],
     "pool-chlorinators-accessories": [],
     "pool-unions": [],
     "pool-ells-tees-wyes": [],
@@ -622,12 +1064,46 @@
         "slug": "jet",
         "values": [
           {
+            "label": "seat-1",
+            "slug": "jet-seat-1"
+          },
+          {
+            "label": "seat-2",
+            "slug": "jet-seat-2"
+          },
+          {
+            "label": "seat-3",
+            "slug": "jet-seat-3"
+          },
+          {
+            "label": "size-poly-jets",
+            "slug": "jet-size-poly-jets"
+          },
+          {
             "label": "style-scalloped",
             "slug": "jet-style-scalloped"
           },
           {
             "label": "style-smooth",
             "slug": "jet-style-smooth"
+          },
+          {
+            "label": "type-6-spoke",
+            "slug": "jet-type-6-spoke"
+          }
+        ]
+      },
+      {
+        "name": "Kit",
+        "slug": "kit",
+        "values": [
+          {
+            "label": "size-7",
+            "slug": "kit-size-7"
+          },
+          {
+            "label": "size-9",
+            "slug": "kit-size-9"
           }
         ]
       },
@@ -649,21 +1125,460 @@
     "pool-miscellaneous-accessories": [],
     "spa-pumps-spa": [],
     "hose-and-tubing": [],
-    "spa-jets": [],
+    "spa-jets": [
+      {
+        "name": "Color",
+        "slug": "color",
+        "values": [
+          {
+            "label": "dsg",
+            "slug": "color-dsg"
+          }
+        ]
+      },
+      {
+        "name": "Jet",
+        "slug": "jet",
+        "values": [
+          {
+            "label": "type-massage",
+            "slug": "jet-type-massage"
+          }
+        ]
+      },
+      {
+        "name": "Size",
+        "slug": "size",
+        "values": [
+          {
+            "label": "5",
+            "slug": "size-5"
+          },
+          {
+            "label": "6",
+            "slug": "size-6"
+          }
+        ]
+      }
+    ],
     "spa-control-system": [],
     "spa-drains-suctions": [],
-    "spa-manifolds": [],
+    "spa-manifolds": [
+      {
+        "name": "Barb",
+        "slug": "barb",
+        "values": [
+          {
+            "label": "type-ribbed",
+            "slug": "barb-type-ribbed"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "slug": "color",
+        "values": [
+          {
+            "label": "black",
+            "slug": "color-black"
+          },
+          {
+            "label": "white",
+            "slug": "color-white"
+          }
+        ]
+      },
+      {
+        "name": "Size",
+        "slug": "size",
+        "values": [
+          {
+            "label": "3.8",
+            "slug": "size-3-8"
+          }
+        ]
+      },
+      {
+        "name": "Socket",
+        "slug": "socket",
+        "values": [
+          {
+            "label": "1.1.2",
+            "slug": "socket-1-1-2"
+          },
+          {
+            "label": "1",
+            "slug": "socket-1"
+          },
+          {
+            "label": "1.2",
+            "slug": "socket-1-2"
+          },
+          {
+            "label": "2",
+            "slug": "socket-2"
+          }
+        ]
+      },
+      {
+        "name": "Spigot",
+        "slug": "spigot",
+        "values": [
+          {
+            "label": "1.1.2",
+            "slug": "spigot-1-1-2"
+          },
+          {
+            "label": "1",
+            "slug": "spigot-1"
+          },
+          {
+            "label": "2",
+            "slug": "spigot-2"
+          }
+        ]
+      }
+    ],
     "wet-ends-bases": [],
     "top-side-valves": [],
-    "air-controls": [],
+    "air-controls": [
+      {
+        "name": "Body",
+        "slug": "body",
+        "values": [
+          {
+            "label": "style-extra-short",
+            "slug": "body-style-extra-short"
+          },
+          {
+            "label": "style-short",
+            "slug": "body-style-short"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "slug": "color",
+        "values": [
+          {
+            "label": "black-clear",
+            "slug": "color-black-clear"
+          },
+          {
+            "label": "dsg",
+            "slug": "color-dsg"
+          },
+          {
+            "label": "dsg-clear",
+            "slug": "color-dsg-clear"
+          },
+          {
+            "label": "dsg-silver",
+            "slug": "color-dsg-silver"
+          },
+          {
+            "label": "dsg-titanium",
+            "slug": "color-dsg-titanium"
+          },
+          {
+            "label": "gray",
+            "slug": "color-gray"
+          }
+        ]
+      },
+      {
+        "name": "Handle",
+        "slug": "handle",
+        "values": [
+          {
+            "label": "style-6-spoke",
+            "slug": "handle-style-6-spoke"
+          },
+          {
+            "label": "style-s-shaped",
+            "slug": "handle-style-s-shaped"
+          }
+        ]
+      },
+      {
+        "name": "Material",
+        "slug": "material",
+        "values": [
+          {
+            "label": "stainless-steel",
+            "slug": "material-stainless-steel"
+          },
+          {
+            "label": "standard",
+            "slug": "material-standard"
+          }
+        ]
+      },
+      {
+        "name": "Size",
+        "slug": "size",
+        "values": [
+          {
+            "label": "2",
+            "slug": "size-2"
+          }
+        ]
+      },
+      {
+        "name": "Socket",
+        "slug": "socket",
+        "values": [
+          {
+            "label": "1",
+            "slug": "socket-1"
+          },
+          {
+            "label": "1.2",
+            "slug": "socket-1-2"
+          }
+        ]
+      }
+    ],
     "fittings-spa": [],
     "water-features": [],
     "air-systems-spa": [],
-    "lighting": [],
+    "lighting": [
+      {
+        "name": "Amp",
+        "slug": "amp",
+        "values": [
+          {
+            "label": "1",
+            "slug": "amp-1"
+          }
+        ]
+      },
+      {
+        "name": "Hertz",
+        "slug": "hertz",
+        "values": [
+          {
+            "label": "50.60",
+            "slug": "hertz-50-60"
+          },
+          {
+            "label": "60",
+            "slug": "hertz-60"
+          }
+        ]
+      },
+      {
+        "name": "Volatge",
+        "slug": "volatge",
+        "values": [
+          {
+            "label": "230v-12v",
+            "slug": "volatge-230v-12v"
+          }
+        ]
+      },
+      {
+        "name": "Voltage",
+        "slug": "voltage",
+        "values": [
+          {
+            "label": "110v-12v",
+            "slug": "voltage-110v-12v"
+          }
+        ]
+      }
+    ],
     "spa-skimmers-and-filters": [],
     "spa-unions": [],
     "spa-ells-tees-wyes": [],
-    "spa-miscellaneous-accessories": [],
+    "spa-miscellaneous-accessories": [
+      {
+        "name": "Color",
+        "slug": "color",
+        "values": [
+          {
+            "label": "abs-black",
+            "slug": "color-abs-black"
+          },
+          {
+            "label": "bark",
+            "slug": "color-bark"
+          },
+          {
+            "label": "black",
+            "slug": "color-black"
+          },
+          {
+            "label": "charcoal",
+            "slug": "color-charcoal"
+          },
+          {
+            "label": "clear",
+            "slug": "color-clear"
+          },
+          {
+            "label": "coastal-gray",
+            "slug": "color-coastal-gray"
+          },
+          {
+            "label": "dsg",
+            "slug": "color-dsg"
+          },
+          {
+            "label": "graphite",
+            "slug": "color-graphite"
+          },
+          {
+            "label": "gray",
+            "slug": "color-gray"
+          },
+          {
+            "label": "mocha",
+            "slug": "color-mocha"
+          }
+        ]
+      },
+      {
+        "name": "Ell",
+        "slug": "ell",
+        "values": [
+          {
+            "label": "90",
+            "slug": "ell-90"
+          }
+        ]
+      },
+      {
+        "name": "Kw",
+        "slug": "kw",
+        "values": [
+          {
+            "label": "4.0",
+            "slug": "kw-4-0"
+          },
+          {
+            "label": "5.5",
+            "slug": "kw-5-5"
+          }
+        ]
+      },
+      {
+        "name": "Size",
+        "slug": "size",
+        "values": [
+          {
+            "label": "1",
+            "slug": "size-1"
+          },
+          {
+            "label": "1.2",
+            "slug": "size-1-2"
+          },
+          {
+            "label": "11",
+            "slug": "size-11"
+          },
+          {
+            "label": "13",
+            "slug": "size-13"
+          },
+          {
+            "label": "14",
+            "slug": "size-14"
+          },
+          {
+            "label": "16",
+            "slug": "size-16"
+          },
+          {
+            "label": "18",
+            "slug": "size-18"
+          },
+          {
+            "label": "20",
+            "slug": "size-20"
+          },
+          {
+            "label": "3-5-sq-in",
+            "slug": "size-3-5-sq-in"
+          },
+          {
+            "label": "3-5-x-6-25",
+            "slug": "size-3-5-x-6-25"
+          },
+          {
+            "label": "3.4",
+            "slug": "size-3-4"
+          },
+          {
+            "label": "33",
+            "slug": "size-33"
+          },
+          {
+            "label": "4.3.4",
+            "slug": "size-4-3-4"
+          }
+        ]
+      },
+      {
+        "name": "Socket",
+        "slug": "socket",
+        "values": [
+          {
+            "label": "1.1.2",
+            "slug": "socket-1-1-2"
+          },
+          {
+            "label": "2",
+            "slug": "socket-2"
+          }
+        ]
+      },
+      {
+        "name": "Spigot",
+        "slug": "spigot",
+        "values": [
+          {
+            "label": "1.1.2",
+            "slug": "spigot-1-1-2"
+          },
+          {
+            "label": "1.1.4",
+            "slug": "spigot-1-1-4"
+          },
+          {
+            "label": "1",
+            "slug": "spigot-1"
+          },
+          {
+            "label": "1.2",
+            "slug": "spigot-1-2"
+          },
+          {
+            "label": "2",
+            "slug": "spigot-2"
+          },
+          {
+            "label": "3.4",
+            "slug": "spigot-3-4"
+          },
+          {
+            "label": "3.8",
+            "slug": "spigot-3-8"
+          }
+        ]
+      },
+      {
+        "name": "Volts",
+        "slug": "volts",
+        "values": [
+          {
+            "label": "115v-230v",
+            "slug": "volts-115v-230v"
+          }
+        ]
+      }
+    ],
     "speakers": []
   },
   "rootCategories": [
@@ -2423,11 +3338,318 @@
   },
   "products": [
     {
+      "title": "Pancake Manifolds",
+      "slug": "pancake-manifolds",
+      "databaseId": 40549,
+      "date": "2026-04-21T23:53:00",
+      "modified": "2026-04-21T23:53:00",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-5960.png",
+      "imageAlt": null,
+      "imageWidth": 631,
+      "imageHeight": 614,
+      "categorySlugs": [
+        "spa-manifolds"
+      ],
+      "attributeSlugs": [
+        "socket-1",
+        "spigot-1"
+      ]
+    },
+    {
+      "title": "3/8″ Ribbed Barb Air Manifolds",
+      "slug": "3-8-ribbed-barb-manifolds",
+      "databaseId": 40540,
+      "date": "2026-04-21T21:18:29",
+      "modified": "2026-04-21T21:50:16",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-0410.png",
+      "imageAlt": null,
+      "imageWidth": 555,
+      "imageHeight": 342,
+      "categorySlugs": [
+        "spa-manifolds"
+      ],
+      "attributeSlugs": [
+        "barb-type-ribbed",
+        "size-3-8",
+        "socket-1",
+        "spigot-1-1-2"
+      ]
+    },
+    {
+      "title": "Reducers & Nipples",
+      "slug": "reducers-nipples",
+      "databaseId": 40530,
+      "date": "2026-04-21T16:40:05",
+      "modified": "2026-04-21T16:40:05",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/421-4020.png",
+      "imageAlt": null,
+      "imageWidth": 1322,
+      "imageHeight": 1235,
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": [
+        "spigot-1-1-2",
+        "spigot-1-1-4",
+        "spigot-1",
+        "spigot-2",
+        "spigot-3-4"
+      ]
+    },
+    {
+      "title": "Service Logic Replacement Heaters",
+      "slug": "service-logic-replacement-heaters",
+      "databaseId": 40525,
+      "date": "2026-04-21T15:25:37",
+      "modified": "2026-04-21T15:25:37",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/775-6001.png",
+      "imageAlt": null,
+      "imageWidth": 1920,
+      "imageHeight": 1405,
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": [
+        "kw-4-0",
+        "kw-5-5",
+        "volts-115v-230v"
+      ]
+    },
+    {
+      "title": "Spa Cabinet Vents",
+      "slug": "spa-cabinet-vents",
+      "databaseId": 40523,
+      "date": "2026-04-20T23:54:35",
+      "modified": "2026-04-20T23:54:35",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/675-6501-6507-6509.png",
+      "imageAlt": null,
+      "imageWidth": 1482,
+      "imageHeight": 1140,
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": [
+        "color-bark",
+        "color-black",
+        "color-charcoal"
+      ]
+    },
+    {
+      "title": "4″ Round Vent",
+      "slug": "4-round-vent",
+      "databaseId": 40518,
+      "date": "2026-04-20T23:15:47",
+      "modified": "2026-04-21T15:42:14",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-0600.png",
+      "imageAlt": null,
+      "imageWidth": 1800,
+      "imageHeight": 780,
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": [
+        "color-dsg",
+        "size-4-3-4"
+      ]
+    },
+    {
+      "title": "Adjustable Thermo Vent",
+      "slug": "adjustable-thermo-vent",
+      "databaseId": 40514,
+      "date": "2026-04-20T22:15:13",
+      "modified": "2026-04-20T22:21:09",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/675-6531_BackandFront.png",
+      "imageAlt": null,
+      "imageWidth": 1138,
+      "imageHeight": 1140,
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": [
+        "color-black",
+        "color-gray"
+      ]
+    },
+    {
+      "title": "LED Spa Vent/Sconce Light",
+      "slug": "led-spa-vent-sconce-light",
+      "databaseId": 40512,
+      "date": "2026-04-20T21:25:58",
+      "modified": "2026-04-20T21:25:58",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/LEDspavent.jpg",
+      "imageAlt": null,
+      "imageWidth": 1484,
+      "imageHeight": 1920,
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": [
+        "color-black",
+        "color-clear",
+        "size-3-5-sq-in"
+      ]
+    },
+    {
+      "title": "Spa Handle Vent",
+      "slug": "spa-handle-vent",
+      "databaseId": 40511,
+      "date": "2026-04-20T20:05:18",
+      "modified": "2026-04-20T20:05:18",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/675-6511.png",
+      "imageAlt": null,
+      "imageWidth": 1507,
+      "imageHeight": 1920,
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": [
+        "color-black",
+        "size-3-5-x-6-25"
+      ]
+    },
+    {
+      "title": "Cabinet Latch",
+      "slug": "cabinet-latch",
+      "databaseId": 40507,
+      "date": "2026-04-20T18:39:12",
+      "modified": "2026-04-20T22:20:57",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Cabinet_Latch_Installed.png",
+      "imageAlt": null,
+      "imageWidth": 1920,
+      "imageHeight": 1280,
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": [
+        "color-abs-black"
+      ]
+    },
+    {
+      "title": "Clear Acrylic Hand Rails",
+      "slug": "spa-accessories-2",
+      "databaseId": 40504,
+      "date": "2026-04-20T15:54:57",
+      "modified": "2026-04-20T22:14:18",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/616-1800.png",
+      "imageAlt": null,
+      "imageWidth": 1920,
+      "imageHeight": 1284,
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": [
+        "color-clear",
+        "size-11",
+        "size-13",
+        "size-14",
+        "size-16",
+        "size-18",
+        "size-20"
+      ]
+    },
+    {
+      "title": "On/Off Valves for Garden Hose",
+      "slug": "on-off-valves-for-garden-hose",
+      "databaseId": 40497,
+      "date": "2026-04-20T15:17:07",
+      "modified": "2026-04-20T15:41:46",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-2100.png",
+      "imageAlt": null,
+      "imageWidth": 1920,
+      "imageHeight": 1189,
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": [
+        "size-1-2",
+        "size-3-4"
+      ]
+    },
+    {
+      "title": "Spa Drain and Fill Niche for Garden Hose Connection",
+      "slug": "spa-drain-and-fill-niche-for-garden-hose-connection",
+      "databaseId": 40494,
+      "date": "2026-04-17T23:57:21",
+      "modified": "2026-04-17T23:57:21",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-3031.png",
+      "imageAlt": null,
+      "imageWidth": 1331,
+      "imageHeight": 1200,
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": [
+        "size-1",
+        "size-1-2",
+        "size-3-4"
+      ]
+    },
+    {
+      "title": "Air Controls Accessories",
+      "slug": "air-controls-accessories",
+      "databaseId": 40481,
+      "date": "2026-04-17T22:17:27",
+      "modified": "2026-04-17T22:17:27",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/413-4180.png",
+      "imageAlt": null,
+      "imageWidth": 1167,
+      "imageHeight": 1169,
+      "categorySlugs": [
+        "air-controls"
+      ],
+      "attributeSlugs": [
+        "socket-1",
+        "socket-1-2"
+      ]
+    },
+    {
+      "title": "Top Access Air Controls",
+      "slug": "top-access-controls",
+      "databaseId": 40472,
+      "date": "2026-04-17T21:55:20",
+      "modified": "2026-04-17T22:14:58",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/AIR-CONTROL-ORION.png",
+      "imageAlt": null,
+      "imageWidth": 1283,
+      "imageHeight": 1920,
+      "categorySlugs": [
+        "air-controls"
+      ],
+      "attributeSlugs": [
+        "color-black-clear",
+        "color-dsg",
+        "color-dsg-clear",
+        "color-dsg-silver",
+        "color-dsg-titanium",
+        "color-gray",
+        "socket-1"
+      ]
+    },
+    {
+      "title": "Power Pulsar Foot & Back Massage Jets",
+      "slug": "power-pulsar-foot-back-massage-jets",
+      "databaseId": 40463,
+      "date": "2026-04-17T17:04:44",
+      "modified": "2026-04-17T23:40:39",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/210-9840.png",
+      "imageAlt": null,
+      "imageWidth": 1734,
+      "imageHeight": 1920,
+      "categorySlugs": [
+        "spa-jets"
+      ],
+      "attributeSlugs": [
+        "color-dsg",
+        "jet-type-massage",
+        "size-5"
+      ]
+    },
+    {
       "title": "Old Faithful Jets – Gunite & Vinyl Liner",
       "slug": "old-faithful-jets-gunite-vinyl-liner-2",
       "databaseId": 40265,
       "date": "2025-08-14T15:28:33",
-      "modified": "2026-04-15T19:15:32",
+      "modified": "2026-04-17T19:47:34",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/210-7350.png",
       "imageAlt": null,
       "imageWidth": 1783,
@@ -2453,7 +3675,7 @@
       "slug": "clearwater-ii-d-e-filter-system",
       "databaseId": 40169,
       "date": "2025-06-02T17:08:07",
-      "modified": "2026-04-16T15:38:57",
+      "modified": "2026-04-17T23:42:06",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/520-5187-3S_ClearWaterII-DE_StandSys_Hi-FloII_newplug_sil_xsm_flat_2025.png",
       "imageAlt": null,
       "imageWidth": 689,
@@ -2479,7 +3701,7 @@
       "slug": "carefree-top-mount-sand-filter-inground",
       "databaseId": 39535,
       "date": "2023-11-30T14:30:19",
-      "modified": "2026-04-16T23:50:45",
+      "modified": "2026-04-17T23:43:37",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Carefree_Sand-Filter2025_sil_xsm_flat.png",
       "imageAlt": null,
       "imageWidth": 633,
@@ -2501,34 +3723,46 @@
       ]
     },
     {
-      "title": "Pulsar Foot Massage Jets & Power Pulsar Foot & Back Message Jets",
+      "title": "Pulsar Foot Massage Jets",
       "slug": "pulsar-foot-massage-jets",
       "databaseId": 38111,
       "date": "2023-11-22T17:47:04",
-      "modified": "2024-01-29T16:33:02",
-      "imageUrl": null,
+      "modified": "2026-04-17T23:45:27",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/210-9850.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1920,
+      "imageHeight": 1908,
       "categorySlugs": [
         "spa-jets"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "color-dsg",
+        "jet-type-massage",
+        "size-6"
+      ]
     },
     {
       "title": "AquaShapes  3, 2, 1 Jet Systems",
       "slug": "aquashapes-storm-jet-systems",
       "databaseId": 37826,
       "date": "2023-09-06T20:29:58",
-      "modified": "2024-09-13T21:10:27",
-      "imageUrl": null,
+      "modified": "2026-04-17T20:56:30",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/210-3410G-w_jet.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1920,
+      "imageHeight": 1846,
       "categorySlugs": [
         "gunite-jets"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "jet-seat-1",
+        "jet-seat-2",
+        "jet-seat-3",
+        "jet-size-poly-jets",
+        "jet-type-6-spoke",
+        "kit-size-7",
+        "kit-size-9"
+      ]
     },
     {
       "title": "Waterway Warranty",
@@ -2546,934 +3780,156 @@
       "attributeSlugs": []
     },
     {
-      "title": "TruSeal Air Controls, Top Access Controls & Accessories",
+      "title": "TruSeal Air Controls",
       "slug": "truseal-air-controls-top-access-controls-accessories",
       "databaseId": 38197,
       "date": "2023-06-07T16:55:57",
-      "modified": "2023-12-15T14:53:29",
-      "imageUrl": null,
+      "modified": "2026-04-17T21:18:29",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/660-4459DSG-PS.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 483,
+      "imageHeight": 588,
       "categorySlugs": [
         "air-controls"
       ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "VGB Suctions & Strip Drains Replacement Parts",
-      "slug": "vgb-suctions-strip-drains-replacement-parts",
-      "databaseId": 38964,
-      "date": "2023-06-06T22:31:03",
-      "modified": "2023-06-07T23:09:45",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "VGB Grates & Frames Replacement Parts",
-      "slug": "vgb-grates-frames",
-      "databaseId": 38952,
-      "date": "2023-06-06T20:44:25",
-      "modified": "2023-06-06T22:07:27",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "VGB Drains Replacement Parts",
-      "slug": "vgb-drains-replacement-parts",
-      "databaseId": 38947,
-      "date": "2023-06-06T18:52:15",
-      "modified": "2023-06-07T23:11:45",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "TWM Skim Filter Replacement Parts",
-      "slug": "twm-skim-filter-replacement-parts",
-      "databaseId": 38932,
-      "date": "2023-06-06T18:23:23",
-      "modified": "2023-06-06T18:23:23",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Ultra Skim Filter & Ultra Skim XL Filter Replacement Parts",
-      "slug": "ultra-skim-filter-ultra-skim-xl-filter-replacement-parts",
-      "databaseId": 38913,
-      "date": "2023-06-06T17:06:19",
-      "modified": "2023-06-07T23:12:41",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Deluxe Strip Skimmer and Skim Filter Replacement Parts",
-      "slug": "deluxe-strip-skimmer-and-skim-filter-replacement-parts",
-      "databaseId": 38897,
-      "date": "2023-06-06T16:16:03",
-      "modified": "2023-06-06T16:33:32",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Teleweir Replacement Parts",
-      "slug": "teleweir-replacement-parts",
-      "databaseId": 38894,
-      "date": "2023-06-06T16:06:39",
-      "modified": "2023-06-06T16:06:39",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Spa Skimmer and Skim Filter Replacement Parts",
-      "slug": "spa-skimmer-and-skim-filter",
-      "databaseId": 33622,
-      "date": "2023-06-06T12:37:07",
-      "modified": "2023-06-06T23:00:56",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Renegade Gunite and Venturi / Deep Basket Skimmers Replacement Parts",
-      "slug": "renegade-gunite-and-venturi-deep-basket-skimmers",
-      "databaseId": 33229,
-      "date": "2023-06-06T12:37:03",
-      "modified": "2023-06-06T17:37:53",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Renegade Fiberglass Skimmer Replacement Parts",
-      "slug": "renegade-fiberglass-skimmer",
-      "databaseId": 33197,
-      "date": "2023-06-06T12:37:03",
-      "modified": "2023-06-07T23:15:21",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Flo-Pro II Above Ground Skimmer Replacement Parts",
-      "slug": "flo-pro-ii-above-ground-skimmer-2",
-      "databaseId": 32765,
-      "date": "2023-06-06T12:36:59",
-      "modified": "2023-06-06T23:04:28",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Off-Line and Above Ground Chlorinators Replacement Parts",
-      "slug": "off-line-and-above-ground-chlorinators",
-      "databaseId": 32656,
-      "date": "2023-06-06T12:36:59",
-      "modified": "2023-06-07T23:26:50",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Main Drains Replacement Parts",
-      "slug": "main-drains",
-      "databaseId": 32470,
-      "date": "2023-06-06T12:36:57",
-      "modified": "2023-06-06T23:09:56",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "In-Line Chlorinators Replacement Parts",
-      "slug": "in-line-chlorinators",
-      "databaseId": 32380,
-      "date": "2023-06-06T12:36:56",
-      "modified": "2023-06-07T23:18:44",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Flo-Pro Skim Filter Replacement Parts",
-      "slug": "flo-pro-skim-filter",
-      "databaseId": 32180,
-      "date": "2023-06-06T12:36:54",
-      "modified": "2023-06-07T23:19:50",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "50 sq. ft. Skim Filter Replacement Parts",
-      "slug": "50-sq-ft-skim-filter-2",
-      "databaseId": 32005,
-      "date": "2023-06-06T12:36:53",
-      "modified": "2023-06-07T23:30:39",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Dyna-Flo XL Skim Filter Replacement Parts",
-      "slug": "dyna-flo-xl-skim-filter",
-      "databaseId": 31994,
-      "date": "2023-06-06T12:36:52",
-      "modified": "2023-06-07T23:31:52",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Dyna-Flo Top Mount Skim Filter Replacement Parts",
-      "slug": "dyna-flo-top-mount-skim-filter",
-      "databaseId": 31977,
-      "date": "2023-06-06T12:36:52",
-      "modified": "2023-06-07T23:32:41",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "100 sq. ft. Skim Filter Replacement Parts",
-      "slug": "100-sq-ft-skim-filter",
-      "databaseId": 31760,
-      "date": "2023-06-06T12:36:50",
-      "modified": "2023-06-07T23:34:56",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "1 1/2″ and 2″ Top-Load Filter Replacement Parts",
-      "slug": "1-1-2-and-2-top-load-filter",
-      "databaseId": 31727,
-      "date": "2023-06-06T12:36:50",
-      "modified": "2023-06-07T23:33:45",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "1 1/2″ In-Line Filter Replacement Parts",
-      "slug": "1-1-2-in-line-filter",
-      "databaseId": 31677,
-      "date": "2023-06-06T12:36:50",
-      "modified": "2023-06-07T23:34:28",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Renegade Vinyl Liner Skimmer Replacement Parts",
-      "slug": "renegade-vinyl-liner-skimmer",
-      "databaseId": 33257,
-      "date": "2023-06-03T12:37:04",
-      "modified": "2023-06-07T23:35:30",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "TWM Sand Filter Replacement Parts",
-      "slug": "twm-sand-filter-replacement-parts",
-      "databaseId": 38879,
-      "date": "2023-06-02T23:42:00",
-      "modified": "2023-06-02T23:42:00",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "UltraClean Pro Sand Filter Replacement Parts (Discontinued 2015)",
-      "slug": "ultraclean-pro-sand-filter-replacement-parts-discontinued-2015",
-      "databaseId": 38873,
-      "date": "2023-06-02T23:15:02",
-      "modified": "2023-06-07T23:36:19",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "TWM Cartridge Filter Package Replacement Parts",
-      "slug": "twm-cartridge-filter-package-replacement-parts",
-      "databaseId": 38866,
-      "date": "2023-06-02T22:50:59",
-      "modified": "2023-06-07T23:37:15",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "TruSeal Valves Replacement Parts",
-      "slug": "truseal-valves-replacement-parts",
-      "databaseId": 38843,
-      "date": "2023-06-02T18:44:04",
-      "modified": "2023-06-07T23:37:57",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Viper Wet End Replacement Parts",
-      "slug": "viper-wet-end-replacement-parts",
-      "databaseId": 38823,
-      "date": "2023-06-02T18:06:04",
-      "modified": "2023-06-07T23:38:28",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Supreme Pump Replacement Parts",
-      "slug": "supreme-pump-replacement-parts",
-      "databaseId": 38795,
-      "date": "2023-06-02T16:28:02",
-      "modified": "2023-06-07T23:39:00",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Power Defender 140ABG Pump Replacement Parts",
-      "slug": "power-defender-140abg-pump-replacement-parts",
-      "databaseId": 38788,
-      "date": "2023-06-02T15:57:24",
-      "modified": "2023-06-07T23:40:52",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Spa Flo and Iron Might Wet End Replacement Parts",
-      "slug": "spa-flo-and-iron-might-wet-end",
-      "databaseId": 33608,
-      "date": "2023-06-02T12:37:07",
-      "modified": "2023-06-02T18:10:01",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Spa Flo II Wet End Replacement Parts",
-      "slug": "spa-flo-ii-wet-end",
-      "databaseId": 33606,
-      "date": "2023-06-02T12:37:07",
-      "modified": "2023-06-07T23:41:26",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "SmartClean Sand Filter – Top Mount Replacement Parts (Discontinued 2015)",
-      "slug": "smartclean-sand-filter-top-mount-discontinued-2015",
-      "databaseId": 33540,
-      "date": "2023-06-02T12:37:06",
-      "modified": "2023-06-06T23:34:11",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Slide Valve Internals Replacement Parts",
-      "slug": "slide-valve-internals",
-      "databaseId": 33536,
-      "date": "2023-06-02T12:37:06",
-      "modified": "2023-06-07T23:42:13",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "SVL56 High-Flow Pump Replacement Parts",
-      "slug": "svl56-high-flow-pump",
-      "databaseId": 33432,
-      "date": "2023-06-02T12:37:05",
-      "modified": "2023-06-07T23:43:55",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "SMF International Pump Replacement Parts",
-      "slug": "smf-pump",
-      "databaseId": 33402,
-      "date": "2023-06-02T12:37:05",
-      "modified": "2023-06-07T23:46:07",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "ProClean Plus Cartridge Filter Replacement Parts",
-      "slug": "proclean-plus-cartridge-filter",
-      "databaseId": 33083,
-      "date": "2023-06-02T12:37:02",
-      "modified": "2023-06-06T23:43:00",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Hi-Flo & Hi-Flo II Side Discharge Pump Replacement Parts",
-      "slug": "hi-flo-hi-flo-ii-side-discharge-pump-2",
-      "databaseId": 32891,
-      "date": "2023-06-02T12:37:00",
-      "modified": "2023-06-07T23:47:12",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Multi-Port Valves – Side Mount and Top Mount Replacement Parts",
-      "slug": "multi-port-valves-side-mount-and-top-mount",
-      "databaseId": 32538,
-      "date": "2023-06-02T12:36:58",
-      "modified": "2023-06-06T23:47:49",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Hi-Flo Side Discharge Wet End Replacement Parts",
-      "slug": "hi-flo-side-discharge-wet-end",
-      "databaseId": 32300,
-      "date": "2023-06-02T12:36:55",
-      "modified": "2023-06-07T23:48:56",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Hi-Flo II Side Discharge Wet End Replacement Parts",
-      "slug": "hi-flo-ii-side-discharge-wet-end",
-      "databaseId": 32298,
-      "date": "2023-06-02T12:36:55",
-      "modified": "2023-06-07T23:50:36",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "CSA Hi-Flo II Side Discharge Pump Replacement Parts",
-      "slug": "csa-hi-flo-ii-side-discharge-pump-2",
-      "databaseId": 32177,
-      "date": "2023-06-02T12:36:54",
-      "modified": "2023-06-07T23:52:23",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Executive Wet End Replacement Parts",
-      "slug": "executive-wet-end",
-      "databaseId": 32114,
-      "date": "2023-06-02T12:36:54",
-      "modified": "2023-06-07T23:51:28",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "EX2 Wet End Replacement Parts",
-      "slug": "ex2-wet-end",
-      "databaseId": 32042,
-      "date": "2023-06-02T12:36:53",
-      "modified": "2023-06-02T17:58:32",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "E-Series Center Discharge Pump Replacement Parts",
-      "slug": "e-series-center-discharge-pump",
-      "databaseId": 32017,
-      "date": "2023-06-02T12:36:53",
-      "modified": "2023-06-07T23:53:32",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Crystal Water D.E. Filter Replacement Parts",
-      "slug": "crystal-water-d-e-filter",
-      "databaseId": 31965,
-      "date": "2023-06-02T12:36:52",
-      "modified": "2023-06-06T23:54:46",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Crystal Water Cartridge Filter Replacement Parts",
-      "slug": "crystal-water-cartridge-filter",
-      "databaseId": 31958,
-      "date": "2023-06-02T12:36:52",
-      "modified": "2023-06-07T23:54:25",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "ClearWater II Cartridge Filter Replacement Parts",
-      "slug": "clearwater-ii-cartridge-filter",
-      "databaseId": 31825,
-      "date": "2023-06-02T12:36:51",
-      "modified": "2023-06-07T23:55:35",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Champion 56-Frame Pump Replacement Parts (Discontinued 2021)",
-      "slug": "champion-56-frame-pump",
-      "databaseId": 31679,
-      "date": "2023-06-02T12:36:50",
-      "modified": "2023-06-07T23:56:41",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Center Discharge Wet End (2010 and Earlier) Replacement Parts",
-      "slug": "center-discharge-wet-end-2010-and-earlier",
-      "databaseId": 31661,
-      "date": "2023-06-02T12:36:49",
-      "modified": "2023-06-08T15:03:18",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Center Discharge Pump (2010 and Earlier) Replacement Parts",
-      "slug": "center-discharge-pump-2010-and-earlier",
-      "databaseId": 31656,
-      "date": "2023-06-02T12:36:49",
-      "modified": "2023-06-08T15:03:53",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Carefree Sand Filter Replacement Parts",
-      "slug": "carefree-sand-filter",
-      "databaseId": 31576,
-      "date": "2023-06-02T12:36:49",
-      "modified": "2023-06-08T15:01:50",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "CSA Supreme Pump Replacement Parts",
-      "slug": "csa-supreme-pump",
-      "databaseId": 31550,
-      "date": "2023-06-02T12:36:49",
-      "modified": "2023-06-08T15:02:48",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "body-style-extra-short",
+        "body-style-short",
+        "color-dsg",
+        "color-dsg-silver",
+        "handle-style-6-spoke",
+        "handle-style-s-shaped",
+        "material-stainless-steel",
+        "material-standard",
+        "size-2"
+      ]
     },
     {
       "title": "Reversible Skimmer Lid",
       "slug": "reversible-skimmer-lid",
       "databaseId": 36895,
       "date": "2023-06-01T23:22:01",
-      "modified": "2023-06-08T15:14:32",
-      "imageUrl": null,
+      "modified": "2026-04-17T22:41:25",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/540-7800.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1920,
+      "imageHeight": 1284,
       "categorySlugs": [
         "pool-skimmers-skim-filters"
       ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Power Defender SVL Pump Replacement Parts",
-      "slug": "power-defender-svl-pump-replacement-parts",
-      "databaseId": 38782,
-      "date": "2023-06-01T23:17:05",
-      "modified": "2023-06-08T15:15:50",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "color-beige",
+        "color-black",
+        "color-clear",
+        "color-dark-gray",
+        "color-gray",
+        "color-white",
+        "shape-round",
+        "shape-square"
+      ]
     },
     {
       "title": "Spa Steps",
       "slug": "spa-steps",
       "databaseId": 38736,
       "date": "2023-06-01T17:36:58",
-      "modified": "2023-06-01T17:36:58",
-      "imageUrl": null,
+      "modified": "2026-04-17T22:59:21",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Sp-Steps_Mocha_sil.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1433,
+      "imageHeight": 1018,
       "categorySlugs": [
         "spa-miscellaneous-accessories"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "color-bark",
+        "color-black",
+        "color-charcoal",
+        "color-coastal-gray",
+        "color-graphite",
+        "color-mocha",
+        "size-33"
+      ]
     },
     {
       "title": "Thermowells",
       "slug": "thermowells",
       "databaseId": 38715,
       "date": "2023-06-01T17:14:07",
-      "modified": "2023-06-08T15:17:26",
-      "imageUrl": null,
+      "modified": "2026-04-17T23:14:59",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-4360.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1356,
+      "imageHeight": 1144,
       "categorySlugs": [
         "spa-miscellaneous-accessories"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "ell-90",
+        "socket-1-1-2",
+        "socket-2"
+      ]
     },
     {
-      "title": "Spa Accessories",
+      "title": "Lo-Profile Spa Drain Fill Valve",
       "slug": "spa-accessories",
       "databaseId": 33545,
       "date": "2023-06-01T12:37:06",
-      "modified": "2025-06-04T22:52:22",
-      "imageUrl": null,
+      "modified": "2026-04-17T23:57:27",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/600-9101_600-9167.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 331,
+      "imageHeight": 498,
       "categorySlugs": [
         "spa-miscellaneous-accessories"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "color-black",
+        "size-3-4"
+      ]
     },
     {
       "title": "ShurGrip Manifolds",
       "slug": "shurgrip-manifolds",
       "databaseId": 33470,
       "date": "2023-06-01T12:37:05",
-      "modified": "2023-07-17T17:53:56",
-      "imageUrl": null,
+      "modified": "2026-04-21T15:43:52",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-4940.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1416,
+      "imageHeight": 1200,
       "categorySlugs": [
         "spa-manifolds"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "color-white",
+        "socket-1-1-2",
+        "socket-1",
+        "socket-2",
+        "spigot-1-1-2",
+        "spigot-2"
+      ]
     },
     {
-      "title": "Reducers, Nipples, and Plugs",
+      "title": "Plugs",
       "slug": "reducers-nipples-and-plugs",
       "databaseId": 33167,
       "date": "2023-06-01T12:37:03",
-      "modified": "2023-07-17T18:46:47",
-      "imageUrl": null,
+      "modified": "2026-04-21T16:45:06",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/715-0000_715-9890_715-2000_715-9880-1.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1920,
+      "imageHeight": 1440,
       "categorySlugs": [
         "spa-miscellaneous-accessories"
       ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Power Defender Pumps Replacement Parts",
-      "slug": "power-defender-2-7hp-variable-speed-pump",
-      "databaseId": 32916,
-      "date": "2023-06-01T12:37:00",
-      "modified": "2023-06-08T15:38:49",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Power Defender Booster Pump Replacement Parts",
-      "slug": "power-defender-1-65hp-variable-speed-pump",
-      "databaseId": 32862,
-      "date": "2023-06-01T12:37:00",
-      "modified": "2023-06-08T15:41:43",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "spigot-1-1-2",
+        "spigot-1",
+        "spigot-1-2",
+        "spigot-3-4",
+        "spigot-3-8"
+      ]
     },
     {
       "title": "Hole Saw Sizes",
@@ -3510,15 +3966,21 @@
       "slug": "5-jumbo-spa-lights-and-spa-light-accessories-2",
       "databaseId": 31957,
       "date": "2023-06-01T12:36:52",
-      "modified": "2026-04-01T07:57:04",
-      "imageUrl": null,
+      "modified": "2026-04-21T17:16:00",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/630-0005.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1031,
+      "imageHeight": 595,
       "categorySlugs": [
         "lighting"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "amp-1",
+        "hertz-50-60",
+        "hertz-60",
+        "volatge-230v-12v",
+        "voltage-110v-12v"
+      ]
     },
     {
       "title": "Color Guide",
@@ -3596,49 +4058,63 @@
       "attributeSlugs": []
     },
     {
-      "title": "3/8″ Barb Manifolds & Pancake Manifolds",
+      "title": "3/8″ Distributor Manifolds",
       "slug": "3-8-barb-manifolds-pancake-manifolds",
       "databaseId": 31574,
       "date": "2023-06-01T12:36:49",
-      "modified": "2023-07-17T17:33:11",
-      "imageUrl": null,
+      "modified": "2026-04-21T22:29:22",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-4100.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 418,
+      "imageHeight": 403,
       "categorySlugs": [
         "spa-manifolds"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "socket-1",
+        "spigot-1"
+      ]
     },
     {
-      "title": "3/8″ Barb Manifolds",
+      "title": "3/8″ Smooth Barb Air Manifolds",
       "slug": "3-8-barb-manifolds",
       "databaseId": 31563,
       "date": "2023-06-01T12:36:49",
-      "modified": "2023-07-17T17:34:04",
-      "imageUrl": null,
+      "modified": "2026-04-21T21:49:58",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-4370.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 569,
+      "imageHeight": 236,
       "categorySlugs": [
         "spa-manifolds"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "size-3-8",
+        "socket-1-1-2",
+        "socket-1",
+        "socket-1-2",
+        "spigot-1-1-2",
+        "spigot-1"
+      ]
     },
     {
       "title": "3/8″ Barb Adapters",
       "slug": "3-8-barb-adapters",
       "databaseId": 31544,
       "date": "2023-06-01T12:36:49",
-      "modified": "2023-07-17T17:43:52",
-      "imageUrl": null,
+      "modified": "2026-04-21T18:09:31",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/419-1000.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 541,
+      "imageHeight": 275,
       "categorySlugs": [
         "spa-manifolds"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "barb-type-ribbed",
+        "color-black",
+        "color-white"
+      ]
     },
     {
       "title": "Wyes & Manifold Wyes",

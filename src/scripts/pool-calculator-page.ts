@@ -1,0 +1,439 @@
+import {
+  type ShapeId,
+  SHAPE_LABELS,
+  dimensionFieldsForShape,
+  estimateVolumeGallons,
+  formatGpm,
+  gpmFromVolume,
+} from "../lib/pool-calculator";
+
+const MAX_FT_DIGITS = 4;
+const MAX_IN_DIGITS = 2;
+
+type FlowMode = "dimensions" | "gpmOnly";
+
+let flowMode: FlowMode = "dimensions";
+let currentStep = 1;
+let selectedShape: ShapeId | null = null;
+let cachedVolumeGallons = 0;
+let cachedTurnovers = 1;
+let cachedGpm = 0;
+/** Step 2: footer Next stays disabled until user clicks Estimate volume. */
+let step2HasEstimatedVolume = false;
+
+function $(sel: string, root: ParentNode = document): HTMLElement | null {
+  const el = root.querySelector(sel);
+  return el instanceof HTMLElement ? el : null;
+}
+
+function digitsOnlyFt(raw: string): string {
+  return raw.replace(/\D/g, "").slice(0, MAX_FT_DIGITS);
+}
+
+function digitsOnlyIn(raw: string): string {
+  return raw.replace(/\D/g, "").slice(0, MAX_IN_DIGITS);
+}
+
+function stepperSegment(step: number): 1 | 2 | 3 {
+  if (step <= 1) return 1;
+  if (step <= 3) return 2;
+  return 3;
+}
+
+function syncStepper(): void {
+  const seg = stepperSegment(currentStep);
+  const skipFirstTwo = flowMode === "gpmOnly" && currentStep >= 4;
+  for (let i = 1; i <= 3; i++) {
+    const item = $(`[data-pool-stepper-index="${i}"]`);
+    if (!item) continue;
+    item.classList.toggle("pool-calc__stepper-item--current", i === seg);
+    item.classList.toggle(
+      "pool-calc__stepper-item--done",
+      i < seg && !skipFirstTwo,
+    );
+    item.classList.toggle(
+      "pool-calc__stepper-item--skip",
+      skipFirstTwo && i < 3,
+    );
+  }
+}
+
+function showPanel(step: number): void {
+  document.querySelectorAll<HTMLElement>("[data-pool-panel]").forEach((el) => {
+    const n = Number(el.dataset.poolPanel);
+    el.hidden = n !== step;
+  });
+}
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function areDimensionFieldsComplete(): boolean {
+  const host = $("#pool-calc-dimensions");
+  if (!host || !selectedShape) return false;
+  const inputs = host.querySelectorAll<HTMLInputElement>("input");
+  if (inputs.length === 0) return false;
+  for (const inp of inputs) {
+    if (!inp.value.trim()) return false;
+  }
+  return true;
+}
+
+function attachDimInputHandlers(host: HTMLElement): void {
+  host.querySelectorAll("input").forEach((inp) => {
+    inp.addEventListener("input", () => {
+      const isInches = inp.classList.contains("pool-calc__dim-in");
+      inp.value = isInches ? digitsOnlyIn(inp.value) : digitsOnlyFt(inp.value);
+      step2HasEstimatedVolume = false;
+      syncChrome();
+    });
+  });
+}
+
+function renderDimensionForm(): void {
+  const host = $("#pool-calc-dimensions");
+  if (!host || !selectedShape) return;
+  const fields = dimensionFieldsForShape(selectedShape);
+  host.innerHTML = fields
+    .map(
+      (f) => `
+    <div class="pool-calc__dim-row">
+      <div class="pool-calc__dim-label-wrap">
+        <span class="pool-calc__dim-label">${escapeHtml(f.label)}<span class="pool-calc__dim-req" aria-hidden="true">*</span></span>
+      </div>
+      <div class="pool-calc__dim-inputs">
+        <label class="pool-calc__dim-field">
+          <div class="pool-calc__dim-control pool-calc__dim-control--ft">
+            <span class="pool-calc__dim-sublabel">Feet</span>
+            <input type="text" inputmode="numeric" autocomplete="off" class="pool-calc__dim-ft" maxlength="${MAX_FT_DIGITS}" aria-label="${escapeHtml(f.label)} feet" />
+            <span class="pool-calc__dim-unit">ft</span>
+          </div>
+        </label>
+        <label class="pool-calc__dim-field">
+          <div class="pool-calc__dim-control pool-calc__dim-control--in">
+            <span class="pool-calc__dim-sublabel">Inches</span>
+            <input type="text" inputmode="numeric" autocomplete="off" class="pool-calc__dim-in" maxlength="${MAX_IN_DIGITS}" aria-label="${escapeHtml(f.label)} inches" />
+            <span class="pool-calc__dim-unit">in</span>
+          </div>
+        </label>
+      </div>
+    </div>`,
+    )
+    .join("");
+  attachDimInputHandlers(host);
+}
+
+function readDimensionPairs(): [string, string][] {
+  const rows = document.querySelectorAll<HTMLElement>(
+    "#pool-calc-dimensions .pool-calc__dim-row",
+  );
+  const out: [string, string][] = [];
+  rows.forEach((row) => {
+    const ft = row.querySelector<HTMLInputElement>(".pool-calc__dim-ft");
+    const inch = row.querySelector<HTMLInputElement>(".pool-calc__dim-in");
+    out.push([ft?.value ?? "", inch?.value ?? ""]);
+  });
+  return out;
+}
+
+function selectedShapeSummaryLine(): string | null {
+  if (!selectedShape) return null;
+  return `Selected shape: ${SHAPE_LABELS[selectedShape]}`;
+}
+
+/** Badge copy on steps 2–4: shape line, “volume only”, or empty before shape on step 1. */
+function shapeBadgeText(): string {
+  const line = selectedShapeSummaryLine();
+  if (line) return line;
+  if (flowMode === "gpmOnly") return "Volume entry only";
+  return "";
+}
+
+function updateShapeBadges(): void {
+  const text = shapeBadgeText();
+  document
+    .querySelectorAll<HTMLElement>(".pool-calc__js-shape-badge")
+    .forEach((el) => {
+      el.textContent = text;
+      el.hidden = !text;
+    });
+}
+
+function updateFinalSummary(): void {
+  const shapeEl = $("#pool-calc-final-shape");
+  if (shapeEl) {
+    shapeEl.textContent = selectedShapeSummaryLine() ?? "Volume entry only";
+  }
+}
+
+function updateVolumeDisplays(): void {
+  const v1 = $("#pool-calc-volume-result");
+  const v2 = $("#pool-calc-final-volume");
+  const g = $("#pool-calc-final-gpm");
+  const t = $("#pool-calc-final-turnover");
+  if (v1) v1.textContent = String(cachedVolumeGallons);
+  if (v2) v2.textContent = String(cachedVolumeGallons);
+  if (g) g.textContent = formatGpm(cachedGpm);
+  if (t) t.textContent = `Turnover: ${cachedTurnovers}× / day`;
+}
+
+function readVolumeInput(): number {
+  const inp = $("#pool-calc-volume-input") as HTMLInputElement | null;
+  if (!inp) return 0;
+  const n = Math.floor(Number(inp.value.replace(/\D/g, "") || 0));
+  return Math.max(0, n);
+}
+
+function readTurnovers(): number {
+  const sel = $("#pool-calc-turnovers") as HTMLSelectElement | null;
+  if (!sel) return 1;
+  const n = Number(sel.value);
+  return Number.isFinite(n) && n >= 1 && n <= 6 ? n : 1;
+}
+
+function syncChrome(): void {
+  const cancelBtn = $("#pool-calc-btn-cancel") as HTMLButtonElement | null;
+  const prevBtn = $("#pool-calc-btn-prev") as HTMLButtonElement | null;
+  const nextTop = $("#pool-calc-btn-next") as HTMLButtonElement | null;
+  const finishBtn = $("#pool-calc-btn-finish") as HTMLButtonElement | null;
+  const step2Actions = $("#pool-calc-step2-actions");
+  const step4Actions = $("#pool-calc-step4-actions");
+
+  if (step2Actions) step2Actions.hidden = currentStep !== 2;
+  if (step4Actions) step4Actions.hidden = currentStep !== 4;
+
+  const estimateVolBtn = $(
+    "#pool-calc-estimate-volume",
+  ) as HTMLButtonElement | null;
+  if (estimateVolBtn) {
+    estimateVolBtn.hidden = currentStep !== 2;
+    estimateVolBtn.disabled =
+      currentStep !== 2 || !areDimensionFieldsComplete();
+  }
+
+  if (cancelBtn) {
+    cancelBtn.hidden = currentStep !== 1;
+  }
+
+  if (prevBtn) {
+    prevBtn.hidden = currentStep === 1;
+    prevBtn.disabled = false;
+  }
+
+  if (nextTop) {
+    const showNext =
+      currentStep === 1 ||
+      (currentStep === 2 && flowMode === "dimensions") ||
+      currentStep === 3;
+    nextTop.hidden = !showNext;
+    if (currentStep === 1) {
+      nextTop.disabled = flowMode === "dimensions" && !selectedShape;
+    } else if (currentStep === 2) {
+      nextTop.disabled = !step2HasEstimatedVolume;
+    } else if (currentStep === 3) {
+      nextTop.disabled = false;
+    } else {
+      nextTop.disabled = true;
+    }
+  }
+
+  if (finishBtn) {
+    finishBtn.hidden = currentStep !== 5;
+    finishBtn.disabled = false;
+  }
+
+  updateShapeBadges();
+  if (currentStep === 5) updateFinalSummary();
+}
+
+function goToStep(step: number): void {
+  if (step === 2) {
+    step2HasEstimatedVolume = false;
+  }
+  currentStep = step;
+  showPanel(step);
+  syncStepper();
+  syncChrome();
+
+  if (step === 4) {
+    const inp = $("#pool-calc-volume-input") as HTMLInputElement | null;
+    if (inp && flowMode === "dimensions") {
+      inp.value = String(cachedVolumeGallons);
+    }
+    const sel = $("#pool-calc-turnovers") as HTMLSelectElement | null;
+    if (sel) sel.value = String(cachedTurnovers);
+  }
+}
+
+function deselectAllShapeCards(): void {
+  document.querySelectorAll(".pool-calc__shape-card").forEach((c) => {
+    c.classList.remove("is-selected");
+  });
+}
+
+function resetAll(): void {
+  flowMode = "dimensions";
+  currentStep = 1;
+  selectedShape = null;
+  cachedVolumeGallons = 0;
+  cachedTurnovers = 1;
+  cachedGpm = 0;
+  deselectAllShapeCards();
+  const dimHost = $("#pool-calc-dimensions");
+  if (dimHost) dimHost.innerHTML = "";
+  const volInp = $("#pool-calc-volume-input") as HTMLInputElement | null;
+  if (volInp) volInp.value = "";
+  document.querySelectorAll(".pool-calc__stepper-item").forEach((el) => {
+    el.classList.remove("pool-calc__stepper-item--skip");
+  });
+  goToStep(1);
+}
+
+function onPrevStep(): void {
+  if (currentStep <= 1) return;
+  if (currentStep === 5) {
+    goToStep(4);
+    return;
+  }
+  if (currentStep === 4 && flowMode === "gpmOnly") {
+    resetAll();
+    return;
+  }
+  if (currentStep === 4) {
+    goToStep(3);
+    return;
+  }
+  if (currentStep === 3) {
+    goToStep(2);
+    return;
+  }
+  if (currentStep === 2) {
+    goToStep(1);
+  }
+}
+
+function applyEstimateVolumeOnStep2(): void {
+  if (!selectedShape) return;
+  if (!areDimensionFieldsComplete()) return;
+  const pairs = readDimensionPairs();
+  const fields = dimensionFieldsForShape(selectedShape);
+  if (pairs.length !== fields.length) return;
+  cachedVolumeGallons = estimateVolumeGallons(selectedShape, pairs);
+  updateVolumeDisplays();
+  step2HasEstimatedVolume = true;
+  syncChrome();
+}
+
+function computeGpmAndFinish(): void {
+  cachedVolumeGallons = readVolumeInput();
+  cachedTurnovers = readTurnovers();
+  cachedGpm = gpmFromVolume(cachedVolumeGallons, cachedTurnovers);
+  updateVolumeDisplays();
+  goToStep(5);
+}
+
+export function initPoolCalculator(): void {
+  document
+    .querySelectorAll<HTMLElement>(".pool-calc__shape-card")
+    .forEach((card) => {
+      card.addEventListener("click", () => {
+        const shape = card.dataset.shape as ShapeId | undefined;
+        if (!shape) return;
+        flowMode = "dimensions";
+        selectedShape = shape;
+        document.querySelectorAll(".pool-calc__shape-card").forEach((c) => {
+          c.classList.toggle("is-selected", c === card);
+        });
+        syncChrome();
+      });
+    });
+
+  $("#pool-calc-gpm-only")?.addEventListener("click", () => {
+    flowMode = "gpmOnly";
+    selectedShape = null;
+    deselectAllShapeCards();
+    goToStep(4);
+  });
+
+  $("#pool-calc-btn-cancel")?.addEventListener("click", () => {
+    resetAll();
+  });
+
+  const onNext = () => {
+    if (currentStep === 1 && flowMode === "dimensions" && selectedShape) {
+      renderDimensionForm();
+      goToStep(2);
+    } else if (
+      currentStep === 2 &&
+      flowMode === "dimensions" &&
+      selectedShape
+    ) {
+      if (!step2HasEstimatedVolume) return;
+      goToStep(3);
+    } else if (currentStep === 3) {
+      goToStep(4);
+    }
+  };
+  $("#pool-calc-btn-next")?.addEventListener("click", onNext);
+
+  $("#pool-calc-btn-prev")?.addEventListener("click", onPrevStep);
+
+  $("#pool-calc-clear-dim")?.addEventListener("click", () => {
+    $("#pool-calc-dimensions")
+      ?.querySelectorAll("input")
+      .forEach((i) => {
+        (i as HTMLInputElement).value = "";
+      });
+    step2HasEstimatedVolume = false;
+    syncChrome();
+  });
+
+  $("#pool-calc-estimate-volume")?.addEventListener("click", () => {
+    applyEstimateVolumeOnStep2();
+  });
+
+  $("#pool-calc-try-again")?.addEventListener("click", () => {
+    goToStep(2);
+  });
+
+  $("#pool-calc-clear-gpm")?.addEventListener("click", () => {
+    const inp = $("#pool-calc-volume-input") as HTMLInputElement | null;
+    const sel = $("#pool-calc-turnovers") as HTMLSelectElement | null;
+    if (inp) inp.value = "";
+    if (sel) sel.value = "1";
+  });
+
+  $("#pool-calc-estimate-gpm")?.addEventListener("click", () => {
+    computeGpmAndFinish();
+  });
+
+  $("#pool-calc-btn-finish")?.addEventListener("click", () => {
+    resetAll();
+  });
+
+  $("#pool-calc-volume-input")?.addEventListener("input", (e) => {
+    const t = e.target as HTMLInputElement;
+    t.value = t.value.replace(/\D/g, "").slice(0, 9);
+  });
+
+  document.querySelectorAll(".pool-calc__accordion-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const item = btn.closest(".pool-calc__accordion-item");
+      if (!(item instanceof HTMLElement)) return;
+      item.classList.toggle("is-open");
+      const expanded = item.classList.contains("is-open");
+      btn.setAttribute("aria-expanded", expanded ? "true" : "false");
+      const panel = item.querySelector<HTMLElement>(
+        ".pool-calc__accordion-panel",
+      );
+      if (panel) panel.hidden = !expanded;
+    });
+  });
+
+  resetAll();
+}

@@ -43,9 +43,14 @@
   }
 
   &__sidebar {
-    position: sticky;
+    position: relative;
     padding: px-to-rem(8) px-to-rem(16) px-to-rem(14) px-to-rem(16);
-    top: calc(var(--page-header-offset, #{px-to-rem(112)}) + #{px-to-rem(24)});
+
+    @include media-breakpoint-up(lg) {
+      position: sticky;
+
+      top: calc(var(--page-header-offset, #{px-to-rem(112)}) + #{px-to-rem(24)});
+    }
   }
 
   &__search-wrap {
