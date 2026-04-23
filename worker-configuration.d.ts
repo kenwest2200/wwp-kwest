@@ -10,6 +10,13 @@ declare namespace Cloudflare {
 		PUBLIC_GRAPHQL_URL: string;
 		GRAPHQL_BASIC_USER: string;
 		GRAPHQL_BASIC_PASSWORD: string;
+		/** Bearer token for Waterway Operations sales-reps API (worker only). */
+		SALES_REPS_ACCESS_TOKEN?: string;
+		/**
+		 * Override API root (default: wwoperations…/WaterwayAPI/locations).
+		 * Use in local dev when routing through a U.S. forward proxy; production leaves unset.
+		 */
+		SALES_REPS_API_ROOT?: string;
 	}
 }
 interface Env extends Cloudflare.Env {}

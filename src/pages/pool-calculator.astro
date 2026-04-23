@@ -149,38 +149,57 @@ const intro =
 
         <div class="pool-calc__panel" data-pool-panel="2" hidden>
           <h2 class="pool-calc__panel-title">Estimate your pool volume</h2>
-          <p class="pool-calc__badge pool-calc__js-shape-badge" hidden></p>
-          <div id="pool-calc-dimensions" class="pool-calc__dimensions"></div>
-          <div
-            id="pool-calc-step2-actions"
-            class="pool-calc__inline-actions"
-            hidden
-          >
-            <button
-              type="button"
-              class="btn pool-calc__btn-outline"
-              id="pool-calc-clear-dim"
+          <div class="pool-calc__badge-wrap">
+            <p class="pool-calc__badge pool-calc__js-shape-badge" hidden>
+              <span class="pool-calc__js-shape-badge-label"
+                >Selected shape:</span
+              >
+              <span class="pool-calc__js-shape-badge-value"></span>
+            </p>
+          </div>
+          <div id="pool-calc-dimensions" class="pool-calc__dimensions">
+            <div
+              id="pool-calc-dimensions-fields"
+              class="pool-calc__dimensions-fields"
             >
-              Clear all
-            </button>
-            <button
-              type="button"
-              class="btn btn--primary-dark pool-calc__btn-solid"
-              id="pool-calc-estimate-volume"
+            </div>
+            <div
+              id="pool-calc-step2-actions"
+              class="pool-calc__inline-actions"
+              hidden
             >
-              Estimate volume
-            </button>
+              <button
+                type="button"
+                class="btn pool-calc__btn-outline"
+                id="pool-calc-clear-dim"
+              >
+                Clear all
+              </button>
+              <button
+                type="button"
+                class="btn btn--primary-dark pool-calc__btn-solid"
+                id="pool-calc-estimate-volume"
+              >
+                Estimate volume
+              </button>
+            </div>
           </div>
         </div>
 
         <div class="pool-calc__panel" data-pool-panel="3" hidden>
           <h2 class="pool-calc__panel-title">Estimate your pool volume</h2>
-          <p
-            class="pool-calc__badge pool-calc__js-shape-badge"
-            aria-live="polite"
-            hidden
-          >
-          </p>
+          <div class="pool-calc__badge-wrap">
+            <p
+              class="pool-calc__badge pool-calc__js-shape-badge"
+              aria-live="polite"
+              hidden
+            >
+              <span class="pool-calc__js-shape-badge-label"
+                >Selected shape:</span
+              >
+              <span class="pool-calc__js-shape-badge-value"></span>
+            </p>
+          </div>
           <div class="pool-calc__result-card">
             <p class="pool-calc__result-line">
               Your pool volume: <strong id="pool-calc-volume-result">0</strong> Gallons
@@ -195,68 +214,168 @@ const intro =
 
         <div class="pool-calc__panel" data-pool-panel="4" hidden>
           <h2 class="pool-calc__panel-title">Estimate your GPM</h2>
-          <p
-            class="pool-calc__badge pool-calc__js-shape-badge"
-            aria-live="polite"
-            hidden
-          >
-          </p>
-          <div class="pool-calc__gpm-form">
-            <label class="pool-calc__gpm-field">
-              <span class="pool-calc__gpm-label"
-                >Pool volume<span class="pool-calc__dim-req" aria-hidden="true"
-                  >*</span
-                ></span
+          <div class="pool-calc__badge-wrap">
+            <p
+              class="pool-calc__badge pool-calc__js-shape-badge"
+              aria-live="polite"
+              hidden
+            >
+              <span class="pool-calc__js-shape-badge-label"
+                >Selected shape:</span
               >
-              <span class="pool-calc__gpm-input-wrap">
-                <input
-                  type="text"
-                  inputmode="numeric"
-                  id="pool-calc-volume-input"
-                  class="pool-calc__gpm-input"
-                  autocomplete="off"
-                  aria-label="Pool volume in gallons"
-                />
-                <span class="pool-calc__gpm-suffix">Gallons</span>
-              </span>
-            </label>
-            <label class="pool-calc__gpm-field">
-              <span class="pool-calc__gpm-label">Turnovers per day</span>
-              <select id="pool-calc-turnovers" class="pool-calc__gpm-select">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-              </select>
-            </label>
+              <span class="pool-calc__js-shape-badge-value"></span>
+            </p>
           </div>
-          <div
-            id="pool-calc-step4-actions"
-            class="pool-calc__inline-actions"
-            hidden
-          >
-            <button
-              type="button"
-              class="btn pool-calc__btn-outline"
-              id="pool-calc-clear-gpm">Clear all</button
+          <div class="pool-calc__dimensions pool-calc__dimensions--gpm">
+            <div class="pool-calc__dimensions-fields">
+              <div class="pool-calc__dim-row">
+                <div class="pool-calc__dim-label-wrap">
+                  <span class="pool-calc__dim-label"
+                    >Pool volume<span class="pool-calc__dim-req" aria-hidden="true"
+                      >*</span
+                    ></span
+                  >
+                </div>
+                <div class="pool-calc__dim-inputs pool-calc__dim-inputs--gpm-full">
+                  <label class="pool-calc__dim-field pool-calc__dim-field--stretch">
+                    <div class="pool-calc__dim-control pool-calc__dim-control--gpm-volume">
+                      <input
+                        type="text"
+                        inputmode="numeric"
+                        id="pool-calc-volume-input"
+                        autocomplete="off"
+                        aria-label="Pool volume in gallons"
+                      />
+                      <span class="pool-calc__dim-unit">Gallons</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+              <div class="pool-calc__dim-row">
+                <div class="pool-calc__dim-label-wrap">
+                  <span class="pool-calc__dim-label">Turnovers per day</span>
+                </div>
+                <div class="pool-calc__dim-inputs pool-calc__dim-inputs--gpm-full">
+                  <div
+                    id="pool-calc-turnovers-root"
+                    class="product-filters__custom-select"
+                    data-pool-turnover-root
+                  >
+                    <button
+                      type="button"
+                      id="pool-calc-turnovers-trigger"
+                      class="product-filters__custom-select-trigger"
+                      aria-label="Turnovers per day"
+                      aria-haspopup="listbox"
+                      aria-expanded="false"
+                      aria-controls="pool-calc-turnovers-menu"
+                      data-pool-turnover-trigger
+                    >
+                      <span class="product-filters__custom-select-text">
+                        <span class="product-filters__custom-select-fixed"
+                          >Turnovers:</span
+                        >
+                        <span
+                          id="pool-calc-turnovers-value"
+                          class="product-filters__custom-select-variable">1</span
+                        >
+                        <span class="product-filters__custom-select-variable"
+                          >× / day</span
+                        >
+                      </span>
+                      <span
+                        class="product-filters__custom-select-chevron"
+                        aria-hidden="true"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="10"
+                          height="6"
+                          viewBox="0 0 10 6"
+                          fill="none"
+                        >
+                          <path
+                            d="M0.75 0.75L4.75 4.75L8.75 0.75"
+                            stroke="#9C9C9C"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                        </svg>
+                      </span>
+                    </button>
+                    <ul
+                      id="pool-calc-turnovers-menu"
+                      class="product-filters__custom-select-menu"
+                      role="listbox"
+                      aria-labelledby="pool-calc-turnovers-trigger"
+                      hidden
+                      data-pool-turnover-menu
+                    >
+                      {
+                        [1, 2, 3, 4, 5, 6].map((n) => (
+                          <li role="presentation">
+                            <button
+                              type="button"
+                              class="product-filters__custom-select-option"
+                              role="option"
+                              data-pool-turnover-value={String(n)}
+                              aria-selected={n === 1 ? "true" : "false"}
+                            >
+                              {n}
+                            </button>
+                          </li>
+                        ))
+                      }
+                    </ul>
+                    <select
+                      id="pool-calc-turnovers"
+                      class="visually-hidden"
+                      tabindex="-1"
+                      aria-hidden="true"
+                    >
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              id="pool-calc-step4-actions"
+              class="pool-calc__inline-actions"
+              hidden
             >
-            <button
-              type="button"
-              class="btn btn--primary-dark pool-calc__btn-solid"
-              id="pool-calc-estimate-gpm"
-            >
-              Estimate GPM
-            </button>
+              <button
+                type="button"
+                class="btn pool-calc__btn-outline"
+                id="pool-calc-clear-gpm">Clear all</button
+              >
+              <button
+                type="button"
+                class="btn btn--primary-dark pool-calc__btn-solid"
+                id="pool-calc-estimate-gpm"
+              >
+                Estimate GPM
+              </button>
+            </div>
           </div>
         </div>
 
         <div class="pool-calc__panel" data-pool-panel="5" hidden>
           <h2 class="pool-calc__panel-title">Calculation results</h2>
           <div class="pool-calc__badges-row">
-            <span id="pool-calc-final-shape" class="pool-calc__badge"></span>
-            <span id="pool-calc-final-turnover" class="pool-calc__badge"></span>
+            <p id="pool-calc-final-shape" class="pool-calc__badge">
+              <span class="pool-calc__js-shape-badge-label">Selected shape:</span>
+              <span class="pool-calc__js-shape-badge-value"></span>
+            </p>
+            <p id="pool-calc-final-turnover" class="pool-calc__badge">
+              <span class="pool-calc__js-shape-badge-label">Turnover:</span>
+              <span class="pool-calc__js-shape-badge-value"></span>
+            </p>
           </div>
           <div class="pool-calc__result-card pool-calc__result-card--wide">
             <p class="pool-calc__result-line">
@@ -267,11 +386,19 @@ const intro =
                 >0.0</strong
               > GPM
             </p>
+            <button
+              type="button"
+              class="btn pool-calc__btn-outline"
+              id="pool-calc-try-again-final">Try again</button
+            >
           </div>
 
           <h3 class="pool-calc__parts-title">Find below suitable parts</h3>
           <div class="pool-calc__accordion">
-            <div class="pool-calc__accordion-item">
+            <div
+              class="pool-calc__accordion-item"
+              data-pool-calc-category-slug="pool-pumps-in-ground"
+            >
               <button
                 type="button"
                 class="pool-calc__accordion-btn"
@@ -284,7 +411,10 @@ const intro =
               </button>
               <div class="pool-calc__accordion-panel" hidden></div>
             </div>
-            <div class="pool-calc__accordion-item">
+            <div
+              class="pool-calc__accordion-item"
+              data-pool-calc-category-slug="pool-filters-in-ground-above-ground"
+            >
               <button
                 type="button"
                 class="pool-calc__accordion-btn"
@@ -297,7 +427,10 @@ const intro =
               </button>
               <div class="pool-calc__accordion-panel" hidden></div>
             </div>
-            <div class="pool-calc__accordion-item">
+            <div
+              class="pool-calc__accordion-item"
+              data-pool-calc-category-slug="pool-skimmers-skim-filters"
+            >
               <button
                 type="button"
                 class="pool-calc__accordion-btn"
@@ -310,7 +443,10 @@ const intro =
               </button>
               <div class="pool-calc__accordion-panel" hidden></div>
             </div>
-            <div class="pool-calc__accordion-item">
+            <div
+              class="pool-calc__accordion-item"
+              data-pool-calc-category-slug="drains-suctions"
+            >
               <button
                 type="button"
                 class="pool-calc__accordion-btn"
@@ -331,17 +467,10 @@ const intro =
             <button
               type="button"
               class="btn pool-calc__btn-outline"
-              id="pool-calc-btn-cancel"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              class="btn pool-calc__btn-outline"
               id="pool-calc-btn-prev"
               hidden
             >
-              ← Previous step
+              <IconArrowRight /> Previous step
             </button>
           </div>
           <div class="pool-calc__footer-right">
@@ -350,7 +479,10 @@ const intro =
               class="btn btn--primary-dark pool-calc__btn-solid"
               id="pool-calc-btn-next"
             >
-              <span id="pool-calc-btn-next-text" class="pool-calc__btn-next-text">
+              <span
+                id="pool-calc-btn-next-text"
+                class="pool-calc__btn-next-text"
+              >
                 Next step
                 <IconArrowRight />
               </span>
@@ -370,11 +502,11 @@ const intro =
 
     <ScrollToTopButton />
   </main>
+
+  <PageHeaderOffset />
+
+  <script>
+    import { initPoolCalculator } from "../scripts/pool-calculator-page.ts";
+    initPoolCalculator();
+  </script>
 </Layout>
-
-<PageHeaderOffset />
-
-<script>
-  import { initPoolCalculator } from "../scripts/pool-calculator-page.ts";
-  initPoolCalculator();
-</script>

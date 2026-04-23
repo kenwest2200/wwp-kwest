@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-22T12:52:00.459Z",
+  "generatedAt": "2026-04-23T12:33:10.306Z",
   "attributesByCategory": {
     "bath": [],
     "pool": [
@@ -660,6 +660,10 @@
             "slug": "spigot-2"
           },
           {
+            "label": "3.4.2",
+            "slug": "spigot-3-4-2"
+          },
+          {
             "label": "3.4",
             "slug": "spigot-3-4"
           },
@@ -696,6 +700,16 @@
           {
             "label": "115v-230v",
             "slug": "volts-115v-230v"
+          }
+        ]
+      },
+      {
+        "name": "Wye",
+        "slug": "wye",
+        "values": [
+          {
+            "label": "120",
+            "slug": "wye-120"
           }
         ]
       }
@@ -1189,6 +1203,16 @@
         ]
       },
       {
+        "name": "Ell",
+        "slug": "ell",
+        "values": [
+          {
+            "label": "90",
+            "slug": "ell-90"
+          }
+        ]
+      },
+      {
         "name": "Size",
         "slug": "size",
         "values": [
@@ -1235,6 +1259,20 @@
           {
             "label": "2",
             "slug": "spigot-2"
+          },
+          {
+            "label": "3.4.2",
+            "slug": "spigot-3-4-2"
+          }
+        ]
+      },
+      {
+        "name": "Wye",
+        "slug": "wye",
+        "values": [
+          {
+            "label": "120",
+            "slug": "wye-120"
           }
         ]
       }
@@ -3342,7 +3380,7 @@
       "slug": "pancake-manifolds",
       "databaseId": 40549,
       "date": "2026-04-21T23:53:00",
-      "modified": "2026-04-21T23:53:00",
+      "modified": "2026-04-22T15:02:03",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-5960.png",
       "imageAlt": null,
       "imageWidth": 631,
@@ -4043,19 +4081,26 @@
       "attributeSlugs": []
     },
     {
-      "title": "3/4″ Barb Adapters",
+      "title": "Ribbed Barb Adapters",
       "slug": "3-4-barb-adapters",
       "databaseId": 31615,
       "date": "2023-06-01T12:36:49",
-      "modified": "2023-07-17T18:43:23",
-      "imageUrl": null,
+      "modified": "2026-04-22T22:39:29",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/413-1860.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 513,
+      "imageHeight": 355,
       "categorySlugs": [
         "spa-manifolds"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "barb-type-ribbed",
+        "ell-90",
+        "socket-1-2",
+        "spigot-1",
+        "spigot-3-4-2",
+        "wye-120"
+      ]
     },
     {
       "title": "3/8″ Distributor Manifolds",

@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PageHeaderOffset from "../components/PageHeaderOffset.astro";
+import ScrollToTopButton from "../components/ScrollToTopButton/ScrollToTopButton.astro";
 import ArrowPaginationIcon from "../components/icons/arrowPaginationIcon.astro";
 
 export const prerender = true;
@@ -28,6 +29,16 @@ export const prerender = true;
         </p>
         <p id="search-results-error" class="search-results-page__error" hidden>
         </p>
+        <div
+          id="search-results-tabs-loader"
+          class="search-results-page__tabs-loader"
+          hidden
+        >
+          <span
+            class="search-results-page__tabs-loader-spinner"
+            aria-hidden="true"></span>
+          <span class="search-results-page__tabs-loader-text">Loading…</span>
+        </div>
         <div
           id="search-results-tabs-wrap"
           class="search-results-page__tabs-wrap"
@@ -203,6 +214,14 @@ export const prerender = true;
                 class="product-filters__list search-results-page__results-grid"
               >
               </ul>
+              <button
+                type="button"
+                id="search-load-more-products"
+                class="btn btn--primary-dark product-filters__load-more"
+                hidden
+              >
+                Load more products
+              </button>
               <p
                 id="search-results-empty-products"
                 class="search-results-page__empty search-results-page__empty--tab"
@@ -358,6 +377,8 @@ export const prerender = true;
         </template>
       </div>
     </section>
+
+    <ScrollToTopButton />
   </main>
 </Layout>
 

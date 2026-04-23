@@ -479,7 +479,7 @@
     &-suggest-item {
       display: block;
       padding: px-to-rem(10) px-to-rem(14);
-      font-size: px-to-rem(14);
+      font-size: px-to-rem(16);
       line-height: px-to-rem(20);
       color: $dark;
       text-decoration: none;
@@ -488,6 +488,16 @@
       &:focus-visible {
         color: $light-teal;
         outline: none;
+      }
+
+      &--all-results {
+        margin-top: 0;
+        font-weight: 500;
+        font-size: px-to-rem(16);
+        line-height: px-to-rem(24);
+        letter-spacing: 0.03em;
+        color: $dark-teal;
+        text-transform: lowercase;
       }
     }
 

@@ -73,8 +73,105 @@ function escapeHtml(s: string): string {
     .replace(/"/g, "&quot;");
 }
 
+function normalizeProductHref(uri: string): string {
+  const u = uri.trim();
+  if (!u) return "#";
+  if (u.startsWith("http://") || u.startsWith("https://")) return u;
+  return u.startsWith("/") ? u : `/${u}`;
+}
+
+type ProductCategoryProductsApiItem = {
+  title: string;
+  uri: string;
+};
+
+type ProductCategoryProductsApiResponse = {
+  items?: ProductCategoryProductsApiItem[];
+  error?: string;
+};
+
+const PARTS_LOADED = "1";
+
+function setPanelMessage(
+  panel: HTMLElement,
+  text: string,
+  variant?: "error",
+): void {
+  panel.replaceChildren();
+  const p = document.createElement("p");
+  p.className =
+    variant === "error"
+      ? "pool-calc__accordion-panel-msg pool-calc__accordion-panel-msg--error"
+      : "pool-calc__accordion-panel-msg";
+  if (variant === "error") p.setAttribute("role", "alert");
+  else p.setAttribute("role", "status");
+  p.textContent = text;
+  panel.appendChild(p);
+}
+
+function renderPartsProductList(
+  panel: HTMLElement,
+  items: ProductCategoryProductsApiItem[],
+): void {
+  panel.replaceChildren();
+  const ul = document.createElement("ul");
+  ul.className = "pool-calc__parts-list";
+  for (const it of items) {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.className = "pool-calc__parts-link";
+    a.href = normalizeProductHref(it.uri);
+    a.textContent = it.title;
+    li.appendChild(a);
+    ul.appendChild(li);
+  }
+  panel.appendChild(ul);
+}
+
+async function loadCategoryProductsIfNeeded(
+  item: HTMLElement,
+  panel: HTMLElement,
+): Promise<void> {
+  const slug = item.dataset.poolCalcCategorySlug?.trim();
+  if (!slug || panel.dataset.partsLoaded === PARTS_LOADED) return;
+  if (panel.dataset.partsLoading === "1") return;
+
+  panel.dataset.partsLoading = "1";
+  setPanelMessage(panel, "Loading…");
+
+  try {
+    const res = await fetch(
+      `/api/product-category-products?slug=${encodeURIComponent(slug)}`,
+    );
+    const json = (await res.json()) as ProductCategoryProductsApiResponse;
+    if (!res.ok || json.error) {
+      setPanelMessage(
+        panel,
+        json.error ?? "Could not load products.",
+        "error",
+      );
+      return;
+    }
+    const items = (json.items ?? []).filter((x) => x.title && x.uri);
+    if (items.length === 0) {
+      setPanelMessage(panel, "No products in this category.");
+    } else {
+      renderPartsProductList(panel, items);
+    }
+    panel.dataset.partsLoaded = PARTS_LOADED;
+  } catch (e) {
+    setPanelMessage(
+      panel,
+      e instanceof Error ? e.message : String(e),
+      "error",
+    );
+  } finally {
+    panel.dataset.partsLoading = "";
+  }
+}
+
 function areDimensionFieldsComplete(): boolean {
-  const host = $("#pool-calc-dimensions");
+  const host = $("#pool-calc-dimensions-fields");
   if (!host || !selectedShape) return false;
   const inputs = host.querySelectorAll<HTMLInputElement>("input");
   if (inputs.length === 0) return false;
@@ -96,7 +193,7 @@ function attachDimInputHandlers(host: HTMLElement): void {
 }
 
 function renderDimensionForm(): void {
-  const host = $("#pool-calc-dimensions");
+  const host = $("#pool-calc-dimensions-fields");
   if (!host || !selectedShape) return;
   const fields = dimensionFieldsForShape(selectedShape);
   host.innerHTML = fields
@@ -130,7 +227,7 @@ function renderDimensionForm(): void {
 
 function readDimensionPairs(): [string, string][] {
   const rows = document.querySelectorAll<HTMLElement>(
-    "#pool-calc-dimensions .pool-calc__dim-row",
+    "#pool-calc-dimensions-fields .pool-calc__dim-row",
   );
   const out: [string, string][] = [];
   rows.forEach((row) => {
@@ -141,34 +238,50 @@ function readDimensionPairs(): [string, string][] {
   return out;
 }
 
-function selectedShapeSummaryLine(): string | null {
-  if (!selectedShape) return null;
-  return `Selected shape: ${SHAPE_LABELS[selectedShape]}`;
-}
-
-/** Badge copy on steps 2–4: shape line, “volume only”, or empty before shape on step 1. */
-function shapeBadgeText(): string {
-  const line = selectedShapeSummaryLine();
-  if (line) return line;
-  if (flowMode === "gpmOnly") return "Volume entry only";
-  return "";
-}
-
+/** Steps 2–4: label “Selected shape:” is static in markup; value span holds shape name or “Volume entry only”. */
 function updateShapeBadges(): void {
-  const text = shapeBadgeText();
+  const hasShape = selectedShape !== null;
+  const valueText =
+    selectedShape != null
+      ? SHAPE_LABELS[selectedShape]
+      : flowMode === "gpmOnly"
+        ? "Volume entry only"
+        : "";
+  const show = valueText.length > 0;
+
   document
     .querySelectorAll<HTMLElement>(".pool-calc__js-shape-badge")
     .forEach((el) => {
-      el.textContent = text;
-      el.hidden = !text;
+      const label = el.querySelector<HTMLElement>(
+        ".pool-calc__js-shape-badge-label",
+      );
+      const valueEl = el.querySelector<HTMLElement>(
+        ".pool-calc__js-shape-badge-value",
+      );
+      if (valueEl) valueEl.textContent = valueText;
+      if (label) label.hidden = !hasShape;
+      el.hidden = !show;
     });
 }
 
 function updateFinalSummary(): void {
-  const shapeEl = $("#pool-calc-final-shape");
-  if (shapeEl) {
-    shapeEl.textContent = selectedShapeSummaryLine() ?? "Volume entry only";
-  }
+  const root = $("#pool-calc-final-shape");
+  if (!root) return;
+  const label = root.querySelector<HTMLElement>(
+    ".pool-calc__js-shape-badge-label",
+  );
+  const valueEl = root.querySelector<HTMLElement>(
+    ".pool-calc__js-shape-badge-value",
+  );
+  const hasShape = selectedShape !== null;
+  const valueText =
+    selectedShape != null
+      ? SHAPE_LABELS[selectedShape]
+      : flowMode === "gpmOnly"
+        ? "Volume entry only"
+        : "";
+  if (valueEl) valueEl.textContent = valueText;
+  if (label) label.hidden = !hasShape;
 }
 
 function updateVolumeDisplays(): void {
@@ -179,7 +292,14 @@ function updateVolumeDisplays(): void {
   if (v1) v1.textContent = String(cachedVolumeGallons);
   if (v2) v2.textContent = String(cachedVolumeGallons);
   if (g) g.textContent = formatGpm(cachedGpm);
-  if (t) t.textContent = `Turnover: ${cachedTurnovers}× / day`;
+  if (t) {
+    const turnoverVal = t.querySelector<HTMLElement>(
+      ".pool-calc__js-shape-badge-value",
+    );
+    if (turnoverVal) {
+      turnoverVal.textContent = `${cachedTurnovers}× / day`;
+    }
+  }
 }
 
 function readVolumeInput(): number {
@@ -196,8 +316,68 @@ function readTurnovers(): number {
   return Number.isFinite(n) && n >= 1 && n <= 6 ? n : 1;
 }
 
+function turnoverRoot(): HTMLElement | null {
+  return document.querySelector<HTMLElement>("[data-pool-turnover-root]");
+}
+
+function setTurnoverMenuOpen(open: boolean): void {
+  const root = turnoverRoot();
+  if (!root) return;
+  root.classList.toggle("product-filters__custom-select--open", open);
+  root
+    .querySelector<HTMLElement>("[data-pool-turnover-trigger]")
+    ?.setAttribute("aria-expanded", open ? "true" : "false");
+  const menu = root.querySelector<HTMLElement>("[data-pool-turnover-menu]");
+  if (menu) menu.hidden = !open;
+}
+
+function syncTurnoverCustomFromNative(): void {
+  const sel = $("#pool-calc-turnovers") as HTMLSelectElement | null;
+  const valEl = $("#pool-calc-turnovers-value");
+  if (!sel || !valEl) return;
+  const n = Number(sel.value);
+  const v = Number.isFinite(n) && n >= 1 && n <= 6 ? n : 1;
+  valEl.textContent = String(v);
+  turnoverRoot()
+    ?.querySelectorAll<HTMLButtonElement>("[data-pool-turnover-value]")
+    .forEach((btn) => {
+      const bn = Number(btn.dataset.poolTurnoverValue);
+      btn.setAttribute("aria-selected", bn === v ? "true" : "false");
+    });
+}
+
+function setTurnoversValue(n: number): void {
+  const sel = $("#pool-calc-turnovers") as HTMLSelectElement | null;
+  if (sel) {
+    const v = Math.min(6, Math.max(1, Math.floor(n)));
+    sel.value = String(v);
+  }
+  syncTurnoverCustomFromNative();
+}
+
+function bindPoolTurnoverCustomSelect(): void {
+  const root = turnoverRoot();
+  if (!root) return;
+  root.addEventListener("click", (e) => e.stopPropagation());
+  root.querySelector("[data-pool-turnover-trigger]")?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const open = !root.classList.contains("product-filters__custom-select--open");
+    setTurnoverMenuOpen(open);
+  });
+  root.querySelector("[data-pool-turnover-menu]")?.addEventListener("click", (e) => {
+    const t = (e.target as HTMLElement).closest<HTMLButtonElement>(
+      "[data-pool-turnover-value]",
+    );
+    if (!t) return;
+    const v = Number(t.dataset.poolTurnoverValue);
+    if (!Number.isFinite(v) || v < 1 || v > 6) return;
+    setTurnoversValue(v);
+    setTurnoverMenuOpen(false);
+  });
+  document.addEventListener("click", () => setTurnoverMenuOpen(false));
+}
+
 function syncChrome(): void {
-  const cancelBtn = $("#pool-calc-btn-cancel") as HTMLButtonElement | null;
   const prevBtn = $("#pool-calc-btn-prev") as HTMLButtonElement | null;
   const nextTop = $("#pool-calc-btn-next") as HTMLButtonElement | null;
   const finishBtn = $("#pool-calc-btn-finish") as HTMLButtonElement | null;
@@ -214,10 +394,6 @@ function syncChrome(): void {
     estimateVolBtn.hidden = currentStep !== 2;
     estimateVolBtn.disabled =
       currentStep !== 2 || !areDimensionFieldsComplete();
-  }
-
-  if (cancelBtn) {
-    cancelBtn.hidden = currentStep !== 1;
   }
 
   if (prevBtn) {
@@ -265,8 +441,7 @@ function goToStep(step: number): void {
     if (inp && flowMode === "dimensions") {
       inp.value = String(cachedVolumeGallons);
     }
-    const sel = $("#pool-calc-turnovers") as HTMLSelectElement | null;
-    if (sel) sel.value = String(cachedTurnovers);
+    setTurnoversValue(cachedTurnovers);
   }
 }
 
@@ -284,10 +459,11 @@ function resetAll(): void {
   cachedTurnovers = 1;
   cachedGpm = 0;
   deselectAllShapeCards();
-  const dimHost = $("#pool-calc-dimensions");
-  if (dimHost) dimHost.innerHTML = "";
+  const dimFields = $("#pool-calc-dimensions-fields");
+  if (dimFields) dimFields.innerHTML = "";
   const volInp = $("#pool-calc-volume-input") as HTMLInputElement | null;
   if (volInp) volInp.value = "";
+  setTurnoversValue(1);
   document.querySelectorAll(".pool-calc__stepper-item").forEach((el) => {
     el.classList.remove("pool-calc__stepper-item--skip");
   });
@@ -360,10 +536,6 @@ export function initPoolCalculator(): void {
     goToStep(4);
   });
 
-  $("#pool-calc-btn-cancel")?.addEventListener("click", () => {
-    resetAll();
-  });
-
   const onNext = () => {
     if (currentStep === 1 && flowMode === "dimensions" && selectedShape) {
       renderDimensionForm();
@@ -384,7 +556,7 @@ export function initPoolCalculator(): void {
   $("#pool-calc-btn-prev")?.addEventListener("click", onPrevStep);
 
   $("#pool-calc-clear-dim")?.addEventListener("click", () => {
-    $("#pool-calc-dimensions")
+    $("#pool-calc-dimensions-fields")
       ?.querySelectorAll("input")
       .forEach((i) => {
         (i as HTMLInputElement).value = "";
@@ -403,16 +575,21 @@ export function initPoolCalculator(): void {
 
   $("#pool-calc-clear-gpm")?.addEventListener("click", () => {
     const inp = $("#pool-calc-volume-input") as HTMLInputElement | null;
-    const sel = $("#pool-calc-turnovers") as HTMLSelectElement | null;
     if (inp) inp.value = "";
-    if (sel) sel.value = "1";
+    setTurnoversValue(1);
   });
+
+  bindPoolTurnoverCustomSelect();
 
   $("#pool-calc-estimate-gpm")?.addEventListener("click", () => {
     computeGpmAndFinish();
   });
 
   $("#pool-calc-btn-finish")?.addEventListener("click", () => {
+    resetAll();
+  });
+
+  $("#pool-calc-try-again-final")?.addEventListener("click", () => {
     resetAll();
   });
 
@@ -432,6 +609,9 @@ export function initPoolCalculator(): void {
         ".pool-calc__accordion-panel",
       );
       if (panel) panel.hidden = !expanded;
+      if (expanded && panel) {
+        void loadCategoryProductsIfNeeded(item, panel);
+      }
     });
   });
 

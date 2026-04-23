@@ -14,6 +14,12 @@ export default {
     if (url.pathname === "/api/store-locations") {
       return handleStoreLocationsApi(request, env);
     }
+    if (url.pathname === "/api/product-category-products") {
+      return handleProductCategoryProductsApi(request, env);
+    }
+    if (url.pathname === "/api/sales-reps") {
+      return handleSalesRepsApi(request, env);
+    }
 
     return handleFrontend(request, env);
   },
@@ -96,6 +102,51 @@ const GLOBAL_SEARCH_AUTOCOMPLETE_QUERY = `
   }
 `;
 
+/** Pool calculator “suitable parts” — same category slugs as in `public/data/product-filters.json`. */
+const PRODUCT_CATEGORY_PRODUCTS_ALLOWED_SLUGS = new Set([
+  "pool-pumps-in-ground",
+  "pool-filters-in-ground-above-ground",
+  "pool-skimmers-skim-filters",
+  "drains-suctions",
+]);
+
+const PRODUCT_CATEGORY_PRODUCTS_QUERY = `
+  query ProductCategoryProducts($slug: ID!) {
+    productCategory(id: $slug, idType: SLUG) {
+      databaseId
+      name
+      slug
+      products(first: 100) {
+        nodes {
+          databaseId
+          title
+          slug
+          uri
+        }
+      }
+    }
+  }
+`;
+
+type ProductCategoryProductsPayload = {
+  data?: {
+    productCategory?: {
+      databaseId?: number | null;
+      name?: string | null;
+      slug?: string | null;
+      products?: {
+        nodes?: Array<{
+          databaseId?: number | null;
+          title?: string | null;
+          slug?: string | null;
+          uri?: string | null;
+        } | null> | null;
+      } | null;
+    } | null;
+  };
+  errors?: Array<{ message?: string }>;
+};
+
 function mapSearchApiItem(item: SearchItemRaw) {
   return {
     title: String(item.title ?? "").trim(),
@@ -139,11 +190,16 @@ async function handleWebhook(request: Request, env: Env): Promise<Response> {
 
 function jsonResponse(
   body: unknown,
-  init?: { status?: number; origin?: string | null },
+  init?: {
+    status?: number;
+    origin?: string | null;
+    /** When set, replaces default `Cache-Control: no-store`. */
+    cacheControl?: string | null;
+  },
 ): Response {
   const headers = new Headers({
     "Content-Type": "application/json; charset=utf-8",
-    "Cache-Control": "no-store",
+    "Cache-Control": init?.cacheControl ?? "no-store",
   });
   if (init?.origin) {
     headers.set("Access-Control-Allow-Origin", init.origin);
@@ -300,6 +356,261 @@ function normalizeSearchItemType(
   const t = (raw ?? "").trim().toLowerCase();
   if (t === "product" || t === "page") return t;
   return null;
+}
+
+async function handleProductCategoryProductsApi(
+  request: Request,
+  env: Env,
+): Promise<Response> {
+  const origin = request.headers.get("Origin");
+  if (request.method === "OPTIONS") {
+    const headers = new Headers();
+    headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
+    headers.set("Access-Control-Allow-Headers", "Content-Type");
+    headers.set("Access-Control-Max-Age", "86400");
+    if (origin) headers.set("Access-Control-Allow-Origin", origin);
+    return new Response(null, { status: 204, headers });
+  }
+  if (request.method !== "GET") {
+    return jsonResponse({ items: [], error: "Method Not Allowed" }, {
+      status: 405,
+      origin,
+    });
+  }
+
+  const url = new URL(request.url);
+  const slug = (url.searchParams.get("slug") ?? "").trim();
+  if (!slug || !PRODUCT_CATEGORY_PRODUCTS_ALLOWED_SLUGS.has(slug)) {
+    return jsonResponse(
+      { items: [], error: "Unknown or missing category slug" },
+      { status: 400, origin },
+    );
+  }
+
+  const endpoint = env.PUBLIC_GRAPHQL_URL;
+  if (!endpoint) {
+    return jsonResponse(
+      { items: [], error: "PUBLIC_GRAPHQL_URL is not configured" },
+      { status: 500, origin },
+    );
+  }
+  const user = env.GRAPHQL_BASIC_USER || "api";
+  const pass = env.GRAPHQL_BASIC_PASSWORD || "apiwaterway";
+  const auth = btoa(`${user}:${pass}`);
+
+  try {
+    const gqlRes = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Basic ${auth}`,
+      },
+      body: JSON.stringify({
+        query: PRODUCT_CATEGORY_PRODUCTS_QUERY,
+        variables: { slug },
+      }),
+    });
+    const payload = (await gqlRes.json()) as ProductCategoryProductsPayload;
+    if (!gqlRes.ok || payload.errors?.length) {
+      const message =
+        payload.errors?.[0]?.message ||
+        `GraphQL productCategory failed with status ${gqlRes.status}`;
+      return jsonResponse(
+        { items: [], error: message },
+        { status: 502, origin },
+      );
+    }
+    const cat = payload.data?.productCategory;
+    const nodes = cat?.products?.nodes ?? [];
+    const items = nodes
+      .filter((n): n is NonNullable<typeof n> => Boolean(n))
+      .filter((n) => n.uri && n.title)
+      .map((n) => ({
+        databaseId: n.databaseId ?? null,
+        title: String(n.title ?? "").trim(),
+        slug: n.slug ? String(n.slug).trim() : null,
+        uri: String(n.uri ?? "").trim(),
+      }));
+    return jsonResponse(
+      {
+        items,
+        category: cat
+          ? {
+              databaseId: cat.databaseId ?? null,
+              name: cat.name ? String(cat.name).trim() : null,
+              slug: cat.slug ? String(cat.slug).trim() : null,
+            }
+          : null,
+      },
+      { origin, cacheControl: "public, max-age=120" },
+    );
+  } catch (error) {
+    return jsonResponse(
+      {
+        items: [],
+        error: error instanceof Error ? error.message : String(error),
+      },
+      { status: 500, origin },
+    );
+  }
+}
+
+const DEFAULT_SALES_REPS_API_ROOT =
+  "https://wwoperations.waterwayplastics.com/WaterwayAPI/locations";
+
+function normalizeSalesRepsZipParam(raw: string): string {
+  return raw.trim().replace(/\s+/g, "");
+}
+
+function isValidSalesRepsZip(zip: string): boolean {
+  return /^\d{5}(-\d{4})?$/.test(zip);
+}
+
+type SalesRepUpstreamRow = {
+  Name?: string;
+  Phone?: string;
+  Email?: string | null;
+  Location?: string | null;
+  Territory?: string | null;
+};
+
+function mapSalesRepRow(raw: unknown): {
+  name: string;
+  phone: string;
+  email: string | null;
+  location: string | null;
+} {
+  if (!raw || typeof raw !== "object") {
+    return { name: "", phone: "", email: null, location: null };
+  }
+  const o = raw as SalesRepUpstreamRow & Record<string, unknown>;
+  const str = (v: unknown) => (v == null ? "" : String(v).trim());
+  const name = str(o.Name);
+  const phone = str(o.Phone);
+  const emailRaw = o.Email;
+  const email =
+    emailRaw == null || String(emailRaw).trim() === ""
+      ? null
+      : String(emailRaw).trim();
+  const loc = o.Location ?? o.Territory;
+  const location =
+    loc == null || String(loc).trim() === "" ? null : String(loc).trim();
+  return { name, phone, email, location };
+}
+
+async function handleSalesRepsApi(
+  request: Request,
+  env: Env,
+): Promise<Response> {
+  const origin = request.headers.get("Origin");
+  if (request.method === "OPTIONS") {
+    const headers = new Headers();
+    headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
+    headers.set("Access-Control-Allow-Headers", "Content-Type");
+    headers.set("Access-Control-Max-Age", "86400");
+    if (origin) headers.set("Access-Control-Allow-Origin", origin);
+    return new Response(null, { status: 204, headers });
+  }
+  if (request.method !== "GET") {
+    return jsonResponse({ reps: [], error: "Method Not Allowed" }, {
+      status: 405,
+      origin,
+    });
+  }
+
+  const url = new URL(request.url);
+  const zip = normalizeSalesRepsZipParam(url.searchParams.get("zip") ?? "");
+  if (!zip) {
+    return jsonResponse(
+      { reps: [], error: "ZIP code is required." },
+      { status: 400, origin },
+    );
+  }
+  if (!isValidSalesRepsZip(zip)) {
+    return jsonResponse(
+      {
+        reps: [],
+        error: "Enter a valid U.S. ZIP code (5 digits or ZIP+4).",
+      },
+      { status: 400, origin },
+    );
+  }
+
+  const token = env.SALES_REPS_ACCESS_TOKEN?.trim();
+  if (!token) {
+    return jsonResponse(
+      {
+        reps: [],
+        error: "Sales representatives lookup is not configured.",
+      },
+      { status: 503, origin },
+    );
+  }
+
+  const root = (env.SALES_REPS_API_ROOT ?? DEFAULT_SALES_REPS_API_ROOT).replace(
+    /\/+$/,
+    "",
+  );
+  const upstreamUrl = `${root}/sales-reps?zip=${encodeURIComponent(zip)}`;
+
+  try {
+    const upstream = await fetch(upstreamUrl, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const text = await upstream.text();
+    if (!upstream.ok) {
+      let detail = text.slice(0, 200);
+      try {
+        const j = JSON.parse(text) as { message?: string };
+        if (j?.message) detail = String(j.message);
+      } catch {
+        /* keep text slice */
+      }
+      return jsonResponse(
+        {
+          reps: [],
+          error:
+            upstream.status === 401
+              ? "Sales representatives service rejected credentials."
+              : `Sales representatives service error (${upstream.status}). ${detail}`.trim(),
+        },
+        { status: upstream.status === 401 ? 502 : 502, origin },
+      );
+    }
+
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(text) as unknown;
+    } catch {
+      return jsonResponse(
+        { reps: [], error: "Invalid response from sales representatives service." },
+        { status: 502, origin },
+      );
+    }
+
+    if (!Array.isArray(parsed)) {
+      return jsonResponse(
+        { reps: [], error: "Unexpected response from sales representatives service." },
+        { status: 502, origin },
+      );
+    }
+
+    const reps = parsed.map(mapSalesRepRow).filter((r) => r.name || r.phone || r.email);
+    return jsonResponse({ reps }, { origin });
+  } catch (error) {
+    return jsonResponse(
+      {
+        reps: [],
+        error: error instanceof Error ? error.message : String(error),
+      },
+      { status: 502, origin },
+    );
+  }
 }
 
 async function handleSearchAutocompleteApi(

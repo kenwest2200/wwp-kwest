@@ -45,6 +45,7 @@ const emptyPagesEl = document.getElementById(
   "search-results-empty-pages",
 ) as HTMLParagraphElement | null;
 const tabsWrapEl = document.getElementById("search-results-tabs-wrap");
+const tabsLoaderEl = document.getElementById("search-results-tabs-loader");
 const cardTemplateEl = document.getElementById(
   "search-card-template",
 ) as HTMLTemplateElement | null;
@@ -92,6 +93,12 @@ let currentPagePages = 1;
 let perPage = readPerPage();
 let lastTotalProducts = 0;
 let lastTotalPages = 0;
+/** On narrow viewport: product cards currently shown (load-more). */
+let mobileAccumulatedProducts = 0;
+
+function isNarrowSearchViewport(): boolean {
+  return window.matchMedia("(max-width: 767px)").matches;
+}
 
 function readPerPage(): number {
   try {
@@ -198,6 +205,7 @@ function setPanelLoading(tab: SearchTab, loading: boolean): void {
 }
 
 function resetListsFull(): void {
+  mobileAccumulatedProducts = 0;
   if (listProductsEl) listProductsEl.innerHTML = "";
   if (listPagesEl) listPagesEl.innerHTML = "";
   if (emptyGlobalEl) emptyGlobalEl.hidden = true;
@@ -210,7 +218,10 @@ function resetListsFull(): void {
 }
 
 function clearListFor(tab: SearchTab): void {
-  if (tab === "products" && listProductsEl) listProductsEl.innerHTML = "";
+  if (tab === "products" && listProductsEl) {
+    listProductsEl.innerHTML = "";
+    mobileAccumulatedProducts = 0;
+  }
   if (tab === "pages" && listPagesEl) listPagesEl.innerHTML = "";
 }
 
@@ -220,8 +231,74 @@ function setError(message: string) {
   errorEl.hidden = false;
 }
 
-function setSummary(text: string) {
-  if (summaryEl) summaryEl.textContent = text;
+function setSummary(text: string): void {
+  if (!summaryEl) return;
+  summaryEl.replaceChildren();
+  if (text) summaryEl.appendChild(document.createTextNode(text));
+}
+
+function setMainSearchLoading(visible: boolean): void {
+  if (tabsLoaderEl) tabsLoaderEl.hidden = !visible;
+  if (visible && tabsWrapEl) tabsWrapEl.setAttribute("hidden", "");
+}
+
+async function fetchRelatedAutocompleteItems(
+  q: string,
+): Promise<{ title: string; uri: string }[]> {
+  const trimmed = q.trim();
+  if (!trimmed) return [];
+  try {
+    const res = await fetch(
+      `/api/search-autocomplete?q=${encodeURIComponent(trimmed)}&limit=10`,
+    );
+    const data = (await res.json()) as {
+      items?: { title?: string; uri?: string }[];
+    };
+    if (!res.ok) return [];
+    const raw = Array.isArray(data.items) ? data.items : [];
+    const qLower = trimmed.toLowerCase();
+    return raw
+      .filter((x) => x?.title && x?.uri)
+      .map((x) => ({
+        title: decodeHtmlEntities(String(x.title).trim()),
+        uri: String(x.uri).trim(),
+      }))
+      .filter((x) => x.title.toLowerCase() !== qLower)
+      .slice(0, 8);
+  } catch {
+    return [];
+  }
+}
+
+function fillRelatedSearchTerms(
+  mode: "loading" | "empty" | "list",
+  items?: { title: string; uri: string }[],
+): void {
+  if (!summaryEl || !query) return;
+  summaryEl.replaceChildren();
+  const lead = document.createElement("span");
+  lead.className = "search-results-page__summary-lead";
+  lead.textContent = "Related search terms: ";
+  summaryEl.appendChild(lead);
+  if (mode === "loading") {
+    const s = document.createElement("span");
+    s.className = "search-results-page__summary-muted";
+    s.textContent = "Loading…";
+    summaryEl.appendChild(s);
+    return;
+  }
+  if (mode === "empty" || !items?.length) {
+    summaryEl.appendChild(document.createTextNode("—"));
+    return;
+  }
+  items.forEach((it, i) => {
+    if (i > 0) summaryEl.appendChild(document.createTextNode(", "));
+    const a = document.createElement("a");
+    a.href = normalizeSearchHref(it.uri);
+    a.textContent = it.title;
+    a.className = "search-results-page__summary-link";
+    summaryEl.appendChild(a);
+  });
 }
 
 function setSearchHeading(main: string, queryLine: string | null): void {
@@ -416,7 +493,16 @@ function syncToolbarRange(): void {
   const el = document.querySelector<HTMLElement>(
     ".search-js-pager-range-toolbar",
   );
-  if (el) el.innerHTML = formatRangeHtml(total, cur);
+  if (!el) return;
+  if (
+    tab === "products" &&
+    isNarrowSearchViewport() &&
+    total > 0
+  ) {
+    el.innerHTML = `<span class="product-filters__pager-range-of">${mobileAccumulatedProducts} of</span> ${total}`;
+    return;
+  }
+  el.innerHTML = formatRangeHtml(total, cur);
 }
 
 function syncFooterRange(): void {
@@ -487,6 +573,22 @@ function syncPagerUi(): void {
       lastTotalProducts === 0,
     );
   }
+
+  syncSearchLoadMoreButton();
+}
+
+const loadMoreProductsBtn = document.getElementById(
+  "search-load-more-products",
+) as HTMLButtonElement | null;
+
+function syncSearchLoadMoreButton(): void {
+  if (!loadMoreProductsBtn) return;
+  const narrow = isNarrowSearchViewport();
+  loadMoreProductsBtn.hidden =
+    !narrow ||
+    activeTab !== "products" ||
+    lastTotalProducts === 0 ||
+    mobileAccumulatedProducts >= lastTotalProducts;
 }
 
 function bindTabs() {
@@ -581,18 +683,6 @@ function bindPagerPages() {
   });
 }
 
-function setSummaryForTab(tab: SearchTab): void {
-  const n = tab === "products" ? lastTotalProducts : lastTotalPages;
-  const label = tab === "products" ? "product" : "related page";
-  if (n === 0) {
-    setSummary(`No ${label} results for "${decodeHtmlEntities(query)}".`);
-    return;
-  }
-  setSummary(
-    `${lastTotalProducts} product result${lastTotalProducts === 1 ? "" : "s"}, ${lastTotalPages} page result${lastTotalPages === 1 ? "" : "s"} for "${decodeHtmlEntities(query)}".`,
-  );
-}
-
 async function fetchTabTotal(tab: SearchTab): Promise<number> {
   if (!query) return 0;
   const type = tab === "products" ? "product" : "page";
@@ -608,21 +698,35 @@ async function fetchTabTotal(tab: SearchTab): Promise<number> {
 
 async function fetchAndRender(
   tab: SearchTab,
-  opts?: { showLoader?: boolean },
-): Promise<void> {
-  if (!query) return;
+  opts?: { showLoader?: boolean; append?: boolean },
+): Promise<boolean> {
+  if (!query) return false;
 
   const showLoader = opts?.showLoader !== false;
+  const append =
+    Boolean(opts?.append) &&
+    tab === "products" &&
+    isNarrowSearchViewport();
   const pageBeforeFetch = currentPageFor(tab);
   const type = tab === "products" ? "product" : "page";
 
-  clearListFor(tab);
-  if (showLoader) setPanelLoading(tab, true);
+  if (!append) {
+    clearListFor(tab);
+  }
+  if (showLoader && !append) setPanelLoading(tab, true);
+  if (append && loadMoreProductsBtn) loadMoreProductsBtn.disabled = true;
 
   clampCurrentPageFor(tab);
   syncPagerUi();
 
-  const offset = (currentPageFor(tab) - 1) * perPage;
+  const offset =
+    tab === "products"
+      ? append
+        ? mobileAccumulatedProducts
+        : isNarrowSearchViewport()
+          ? 0
+          : (currentPageFor(tab) - 1) * perPage
+      : (currentPageFor(tab) - 1) * perPage;
 
   try {
     const res = await fetch(
@@ -641,13 +745,11 @@ async function fetchAndRender(
     else lastTotalPages = total;
 
     clampCurrentPageFor(tab);
-    if (currentPageFor(tab) !== pageBeforeFetch) {
+    if (!append && currentPageFor(tab) !== pageBeforeFetch) {
       if (showLoader) setPanelLoading(tab, false);
-      void fetchAndRender(tab, opts);
-      return;
+      if (loadMoreProductsBtn) loadMoreProductsBtn.disabled = false;
+      return await fetchAndRender(tab, opts);
     }
-
-    setSummaryForTab(tab);
 
     const hasAny = lastTotalProducts > 0 || lastTotalPages > 0;
     if (emptyGlobalEl) emptyGlobalEl.hidden = hasAny;
@@ -658,8 +760,9 @@ async function fetchAndRender(
         const row = cloneSearchResultCard(item);
         if (row) listProductsEl.appendChild(row);
       }
+      mobileAccumulatedProducts = listProductsEl.children.length;
       if (emptyProductsEl) {
-        emptyProductsEl.hidden = items.length > 0;
+        emptyProductsEl.hidden = mobileAccumulatedProducts > 0;
       }
     }
 
@@ -675,17 +778,26 @@ async function fetchAndRender(
     }
 
     syncPagerUi();
+    return true;
   } catch (e) {
+    if (append) {
+      if (loadMoreProductsBtn) loadMoreProductsBtn.disabled = false;
+      syncPagerUi();
+      setPanelLoading(tab, false);
+      return false;
+    }
     lastTotalProducts = 0;
     lastTotalPages = 0;
-    setSummary("");
+    mobileAccumulatedProducts = 0;
     setError(e instanceof Error ? e.message : String(e));
     tabsWrapEl?.setAttribute("hidden", "");
     syncPagerUi();
     setPanelLoading("products", false);
     setPanelLoading("pages", false);
+    return false;
   } finally {
-    if (showLoader) setPanelLoading(tab, false);
+    if (showLoader && !append) setPanelLoading(tab, false);
+    if (append && loadMoreProductsBtn) loadMoreProductsBtn.disabled = false;
   }
 }
 
@@ -702,49 +814,75 @@ async function runSearch() {
     setSearchHeading("Search", null);
     setSummary("Enter a query to search.");
     tabsWrapEl?.setAttribute("hidden", "");
+    setMainSearchLoading(false);
     closeAllPerMenus();
     updatePerValueLabels();
     return;
   }
 
-  tabsWrapEl?.removeAttribute("hidden");
   setSearchHeading("Search results", `For "${decodeHtmlEntities(query)}"`);
-  setSummary("Loading…");
+  fillRelatedSearchTerms("loading");
+  setMainSearchLoading(true);
   syncPagerUi();
   closeAllPerMenus();
   updatePerValueLabels();
 
   try {
-    const [prodTotal, pageTotal] = await Promise.all([
+    const [prodTotal, pageTotal, relatedItems] = await Promise.all([
       fetchTabTotal("products"),
       fetchTabTotal("pages"),
+      fetchRelatedAutocompleteItems(query),
     ]);
     lastTotalProducts = prodTotal;
     lastTotalPages = pageTotal;
     syncPagerUi();
 
+    if (relatedItems.length > 0) {
+      fillRelatedSearchTerms("list", relatedItems);
+    } else {
+      fillRelatedSearchTerms("empty");
+    }
+
     const hasAny = lastTotalProducts > 0 || lastTotalPages > 0;
     if (emptyGlobalEl) emptyGlobalEl.hidden = hasAny;
     if (!hasAny) {
-      setSummary(`No results for "${decodeHtmlEntities(query)}".`);
+      setMainSearchLoading(false);
       return;
     }
 
+    let initialOk = false;
     if (lastTotalProducts === 0 && lastTotalPages > 0) {
       setActiveTab("pages");
-      await fetchAndRender("pages", { showLoader: true });
+      initialOk = await fetchAndRender("pages", { showLoader: false });
     } else {
       setActiveTab("products");
-      setPanelLoading("products", true);
-      await fetchAndRender("products", { showLoader: false });
-      setPanelLoading("products", false);
+      initialOk = await fetchAndRender("products", { showLoader: false });
+    }
+
+    setMainSearchLoading(false);
+    if (initialOk) {
+      tabsWrapEl?.removeAttribute("hidden");
     }
   } catch (e) {
+    setMainSearchLoading(false);
     setSummary("");
     setError(e instanceof Error ? e.message : String(e));
     tabsWrapEl?.setAttribute("hidden", "");
   }
 }
+
+loadMoreProductsBtn?.addEventListener("click", () => {
+  if (!isNarrowSearchViewport() || activeTab !== "products") return;
+  void fetchAndRender("products", { showLoader: false, append: true });
+});
+
+const mqSearchDesktop = window.matchMedia("(min-width: 768px)");
+mqSearchDesktop.addEventListener("change", () => {
+  if (!query || activeTab !== "products") return;
+  currentPageProducts = 1;
+  mobileAccumulatedProducts = 0;
+  void fetchAndRender("products", { showLoader: true });
+});
 
 bindTabs();
 bindPagerNav();

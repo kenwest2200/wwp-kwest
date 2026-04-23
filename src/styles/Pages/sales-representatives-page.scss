@@ -1,13 +1,13 @@
 @use "../variables" as *;
 @use "../functions" as *;
+@use "../breakpoints" as *;
 
 .sr-page {
   padding-top: var(--page-header-offset, #{px-to-rem(112)});
   padding-bottom: px-to-rem(80);
 
-
   &__body {
-    padding-top: px-to-rem(60);
+    padding-top: px-to-rem(40);
   }
 
   &__body-inner {
@@ -17,21 +17,165 @@
     padding-right: var(--section-right, var(--s-padding-x));
   }
 
-  &__content {
-    font-size: px-to-rem(16);
-    line-height: px-to-rem(28);
-    color: $dark;
+  &__search {
+    margin-bottom: px-to-rem(24);
+  }
 
-    img {
-      max-width: 100%;
-      height: auto;
-      width: 100%;
+  &__search-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: px-to-rem(16) px-to-rem(20);
+  }
+
+  &__search-field {
+    flex: 1 1 px-to-rem(280);
+    min-width: 0;
+  }
+
+  &__label {
+    display: block;
+    margin-bottom: px-to-rem(8);
+    font-size: px-to-rem(14);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: $dark;
+  }
+
+  &__input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &__input-icon {
+    position: absolute;
+    left: px-to-rem(14);
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    color: $dark-medium;
+    pointer-events: none;
+  }
+
+  &__input {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: px-to-rem(48);
+    padding: px-to-rem(12) px-to-rem(16) px-to-rem(12) px-to-rem(48);
+    border: 1px solid rgba($dark, 0.2);
+    border-radius: px-to-rem(4);
+    font: inherit;
+    font-size: px-to-rem(16);
+    line-height: px-to-rem(24);
+    color: $dark;
+    background: $white;
+
+    &::placeholder {
+      color: $dark-medium;
+    }
+
+    &:focus {
+      outline: 2px solid $dark-teal;
+      outline-offset: 1px;
     }
   }
 
-  &__empty {
-    margin: 0;
+  &__hint {
+    margin: px-to-rem(8) 0 0;
+    font-size: px-to-rem(13);
+    line-height: px-to-rem(20);
     color: $dark-medium;
-    font-size: px-to-rem(16);
+  }
+
+  &__submit {
+    flex: 0 0 auto;
+    min-height: px-to-rem(48);
+    padding-left: px-to-rem(28);
+    padding-right: px-to-rem(28);
+  }
+
+  &__message {
+    margin: 0 0 px-to-rem(20);
+    padding: px-to-rem(12) px-to-rem(16);
+    border-radius: px-to-rem(4);
+    font-size: px-to-rem(15);
+    line-height: px-to-rem(22);
+    color: #7a1f1f;
+    background: rgba(#b00020, 0.08);
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  &__results {
+    margin-top: px-to-rem(40);
+  }
+
+  &__results-title {
+    margin: 0 0 px-to-rem(20);
+    font-size: px-to-rem(22);
+    line-height: px-to-rem(32);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: $dark;
+  }
+
+  &__table-wrap {
+    overflow-x: auto;
+    border: 1px solid rgba($dark, 0.12);
+    border-radius: px-to-rem(4);
+    background: $white;
+  }
+
+  &__table {
+    width: 100%;
+    min-width: px-to-rem(560);
+    border-collapse: collapse;
+    font-size: px-to-rem(15);
+    line-height: px-to-rem(24);
+    color: $dark;
+
+    thead th {
+      padding: px-to-rem(14) px-to-rem(16);
+      text-align: left;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: $dark;
+      background: $light-gray;
+      border-bottom: 1px solid rgba($dark, 0.12);
+    }
+
+    tbody td {
+      padding: px-to-rem(16);
+      vertical-align: top;
+      border-bottom: 1px solid rgba($dark, 0.08);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+  }
+
+  &__row-empty td {
+    color: $dark-medium;
+    font-weight: 400;
+  }
+
+  &__link {
+    color: $dark-teal;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    word-break: break-word;
+
+    &:hover {
+      color: $dark;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $dark-teal;
+      outline-offset: 2px;
+    }
   }
 }

@@ -135,6 +135,12 @@ function normalizeSearchHref(uri: string): string {
   return u.startsWith("/") ? u : `/${u}`;
 }
 
+function searchResultsPageHref(query: string): string {
+  const q = query.trim();
+  if (!q) return "/search";
+  return `/search?q=${encodeURIComponent(q)}`;
+}
+
 function bindHeaderSearchAutocomplete(
   panel: HTMLElement,
   input: HTMLInputElement,
@@ -153,9 +159,10 @@ function bindHeaderSearchAutocomplete(
     input.removeAttribute("aria-activedescendant");
   };
 
-  const showSuggest = (items: { title: string; uri: string }[]) => {
+  const showSuggest = (items: { title: string; uri: string }[], query: string) => {
     box.innerHTML = "";
-    if (items.length === 0) {
+    const q = query.trim();
+    if (q.length < AUTOCOMPLETE_MIN_CHARS) {
       hideSuggest();
       return;
     }
@@ -168,6 +175,14 @@ function bindHeaderSearchAutocomplete(
       a.textContent = item.title;
       box.appendChild(a);
     });
+    const all = document.createElement("a");
+    all.className =
+      "header__search-suggest-item header__search-suggest-item--all-results";
+    all.role = "option";
+    all.id = "header-search-suggest-all";
+    all.href = searchResultsPageHref(q);
+    all.textContent = "Show all results";
+    box.appendChild(all);
     box.hidden = false;
     input.setAttribute("aria-expanded", "true");
   };
@@ -194,13 +209,21 @@ function bindHeaderSearchAutocomplete(
           `/api/search-autocomplete?q=${encodeURIComponent(q)}&limit=5`,
           { signal: abort.signal },
         );
-        const data = (await res.json()) as {
+        let data: {
           items?: { title?: string; uri?: string }[];
           error?: string;
         };
+        try {
+          data = (await res.json()) as typeof data;
+        } catch {
+          if (seq !== requestSeq) return;
+          showSuggest([], input.value.trim());
+          return;
+        }
         if (seq !== requestSeq) return;
+        const qNow = input.value.trim();
         if (!res.ok) {
-          hideSuggest();
+          showSuggest([], qNow);
           return;
         }
         const raw = Array.isArray(data.items) ? data.items : [];
@@ -210,9 +233,12 @@ function bindHeaderSearchAutocomplete(
             title: decodeHtmlEntities(String(x.title).trim()),
             uri: String(x.uri).trim(),
           }));
-        showSuggest(items);
+        showSuggest(items, qNow);
       } catch {
-        if (seq === requestSeq) hideSuggest();
+        if (seq !== requestSeq) return;
+        const q2 = input.value.trim();
+        if (q2.length >= AUTOCOMPLETE_MIN_CHARS) showSuggest([], q2);
+        else hideSuggest();
       }
     }, AUTOCOMPLETE_DEBOUNCE_MS);
   };
@@ -259,6 +285,10 @@ export function initHeaderSearch(): void {
     "[data-header-search-input]",
   );
 
+  if (panel instanceof HTMLElement && input) {
+    bindHeaderSearchAutocomplete(panel, input);
+  }
+
   if (!(root instanceof HTMLElement) || !(toggle instanceof HTMLElement)) {
     return;
   }
@@ -301,9 +331,6 @@ export function initHeaderSearch(): void {
     }
   });
 
-  if (panel instanceof HTMLElement && input) {
-    bindHeaderSearchAutocomplete(panel, input);
-  }
 }
 
 export function initHeaderMobile(): void {
