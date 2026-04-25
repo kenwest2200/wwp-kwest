@@ -1,4 +1,8 @@
 import { decodeHtmlEntities } from "../../lib/decode-html-entities";
+import {
+  readHeaderDataTopHeightPx,
+  readHeaderTopPlusContainerHeightPx,
+} from "../../lib/header-page-inset";
 
 const SEARCH_MQ = "(min-width: 768px)";
 const AUTOCOMPLETE_MIN_CHARS = 2;
@@ -6,25 +10,8 @@ const AUTOCOMPLETE_DEBOUNCE_MS = 150;
 
 let mobileMenuForcesHeaderTopZero = false;
 
-/** Rounded height of `[data-header-top]` only — matches CSS `top: calc(-1 * var(--header-top-height))`. */
-function headerTopStripHeightPx(): number {
-  const topEl = document.querySelector("[data-header-top]");
-  if (!(topEl instanceof HTMLElement)) return 0;
-  return Math.max(0, Math.round(topEl.getBoundingClientRect().height));
-}
-
-/** Sum of `[data-header-top]` and `.js-header-container` (scroll threshold for `is-scrolling`). */
 function sumHeaderTopHeightsPx(): number {
-  const topEl = document.querySelector("[data-header-top]");
-  const containerEl = document.querySelector(".js-header-container");
-  let sum = 0;
-  if (topEl instanceof HTMLElement) {
-    sum += Math.round(topEl.getBoundingClientRect().height);
-  }
-  if (containerEl instanceof HTMLElement) {
-    sum += Math.round(containerEl.getBoundingClientRect().height);
-  }
-  return Math.max(0, sum);
+  return readHeaderTopPlusContainerHeightPx();
 }
 
 function applyHeaderTopHeight(): void {
@@ -34,9 +21,17 @@ function applyHeaderTopHeight(): void {
   }
   if (mobileMenuForcesHeaderTopZero) {
     header.style.setProperty("--header-top-height", "0px");
+    header.style.setProperty("--header-data-top-height", "0px");
     return;
   }
-  header.style.setProperty("--header-top-height", `${headerTopStripHeightPx()}px`);
+  header.style.setProperty(
+    "--header-top-height",
+    `${sumHeaderTopHeightsPx()}px`,
+  );
+  header.style.setProperty(
+    "--header-data-top-height",
+    `${readHeaderDataTopHeightPx()}px`,
+  );
 }
 
 function getDocumentScrollY(): number {
@@ -63,7 +58,10 @@ function bindHeaderStickyScroll(): void {
   if (!(header instanceof HTMLElement)) {
     return;
   }
-  if (!(topEl instanceof HTMLElement) && !(containerEl instanceof HTMLElement)) {
+  if (
+    !(topEl instanceof HTMLElement) &&
+    !(containerEl instanceof HTMLElement)
+  ) {
     return;
   }
 
@@ -159,10 +157,17 @@ function bindHeaderSearchAutocomplete(
     input.removeAttribute("aria-activedescendant");
   };
 
-  const showSuggest = (items: { title: string; uri: string }[], query: string) => {
+  const showSuggest = (
+    items: { title: string; uri: string }[],
+    query: string,
+  ) => {
     box.innerHTML = "";
     const q = query.trim();
     if (q.length < AUTOCOMPLETE_MIN_CHARS) {
+      hideSuggest();
+      return;
+    }
+    if (items.length === 0) {
       hideSuggest();
       return;
     }
@@ -217,13 +222,13 @@ function bindHeaderSearchAutocomplete(
           data = (await res.json()) as typeof data;
         } catch {
           if (seq !== requestSeq) return;
-          showSuggest([], input.value.trim());
+          hideSuggest();
           return;
         }
         if (seq !== requestSeq) return;
         const qNow = input.value.trim();
         if (!res.ok) {
-          showSuggest([], qNow);
+          hideSuggest();
           return;
         }
         const raw = Array.isArray(data.items) ? data.items : [];
@@ -236,9 +241,7 @@ function bindHeaderSearchAutocomplete(
         showSuggest(items, qNow);
       } catch {
         if (seq !== requestSeq) return;
-        const q2 = input.value.trim();
-        if (q2.length >= AUTOCOMPLETE_MIN_CHARS) showSuggest([], q2);
-        else hideSuggest();
+        hideSuggest();
       }
     }, AUTOCOMPLETE_DEBOUNCE_MS);
   };
@@ -330,7 +333,6 @@ export function initHeaderSearch(): void {
       toggle.setAttribute("aria-expanded", "false");
     }
   });
-
 }
 
 export function initHeaderMobile(): void {

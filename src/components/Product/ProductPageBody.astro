@@ -1,0 +1,187 @@
+---
+import ProductSingleTemplateBlock from "./ProductSingleTemplateBlock.astro";
+import type { ProductPageData } from "../../lib/queries/product-detail";
+import type { ProductPageView } from "../../lib/product-page-view";
+
+interface Props {
+  graphqlConfigured: boolean;
+  slug: string;
+  product: ProductPageData["product"] | null;
+  view: ProductPageView;
+}
+
+const { graphqlConfigured, slug, product, view } = Astro.props;
+const {
+  specHtml,
+  specSectionTitle,
+  relatedPartsTitle,
+  relatedPartsHtml,
+  showRelatedSection,
+  supportHeading,
+  supportLinks,
+  showSupportAccordion,
+  showSpecAccordion,
+  showProductAccordion,
+  optionalItems,
+} = view;
+---
+
+{
+  !product && (
+    <p class="product-page__placeholder">
+      {graphqlConfigured ? (
+        <>
+          No data from the API for slug <code>{slug}</code>. Check that the
+          product exists in WordPress and that GraphQL can resolve it (slug,
+          database ID, or URI <code>/product/{slug}/</code>).
+        </>
+      ) : (
+        <>
+          Product details are loaded from the GraphQL API. Set{" "}
+          <code>PUBLIC_GRAPHQL_URL</code> in <code>.env</code> (see{" "}
+          <code>.env.example</code>) and restart the dev server or rebuild.
+        </>
+      )}
+    </p>
+  )
+}
+
+{
+  product && (
+    <div class="product-page__body">
+      {optionalItems.map((item, idx) => (
+        <ProductSingleTemplateBlock item={item} index={idx} />
+      ))}
+
+      {showProductAccordion && (
+        <div class="product-page__accordion-stack" data-product-accordion>
+          {showSpecAccordion && (
+            <div class="product-page__accordion">
+              <button
+                type="button"
+                class="product-page__accordion-trigger"
+                id="product-acc-spec-trigger"
+                aria-expanded="false"
+                aria-controls="product-acc-spec-panel"
+              >
+                <span class="product-page__accordion-title">
+                  {specSectionTitle}
+                </span>
+                <span
+                  class="product-page__accordion-chevron"
+                  aria-hidden="true"
+                >
+                  <span class="product-page__accordion-chevron-icon" />
+                </span>
+              </button>
+              <div
+                id="product-acc-spec-panel"
+                class="product-page__accordion-panel product-page__accordion-panel--collapsed"
+                role="region"
+                aria-labelledby="product-acc-spec-trigger"
+              >
+                <div class="product-page__accordion-panel-inner" inert>
+                  <div class="product-page__spec" set:html={specHtml} />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showSupportAccordion && (
+            <div class="product-page__accordion">
+              <button
+                type="button"
+                class="product-page__accordion-trigger"
+                id="product-acc-support-trigger"
+                aria-expanded="false"
+                aria-controls="product-acc-support-panel"
+              >
+                <span class="product-page__accordion-title">
+                  {supportHeading}
+                </span>
+                <span
+                  class="product-page__accordion-chevron"
+                  aria-hidden="true"
+                >
+                  <span class="product-page__accordion-chevron-icon" />
+                </span>
+              </button>
+              <div
+                id="product-acc-support-panel"
+                class="product-page__accordion-panel product-page__accordion-panel--collapsed"
+                role="region"
+                aria-labelledby="product-acc-support-trigger"
+              >
+                <div class="product-page__accordion-panel-inner" inert>
+                  <div class="product-page__support">
+                    {supportLinks.length > 0 && (
+                      <ul class="product-page__link-list">
+                        {supportLinks.map((link) => {
+                          const href = link.url?.trim();
+                          if (!href) return null;
+                          const t = link.title?.trim() || href;
+                          const blank =
+                            link.target?.toLowerCase() === "_blank" ||
+                            link.target?.toLowerCase() === "blank";
+                          return (
+                            <li>
+                              <a
+                                class="product-page__text-link"
+                                href={href}
+                                target={blank ? "_blank" : undefined}
+                                rel={
+                                  blank ? "noopener noreferrer" : undefined
+                                }
+                              >
+                                {t}
+                              </a>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showRelatedSection && (
+            <div class="product-page__accordion">
+              <button
+                type="button"
+                class="product-page__accordion-trigger"
+                id="product-acc-related-trigger"
+                aria-expanded="false"
+                aria-controls="product-acc-related-panel"
+              >
+                <span class="product-page__accordion-title">
+                  {relatedPartsTitle}
+                </span>
+                <span
+                  class="product-page__accordion-chevron"
+                  aria-hidden="true"
+                >
+                  <span class="product-page__accordion-chevron-icon" />
+                </span>
+              </button>
+              <div
+                id="product-acc-related-panel"
+                class="product-page__accordion-panel product-page__accordion-panel--collapsed"
+                role="region"
+                aria-labelledby="product-acc-related-trigger"
+              >
+                <div class="product-page__accordion-panel-inner" inert>
+                  <div
+                    class="product-page__related-body"
+                    set:html={relatedPartsHtml}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}

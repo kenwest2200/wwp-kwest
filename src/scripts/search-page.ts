@@ -234,7 +234,12 @@ function setError(message: string) {
 function setSummary(text: string): void {
   if (!summaryEl) return;
   summaryEl.replaceChildren();
-  if (text) summaryEl.appendChild(document.createTextNode(text));
+  if (text) {
+    summaryEl.appendChild(document.createTextNode(text));
+    summaryEl.hidden = false;
+  } else {
+    summaryEl.hidden = true;
+  }
 }
 
 function setMainSearchLoading(visible: boolean): void {
@@ -270,35 +275,32 @@ async function fetchRelatedAutocompleteItems(
   }
 }
 
-function fillRelatedSearchTerms(
-  mode: "loading" | "empty" | "list",
-  items?: { title: string; uri: string }[],
-): void {
+/** Hides the summary row (used for “Related search terms” when there is nothing to show). */
+function clearRelatedSearchTerms(): void {
   if (!summaryEl || !query) return;
   summaryEl.replaceChildren();
+  summaryEl.hidden = true;
+}
+
+function showRelatedSearchTerms(
+  items: { title: string; uri: string }[],
+): void {
+  const el = summaryEl;
+  if (!el || !query || items.length === 0) return;
+  el.replaceChildren();
   const lead = document.createElement("span");
   lead.className = "search-results-page__summary-lead";
   lead.textContent = "Related search terms: ";
-  summaryEl.appendChild(lead);
-  if (mode === "loading") {
-    const s = document.createElement("span");
-    s.className = "search-results-page__summary-muted";
-    s.textContent = "Loading…";
-    summaryEl.appendChild(s);
-    return;
-  }
-  if (mode === "empty" || !items?.length) {
-    summaryEl.appendChild(document.createTextNode("—"));
-    return;
-  }
+  el.appendChild(lead);
   items.forEach((it, i) => {
-    if (i > 0) summaryEl.appendChild(document.createTextNode(", "));
+    if (i > 0) el.appendChild(document.createTextNode(", "));
     const a = document.createElement("a");
     a.href = normalizeSearchHref(it.uri);
     a.textContent = it.title;
     a.className = "search-results-page__summary-link";
-    summaryEl.appendChild(a);
+    el.appendChild(a);
   });
+  el.hidden = false;
 }
 
 function setSearchHeading(main: string, queryLine: string | null): void {
@@ -821,7 +823,7 @@ async function runSearch() {
   }
 
   setSearchHeading("Search results", `For "${decodeHtmlEntities(query)}"`);
-  fillRelatedSearchTerms("loading");
+  clearRelatedSearchTerms();
   setMainSearchLoading(true);
   syncPagerUi();
   closeAllPerMenus();
@@ -837,13 +839,15 @@ async function runSearch() {
     lastTotalPages = pageTotal;
     syncPagerUi();
 
-    if (relatedItems.length > 0) {
-      fillRelatedSearchTerms("list", relatedItems);
+    const hasAny = lastTotalProducts > 0 || lastTotalPages > 0;
+    if (!hasAny) {
+      clearRelatedSearchTerms();
+    } else if (relatedItems.length > 0) {
+      showRelatedSearchTerms(relatedItems);
     } else {
-      fillRelatedSearchTerms("empty");
+      clearRelatedSearchTerms();
     }
 
-    const hasAny = lastTotalProducts > 0 || lastTotalPages > 0;
     if (emptyGlobalEl) emptyGlobalEl.hidden = hasAny;
     if (!hasAny) {
       setMainSearchLoading(false);

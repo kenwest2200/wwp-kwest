@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-23T12:33:10.306Z",
+  "generatedAt": "2026-04-25T08:51:34.801Z",
   "attributesByCategory": {
     "bath": [],
     "pool": [
@@ -104,6 +104,10 @@
           {
             "label": "type-d-e",
             "slug": "filter-type-d-e"
+          },
+          {
+            "label": "type-sand",
+            "slug": "filter-type-sand"
           }
         ]
       },
@@ -276,6 +280,16 @@
         ]
       },
       {
+        "name": "Pump",
+        "slug": "pump",
+        "values": [
+          {
+            "label": "hi-flo-ii",
+            "slug": "pump-hi-flo-ii"
+          }
+        ]
+      },
+      {
         "name": "Shape",
         "slug": "shape",
         "values": [
@@ -380,6 +394,10 @@
           {
             "label": "type-ribbed",
             "slug": "barb-type-ribbed"
+          },
+          {
+            "label": "type-smooth",
+            "slug": "barb-type-smooth"
           }
         ]
       },
@@ -544,6 +562,10 @@
         "slug": "size",
         "values": [
           {
+            "label": "1.1.2",
+            "slug": "size-1-1-2"
+          },
+          {
             "label": "1",
             "slug": "size-1"
           },
@@ -570,6 +592,10 @@
           {
             "label": "18",
             "slug": "size-18"
+          },
+          {
+            "label": "2.1.2",
+            "slug": "size-2-1-2"
           },
           {
             "label": "2",
@@ -630,8 +656,20 @@
             "slug": "socket-1-2"
           },
           {
+            "label": "2.1.2",
+            "slug": "socket-2-1-2"
+          },
+          {
             "label": "2",
             "slug": "socket-2"
+          },
+          {
+            "label": "3",
+            "slug": "socket-3"
+          },
+          {
+            "label": "3.4",
+            "slug": "socket-3-4"
           }
         ]
       },
@@ -656,8 +694,16 @@
             "slug": "spigot-1-2"
           },
           {
+            "label": "2.1.2",
+            "slug": "spigot-2-1-2"
+          },
+          {
             "label": "2",
             "slug": "spigot-2"
+          },
+          {
+            "label": "3",
+            "slug": "spigot-3"
           },
           {
             "label": "3.4.2",
@@ -710,6 +756,10 @@
           {
             "label": "120",
             "slug": "wye-120"
+          },
+          {
+            "label": "22.1.2",
+            "slug": "wye-22-1-2"
           }
         ]
       }
@@ -732,6 +782,10 @@
           {
             "label": "type-d-e",
             "slug": "filter-type-d-e"
+          },
+          {
+            "label": "type-sand",
+            "slug": "filter-type-sand"
           }
         ]
       },
@@ -816,6 +870,16 @@
           {
             "label": "type-above-ground",
             "slug": "pool-type-above-ground"
+          }
+        ]
+      },
+      {
+        "name": "Pump",
+        "slug": "pump",
+        "values": [
+          {
+            "label": "hi-flo-ii",
+            "slug": "pump-hi-flo-ii"
           }
         ]
       },
@@ -1185,6 +1249,10 @@
           {
             "label": "type-ribbed",
             "slug": "barb-type-ribbed"
+          },
+          {
+            "label": "type-smooth",
+            "slug": "barb-type-smooth"
           }
         ]
       },
@@ -1216,6 +1284,10 @@
         "name": "Size",
         "slug": "size",
         "values": [
+          {
+            "label": "3.4",
+            "slug": "size-3-4"
+          },
           {
             "label": "3.8",
             "slug": "size-3-8"
@@ -1427,8 +1499,130 @@
       }
     ],
     "spa-skimmers-and-filters": [],
-    "spa-unions": [],
-    "spa-ells-tees-wyes": [],
+    "spa-unions": [
+      {
+        "name": "Size",
+        "slug": "size",
+        "values": [
+          {
+            "label": "1.1.2",
+            "slug": "size-1-1-2"
+          },
+          {
+            "label": "1",
+            "slug": "size-1"
+          },
+          {
+            "label": "2.1.2",
+            "slug": "size-2-1-2"
+          },
+          {
+            "label": "2",
+            "slug": "size-2"
+          }
+        ]
+      },
+      {
+        "name": "Socket",
+        "slug": "socket",
+        "values": [
+          {
+            "label": "1.1.2",
+            "slug": "socket-1-1-2"
+          },
+          {
+            "label": "1",
+            "slug": "socket-1"
+          },
+          {
+            "label": "2.1.2",
+            "slug": "socket-2-1-2"
+          },
+          {
+            "label": "2",
+            "slug": "socket-2"
+          }
+        ]
+      },
+      {
+        "name": "Spigot",
+        "slug": "spigot",
+        "values": [
+          {
+            "label": "2",
+            "slug": "spigot-2"
+          }
+        ]
+      }
+    ],
+    "spa-ells-tees-wyes": [
+      {
+        "name": "Socket",
+        "slug": "socket",
+        "values": [
+          {
+            "label": "1.1.2",
+            "slug": "socket-1-1-2"
+          },
+          {
+            "label": "1",
+            "slug": "socket-1"
+          },
+          {
+            "label": "2.1.2",
+            "slug": "socket-2-1-2"
+          },
+          {
+            "label": "2",
+            "slug": "socket-2"
+          },
+          {
+            "label": "3",
+            "slug": "socket-3"
+          },
+          {
+            "label": "3.4",
+            "slug": "socket-3-4"
+          }
+        ]
+      },
+      {
+        "name": "Spigot",
+        "slug": "spigot",
+        "values": [
+          {
+            "label": "1.1.2",
+            "slug": "spigot-1-1-2"
+          },
+          {
+            "label": "2.1.2",
+            "slug": "spigot-2-1-2"
+          },
+          {
+            "label": "2",
+            "slug": "spigot-2"
+          },
+          {
+            "label": "3",
+            "slug": "spigot-3"
+          }
+        ]
+      },
+      {
+        "name": "Wye",
+        "slug": "wye",
+        "values": [
+          {
+            "label": "120",
+            "slug": "wye-120"
+          },
+          {
+            "label": "22.1.2",
+            "slug": "wye-22-1-2"
+          }
+        ]
+      }
+    ],
     "spa-miscellaneous-accessories": [
       {
         "name": "Color",
@@ -3376,6 +3570,134 @@
   },
   "products": [
     {
+      "title": "Spa Pump Union Assemblies",
+      "slug": "spa-pump-union-assemblies",
+      "databaseId": 40632,
+      "date": "2026-04-24T22:40:42",
+      "modified": "2026-04-24T23:01:15",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-5530.png",
+      "imageAlt": null,
+      "imageWidth": 323,
+      "imageHeight": 313,
+      "categorySlugs": [
+        "spa-unions"
+      ],
+      "attributeSlugs": [
+        "socket-1-1-2",
+        "socket-1",
+        "socket-2-1-2",
+        "socket-2",
+        "spigot-2"
+      ]
+    },
+    {
+      "title": "2 1/2″ Spa Pump Union Assemblies",
+      "slug": "2-1-2spa-pump-union-assemblies",
+      "databaseId": 40630,
+      "date": "2026-04-24T21:29:33",
+      "modified": "2026-04-24T21:41:17",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-6010.png",
+      "imageAlt": null,
+      "imageWidth": 1522,
+      "imageHeight": 1920,
+      "categorySlugs": [
+        "spa-unions"
+      ],
+      "attributeSlugs": [
+        "size-2-1-2"
+      ]
+    },
+    {
+      "title": "2″ Spa Pump Union Assemblies",
+      "slug": "2-spa-pump-union-assemblies",
+      "databaseId": 40628,
+      "date": "2026-04-24T18:45:39",
+      "modified": "2026-04-24T18:45:39",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-4300.png",
+      "imageAlt": null,
+      "imageWidth": 1920,
+      "imageHeight": 1440,
+      "categorySlugs": [
+        "spa-unions"
+      ],
+      "attributeSlugs": [
+        "size-2"
+      ]
+    },
+    {
+      "title": "1 1/2″ Spa Pump Union Assemblies",
+      "slug": "1-1-2-spa-pump-union-assemblies",
+      "databaseId": 40626,
+      "date": "2026-04-24T17:58:03",
+      "modified": "2026-04-24T17:58:03",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-4060.png",
+      "imageAlt": null,
+      "imageWidth": 1920,
+      "imageHeight": 1547,
+      "categorySlugs": [
+        "spa-unions"
+      ],
+      "attributeSlugs": [
+        "size-1-1-2"
+      ]
+    },
+    {
+      "title": "U Bends",
+      "slug": "u-bends",
+      "databaseId": 40621,
+      "date": "2026-04-24T16:29:35",
+      "modified": "2026-04-24T16:29:35",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-4130.png",
+      "imageAlt": null,
+      "imageWidth": 1676,
+      "imageHeight": 1200,
+      "categorySlugs": [
+        "spa-ells-tees-wyes"
+      ],
+      "attributeSlugs": [
+        "socket-1-1-2",
+        "socket-2"
+      ]
+    },
+    {
+      "title": "Manifold Wyes",
+      "slug": "manifold-wyes",
+      "databaseId": 40617,
+      "date": "2026-04-24T15:51:00",
+      "modified": "2026-04-24T15:51:00",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-8000.png",
+      "imageAlt": null,
+      "imageWidth": 1472,
+      "imageHeight": 1200,
+      "categorySlugs": [
+        "spa-ells-tees-wyes"
+      ],
+      "attributeSlugs": [
+        "socket-1-1-2",
+        "socket-1",
+        "socket-2-1-2",
+        "socket-2",
+        "socket-3-4"
+      ]
+    },
+    {
+      "title": "Smooth Barb Adapters",
+      "slug": "smooth-barb-adapters",
+      "databaseId": 40554,
+      "date": "2026-04-23T16:12:17",
+      "modified": "2026-04-23T16:12:17",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/413-1960.png",
+      "imageAlt": null,
+      "imageWidth": 1007,
+      "imageHeight": 1076,
+      "categorySlugs": [
+        "spa-manifolds"
+      ],
+      "attributeSlugs": [
+        "barb-type-smooth"
+      ]
+    },
+    {
       "title": "Pancake Manifolds",
       "slug": "pancake-manifolds",
       "databaseId": 40549,
@@ -4036,56 +4358,51 @@
       "attributeSlugs": []
     },
     {
-      "title": "3/4″, 1″, 1 1/2″ Barb Adapters",
-      "slug": "3-4-1-1-1-2-barb-adapters",
-      "databaseId": 31660,
-      "date": "2023-06-01T12:36:49",
-      "modified": "2023-07-17T18:43:46",
-      "imageUrl": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "spa-manifolds"
-      ],
-      "attributeSlugs": []
-    },
-    {
       "title": "3/4″ Ribbed Barb Manifolds",
       "slug": "3-4-ribbed-barb-manifolds",
       "databaseId": 31644,
       "date": "2023-06-01T12:36:49",
-      "modified": "2023-06-07T15:36:53",
-      "imageUrl": null,
+      "modified": "2026-04-24T15:15:44",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-4980.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1180,
+      "imageHeight": 869,
       "categorySlugs": [
         "spa-manifolds"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "barb-type-ribbed",
+        "size-3-4",
+        "socket-2"
+      ]
     },
     {
       "title": "Carefree Top-Mount – Sand Standard System",
       "slug": "carefree-top-mount-sand-standard-system",
       "databaseId": 31622,
       "date": "2023-06-01T12:36:49",
-      "modified": "2026-04-02T09:39:01",
-      "imageUrl": null,
+      "modified": "2026-04-23T23:19:43",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Carefree_26in_Sand-Standard-System_HiFloII_sil_xsm_flat_IMG_6453.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 758,
+      "imageHeight": 1200,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "filter-type-sand",
+        "pump-hi-flo-ii",
+        "tank-size-16",
+        "tank-size-19",
+        "tank-size-22"
+      ]
     },
     {
       "title": "Ribbed Barb Adapters",
       "slug": "3-4-barb-adapters",
       "databaseId": 31615,
       "date": "2023-06-01T12:36:49",
-      "modified": "2026-04-22T22:39:29",
+      "modified": "2026-04-23T22:50:57",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/413-1860.png",
       "imageAlt": null,
       "imageWidth": 513,
@@ -4162,49 +4479,67 @@
       ]
     },
     {
-      "title": "Wyes & Manifold Wyes",
+      "title": "Wyes",
       "slug": "wyes-manifold-wyes",
       "databaseId": 38600,
       "date": "2023-05-31T22:31:00",
-      "modified": "2023-06-30T23:31:42",
-      "imageUrl": null,
+      "modified": "2026-04-24T15:35:14",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/413-4100.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1292,
+      "imageHeight": 1200,
       "categorySlugs": [
         "spa-ells-tees-wyes"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "socket-1-1-2",
+        "socket-1",
+        "socket-2",
+        "socket-3-4",
+        "wye-120",
+        "wye-22-1-2"
+      ]
     },
     {
-      "title": "Spa Sweep Ells & U Bends",
+      "title": "Spa Sweep Ells",
       "slug": "spa-sweep-ells-u-bends",
       "databaseId": 38576,
       "date": "2023-05-31T18:48:43",
-      "modified": "2023-06-30T23:25:36",
-      "imageUrl": null,
+      "modified": "2026-04-24T16:23:06",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/411-9130.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1920,
+      "imageHeight": 1440,
       "categorySlugs": [
         "spa-ells-tees-wyes"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "socket-1-1-2",
+        "socket-2-1-2",
+        "socket-2",
+        "socket-3",
+        "spigot-1-1-2",
+        "spigot-2-1-2",
+        "spigot-2",
+        "spigot-3"
+      ]
     },
     {
-      "title": "Spa Pump Union Assembies",
+      "title": "1 ” Spa Pump Union Assemblies",
       "slug": "spa-pump-union-assembies",
       "databaseId": 38543,
       "date": "2023-05-31T17:30:15",
-      "modified": "2023-11-22T19:14:16",
-      "imageUrl": null,
+      "modified": "2026-04-24T16:58:54",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-1990.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1920,
+      "imageHeight": 1440,
       "categorySlugs": [
         "spa-unions"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "size-1"
+      ]
     },
     {
       "title": "Slice Valves & Check Valves",
@@ -4226,11 +4561,11 @@
       "slug": "sanitary-tee-cross-tee-and-tee-assemblies",
       "databaseId": 33440,
       "date": "2023-05-31T12:37:05",
-      "modified": "2025-05-06T20:53:26",
-      "imageUrl": null,
+      "modified": "2026-04-25T00:01:32",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/413-2030.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1248,
+      "imageHeight": 1200,
       "categorySlugs": [
         "spa-ells-tees-wyes"
       ],
@@ -6555,11 +6890,11 @@
       "slug": "information",
       "databaseId": 32386,
       "date": "2020-01-27T12:36:56",
-      "modified": "2024-12-03T18:41:55",
-      "imageUrl": null,
+      "modified": "2026-04-24T13:51:16",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/4f70f4ebb35c91c464db15c8cfaad0dbfafe32a7.jpg",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1000,
+      "imageHeight": 523,
       "categorySlugs": [
         "general-info"
       ],

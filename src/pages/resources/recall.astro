@@ -1,0 +1,114 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PageHeaderOffset from "../../components/PageHeaderOffset.astro";
+import SectionHero from "../../components/SectionHero/SectionHero.astro";
+import DownloadIcon from "../../components/icons/downloadIcon.astro";
+import DownloadPdfIcon from "../../assets/images/downloadpdf.png";
+import { getGraphQLClient, requestGraphql } from "../../lib/graphql";
+import {
+  RECALL_PAGE_QUERY,
+  RECALL_PAGE_URI,
+  normalizeRecallCards,
+  type RecallPageData,
+} from "../../lib/queries/resources-recall-page";
+
+export const prerender = true;
+
+const graphqlConfigured = Boolean(getGraphQLClient());
+
+const introDefault =
+  "Stay informed about important safety updates and download official recall notices for affected products.";
+
+async function loadPage(): Promise<RecallPageData["page"] | null> {
+  if (!graphqlConfigured) return null;
+  try {
+    const data = await requestGraphql<RecallPageData>(RECALL_PAGE_QUERY);
+    return data.page ?? null;
+  } catch {
+    return null;
+  }
+}
+
+const pageNode = await loadPage();
+const pageTitle =
+  pageNode?.title?.trim() || "Product Safety & Recall Information";
+const cards = normalizeRecallCards(pageNode);
+
+const downloadPdfIconSrc =
+  typeof DownloadPdfIcon === "string" ? DownloadPdfIcon : DownloadPdfIcon.src;
+---
+
+<Layout headerType="white" pageTitle={pageTitle} description={introDefault}>
+  <main class="recall-page" data-page-header-offset>
+    <SectionHero title={pageTitle} intro={introDefault} />
+
+    <div class="recall-page__body">
+      <div class="recall-page__body-inner">
+        {
+          !graphqlConfigured && (
+            <p class="recall-page__notice">
+              GraphQL is not configured. Set <code>PUBLIC_GRAPHQL_URL</code> in{" "}
+              <code>.env</code> to load this page.
+            </p>
+          )
+        }
+        {
+          graphqlConfigured && cards.length === 0 && (
+            <p class="recall-page__notice">
+              No cards were returned for <code>{RECALL_PAGE_URI}</code>. Check
+              ACF field <code>cardsSettings</code> and WPGraphQL schema.
+            </p>
+          )
+        }
+        {
+          cards.length > 0 && (
+            <div class="recall-page__grid recall-page__grid--download">
+              {cards.map((card) => {
+                return (
+                  <a
+                    class="recall-page__card recall-page__card--download"
+                    href={card.linkUrl}
+                    target={card.linkTarget}
+                    rel={
+                      card.linkTarget === "_blank"
+                        ? "noopener noreferrer"
+                        : undefined
+                    }
+                  >
+                    <div class="recall-page__card-icon-wrap">
+                      <img
+                        class="recall-page__card-icon"
+                        src={downloadPdfIconSrc}
+                        alt="PDF document"
+                        width={80}
+                        height={85}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
+                    <div class="recall-page__card-content">
+                      <h2 class="recall-page__card-title">{card.title}</h2>
+                      {card.descriptionHtml ? (
+                        <div
+                          class="recall-page__card-desc"
+                          set:html={card.descriptionHtml}
+                        />
+                      ) : null}
+                      <span class="recall-page__card-action recall-page__card-action--download">
+                        <DownloadIcon />
+
+                        {card.linkLabel}
+                      </span>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<PageHeaderOffset />

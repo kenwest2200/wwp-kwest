@@ -1,0 +1,65 @@
+---
+import ProductPageBody from "./ProductPageBody.astro";
+import type { ProductPageData } from "../../lib/queries/product-detail";
+import type { ProductPageView } from "../../lib/product-page-view";
+
+interface Props {
+  graphqlConfigured: boolean;
+  slug: string;
+  product: ProductPageData["product"] | null;
+  view: ProductPageView;
+}
+
+const { graphqlConfigured, slug, product, view } = Astro.props;
+const { title, brandImg } = view;
+---
+
+<main class="product-page">
+  <div class="product-page__inner">
+    <div class="product-page__hero">
+      <div class="product-page__hero-main">
+        <h1 class="product-page__title">{title}</h1>
+        <nav class="product-page__breadcrumb" aria-label="Breadcrumb">
+          <ol class="product-page__breadcrumb-list">
+            <li>
+              <a href="/">Home</a>
+            </li>
+            <li>
+              <a href="/products/">Products</a>
+            </li>
+            <li aria-current="page">{title}</li>
+          </ol>
+        </nav>
+      </div>
+      {
+        brandImg?.sourceUrl && (
+          <div class="product-page__hero-brand">
+            <figure class="product-page__hero-brand-figure">
+              <img
+                class="product-page__brand-logo"
+                src={brandImg.sourceUrl}
+                alt={brandImg.altText ?? ""}
+                width={brandImg.mediaDetails?.width ?? undefined}
+                height={brandImg.mediaDetails?.height ?? undefined}
+                loading="eager"
+                decoding="async"
+              />
+              {brandImg.title?.trim() && (
+                <figcaption class="product-page__image-caption">
+                  {brandImg.title.trim()}
+                </figcaption>
+              )}
+            </figure>
+          </div>
+        )
+      }
+    </div>
+
+    <ProductPageBody
+      graphqlConfigured={graphqlConfigured}
+      slug={slug}
+      product={product}
+      view={view}
+    />
+  </div>
+</main>

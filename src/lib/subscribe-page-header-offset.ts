@@ -16,12 +16,12 @@ export function subscribePageHeaderOffset(
   const mqReduce = window.matchMedia("(prefers-reduced-motion: reduce)");
   mqReduce.addEventListener("change", sync);
 
-  const headerEl = document.querySelector(".header");
-  const headerContainerEl = document.querySelector(".header__container");
+  const topEl = document.querySelector("[data-header-top]");
+  const containerEl = document.querySelector(".js-header-container");
   if (typeof ResizeObserver !== "undefined") {
     const ro = new ResizeObserver(() => sync());
-    if (headerEl instanceof HTMLElement) ro.observe(headerEl);
-    if (headerContainerEl instanceof HTMLElement) ro.observe(headerContainerEl);
+    if (topEl instanceof HTMLElement) ro.observe(topEl);
+    if (containerEl instanceof HTMLElement) ro.observe(containerEl);
   }
 
   requestAnimationFrame(() => {

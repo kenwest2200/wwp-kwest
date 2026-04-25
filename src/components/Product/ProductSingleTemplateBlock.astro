@@ -1,4 +1,5 @@
 ---
+import { plainCmsFieldAsHtmlIfMarkup } from "../../lib/decode-html-entities";
 import {
   normalizeProductListContent,
   parseSingleTemplateOptionalCharact,
@@ -55,6 +56,7 @@ const galleryNodes =
 
 const descHtml = item.singleTemplateOptionalDescHtml?.trim();
 const descPlain = item.singleTemplateOptionalDesc?.trim();
+const descPlainAsHtml = plainCmsFieldAsHtmlIfMarkup(descPlain);
 const charactParsed = parseSingleTemplateOptionalCharact(
   item.singleTemplateOptionalCharact,
 );
@@ -64,9 +66,12 @@ const tableTitle = item.singleTemplateOptionalTableTitle?.trim();
 const tableHtml = item.singleTemplateOptionalTable?.trim();
 const plTitle = item.singleTemplateOptionalProductListTitle?.trim();
 const plSubtitle = item.singleTemplateOptionalProductListSubtitle?.trim();
+const plSubtitleAsHtml = plainCmsFieldAsHtmlIfMarkup(plSubtitle);
 const plRowLabel = item.singleTemplateOptionalProductListRowLabel?.trim();
 
-const hasDescriptionContent = Boolean(descHtml || descPlain);
+const hasDescriptionContent = Boolean(
+  descHtml || descPlainAsHtml || descPlain,
+);
 const hasFeaturesContent = Boolean(charactParsed);
 const hasGalleryContent = galleryNodes.length > 0;
 const isGallerySlider = showGallery && galleryNodes.length > 1;
@@ -94,7 +99,10 @@ const hasAnything =
       {showDescriptionHtml && descHtml && (
         <div class="product-page__optional-html" set:html={descHtml} />
       )}
-      {showDescriptionHtml && !descHtml && descPlain && (
+      {showDescriptionHtml && !descHtml && descPlainAsHtml && (
+        <div class="product-page__optional-html" set:html={descPlainAsHtml} />
+      )}
+      {showDescriptionHtml && !descHtml && !descPlainAsHtml && descPlain && (
         <p class="product-page__optional-text">{descPlain}</p>
       )}
       {showFeatures && hasFeaturesContent && charactParsed && (
@@ -240,7 +248,13 @@ const hasAnything =
               {plTitle}
             </h2>
           )}
-          {plSubtitle && (
+          {plSubtitleAsHtml && (
+            <div
+              class="product-page__optional-html product-page__optional-html--list-subtitle"
+              set:html={plSubtitleAsHtml}
+            />
+          )}
+          {!plSubtitleAsHtml && plSubtitle && (
             <p class="product-page__optional-text">{plSubtitle}</p>
           )}
         </div>

@@ -29,12 +29,19 @@
     transition: background 0.2s linear, padding-bottom 0.1s linear;
   }
 
-  &.is-scrolling,
-  &.header--white {
-    /* `--header-top-height` = height of `[data-header-top]` (see header-mobile.ts). */
+
+  &.header--white:not(.is-scrolling) {
     top: calc(-1 * var(--header-top-height, 0px));
     transition: top 0.2s ease;
+  }
 
+  &.is-scrolling {
+    top: calc(-1 * var(--header-data-top-height, 0px));
+    transition: top 0.2s ease;
+  }
+
+  &.is-scrolling,
+  &.header--white {
     .header__top {
       background: $white;
 
@@ -44,13 +51,24 @@
       &-link {
         color: $dark-medium;
 
-        svg {
-          path {
-            fill: $dark-medium;
-          }
 
-          rect {
-            stroke: $dark-medium;
+        &--facebook {
+          svg {
+            path {
+              fill: $dark-medium;
+            }
+
+            rect {
+              stroke: $dark-medium;
+            }
+          }
+        }
+
+        &--instagram {
+          svg {
+            path {
+              stroke: $dark-medium;
+            }
           }
         }
       }

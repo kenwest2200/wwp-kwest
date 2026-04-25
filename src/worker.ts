@@ -222,10 +222,13 @@ async function handleSearchApi(request: Request, env: Env): Promise<Response> {
     return new Response(null, { status: 204, headers });
   }
   if (request.method !== "GET") {
-    return jsonResponse({ total: 0, items: [], error: "Method Not Allowed" }, {
-      status: 405,
-      origin,
-    });
+    return jsonResponse(
+      { total: 0, items: [], error: "Method Not Allowed" },
+      {
+        status: 405,
+        origin,
+      },
+    );
   }
 
   const url = new URL(request.url);
@@ -372,10 +375,13 @@ async function handleProductCategoryProductsApi(
     return new Response(null, { status: 204, headers });
   }
   if (request.method !== "GET") {
-    return jsonResponse({ items: [], error: "Method Not Allowed" }, {
-      status: 405,
-      origin,
-    });
+    return jsonResponse(
+      { items: [], error: "Method Not Allowed" },
+      {
+        status: 405,
+        origin,
+      },
+    );
   }
 
   const url = new URL(request.url);
@@ -512,10 +518,13 @@ async function handleSalesRepsApi(
     return new Response(null, { status: 204, headers });
   }
   if (request.method !== "GET") {
-    return jsonResponse({ reps: [], error: "Method Not Allowed" }, {
-      status: 405,
-      origin,
-    });
+    return jsonResponse(
+      { reps: [], error: "Method Not Allowed" },
+      {
+        status: 405,
+        origin,
+      },
+    );
   }
 
   const url = new URL(request.url);
@@ -588,19 +597,27 @@ async function handleSalesRepsApi(
       parsed = JSON.parse(text) as unknown;
     } catch {
       return jsonResponse(
-        { reps: [], error: "Invalid response from sales representatives service." },
+        {
+          reps: [],
+          error: "Invalid response from sales representatives service.",
+        },
         { status: 502, origin },
       );
     }
 
     if (!Array.isArray(parsed)) {
       return jsonResponse(
-        { reps: [], error: "Unexpected response from sales representatives service." },
+        {
+          reps: [],
+          error: "Unexpected response from sales representatives service.",
+        },
         { status: 502, origin },
       );
     }
 
-    const reps = parsed.map(mapSalesRepRow).filter((r) => r.name || r.phone || r.email);
+    const reps = parsed
+      .map(mapSalesRepRow)
+      .filter((r) => r.name || r.phone || r.email);
     return jsonResponse({ reps }, { origin });
   } catch (error) {
     return jsonResponse(
@@ -627,10 +644,13 @@ async function handleSearchAutocompleteApi(
     return new Response(null, { status: 204, headers });
   }
   if (request.method !== "GET") {
-    return jsonResponse({ items: [], error: "Method Not Allowed" }, {
-      status: 405,
-      origin,
-    });
+    return jsonResponse(
+      { items: [], error: "Method Not Allowed" },
+      {
+        status: 405,
+        origin,
+      },
+    );
   }
 
   const url = new URL(request.url);
@@ -709,10 +729,13 @@ async function handleStoreLocationsApi(
     return new Response(null, { status: 204, headers });
   }
   if (request.method !== "GET") {
-    return jsonResponse({ error: "Method Not Allowed" }, {
-      status: 405,
-      origin,
-    });
+    return jsonResponse(
+      { error: "Method Not Allowed" },
+      {
+        status: 405,
+        origin,
+      },
+    );
   }
 
   const wpOrigin = env.PUBLIC_WORDPRESS_ORIGIN;
@@ -729,7 +752,9 @@ async function handleStoreLocationsApi(
   const limit = Number.isFinite(limitRaw)
     ? Math.max(1, Math.min(100, Math.floor(limitRaw)))
     : 10;
-  const offset = Number.isFinite(offsetRaw) ? Math.max(0, Math.floor(offsetRaw)) : 0;
+  const offset = Number.isFinite(offsetRaw)
+    ? Math.max(0, Math.floor(offsetRaw))
+    : 0;
 
   const base = wpOrigin.replace(/\/+$/, "");
   const upstream = `${base}/wp-json/restapi/v2/store-locations?limit=${encodeURIComponent(String(limit))}&offset=${encodeURIComponent(String(offset))}`;
@@ -784,5 +809,18 @@ async function purgeCache(env: Env): Promise<PurgeCacheResponse> {
 }
 
 async function handleFrontend(request: Request, env: Env): Promise<Response> {
-  return env.ASSETS.fetch(request);
+  const response = await env.ASSETS.fetch(request);
+  if (response.status === 404) {
+    const url = new URL(request.url);
+    const errorResponse = await env.ASSETS.fetch(
+      new Request(`${url.origin}/404.html`),
+    );
+
+    return new Response(errorResponse.body, {
+      ...errorResponse,
+      status: 404,
+    });
+  }
+
+  return response;
 }

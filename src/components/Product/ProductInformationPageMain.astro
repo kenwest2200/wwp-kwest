@@ -1,0 +1,46 @@
+---
+import ProductPageBody from "./ProductPageBody.astro";
+import type { ProductPageData } from "../../lib/queries/product-detail";
+import type { ProductPageView } from "../../lib/product-page-view";
+
+interface Props {
+  graphqlConfigured: boolean;
+  slug: string;
+  product: ProductPageData["product"] | null;
+  view: ProductPageView;
+}
+
+const { graphqlConfigured, slug, product, view } = Astro.props;
+const { title, mainImg } = view;
+---
+
+<main class="product-page product-page--information" data-page-header-offset>
+  <div class="product-page__content">
+    <div class="product-page__hero">
+      <h1 class="product-page__title">{title}</h1>
+      {
+        mainImg?.sourceUrl && (
+          <div class="product-page__hero-main-image">
+            <img
+              class="product-page__main-product-image"
+              src={mainImg.sourceUrl}
+              alt={mainImg.altText ?? ""}
+              width={mainImg.mediaDetails?.width ?? undefined}
+              height={mainImg.mediaDetails?.height ?? undefined}
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+        )
+      }
+    </div>
+    <div class="product-page__inner product-page__wysiwyg">
+      <ProductPageBody
+        graphqlConfigured={graphqlConfigured}
+        slug={slug}
+        product={product}
+        view={view}
+      />
+    </div>
+  </div>
+</main>

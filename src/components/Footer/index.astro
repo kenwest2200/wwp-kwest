@@ -1,10 +1,15 @@
 ---
-import type { FooterLayoutData } from "../../lib/queries/layout-footer";
+import {
+  type FooterLayoutData,
+  footerColumnsFromMenuNodes,
+} from "../../lib/queries/layout-footer";
 import FooterLogo from "../icons/footerLogo.astro";
 import CallIcon from "../icons/callIcon.astro";
 import AppIcon from "../../assets/images/app.png";
+import AppIcon2 from "../../assets/images/app2.png";
 import FacebookIcon from "../icons/facebook.astro";
 import InstagramIcon from "../icons/instagram.astro";
+import YoutubeIcon from "../icons/youtube.astro";
 
 interface Props {
   data?: FooterLayoutData | null;
@@ -12,8 +17,45 @@ interface Props {
 
 const { data } = Astro.props;
 
-const columnNodes = data?.footerColumns?.nodes ?? [];
-const legalNodes = data?.footerLegal?.nodes ?? [];
+/** Всегда в конце колонок, после меню из WP (`FOOTER_MENU`). */
+const footerStaticTailColumns = [
+  {
+    label: "Mobile Apps & Tools",
+    links: [
+      {
+        icon: {
+          url: AppIcon,
+          alt: "Applications",
+        },
+        href: "https://apps.apple.com/us/app/waterway-plastics/id1552316458",
+      },
+      {
+        icon: {
+          url: AppIcon2,
+          alt: "Applications",
+        },
+        href: "https://apps.apple.com/us/app/waterway-pool-spa-control/id1130599685",
+      },
+    ],
+  },
+  {
+    label: "Join us",
+    links: [
+      {
+        icon: "facebook" as const,
+        href: "https://www.facebook.com/Waterway-Plastics-132649443445814/?ref=br_rs",
+      },
+      {
+        icon: "instagram" as const,
+        href: "https://www.instagram.com/waterwayplastics/",
+      },
+      {
+        icon: "youtube" as const,
+        href: "https://www.youtube.com/@waterwayplastics8666",
+      },
+    ],
+  },
+];
 
 const mockFooterData = {
   address: "2200 East Sturgis Road Oxnard, California 93030",
@@ -26,115 +68,23 @@ const mockFooterData = {
     },
     {
       label: "Email us",
-      href: "#",
-    },
-  ],
-  columns: [
-    {
-      label: "Company",
-      links: [
-        {
-          label: "Privacy Policy",
-          href: "#",
-        },
-        {
-          label: "Terms of Use",
-          href: "#",
-        },
-        {
-          label: "MAP Policy",
-          href: "#",
-        },
-        {
-          label: "Find a Sale Reps",
-          href: "#",
-        },
-      ],
-    },
-    {
-      label: "Support & Resources",
-      links: [
-        {
-          label: "Support",
-          href: "#",
-        },
-        {
-          label: "FAQ",
-          href: "#",
-        },
-        {
-          label: "Catalog & Brochures",
-          href: "#",
-        },
-        {
-          label: "Tools",
-          href: "#",
-        },
-        {
-          label: "Find a Store",
-          href: "#",
-        },
-      ],
-    },
-    {
-      label: "Regulatory Information",
-      links: [
-        {
-          label: "Rebate Center",
-          href: "#",
-        },
-        {
-          label: "Certification of Compliance",
-          href: "#",
-        },
-        {
-          label: "Warranty Claims",
-          href: "#",
-        },
-        {
-          label: "Recalls",
-          href: "#",
-        },
-        {
-          label: "Conflict-Free Minerals",
-          href: "#",
-        },
-      ],
-    },
-    {
-      label: "Mobile Apps & Tools",
-      links: [
-        {
-          icon: {
-            url: AppIcon,
-            alt: "Applications",
-          },
-          href: "#",
-        },
-      ],
-    },
-    {
-      label: "Join us",
-      links: [
-        {
-          icon: "facebook",
-          href: "#",
-        },
-        {
-          icon: "instagram",
-          href: "#",
-        },
-      ],
+      href: "mailto:info@waterwayplastics.com",
     },
   ],
 };
+
+const columnNodes = data?.footerColumns?.nodes ?? [];
+const apiColumns = footerColumnsFromMenuNodes(columnNodes);
+const displayColumns = [...apiColumns, ...footerStaticTailColumns];
 ---
 
 <footer class="footer">
   <div class="container footer__container">
     <div class="footer__top">
       <div class="footer__logo-block">
-        <FooterLogo class="footer__logo-icon" />
+        <a href="/">
+          <FooterLogo class="footer__logo-icon" />
+        </a>
         <p class="footer__logo-text">{mockFooterData.address}</p>
       </div>
       <div class="footer__buttons">
@@ -155,46 +105,55 @@ const mockFooterData = {
     </div>
     <div class="footer__columns">
       {
-        mockFooterData.columns.map((column, index) => (
-          <div class={`footer__column footer__column--${index + 1}`}>
-            <h3 class="footer__column-title">{column.label}</h3>
-            <ul
-              class={`footer__column-list ${"icon" in column.links[0] ? "footer__column-list--with-icon" : ""}`}
-            >
-              {column.links.map((link, index) => (
-                <li
-                  class={`footer__column-item footer__column-item--${index + 1}`}
-                >
-                  <a href={link.href} class="footer__column-link">
-                    {"icon" in link &&
-                    typeof link.icon === "object" &&
-                    link.icon?.url ? (
-                      <img
-                        src={
-                          typeof link.icon.url === "string"
-                            ? link.icon.url
-                            : link.icon.url.src
-                        }
-                        alt={link.icon.alt}
-                        class="footer__column-icon"
-                      />
-                    ) : null}
-                    {"icon" in link &&
-                    typeof link.icon === "string" &&
-                    link.icon === "facebook" ? (
-                      <FacebookIcon class="footer__column-icon" />
-                    ) : "icon" in link &&
+        displayColumns.map((column, index) => {
+          const firstLink = column.links[0];
+          const listIconModifier =
+            firstLink && "icon" in firstLink
+              ? "footer__column-list--with-icon"
+              : "";
+          return (
+            <div class={`footer__column footer__column--${index + 1}`}>
+              <h3 class="footer__column-title">{column.label}</h3>
+              <ul class={`footer__column-list ${listIconModifier}`}>
+                {column.links.map((link, linkIndex) => (
+                  <li
+                    class={`footer__column-item footer__column-item--${linkIndex + 1}`}
+                  >
+                    <a href={link.href} class="footer__column-link">
+                      {"icon" in link &&
+                      typeof link.icon === "object" &&
+                      link.icon?.url ? (
+                        <img
+                          src={
+                            typeof link.icon.url === "string"
+                              ? link.icon.url
+                              : link.icon.url.src
+                          }
+                          alt={link.icon.alt}
+                          class="footer__column-icon footer__column-icon--app"
+                        />
+                      ) : null}
+                      {"icon" in link &&
                       typeof link.icon === "string" &&
-                      link.icon === "instagram" ? (
-                      <InstagramIcon class="footer__column-icon" />
-                    ) : null}
-                    {"label" in link && link.label ? link.label : null}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))
+                      link.icon === "facebook" ? (
+                        <FacebookIcon class="footer__column-icon" />
+                      ) : "icon" in link &&
+                        typeof link.icon === "string" &&
+                        link.icon === "instagram" ? (
+                        <InstagramIcon class="footer__column-icon" />
+                      ) : "icon" in link &&
+                        typeof link.icon === "string" &&
+                        link.icon === "youtube" ? (
+                        <YoutubeIcon class="footer__column-icon" />
+                      ) : null}
+                      {"label" in link && link.label ? link.label : null}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })
       }
     </div>
     <div class="footer__bottom">

@@ -1,0 +1,42 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import PageHeaderOffset from "../../../components/PageHeaderOffset.astro";
+import ProductInformationPageMain from "../../../components/Product/ProductInformationPageMain.astro";
+import "../../../styles/Pages/product-page.scss";
+import { getGraphQLClient } from "../../../lib/graphql";
+import { INFORMATION_PRODUCT_SLUG } from "../../../lib/product-information-constants";
+import { loadProductPageProduct } from "../../../lib/product-page-load";
+import { buildProductPageView } from "../../../lib/product-page-view";
+import { getCatalogProductProps } from "../../../lib/product-static-paths";
+
+export const prerender = true;
+
+const slug = INFORMATION_PRODUCT_SLUG;
+const { databaseId, catalogTitle } = getCatalogProductProps(slug);
+const graphqlConfigured = Boolean(getGraphQLClient());
+const product = await loadProductPageProduct({
+  slug,
+  catalogDatabaseId: databaseId,
+});
+const view = buildProductPageView(product, {
+  slug,
+  catalogTitle,
+});
+---
+
+<Layout headerType="white">
+  <ProductInformationPageMain
+    graphqlConfigured={graphqlConfigured}
+    slug={slug}
+    product={product}
+    view={view}
+  />
+</Layout>
+
+<PageHeaderOffset />
+
+<script>
+  import "../../../scripts/product-page-gallery.ts";
+  import "../../../scripts/product-page-accordion.ts";
+  import "../../../scripts/product-page-spec-table.ts";
+</script>

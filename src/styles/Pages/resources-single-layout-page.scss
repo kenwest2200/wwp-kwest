@@ -1,0 +1,120 @@
+@use "../variables" as *;
+@use "../functions" as *;
+@use "../breakpoints" as *;
+
+/** Resources pages: sidebar description + single-layout product resources (manuals, bulletins, etc.) */
+.rsl-page {
+  padding-top: var(--page-header-offset, #{px-to-rem(112)});
+  padding-bottom: px-to-rem(80);
+
+  &__body {
+    padding-top: px-to-rem(48);
+  }
+
+  &__body-inner {
+    max-width: px-to-rem(1192);
+    margin: 0 auto;
+    padding-left: var(--section-left, var(--s-padding-x));
+    padding-right: var(--section-right, var(--s-padding-x));
+  }
+
+  &__notice {
+    margin: 0;
+    padding: px-to-rem(16);
+    border-radius: px-to-rem(4);
+    background: $light-gray;
+    color: $dark-medium;
+    font-size: px-to-rem(15);
+    line-height: px-to-rem(24);
+
+    code {
+      font-size: 0.92em;
+    }
+  }
+
+  &__layout {
+    display: grid;
+    gap: px-to-rem(40);
+    align-items: start;
+
+    @include media-breakpoint-up(lg) {
+      grid-template-columns: minmax(0, px-to-rem(320)) minmax(0, 1fr);
+    }
+
+    &--main-only {
+      @include media-breakpoint-up(lg) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  }
+
+  &__sidebar {
+    min-width: 0;
+    padding: px-to-rem(20);
+    border-radius: px-to-rem(8);
+    background: $white;
+    border: 1px solid rgba($dark, 0.08);
+  }
+
+  &__sidebar-html {
+    font-size: px-to-rem(15);
+    line-height: px-to-rem(26);
+    color: $dark-medium;
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__main {
+    min-width: 0;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: px-to-rem(24);
+  }
+
+  &__item {
+    margin: 0;
+  }
+
+  &__article {
+    padding: px-to-rem(24) px-to-rem(20);
+    border-radius: px-to-rem(8);
+    background: $white;
+    border: 1px solid rgba($dark, 0.08);
+  }
+
+  &__item-title {
+    margin: 0 0 px-to-rem(12);
+    font-size: px-to-rem(20);
+    line-height: px-to-rem(28);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: $dark;
+  }
+
+  &__item-body {
+    font-size: px-to-rem(16);
+    line-height: px-to-rem(28);
+    color: $dark;
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  &__item-empty,
+  &__empty-main {
+    margin: 0;
+    color: $dark-medium;
+    font-size: px-to-rem(16);
+    line-height: px-to-rem(28);
+  }
+}

@@ -31,6 +31,23 @@ function decodeHtmlEntitiesServer(text: string): string {
   return s;
 }
 
+/**
+ * When a CMS "plain text" field actually stores HTML (often HTML-encoded),
+ * returns decoded markup for `set:html`. Otherwise returns `null` so the
+ * caller can render the original string as text (escaped).
+ */
+export function plainCmsFieldAsHtmlIfMarkup(
+  plain: string | null | undefined,
+): string | null {
+  const raw = (plain ?? "").trim();
+  if (!raw) return null;
+  const decoded = decodeHtmlEntities(raw);
+  if (/^\s*</.test(decoded)) return decoded;
+  if (raw.includes("&lt;") && /<[a-z][\s\S]*>/i.test(decoded)) return decoded;
+  if (/^[\s\r\n]*&lt;/i.test(raw) && /<[a-z]/i.test(decoded)) return decoded;
+  return null;
+}
+
 export function decodeHtmlEntities(text: string): string {
   if (!text) return text;
   const doc =

@@ -17,6 +17,7 @@ const RESERVED_PATHS = new Set([
   "/404",
   "/resources/faq",
   "/resources/instructional-videos",
+  "/resources/product-support",
   "/resources/sales-representatives",
   "/distributor-locator",
 ]);

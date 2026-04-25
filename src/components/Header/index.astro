@@ -20,8 +20,14 @@ function menuNodesFromHeaderData(data: HeaderLayoutData | null | undefined) {
   return Array.isArray(nodes) ? nodes : [];
 }
 
+function topBarNodesFromHeaderData(data: HeaderLayoutData | null | undefined) {
+  const nodes = data?.topBarMenuItems?.nodes;
+  return Array.isArray(nodes) ? nodes : [];
+}
+
 const { data, headerType } = Astro.props;
 const items = menuNodesFromHeaderData(data);
+const topBarFlat = topBarNodesFromHeaderData(data);
 
 type MenuLink = { label: string; href: string };
 type FlatMenuNode = {
@@ -38,21 +44,6 @@ type HeaderMenuNode = {
   children: HeaderMenuNode[];
 };
 
-function normalizeHref(node: FlatMenuNode) {
-  if (node.path && node.path.startsWith("/")) return node.path;
-  if (node.url && node.url.startsWith("/")) return node.url;
-  if (node.url && /^https?:\/\//i.test(node.url)) {
-    try {
-      const u = new URL(node.url);
-      const rel = `${u.pathname}${u.search}`;
-      return rel.startsWith("/") ? rel : "/";
-    } catch {
-      /* ignore */
-    }
-  }
-  return node.path && node.path !== "#" ? node.path : "#";
-}
-
 function buildHeaderMenuTree(flatNodes: FlatMenuNode[]): HeaderMenuNode[] {
   const byId = new Map<string, HeaderMenuNode>();
   const roots: HeaderMenuNode[] = [];
@@ -60,10 +51,12 @@ function buildHeaderMenuTree(flatNodes: FlatMenuNode[]): HeaderMenuNode[] {
   flatNodes.forEach((node) => {
     if (!node.id || !node.label) return;
     const normalizedLabel = node.label.trim().toLowerCase();
+    const pathRaw = (node.path ?? "").trim();
+    const hrefFromPath = !pathRaw || pathRaw === "#" ? "#" : pathRaw;
     byId.set(node.id, {
       id: node.id,
       label: node.label,
-      href: normalizedLabel === "products" ? "/products" : normalizeHref(node),
+      href: normalizedLabel === "products" ? "/products" : hrefFromPath,
       children: [],
     });
   });
@@ -82,6 +75,31 @@ function buildHeaderMenuTree(flatNodes: FlatMenuNode[]): HeaderMenuNode[] {
 }
 
 const realMenu = buildHeaderMenuTree(items as FlatMenuNode[]);
+const topBarHelpRoots = buildHeaderMenuTree(topBarFlat as FlatMenuNode[]);
+
+const topMenuCallUs = [
+  { label: "CALL US  805-981-0262", href: "tel:+18059810262" },
+  { label: "Support", href: "#" },
+];
+const topMenuSocial = [
+  {
+    label: "Facebook",
+    icon: "facebook" as const,
+    href: "https://www.facebook.com/Waterway-Plastics-132649443445814/?ref=br_rs",
+  },
+  {
+    label: "Instagram",
+    icon: "instagram" as const,
+    href: "https://www.instagram.com/waterwayplastics/",
+  },
+];
+
+function topBarLinkAttrs(href: string): { target?: string; rel?: string } {
+  if (/^https?:\/\//i.test(href)) {
+    return { target: "_blank", rel: "noopener noreferrer" };
+  }
+  return {};
+}
 
 function menuItemHasNestedChildren(item: HeaderMenuNode): boolean {
   return item.children.some((c) => c.children.length > 0);
@@ -100,45 +118,6 @@ function splitMenuIntoColumns(
   }
   return out.length > 0 ? out : [links];
 }
-
-const topMenuItems = {
-  "call-us": [
-    {
-      label: "CALL US  805-981-0262",
-      href: "tel:+18059810262",
-    },
-    {
-      label: "Support",
-      href: "#",
-    },
-  ],
-  "help-us": [
-    {
-      label: "Warranty",
-      href: "#",
-    },
-    {
-      label: "Find a Store",
-      href: "#",
-    },
-    {
-      label: "Find Sales Rep",
-      href: "#",
-    },
-  ],
-  social: [
-    {
-      label: "Instagram",
-      icon: "instagram",
-      href: "#",
-    },
-    {
-      label: "Facebook",
-      icon: "facebook",
-      href: "#",
-    },
-  ],
-};
 ---
 
 <header
@@ -148,12 +127,13 @@ const topMenuItems = {
     <div class="header__top-container">
       <ul class="header__top-menu header__top-menu--call-us">
         {
-          topMenuItems["call-us"].map((item) => (
+          topMenuCallUs.map((item) => (
             <li class="header__top-item">
               <a
                 class="header__top-link"
-                href="#"
-                aria-label={`go to ${item.label}`}
+                href={item.href}
+                aria-label={item.label}
+                {...topBarLinkAttrs(item.href)}
               >
                 <span>{item.label}</span>
               </a>
@@ -164,12 +144,13 @@ const topMenuItems = {
       <div class="header__top-menu-right">
         <ul class="header__top-menu header__top-menu--help-us">
           {
-            topMenuItems["help-us"].map((item) => (
+            topBarHelpRoots.map((item) => (
               <li class="header__top-item">
                 <a
                   class="header__top-link"
-                  href="#"
-                  aria-label={`go to ${item.label}`}
+                  href={item.href}
+                  aria-label={item.label}
+                  {...topBarLinkAttrs(item.href)}
                 >
                   <span>{item.label}</span>
                 </a>
@@ -179,18 +160,22 @@ const topMenuItems = {
         </ul>
         <ul class="header__top-menu header__top-menu--social">
           {
-            topMenuItems["social"].map((item) => (
+            topMenuSocial.map((item) => (
               <li class="header__top-item">
                 <a
-                  class="header__top-link"
+                  class:list={[
+                    "header__top-link",
+                    `header__top-link--${item.label.toLowerCase()}`,
+                  ]}
                   href={item.href}
-                  aria-label={`go to ${item.label}`}
+                  aria-label={item.label}
+                  {...topBarLinkAttrs(item.href)}
                 >
                   <span class="visually-hidden">{item.label}</span>
                   {item.icon === "facebook" ? (
-                    <IconFacebook />
-                  ) : item.icon === "instagram" ? (
                     <IconInstagram />
+                  ) : item.icon === "instagram" ? (
+                    <IconFacebook />
                   ) : null}
                 </a>
               </li>
@@ -328,7 +313,8 @@ const topMenuItems = {
                 role="listbox"
                 aria-label="Search suggestions"
                 hidden
-              />
+              >
+              </div>
             </div>
           </form>
         </div>

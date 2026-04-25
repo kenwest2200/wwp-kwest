@@ -1,0 +1,135 @@
+@use "../variables" as *;
+@use "../functions" as *;
+@use "../breakpoints" as *;
+
+.tb-page {
+  padding-top: var(--page-header-offset, #{px-to-rem(112)});
+  padding-bottom: px-to-rem(80);
+
+  &__body {
+    padding-top: px-to-rem(60);
+    max-width: px-to-rem(992);
+    margin: 0 auto;
+    padding-left: var(--section-left, var(--s-padding-x));
+    padding-right: var(--section-right, var(--s-padding-x));
+
+    @include media-breakpoint-up(md) {
+      padding-top: px-to-rem(100);
+    }
+  }
+
+  &__body-inner {}
+
+  &__notice {
+    margin: 0;
+    padding: px-to-rem(16);
+    border-radius: px-to-rem(4);
+    background: $white;
+    border: 1px solid rgba($dark, 0.08);
+    color: $dark-medium;
+    font-size: px-to-rem(15);
+    line-height: px-to-rem(24);
+
+    code {
+      font-size: 0.92em;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    gap: px-to-rem(24);
+    grid-template-columns: minmax(0, 1fr);
+
+    @include media-breakpoint-up(md) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: px-to-rem(32);
+    }
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 100%;
+    padding: px-to-rem(24);
+    background: $white;
+    border: 1px solid $gray-middle;
+    border-radius: px-to-rem(6);
+    text-decoration: none;
+    color: inherit;
+    transition:
+      border-color 0.2s ease;
+
+    &:hover {
+      border-color: rgba($dark-teal, 0.25);
+    }
+
+    @include media-breakpoint-up(md) {
+      padding: px-to-rem(32);
+    }
+  }
+
+  &__card-icon-wrap {
+    width: px-to-rem(40);
+    height: px-to-rem(40);
+    margin-bottom: px-to-rem(32);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  &__card-icon {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  &__card-title {
+    margin: 0 0 px-to-rem(16);
+    font-size: px-to-rem(24);
+    font-weight: 600;
+    line-height: px-to-rem(32);
+    letter-spacing: 0.03em;
+    color: $dark;
+  }
+
+  &__card-desc {
+    margin: 0 0 px-to-rem(32);
+    flex: 1 1 auto;
+    font-size: px-to-rem(16);
+    line-height: px-to-rem(28);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: $dark-medium;
+
+    p {
+      margin: 0 0 px-to-rem(8);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &__card-action {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: px-to-rem(12);
+    font-size: px-to-rem(12);
+    font-weight: 600;
+    line-height: px-to-rem(16);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $dark-teal;
+
+    svg {
+      flex-shrink: 0;
+      width: px-to-rem(16);
+      height: px-to-rem(16);
+    }
+  }
+}

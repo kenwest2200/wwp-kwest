@@ -82,6 +82,15 @@
     }
 
     &__column {
+        &-icon {
+
+
+            &--app {
+                width: px-to-rem(36);
+                height: px-to-rem(36);
+            }
+        }
+
         &-list {
             &--with-icon {
                 display: flex;
@@ -115,6 +124,8 @@
             text-decoration: none;
             padding: px-to-rem(8) 0;
             transition: color 0.3s ease;
+
+
 
             &:hover {
                 color: $light-teal;
