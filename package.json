@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "dev:worker": "wrangler dev --env dev",
+    "dev:worker": "wrangler dev --remote --env dev",
     "clean:build": "node ./scripts/clean-build-output.mjs",
     "build": "npm run clean:build && npm run generate:product-filters-data && astro build",
     "preview": "astro preview",

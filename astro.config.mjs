@@ -17,6 +17,8 @@ export default defineConfig({
         "/api/store-locations": wranglerDev,
         "/api/product-category-products": wranglerDev,
         "/api/sales-reps": wranglerDev,
+        "/api/cross-ref-find": wranglerDev,
+        "/api/cross-ref-filters": wranglerDev,
       },
     },
   },

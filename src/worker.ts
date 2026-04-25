@@ -20,6 +20,12 @@ export default {
     if (url.pathname === "/api/sales-reps") {
       return handleSalesRepsApi(request, env);
     }
+    if (url.pathname === "/api/cross-ref-find") {
+      return handleCrossRefFindApi(request, env);
+    }
+    if (url.pathname === "/api/cross-ref-filters") {
+      return handleCrossRefFiltersApi(request, env);
+    }
 
     return handleFrontend(request, env);
   },
@@ -464,6 +470,10 @@ async function handleProductCategoryProductsApi(
 const DEFAULT_SALES_REPS_API_ROOT =
   "https://wwoperations.waterwayplastics.com/WaterwayAPI/locations";
 
+const DEFAULT_CROSS_REF_API_ROOT = "https://api.waterwayplastics.com";
+const CROSS_REF_FIND_PATH = "/wp-json/waterway-cross-ref/v1/find";
+const CROSS_REF_FILTERS_PATH = "/wp-json/waterway-cross-ref/v1/filters";
+
 function normalizeSalesRepsZipParam(raw: string): string {
   return raw.trim().replace(/\s+/g, "");
 }
@@ -628,6 +638,183 @@ async function handleSalesRepsApi(
       { status: 502, origin },
     );
   }
+}
+
+type CrossRefApiMode = "find" | "filters";
+
+function readCrossRefApiRoot(env: Env): string {
+  const custom = (
+    env as Env & {
+      CROSS_REF_API_ROOT?: string;
+    }
+  ).CROSS_REF_API_ROOT;
+  const root = (custom ?? DEFAULT_CROSS_REF_API_ROOT).trim();
+  return root.replace(/\/+$/, "");
+}
+
+function readCrossRefApiKey(env: Env): string {
+  return (
+    (
+      env as Env & {
+        CROSS_REF_API_KEY?: string;
+      }
+    ).CROSS_REF_API_KEY ?? ""
+  )
+    .trim();
+}
+
+function readCrossRefBasicAuth(env: Env): string {
+  const customUser = (
+    env as Env & {
+      CROSS_REF_BASIC_USER?: string;
+    }
+  ).CROSS_REF_BASIC_USER;
+  const customPass = (
+    env as Env & {
+      CROSS_REF_BASIC_PASSWORD?: string;
+    }
+  ).CROSS_REF_BASIC_PASSWORD;
+
+  const user = (customUser ?? env.GRAPHQL_BASIC_USER ?? "api").trim();
+  const pass = (customPass ?? env.GRAPHQL_BASIC_PASSWORD ?? "apiwaterway").trim();
+  return btoa(`${user}:${pass}`);
+}
+
+function appendCrossRefQueryParams(
+  upstream: URL,
+  mode: CrossRefApiMode,
+  reqUrl: URL,
+  env: Env,
+): string | null {
+  if (mode === "find") {
+    const brand = (reqUrl.searchParams.get("brand") ?? "").trim();
+    const model = (reqUrl.searchParams.get("model") ?? "").trim();
+    const partNumber = (reqUrl.searchParams.get("part_number") ?? "").trim();
+    const motorNumber = (reqUrl.searchParams.get("motor_number") ?? "").trim();
+    const hpMin =
+      (reqUrl.searchParams.get("hp_min") ?? "").trim() ||
+      (reqUrl.searchParams.get("hp") ?? "").trim();
+    if (!brand && !model && !partNumber && !motorNumber && !hpMin) {
+      return "At least one filter is required for /find.";
+    }
+    if (brand) upstream.searchParams.set("brand", brand);
+    if (model) upstream.searchParams.set("model", model);
+    if (partNumber) upstream.searchParams.set("part_number", partNumber);
+    if (motorNumber) upstream.searchParams.set("motor_number", motorNumber);
+    if (hpMin) upstream.searchParams.set("hp_min", hpMin);
+  } else {
+    const brand = (reqUrl.searchParams.get("brand") ?? "").trim();
+    const model = (reqUrl.searchParams.get("model") ?? "").trim();
+    if (brand) upstream.searchParams.set("brand", brand);
+    if (model) upstream.searchParams.set("model", model);
+  }
+
+  const explicitKey = (reqUrl.searchParams.get("key") ?? "").trim();
+  const envKey = readCrossRefApiKey(env);
+  const key = envKey || explicitKey;
+  if (key) upstream.searchParams.set("key", key);
+  return null;
+}
+
+async function handleCrossRefProxyApi(
+  request: Request,
+  env: Env,
+  mode: CrossRefApiMode,
+): Promise<Response> {
+  const origin = request.headers.get("Origin");
+  if (request.method === "OPTIONS") {
+    const headers = new Headers();
+    headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
+    headers.set("Access-Control-Allow-Headers", "Content-Type");
+    headers.set("Access-Control-Max-Age", "86400");
+    if (origin) headers.set("Access-Control-Allow-Origin", origin);
+    return new Response(null, { status: 204, headers });
+  }
+  if (request.method !== "GET") {
+    return jsonResponse(
+      { error: "Method Not Allowed" },
+      {
+        status: 405,
+        origin,
+      },
+    );
+  }
+
+  const reqUrl = new URL(request.url);
+  const root = readCrossRefApiRoot(env);
+  const path = mode === "find" ? CROSS_REF_FIND_PATH : CROSS_REF_FILTERS_PATH;
+  const upstream = new URL(`${root}${path}`);
+  const validationError = appendCrossRefQueryParams(upstream, mode, reqUrl, env);
+  if (validationError) {
+    return jsonResponse({ error: validationError }, { status: 400, origin });
+  }
+
+  try {
+    const auth = readCrossRefBasicAuth(env);
+    const res = await fetch(upstream.toString(), {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Basic ${auth}`,
+      },
+    });
+    const text = await res.text();
+    let parsed: unknown = null;
+    try {
+      parsed = JSON.parse(text) as unknown;
+    } catch {
+      /* keep raw text */
+    }
+    if (!res.ok) {
+      let message = `Cross Reference API error (${res.status}).`;
+      if (
+        parsed &&
+        typeof parsed === "object" &&
+        "error" in parsed &&
+        typeof (parsed as Record<string, unknown>).error === "string"
+      ) {
+        message = String((parsed as Record<string, unknown>).error);
+      } else if (
+        parsed &&
+        typeof parsed === "object" &&
+        "message" in parsed &&
+        typeof (parsed as Record<string, unknown>).message === "string"
+      ) {
+        message = String((parsed as Record<string, unknown>).message);
+      }
+      return jsonResponse({ error: message }, { status: 502, origin });
+    }
+    if (parsed !== null) {
+      return jsonResponse(parsed, { origin, cacheControl: "public, max-age=30" });
+    }
+    return jsonResponse(
+      {
+        error: "Invalid JSON from Cross Reference API.",
+      },
+      { status: 502, origin },
+    );
+  } catch (error) {
+    return jsonResponse(
+      {
+        error: error instanceof Error ? error.message : String(error),
+      },
+      { status: 502, origin },
+    );
+  }
+}
+
+async function handleCrossRefFindApi(
+  request: Request,
+  env: Env,
+): Promise<Response> {
+  return handleCrossRefProxyApi(request, env, "find");
+}
+
+async function handleCrossRefFiltersApi(
+  request: Request,
+  env: Env,
+): Promise<Response> {
+  return handleCrossRefProxyApi(request, env, "filters");
 }
 
 async function handleSearchAutocompleteApi(

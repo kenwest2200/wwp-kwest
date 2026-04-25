@@ -1,0 +1,262 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHeaderOffset from "../components/PageHeaderOffset.astro";
+import SectionHero from "../components/SectionHero/SectionHero.astro";
+import ScrollToTopButton from "../components/ScrollToTopButton/ScrollToTopButton.astro";
+
+export const prerender = true;
+
+const pageTitle = "Product Cross Reference";
+const intro =
+  "Quickly find compatible Waterway replacements for existing equipment. Search by brand, model, part number, or specifications to match components and ensure the right fit.";
+---
+
+<Layout headerType="white" pageTitle={pageTitle} description={intro}>
+  <main class="cross-ref-page" data-page-header-offset data-cross-ref-page>
+    <SectionHero title={pageTitle} intro={intro} />
+
+    <section
+      class="cross-ref-page__body"
+      aria-labelledby="cross-ref-form-title"
+    >
+      <div class="cross-ref-page__body-inner">
+        <div
+          id="cross-ref-form-section"
+          class="cross-ref-page__form-section"
+          aria-labelledby="cross-ref-form-title"
+        >
+          <h2 id="cross-ref-form-title" class="cross-ref-page__title">
+            Find Replacement
+          </h2>
+
+          <form id="cross-ref-form" class="cross-ref-page__form" novalidate>
+            <div class="cross-ref-page__grid cross-ref-page__grid--top">
+              <div
+                class="cross-ref-page__field cross-ref-page__field--autocomplete"
+              >
+                <span class="cross-ref-page__label"
+                  >Brand <span
+                    aria-hidden="true"
+                    class="cross-ref-page__label-required">*</span
+                  ></span
+                >
+                <input
+                  id="cross-ref-brand"
+                  name="brand"
+                  type="text"
+                  placeholder="Choose a brand"
+                  autocomplete="off"
+                />
+                <ul
+                  id="cross-ref-brand-suggest"
+                  class="cross-ref-page__suggest-list"
+                  role="listbox"
+                  hidden
+                >
+                </ul>
+              </div>
+              <div
+                class="cross-ref-page__field cross-ref-page__field--autocomplete"
+              >
+                <span class="cross-ref-page__label"
+                  >Model <span
+                    aria-hidden="true"
+                    class="cross-ref-page__label-required">*</span
+                  ></span
+                >
+                <input
+                  id="cross-ref-model"
+                  name="model"
+                  type="text"
+                  placeholder="Choose a model"
+                  autocomplete="off"
+                />
+                <ul
+                  id="cross-ref-model-suggest"
+                  class="cross-ref-page__suggest-list"
+                  role="listbox"
+                  hidden
+                >
+                </ul>
+              </div>
+            </div>
+
+            <div class="cross-ref-page__grid cross-ref-page__grid--bottom">
+              <div
+                class="cross-ref-page__field cross-ref-page__field--autocomplete"
+              >
+                <span class="cross-ref-page__label">Part Number</span>
+                <input
+                  id="cross-ref-part-number"
+                  name="part_number"
+                  type="text"
+                  placeholder="For example, PD-140"
+                  autocomplete="off"
+                />
+                <ul
+                  id="cross-ref-part-suggest"
+                  class="cross-ref-page__suggest-list"
+                  role="listbox"
+                  hidden
+                >
+                </ul>
+              </div>
+              <div
+                class="cross-ref-page__field cross-ref-page__field--autocomplete"
+              >
+                <span class="cross-ref-page__label">Motor Number</span>
+                <input
+                  id="cross-ref-motor-number"
+                  name="motor_number"
+                  type="text"
+                  placeholder="For example, PD-140"
+                  autocomplete="off"
+                />
+                <ul
+                  id="cross-ref-motor-suggest"
+                  class="cross-ref-page__suggest-list"
+                  role="listbox"
+                  hidden
+                >
+                </ul>
+              </div>
+              <div
+                class="cross-ref-page__field cross-ref-page__field--autocomplete"
+              >
+                <span class="cross-ref-page__label">HP</span>
+                <input
+                  id="cross-ref-hp"
+                  name="hp"
+                  type="text"
+                  placeholder="For example, 2.2"
+                  autocomplete="off"
+                />
+                <ul
+                  id="cross-ref-hp-suggest"
+                  class="cross-ref-page__suggest-list"
+                  role="listbox"
+                  hidden
+                >
+                </ul>
+              </div>
+            </div>
+
+            <p id="cross-ref-error" class="cross-ref-page__error" hidden></p>
+
+            <div class="cross-ref-page__actions">
+              <button
+                id="cross-ref-clear"
+                type="button"
+                class="btn cross-ref-page__btn-outline"
+              >
+                Clear all
+              </button>
+              <button
+                id="cross-ref-submit"
+                type="submit"
+                class="btn cross-ref-page__btn-solid"
+              >
+                Find replacement
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <divw
+          id="cross-ref-results-section"
+          class="cross-ref-page__results"
+          hidden
+        >
+          <h2 class="cross-ref-page__results-title">Reference model</h2>
+          <div class="cross-ref-page__reference-wrap">
+            <table class="cross-ref-page__reference-table">
+              <tbody>
+                <tr
+                  ><th scope="row">Brand</th><td id="cross-ref-ref-brand">—</td
+                  ></tr
+                >
+                <tr
+                  ><th scope="row">Model</th><td id="cross-ref-ref-model">—</td
+                  ></tr
+                >
+                <tr
+                  ><th scope="row">Part Number</th><td id="cross-ref-ref-part"
+                    >—</td
+                  ></tr
+                >
+                <tr
+                  ><th scope="row">Motor Number</th><td id="cross-ref-ref-motor"
+                    >—</td
+                  ></tr
+                >
+                <tr><th scope="row">HP</th><td id="cross-ref-ref-hp">—</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="cross-ref-page__edit-row">
+            <button
+              id="cross-ref-edit"
+              type="button"
+              class="btn cross-ref-page__btn-outline"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+              >
+                <g clip-path="url(#clip0_3245_6188)">
+                  <path
+                    d="M14.1161 4.54134C14.4686 4.18895 14.6666 3.71098 14.6667 3.21257C14.6668 2.71416 14.4688 2.23614 14.1165 1.88367C13.7641 1.5312 13.2861 1.33315 12.7877 1.33308C12.2893 1.33302 11.8113 1.53095 11.4588 1.88334L2.56145 10.7827C2.40667 10.937 2.29219 11.127 2.22812 11.336L1.34745 14.2373C1.33022 14.295 1.32892 14.3562 1.34369 14.4146C1.35845 14.4729 1.38873 14.5262 1.43132 14.5687C1.4739 14.6112 1.5272 14.6414 1.58556 14.6561C1.64392 14.6707 1.70516 14.6693 1.76279 14.652L4.66479 13.772C4.87357 13.7085 5.06357 13.5947 5.21812 13.4407L14.1161 4.54134Z"
+                    stroke="#007D8A"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+                  <path
+                    d="M10 3.33333L12.6667 5.99999"
+                    stroke="#007D8A"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+                </g>
+                <defs>
+                  <clipPath id="clip0_3245_6188">
+                    <rect width="16" height="16" fill="white"></rect>
+                  </clipPath>
+                </defs>
+              </svg>
+              Edit
+            </button>
+          </div>
+
+          <h2 class="cross-ref-page__results-title">Results</h2>
+          <p id="cross-ref-results-count" class="cross-ref-page__results-count">
+          </p>
+          <ul id="cross-ref-results-list" class="cross-ref-page__results-list">
+          </ul>
+
+          <div class="cross-ref-page__actions cross-ref-page__actions--results">
+            <button
+              id="cross-ref-try-again"
+              type="button"
+              class="btn cross-ref-page__btn-outline"
+            >
+              Try Again
+            </button>
+            <a href="/" class="btn cross-ref-page__btn-solid">Back to Home</a>
+          </div>
+        </divw>
+      </div>
+    </section>
+
+    <ScrollToTopButton />
+  </main>
+</Layout>
+
+<PageHeaderOffset />
+
+<script>
+  import { initProductCrossReferencePage } from "../scripts/product-cross-reference-page.ts";
+
+  initProductCrossReferencePage();
+</script>

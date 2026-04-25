@@ -1,5 +1,6 @@
 {
 	"name": "waterway-frontend",
+	"account_id": "b5276468e906e2275dc13fc5426090e6",
 	"compatibility_date": "2026-03-26",
 	"main": "src/worker.ts",
 	"assets": {
