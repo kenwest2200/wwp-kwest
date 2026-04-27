@@ -6,16 +6,12 @@ import SectionHero from "../../../components/SectionHero/SectionHero.astro";
 export const prerender = true;
 
 const pageTitle = "Sales representatives";
-const heroTitle = "Search Sale Reps by address / ZIP / city";
+const heroTitle = "Find your sales representative by ZIP code";
 const heroIntro =
-  "Enter your ZIP code to find the sales representative for your territory.";
+  "Enter your U.S. ZIP code to see the sales representatives assigned to your territory.";
 ---
 
-<Layout
-  headerType="white"
-  pageTitle={pageTitle}
-  description={heroIntro}
->
+<Layout headerType="white" pageTitle={pageTitle} description={heroIntro}>
   <main class="sr-page" data-page-header-offset data-sales-reps-page>
     <SectionHero title={heroTitle} intro={heroIntro} />
 
@@ -29,7 +25,9 @@ const heroIntro =
         >
           <div class="sr-page__search-row">
             <div class="sr-page__search-field">
-              <label class="sr-page__label" for="sr-zip-input">ZIP code</label>
+              <label class="sr-page__label" for="sr-zip-input"
+                >Search Sale Reps by address / ZIP / city</label
+              >
               <div class="sr-page__input-wrap">
                 <span class="sr-page__input-icon" aria-hidden="true">
                   <svg
@@ -71,19 +69,15 @@ const heroIntro =
 
         <p id="sr-message" class="sr-page__message" hidden role="alert"></p>
 
-        <section
-          class="sr-page__results"
-          aria-labelledby="sr-results-heading"
-        >
+        <section class="sr-page__results" aria-labelledby="sr-results-heading">
           <h2 id="sr-results-heading" class="sr-page__results-title">
-            Pool Representatives
+            Sales representatives
           </h2>
           <div class="sr-page__table-wrap">
             <table class="sr-page__table">
               <thead>
                 <tr>
                   <th scope="col">Name</th>
-                  <th scope="col">Location</th>
                   <th scope="col">Phone number</th>
                   <th scope="col">Email</th>
                 </tr>

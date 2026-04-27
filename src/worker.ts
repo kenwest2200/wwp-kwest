@@ -1,3 +1,8 @@
+import {
+  getSalesRepsOAuthBearer,
+  invalidateSalesRepsOpsOAuth,
+} from "./sales-reps-ops-oauth";
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
@@ -486,18 +491,15 @@ type SalesRepUpstreamRow = {
   Name?: string;
   Phone?: string;
   Email?: string | null;
-  Location?: string | null;
-  Territory?: string | null;
 };
 
 function mapSalesRepRow(raw: unknown): {
   name: string;
   phone: string;
   email: string | null;
-  location: string | null;
 } {
   if (!raw || typeof raw !== "object") {
-    return { name: "", phone: "", email: null, location: null };
+    return { name: "", phone: "", email: null };
   }
   const o = raw as SalesRepUpstreamRow & Record<string, unknown>;
   const str = (v: unknown) => (v == null ? "" : String(v).trim());
@@ -508,10 +510,7 @@ function mapSalesRepRow(raw: unknown): {
     emailRaw == null || String(emailRaw).trim() === ""
       ? null
       : String(emailRaw).trim();
-  const loc = o.Location ?? o.Territory;
-  const location =
-    loc == null || String(loc).trim() === "" ? null : String(loc).trim();
-  return { name, phone, email, location };
+  return { name, phone, email };
 }
 
 async function handleSalesRepsApi(
@@ -555,12 +554,13 @@ async function handleSalesRepsApi(
     );
   }
 
-  const token = env.SALES_REPS_ACCESS_TOKEN?.trim();
-  if (!token) {
+  let bearer = await getSalesRepsOAuthBearer(env);
+  if (!bearer) {
     return jsonResponse(
       {
         reps: [],
-        error: "Sales representatives lookup is not configured.",
+        error:
+          "Sales representatives: set worker secret SALES_REPS_OAUTH_PASSWORD (ERP API user password for /connect). Short-lived access_token is issued inside the worker, not stored in secrets.",
       },
       { status: 503, origin },
     );
@@ -570,16 +570,28 @@ async function handleSalesRepsApi(
     /\/+$/,
     "",
   );
+  /** Production: default root → direct to Waterway Operations. Local (Belarus etc.): set `SALES_REPS_API_ROOT` to a U.S. relay that forwards to the same path. */
   const upstreamUrl = `${root}/sales-reps?zip=${encodeURIComponent(zip)}`;
 
   try {
-    const upstream = await fetch(upstreamUrl, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const runFetch = (auth: string) =>
+      fetch(upstreamUrl, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${auth}`,
+        },
+      });
+
+    let upstream = await runFetch(bearer);
+    if (upstream.status === 401) {
+      invalidateSalesRepsOpsOAuth();
+      const again = await getSalesRepsOAuthBearer(env);
+      if (again) {
+        bearer = again;
+        upstream = await runFetch(bearer);
+      }
+    }
 
     const text = await upstream.text();
     if (!upstream.ok) {
@@ -598,7 +610,7 @@ async function handleSalesRepsApi(
               ? "Sales representatives service rejected credentials."
               : `Sales representatives service error (${upstream.status}). ${detail}`.trim(),
         },
-        { status: upstream.status === 401 ? 502 : 502, origin },
+        { status: 502, origin },
       );
     }
 
@@ -709,10 +721,8 @@ function appendCrossRefQueryParams(
     if (model) upstream.searchParams.set("model", model);
   }
 
-  const explicitKey = (reqUrl.searchParams.get("key") ?? "").trim();
   const envKey = readCrossRefApiKey(env);
-  const key = envKey || explicitKey;
-  if (key) upstream.searchParams.set("key", key);
+  if (envKey) upstream.searchParams.set("key", envKey);
   return null;
 }
 
@@ -758,6 +768,7 @@ async function handleCrossRefProxyApi(
         Authorization: `Basic ${auth}`,
       },
     });
+
     const text = await res.text();
     let parsed: unknown = null;
     try {

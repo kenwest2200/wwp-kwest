@@ -34,7 +34,6 @@ type AutocompleteControl = {
 };
 
 const NO_PRODUCT_IMAGE_SRC = "/images/no-product-image.svg";
-const MAX_SUGGEST_ITEMS = 8;
 
 function text(v: unknown): string {
   if (typeof v === "string") return v.trim();
@@ -302,10 +301,8 @@ function fillReference(values: ReferenceValues): void {
 
 function filterOptions(options: string[], query: string): string[] {
   const q = query.trim().toLowerCase();
-  if (!q) return options.slice(0, MAX_SUGGEST_ITEMS);
-  return options
-    .filter((opt) => opt.toLowerCase().includes(q))
-    .slice(0, MAX_SUGGEST_ITEMS);
+  if (!q) return options.slice();
+  return options.filter((opt) => opt.toLowerCase().includes(q));
 }
 
 function wireAutocomplete(control: AutocompleteControl): void {

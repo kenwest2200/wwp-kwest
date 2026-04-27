@@ -10,8 +10,10 @@ declare namespace Cloudflare {
 		PUBLIC_GRAPHQL_URL: string;
 		GRAPHQL_BASIC_USER: string;
 		GRAPHQL_BASIC_PASSWORD: string;
-		/** Bearer token for Waterway Operations sales-reps API (worker only). */
-		SALES_REPS_ACCESS_TOKEN?: string;
+		/** ERP /connect password grant — long-lived API user password; access_token is obtained in the worker only. */
+		SALES_REPS_OAUTH_PASSWORD?: string;
+		/** Defaults to `waterway_api` if unset. */
+		SALES_REPS_OAUTH_USERNAME?: string;
 		/**
 		 * Override API root (default: wwoperations…/WaterwayAPI/locations).
 		 * Use in local dev when routing through a U.S. forward proxy; production leaves unset.

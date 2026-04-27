@@ -4,7 +4,6 @@ type SalesRepRow = {
   name: string;
   phone: string;
   email: string | null;
-  location: string | null;
 };
 
 type SalesRepsApiResponse = {
@@ -30,7 +29,7 @@ function renderRows(tbody: HTMLElement, reps: SalesRepRow[]): void {
     const tr = document.createElement("tr");
     tr.className = "sr-page__row-empty";
     const td = document.createElement("td");
-    td.colSpan = 4;
+    td.colSpan = 3;
     td.textContent = "No representatives found for this ZIP code.";
     tr.appendChild(td);
     tbody.appendChild(tr);
@@ -41,9 +40,6 @@ function renderRows(tbody: HTMLElement, reps: SalesRepRow[]): void {
     const tr = document.createElement("tr");
     const nameTd = document.createElement("td");
     nameTd.textContent = r.name || "—";
-
-    const locTd = document.createElement("td");
-    locTd.textContent = r.location?.trim() ? r.location : "—";
 
     const phoneTd = document.createElement("td");
     if (r.phone) {
@@ -68,7 +64,6 @@ function renderRows(tbody: HTMLElement, reps: SalesRepRow[]): void {
     }
 
     tr.appendChild(nameTd);
-    tr.appendChild(locTd);
     tr.appendChild(phoneTd);
     tr.appendChild(emailTd);
     tbody.appendChild(tr);
@@ -80,7 +75,7 @@ function initialPlaceholderRow(tbody: HTMLElement): void {
   const tr = document.createElement("tr");
   tr.className = "sr-page__row-empty";
   const td = document.createElement("td");
-  td.colSpan = 4;
+  td.colSpan = 3;
   td.textContent = "Enter a ZIP code and select Search to see representatives.";
   tr.appendChild(td);
   tbody.appendChild(tr);
@@ -123,7 +118,7 @@ export function initSalesRepresentativesPage(): void {
     const loadingTr = document.createElement("tr");
     loadingTr.className = "sr-page__row-empty";
     const loadingTd = document.createElement("td");
-    loadingTd.colSpan = 4;
+    loadingTd.colSpan = 3;
     loadingTd.textContent = "Loading…";
     loadingTr.appendChild(loadingTd);
     tbody.appendChild(loadingTr);

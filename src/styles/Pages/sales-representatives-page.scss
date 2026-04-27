@@ -8,10 +8,14 @@
 
   &__body {
     padding-top: px-to-rem(40);
+
+    @include media-breakpoint-up(md) {
+      padding-top: px-to-rem(80);
+    }
   }
 
   &__body-inner {
-    max-width: px-to-rem(1192);
+    max-width: px-to-rem(1392);
     margin: 0 auto;
     padding-left: var(--section-left, var(--s-padding-x));
     padding-right: var(--section-right, var(--s-padding-x));
@@ -35,10 +39,12 @@
 
   &__label {
     display: block;
-    margin-bottom: px-to-rem(8);
-    font-size: px-to-rem(14);
+    margin-bottom: px-to-rem(16);
+    padding: px-to-rem(4) 0;
+    font-size: px-to-rem(24);
+    line-height: px-to-rem(32);
     font-weight: 600;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.03em;
     color: $dark;
   }
 
