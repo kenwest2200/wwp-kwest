@@ -101,7 +101,7 @@ const cards = normalizeTechnicalBulletinsCards(pageNode);
                     />
                   ) : null}
                   <span class="tb-page__card-action">
-                    {card.linkLabel}
+                    {card.linkLabel || "View guide"}
                     <IconArrowRight />
                   </span>
                 </a>
