@@ -240,7 +240,7 @@ function init(): void {
     if (map) return map;
     if (!mapsKey) {
       throw new Error(
-        "Map is not configured: set PUBLIC_GOOGLE_MAPS_BROWSER_KEY in the build environment.",
+        "Map is not configured: PUBLIC_GOOGLE_MAPS_BROWSER_KEY must be present at build time (see site setup).",
       );
     }
     try {
@@ -479,7 +479,9 @@ function init(): void {
 
   if (!mapsKey) {
     setMessage(
-      "Set PUBLIC_GOOGLE_MAPS_BROWSER_KEY at build time (Cloudflare Pages → Environment variables) so the map key is embedded in the site.",
+      "Map unavailable: PUBLIC_GOOGLE_MAPS_BROWSER_KEY was empty when this site was built. " +
+        "Local dev: add it to .env, restart npm run dev. " +
+        "Cloudflare Pages: Settings → Environment variables → add PUBLIC_GOOGLE_MAPS_BROWSER_KEY for Production (and Preview if you use it), then redeploy — it must be available at build time, not only as a Worker secret.",
       true,
     );
     return;
