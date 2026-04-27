@@ -663,9 +663,8 @@ async function handleSalesRepsApi(
 }
 
 function readDistributorLocationsRoot(env: Env): string {
-  const custom = (
-    env as Env & { DISTRIBUTOR_LOCATOR_LOCATIONS_ROOT?: string }
-  ).DISTRIBUTOR_LOCATOR_LOCATIONS_ROOT;
+  const custom = (env as Env & { DISTRIBUTOR_LOCATOR_LOCATIONS_ROOT?: string })
+    .DISTRIBUTOR_LOCATOR_LOCATIONS_ROOT;
   const raw = (custom ?? DEFAULT_DISTRIBUTOR_LOCATIONS_ROOT).trim();
   return raw.replace(/\/+$/, "");
 }
@@ -700,13 +699,16 @@ async function handleDistributorLocationsInRadiusApi(
   }
 
   const country =
-    (url.searchParams.get("country") ?? "US").trim().slice(0, 2).toUpperCase() ||
-    "US";
+    (url.searchParams.get("country") ?? "US")
+      .trim()
+      .slice(0, 2)
+      .toUpperCase() || "US";
   const distRaw = url.searchParams.get("distance");
   let distance = 20;
   if (distRaw != null && distRaw !== "") {
     const n = Number(distRaw);
-    if (Number.isFinite(n)) distance = Math.min(5000, Math.max(1, Math.floor(n)));
+    if (Number.isFinite(n))
+      distance = Math.min(5000, Math.max(1, Math.floor(n)));
   }
   const unitRaw = (url.searchParams.get("unit") ?? "mi").toLowerCase();
   const unit = ["m", "km", "mi", "ft"].includes(unitRaw) ? unitRaw : "mi";
@@ -907,8 +909,7 @@ function readCrossRefApiKey(env: Env): string {
         CROSS_REF_API_KEY?: string;
       }
     ).CROSS_REF_API_KEY ?? ""
-  )
-    .trim();
+  ).trim();
 }
 
 function readCrossRefBasicAuth(env: Env): string {
@@ -924,7 +925,11 @@ function readCrossRefBasicAuth(env: Env): string {
   ).CROSS_REF_BASIC_PASSWORD;
 
   const user = (customUser ?? env.GRAPHQL_BASIC_USER ?? "api").trim();
-  const pass = (customPass ?? env.GRAPHQL_BASIC_PASSWORD ?? "apiwaterway").trim();
+  const pass = (
+    customPass ??
+    env.GRAPHQL_BASIC_PASSWORD ??
+    "apiwaterway"
+  ).trim();
   return btoa(`${user}:${pass}`);
 }
 
@@ -990,7 +995,12 @@ async function handleCrossRefProxyApi(
   const root = readCrossRefApiRoot(env);
   const path = mode === "find" ? CROSS_REF_FIND_PATH : CROSS_REF_FILTERS_PATH;
   const upstream = new URL(`${root}${path}`);
-  const validationError = appendCrossRefQueryParams(upstream, mode, reqUrl, env);
+  const validationError = appendCrossRefQueryParams(
+    upstream,
+    mode,
+    reqUrl,
+    env,
+  );
   if (validationError) {
     return jsonResponse({ error: validationError }, { status: 400, origin });
   }
@@ -1032,7 +1042,10 @@ async function handleCrossRefProxyApi(
       return jsonResponse({ error: message }, { status: 502, origin });
     }
     if (parsed !== null) {
-      return jsonResponse(parsed, { origin, cacheControl: "public, max-age=30" });
+      return jsonResponse(parsed, {
+        origin,
+        cacheControl: "public, max-age=30",
+      });
     }
     return jsonResponse(
       {

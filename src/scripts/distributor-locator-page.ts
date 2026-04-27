@@ -46,7 +46,8 @@ function normalizeLocation(raw: RawLocation): DistributorLocation | null {
   if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
   return {
     id: 0,
-    customerName: str(raw.CustomerName) || str(raw.LocationName) || "Distributor",
+    customerName:
+      str(raw.CustomerName) || str(raw.LocationName) || "Distributor",
     locationName: str(raw.LocationName),
     address1: str(raw.Address1),
     address2: str(raw.Address2),
@@ -135,7 +136,9 @@ async function zipCenterZippopotam(zip: string): Promise<{
   }
 }
 
-async function zipCenterUs(zip: string): Promise<{ lat: number; lng: number } | null> {
+async function zipCenterUs(
+  zip: string,
+): Promise<{ lat: number; lng: number } | null> {
   return (await zipCenterFromGoogle(zip)) ?? (await zipCenterZippopotam(zip));
 }
 
@@ -175,7 +178,9 @@ const MAPS_AUTH_HELP =
   "Google Maps could not authorize this page. Open the browser console (F12) for the exact error " +
   "(e.g. RefererNotAllowedMapError). For your Browser API key: add HTTP referrer " +
   "`" +
-  (typeof location !== "undefined" ? `${location.origin}/*` : "https://your-domain.com/*") +
+  (typeof location !== "undefined"
+    ? `${location.origin}/*`
+    : "https://your-domain.com/*") +
   "`" +
   " in Google Cloud Console, enable Maps JavaScript API for the project, and ensure billing is on.";
 
@@ -187,9 +192,15 @@ function markerIconUrl(): string {
 
 function init(): void {
   const root = document.querySelector<HTMLElement>("[data-dl-locator]");
-  const form = document.getElementById("dl-locator-form") as HTMLFormElement | null;
-  const zipInput = document.getElementById("dl-zip-input") as HTMLInputElement | null;
-  const list = document.getElementById("dl-results-list") as HTMLUListElement | null;
+  const form = document.getElementById(
+    "dl-locator-form",
+  ) as HTMLFormElement | null;
+  const zipInput = document.getElementById(
+    "dl-zip-input",
+  ) as HTMLInputElement | null;
+  const list = document.getElementById(
+    "dl-results-list",
+  ) as HTMLUListElement | null;
   const mapEl = document.getElementById("dl-map") as HTMLElement | null;
   const msg = document.getElementById("dl-locator-message");
   const businessSel = document.getElementById(
@@ -231,9 +242,10 @@ function init(): void {
   }
 
   function installMapsAuthFailureHandler(): void {
-    (window as Window & { gm_authFailure?: () => void }).gm_authFailure = () => {
-      setMessage(MAPS_AUTH_HELP, true);
-    };
+    (window as Window & { gm_authFailure?: () => void }).gm_authFailure =
+      () => {
+        setMessage(MAPS_AUTH_HELP, true);
+      };
   }
 
   async function ensureMap(): Promise<google.maps.Map> {
@@ -435,7 +447,9 @@ function init(): void {
       const bounds = new google.maps.LatLngBounds();
       for (const loc of locs) {
         const miles =
-          center != null ? haversineMi(center.lat, center.lng, loc.lat, loc.lng) : null;
+          center != null
+            ? haversineMi(center.lat, center.lng, loc.lat, loc.lng)
+            : null;
         dlList.appendChild(renderCard(loc, miles));
 
         const marker = new google.maps.Marker({
