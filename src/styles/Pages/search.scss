@@ -118,6 +118,10 @@
     margin-bottom: px-to-rem(20);
     box-sizing: border-box;
 
+    &[hidden] {
+      display: none;
+    }
+
     @include media-breakpoint-up(md) {
       display: flex;
       flex-direction: row-reverse;

@@ -53,6 +53,7 @@ const pageHitTemplateEl = document.getElementById(
   "search-page-hit-template",
 ) as HTMLTemplateElement | null;
 
+const toolbarProductsEl = document.getElementById("search-toolbar-products");
 const bottomPagerWrapEl = document.getElementById("search-bottom-pager-wrap");
 
 const pagerRootEl = document.getElementById("search-results-pager");
@@ -332,8 +333,6 @@ function setActiveTab(which: SearchTab): void {
   if (tabProductsPanel) tabProductsPanel.hidden = !isProducts;
   if (tabPagesPanel) tabPagesPanel.hidden = isProducts;
 
-  if (bottomPagerWrapEl) bottomPagerWrapEl.hidden = !isProducts;
-
   syncPagerUi();
 }
 
@@ -577,6 +576,11 @@ function syncPagerUi(): void {
   }
 
   syncSearchLoadMoreButton();
+
+  const showProductsChrome =
+    activeTab === "products" && lastTotalProducts > perPage;
+  if (toolbarProductsEl) toolbarProductsEl.hidden = !showProductsChrome;
+  if (bottomPagerWrapEl) bottomPagerWrapEl.hidden = !showProductsChrome;
 }
 
 const loadMoreProductsBtn = document.getElementById(

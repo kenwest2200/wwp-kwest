@@ -27,7 +27,7 @@ const footerStaticTailColumns = [
           url: AppIcon,
           alt: "Applications",
         },
-        href: "https://apps.apple.com/us/app/waterway-plastics/id1552316458",
+        href: "https://apps.apple.com/us/app/waterway-pool-spa-catalog/id1210513986",
       },
       {
         icon: {
@@ -119,7 +119,15 @@ const displayColumns = [...apiColumns, ...footerStaticTailColumns];
                   <li
                     class={`footer__column-item footer__column-item--${linkIndex + 1}`}
                   >
-                    <a href={link.href} class="footer__column-link">
+                    <a
+                      href={link.href}
+                      class="footer__column-link"
+                      aria-label={
+                        "icon" in link && typeof link.icon === "string"
+                          ? link.icon
+                          : undefined
+                      }
+                    >
                       {"icon" in link &&
                       typeof link.icon === "object" &&
                       link.icon?.url ? (

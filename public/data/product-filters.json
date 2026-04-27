@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-27T14:09:05.924Z",
+  "generatedAt": "2026-04-27T18:56:57.121Z",
   "attributesByCategory": {
     "bath": [],
     "pool": [
@@ -646,6 +646,10 @@
           {
             "label": "1.1.2",
             "slug": "socket-1-1-2"
+          },
+          {
+            "label": "1.1.4",
+            "slug": "socket-1-1-4"
           },
           {
             "label": "1",
@@ -1501,6 +1505,24 @@
     "spa-skimmers-and-filters": [],
     "spa-unions": [
       {
+        "name": "Color",
+        "slug": "color",
+        "values": [
+          {
+            "label": "black",
+            "slug": "color-black"
+          },
+          {
+            "label": "clear",
+            "slug": "color-clear"
+          },
+          {
+            "label": "white",
+            "slug": "color-white"
+          }
+        ]
+      },
+      {
         "name": "Size",
         "slug": "size",
         "values": [
@@ -1565,8 +1587,16 @@
             "slug": "socket-1-1-2"
           },
           {
+            "label": "1.1.4",
+            "slug": "socket-1-1-4"
+          },
+          {
             "label": "1",
             "slug": "socket-1"
+          },
+          {
+            "label": "1.2",
+            "slug": "socket-1-2"
           },
           {
             "label": "2.1.2",
@@ -3570,6 +3600,99 @@
   },
   "products": [
     {
+      "title": "2″ and 2 1/2″ Heater Union O-Rings and Gaskets",
+      "slug": "2-and-2-1-2-heater-union-o-rings-and-gaskets",
+      "databaseId": 40675,
+      "date": "2026-04-27T18:53:42",
+      "modified": "2026-04-27T18:53:42",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/711-4030-4050-1.png",
+      "imageAlt": null,
+      "imageWidth": 1716,
+      "imageHeight": 1138,
+      "categorySlugs": [
+        "spa-unions"
+      ],
+      "attributeSlugs": [
+        "color-clear",
+        "color-white",
+        "size-2-1-2",
+        "size-2"
+      ]
+    },
+    {
+      "title": "2″ and 2 1/2″ Heater Union Tailpieces",
+      "slug": "2-and-2-1-2-heater-union-tailpieces",
+      "databaseId": 40673,
+      "date": "2026-04-27T18:31:57",
+      "modified": "2026-04-27T18:33:25",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/413-2160.png",
+      "imageAlt": null,
+      "imageWidth": 1671,
+      "imageHeight": 1221,
+      "categorySlugs": [
+        "spa-unions"
+      ],
+      "attributeSlugs": [
+        "color-white",
+        "size-2-1-2",
+        "size-2"
+      ]
+    },
+    {
+      "title": "2″ Heater Union Split Nut",
+      "slug": "2-heater-union-split-nut",
+      "databaseId": 40671,
+      "date": "2026-04-27T17:54:05",
+      "modified": "2026-04-27T17:54:05",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-5491-5161.png",
+      "imageAlt": null,
+      "imageWidth": 1920,
+      "imageHeight": 1440,
+      "categorySlugs": [
+        "spa-unions"
+      ],
+      "attributeSlugs": [
+        "color-black",
+        "size-2"
+      ]
+    },
+    {
+      "title": "1 1/2″ Heater Union O-Ring Gaskets",
+      "slug": "1-1-2-heater-union-o-ring-gaskets",
+      "databaseId": 40668,
+      "date": "2026-04-27T17:40:57",
+      "modified": "2026-04-27T17:40:57",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/711-4030-4050.png",
+      "imageAlt": null,
+      "imageWidth": 1716,
+      "imageHeight": 1138,
+      "categorySlugs": [
+        "spa-unions"
+      ],
+      "attributeSlugs": [
+        "size-1-1-2"
+      ]
+    },
+    {
+      "title": "1 1/2″ Heater Union Tailpieces",
+      "slug": "heater-union-components-2",
+      "databaseId": 40666,
+      "date": "2026-04-27T17:05:00",
+      "modified": "2026-04-27T18:34:09",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/417-4090.png",
+      "imageAlt": null,
+      "imageWidth": 996,
+      "imageHeight": 1063,
+      "categorySlugs": [
+        "spa-unions"
+      ],
+      "attributeSlugs": [
+        "color-black",
+        "color-white",
+        "size-1-1-2"
+      ]
+    },
+    {
       "title": "Spa Pump Union Assemblies",
       "slug": "spa-pump-union-assemblies",
       "databaseId": 40632,
@@ -4561,7 +4684,7 @@
       "slug": "sanitary-tee-cross-tee-and-tee-assemblies",
       "databaseId": 33440,
       "date": "2023-05-31T12:37:05",
-      "modified": "2026-04-25T00:01:32",
+      "modified": "2026-04-27T15:56:51",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/413-2030.png",
       "imageAlt": null,
       "imageWidth": 1248,
@@ -4569,22 +4692,31 @@
       "categorySlugs": [
         "spa-ells-tees-wyes"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "socket-1-1-2",
+        "socket-1-1-4",
+        "socket-1",
+        "socket-1-2",
+        "socket-2-1-2",
+        "socket-2"
+      ]
     },
     {
-      "title": "Heater Union Components",
+      "title": "1 1/2″ Heater Union Split Nuts",
       "slug": "heater-union-components",
       "databaseId": 32238,
       "date": "2023-05-31T12:36:55",
-      "modified": "2023-06-07T15:55:41",
-      "imageUrl": null,
+      "modified": "2026-04-27T16:25:55",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-5491-5161.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1920,
+      "imageHeight": 1440,
       "categorySlugs": [
         "spa-unions"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "size-1-1-2"
+      ]
     },
     {
       "title": "45° and 90° Spa Ells",

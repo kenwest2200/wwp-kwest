@@ -31,6 +31,7 @@ type AutocompleteControl = {
   list: HTMLElement;
   getOptions: () => string[];
   onPick?: (value: string) => void;
+  isLoading?: () => boolean;
 };
 
 const NO_PRODUCT_IMAGE_SRC = "/images/no-product-image.svg";
@@ -299,22 +300,41 @@ function fillReference(values: ReferenceValues): void {
   set("cross-ref-ref-hp", values.hp);
 }
 
-function filterOptions(options: string[], query: string): string[] {
-  const q = query.trim().toLowerCase();
-  if (!q) return options.slice();
-  return options.filter((opt) => opt.toLowerCase().includes(q));
-}
+function wireAutocomplete(control: AutocompleteControl): () => void {
+  const { input, list, getOptions, onPick, isLoading } = control;
 
-function wireAutocomplete(control: AutocompleteControl): void {
-  const { input, list, getOptions, onPick } = control;
+  /** Keeps focus on the input while choosing an item (avoids blur closing the list). */
+  list.addEventListener("mousedown", (e) => {
+    e.preventDefault();
+  });
 
   const close = () => {
     list.hidden = true;
     list.replaceChildren();
   };
 
+  /** Always show the full option list (no substring filter). */
   const render = () => {
-    const options = filterOptions(getOptions(), input.value);
+    if (isLoading?.()) {
+      list.replaceChildren();
+      const li = document.createElement("li");
+      li.className = "cross-ref-page__suggest-loading";
+      li.setAttribute("role", "status");
+      li.setAttribute("aria-busy", "true");
+      const spin = document.createElement("span");
+      spin.className = "cross-ref-page__suggest-spinner";
+      spin.setAttribute("aria-hidden", "true");
+      const label = document.createElement("span");
+      label.className = "cross-ref-page__suggest-loading-text";
+      label.textContent = "Loading…";
+      li.appendChild(spin);
+      li.appendChild(label);
+      list.appendChild(li);
+      list.hidden = false;
+      return;
+    }
+
+    const options = getOptions().slice();
     if (options.length === 0) {
       close();
       return;
@@ -337,10 +357,15 @@ function wireAutocomplete(control: AutocompleteControl): void {
   };
 
   input.addEventListener("focus", render);
+  input.addEventListener("click", render);
   input.addEventListener("input", render);
   input.addEventListener("blur", () => {
-    window.setTimeout(close, 120);
+    window.setTimeout(close, 200);
   });
+
+  return () => {
+    if (!list.hidden) render();
+  };
 }
 
 async function fetchFilters(brand: string, model: string): Promise<FilterLists> {
@@ -410,16 +435,69 @@ export function initProductCrossReferencePage(): void {
     hpValues: [],
   };
 
+  /** Full brand list (API narrows `brands` when `brand` query is set — do not use that for the brand field). */
+  let allBrands: string[] = [];
+  /** All models for the current brand (request without `model` so the list is not narrowed to one row). */
+  let allModels: string[] = [];
+
+  /** Last value chosen from the suggest list (not free-typing). */
+  let lastPickedBrand = "";
+  let lastPickedModel = "";
+
+  /** Until the first filter fetch finishes, dropdowns have no data — treat as loading. */
+  let filtersReady = false;
+  let filtersInflight = 0;
+  const isFiltersLoading = () => filtersInflight > 0 || !filtersReady;
+
+  const suggestRerenderIfOpen: Array<() => void> = [];
+  const rerenderOpenSuggests = () => {
+    for (const fn of suggestRerenderIfOpen) fn();
+  };
+
   const switchToResults = (on: boolean) => {
     formSection.hidden = on;
     resultsSection.hidden = !on;
   };
 
   const refreshFilters = async (): Promise<void> => {
-    const brand = brandInput.value;
-    const model = modelInput.value;
-    const lists = await fetchFilters(brand, model);
-    currentLists = lists;
+    filtersInflight++;
+    rerenderOpenSuggests();
+    try {
+      const brand = text(brandInput.value);
+      const model = text(modelInput.value);
+
+      if (!brand && !model) {
+        const only = await fetchFilters("", "");
+        currentLists = only;
+        allBrands = only.brands;
+        allModels = only.models;
+        return;
+      }
+
+      if (brand && !model) {
+        const [emptyLists, byBrand] = await Promise.all([
+          fetchFilters("", ""),
+          fetchFilters(brand, ""),
+        ]);
+        currentLists = byBrand;
+        allBrands = emptyLists.brands;
+        allModels = byBrand.models;
+        return;
+      }
+
+      const [narrow, emptyLists, modelsWide] = await Promise.all([
+        fetchFilters(brand, model),
+        fetchFilters("", ""),
+        fetchFilters(brand, ""),
+      ]);
+      currentLists = narrow;
+      allBrands = emptyLists.brands;
+      allModels = modelsWide.models;
+    } finally {
+      filtersInflight = Math.max(0, filtersInflight - 1);
+      filtersReady = true;
+      rerenderOpenSuggests();
+    }
   };
 
   let refreshTimer: number | null = null;
@@ -432,45 +510,100 @@ export function initProductCrossReferencePage(): void {
     }, 180);
   };
 
-  brandInput.addEventListener("input", scheduleRefresh);
-  modelInput.addEventListener("input", scheduleRefresh);
+  brandInput.addEventListener("input", () => {
+    if (!text(brandInput.value)) {
+      lastPickedBrand = "";
+      lastPickedModel = "";
+      modelInput.value = "";
+      partInput.value = "";
+      motorInput.value = "";
+      hpInput.value = "";
+    }
+    scheduleRefresh();
+  });
+  modelInput.addEventListener("input", () => {
+    if (!text(modelInput.value)) {
+      lastPickedModel = "";
+      partInput.value = "";
+      motorInput.value = "";
+      hpInput.value = "";
+    }
+    scheduleRefresh();
+  });
   brandInput.addEventListener("change", scheduleRefresh);
   modelInput.addEventListener("change", scheduleRefresh);
 
-  wireAutocomplete({
-    input: brandInput,
-    list: brandSuggest,
-    getOptions: () => currentLists.brands,
-    onPick: () => scheduleRefresh(),
-  });
-  wireAutocomplete({
-    input: modelInput,
-    list: modelSuggest,
-    getOptions: () => currentLists.models,
-    onPick: () => scheduleRefresh(),
-  });
+  suggestRerenderIfOpen.push(
+    wireAutocomplete({
+      input: brandInput,
+      list: brandSuggest,
+      getOptions: () => (allBrands.length ? allBrands : currentLists.brands),
+      isLoading: isFiltersLoading,
+      onPick: (value) => {
+        const changed = value !== lastPickedBrand;
+        lastPickedBrand = value;
+        if (changed) {
+          lastPickedModel = "";
+          modelInput.value = "";
+          partInput.value = "";
+          motorInput.value = "";
+          hpInput.value = "";
+        }
+        scheduleRefresh();
+      },
+    }),
+  );
+  suggestRerenderIfOpen.push(
+    wireAutocomplete({
+      input: modelInput,
+      list: modelSuggest,
+      getOptions: () => (allModels.length ? allModels : currentLists.models),
+      isLoading: isFiltersLoading,
+      onPick: (value) => {
+        const changed = value !== lastPickedModel;
+        lastPickedModel = value;
+        if (changed) {
+          partInput.value = "";
+          motorInput.value = "";
+          hpInput.value = "";
+        }
+        scheduleRefresh();
+      },
+    }),
+  );
 
-  wireAutocomplete({
-    input: partInput,
-    list: partSuggest,
-    getOptions: () => currentLists.partNumbers,
-  });
-  wireAutocomplete({
-    input: motorInput,
-    list: motorSuggest,
-    getOptions: () => currentLists.motorNumbers,
-  });
-  wireAutocomplete({
-    input: hpInput,
-    list: hpSuggest,
-    getOptions: () => currentLists.hpValues,
-  });
+  suggestRerenderIfOpen.push(
+    wireAutocomplete({
+      input: partInput,
+      list: partSuggest,
+      getOptions: () => currentLists.partNumbers,
+      isLoading: isFiltersLoading,
+    }),
+  );
+  suggestRerenderIfOpen.push(
+    wireAutocomplete({
+      input: motorInput,
+      list: motorSuggest,
+      getOptions: () => currentLists.motorNumbers,
+      isLoading: isFiltersLoading,
+    }),
+  );
+  suggestRerenderIfOpen.push(
+    wireAutocomplete({
+      input: hpInput,
+      list: hpSuggest,
+      getOptions: () => currentLists.hpValues,
+      isLoading: isFiltersLoading,
+    }),
+  );
 
   refreshFilters().catch((e) =>
     setError(errorEl, e instanceof Error ? e.message : String(e)),
   );
 
   clearBtn?.addEventListener("click", () => {
+    lastPickedBrand = "";
+    lastPickedModel = "";
     form.reset();
     setError(errorEl, "");
     refreshFilters().catch((e) =>

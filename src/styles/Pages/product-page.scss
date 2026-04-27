@@ -109,26 +109,30 @@
 }
 
 .product-page__breadcrumb-list {
-  display: block;
+  display: flex;
   margin: 0;
   padding: 0;
   list-style: none;
-  font-size: px-to-rem(14);
+  font-size: px-to-rem(16);
   line-height: px-to-rem(24);
-  color: #9c9c9c;
+  letter-spacing: 0.03em;
+  font-weight: 500;
+  color: $dark;
+  gap: px-to-rem(12);
+
 
   li {
     display: inline;
   }
 
   li+li::before {
-    content: " > ";
-    color: #9c9c9c;
-    font-weight: 400;
+    content: ">";
+    color: $cool-gray-60;
+    margin-right: px-to-rem(9);
+
   }
 
   a {
-    color: #9c9c9c;
     text-decoration: none;
 
     &:hover {
@@ -138,7 +142,7 @@
   }
 
   li[aria-current="page"] {
-    color: $dark-medium;
+    color: $cool-gray-60;
   }
 }
 

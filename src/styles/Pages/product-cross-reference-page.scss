@@ -117,7 +117,7 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
 
-    &--required {
+    &-required {
       color: $error;
     }
   }
@@ -216,6 +216,33 @@
     &:hover {
       background: $light-gray;
     }
+  }
+
+  &__suggest-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: px-to-rem(12);
+    padding: px-to-rem(16) px-to-rem(12);
+    font-size: px-to-rem(14);
+    line-height: px-to-rem(20);
+    color: $dark-gray;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  &__suggest-loading-text {
+    flex: 0 1 auto;
+  }
+
+  &__suggest-spinner {
+    flex-shrink: 0;
+    width: px-to-rem(22);
+    height: px-to-rem(22);
+    border-radius: 50%;
+    border: 2px solid rgba($dark-teal, 0.2);
+    border-top-color: $dark-teal;
+    animation: cross-ref-suggest-spin 0.75s linear infinite;
   }
 
   &__error {
@@ -424,5 +451,11 @@
     padding: px-to-rem(18);
     font-size: px-to-rem(14);
     color: $dark-medium;
+  }
+}
+
+@keyframes cross-ref-suggest-spin {
+  to {
+    transform: rotate(360deg);
   }
 }

@@ -1,4 +1,8 @@
 import {
+  buildProductBreadcrumbLinks,
+  type ProductBreadcrumbLink,
+} from "./product-page-breadcrumbs";
+import {
   normalizeSingleTemplateOptionalItems,
   normalizeSupportLinks,
   relatedPartsHtmlFromApi,
@@ -8,6 +12,8 @@ import {
 
 export type ProductPageView = {
   title: string;
+  /** Home / Products / … — built from `product.productCategories` when present. */
+  breadcrumbLinks: ProductBreadcrumbLink[];
   /** ACF Product Images → Main */
   mainImg: ProductPageMediaNode | undefined;
   brandImg: ProductPageMediaNode | undefined;
@@ -58,9 +64,11 @@ export function buildProductPageView(
   const optionalItems = normalizeSingleTemplateOptionalItems(
     product?.productSettings?.singleTemplateGroup?.singleTemplateOptional,
   );
+  const breadcrumbLinks = buildProductBreadcrumbLinks(product);
 
   return {
     title,
+    breadcrumbLinks,
     mainImg,
     brandImg,
     specHtml,

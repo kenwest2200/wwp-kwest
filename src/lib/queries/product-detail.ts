@@ -134,12 +134,25 @@ export type SingleTemplateOptionalItem = {
     | null;
 };
 
+/** WooCommerce product category term (breadcrumb chain via `parent`). */
+export type ProductCategoryBreadcrumbNode = {
+  name?: string | null;
+  slug?: string | null;
+  uri?: string | null;
+  parent?: {
+    node?: ProductCategoryBreadcrumbNode | null;
+  } | null;
+};
+
 export type ProductPageData = {
   product?: {
     databaseId?: number | null;
     title?: string | null;
     slug?: string | null;
     uri?: string | null;
+    productCategories?: {
+      nodes?: (ProductCategoryBreadcrumbNode | null)[] | null;
+    } | null;
     productSettings?: {
       fieldPageNumber?: string | null;
       productImagesGroup?: {
@@ -171,6 +184,41 @@ const PRODUCT_PAGE_FIELDS = /* GraphQL */ `
       title
       slug
       uri
+      productCategories(first: 30) {
+        nodes {
+          name
+          slug
+          uri
+          parent {
+            node {
+              name
+              slug
+              uri
+              parent {
+                node {
+                  name
+                  slug
+                  uri
+                  parent {
+                    node {
+                      name
+                      slug
+                      uri
+                      parent {
+                        node {
+                          name
+                          slug
+                          uri
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
       productSettings {
         fieldPageNumber
         productImagesGroup {

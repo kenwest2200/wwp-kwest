@@ -27,6 +27,13 @@ const { title, brandImg } = view;
             <li>
               <a href="/products/">Products</a>
             </li>
+            {
+              view.breadcrumbLinks.map((crumb) => (
+                <li>
+                  <a href={crumb.href}>{crumb.label}</a>
+                </li>
+              ))
+            }
             <li aria-current="page">{title}</li>
           </ol>
         </nav>
