@@ -480,8 +480,8 @@ function init(): void {
   if (!mapsKey) {
     setMessage(
       "Map unavailable: PUBLIC_GOOGLE_MAPS_BROWSER_KEY was empty when this site was built. " +
-        "Local dev: add it to .env, restart npm run dev. " +
-        "Cloudflare Pages: Settings → Environment variables → add PUBLIC_GOOGLE_MAPS_BROWSER_KEY for Production (and Preview if you use it), then redeploy — it must be available at build time, not only as a Worker secret.",
+        "Local: add it to .env and restart npm run dev. " +
+        "Production/stage/dev: this project builds on GitHub Actions — add repository secret PUBLIC_GOOGLE_MAPS_BROWSER_KEY (Settings → Secrets and variables → Actions) and redeploy via workflow.",
       true,
     );
     return;
