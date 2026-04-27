@@ -1841,6 +1841,10 @@ $product-filters-check-svg: "%3Csvg xmlns='http://www.w3.org/2000/svg' width='9'
   padding-right: px-to-rem(0);
   gap: px-to-rem(16) px-to-rem(24);
 
+  &[hidden] {
+    display: none;
+  }
+
   @include media-breakpoint-up(md) {
     display: flex;
   }

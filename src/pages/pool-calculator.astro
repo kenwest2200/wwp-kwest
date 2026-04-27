@@ -61,6 +61,7 @@ const intro =
           </div>
         </nav>
 
+        <div class="pool-calc__panels" id="pool-calc-panels-viewport">
         <div class="pool-calc__panel" data-pool-panel="1">
           <h2 class="pool-calc__panel-title">Select a pool shape</h2>
           <div class="pool-calc__shape-grid">
@@ -157,58 +158,51 @@ const intro =
               <span class="pool-calc__js-shape-badge-value"></span>
             </p>
           </div>
-          <div id="pool-calc-dimensions" class="pool-calc__dimensions">
-            <div
-              id="pool-calc-dimensions-fields"
-              class="pool-calc__dimensions-fields"
-            >
+          <div
+            id="pool-calc-step2-viewport"
+            class="pool-calc__step2-viewport"
+          >
+            <div id="pool-calc-dimensions" class="pool-calc__dimensions">
+              <div
+                id="pool-calc-dimensions-fields"
+                class="pool-calc__dimensions-fields"
+              >
+              </div>
+              <div
+                id="pool-calc-step2-actions"
+                class="pool-calc__inline-actions"
+                hidden
+              >
+                <button
+                  type="button"
+                  class="btn pool-calc__btn-outline"
+                  id="pool-calc-clear-dim"
+                >
+                  Clear all
+                </button>
+                <button
+                  type="button"
+                  class="btn btn--primary-dark pool-calc__btn-solid"
+                  id="pool-calc-estimate-volume"
+                >
+                  Estimate volume
+                </button>
+              </div>
             </div>
             <div
-              id="pool-calc-step2-actions"
-              class="pool-calc__inline-actions"
+              id="pool-calc-step2-result"
+              class="pool-calc__result-card"
               hidden
             >
+              <p class="pool-calc__result-line">
+                Your pool volume: <strong id="pool-calc-volume-result">0</strong> Gallons
+              </p>
               <button
                 type="button"
                 class="btn pool-calc__btn-outline"
-                id="pool-calc-clear-dim"
+                id="pool-calc-try-again">Try again</button
               >
-                Clear all
-              </button>
-              <button
-                type="button"
-                class="btn btn--primary-dark pool-calc__btn-solid"
-                id="pool-calc-estimate-volume"
-              >
-                Estimate volume
-              </button>
             </div>
-          </div>
-        </div>
-
-        <div class="pool-calc__panel" data-pool-panel="3" hidden>
-          <h2 class="pool-calc__panel-title">Estimate your pool volume</h2>
-          <div class="pool-calc__badge-wrap">
-            <p
-              class="pool-calc__badge pool-calc__js-shape-badge"
-              aria-live="polite"
-              hidden
-            >
-              <span class="pool-calc__js-shape-badge-label"
-                >Selected shape:</span
-              >
-              <span class="pool-calc__js-shape-badge-value"></span>
-            </p>
-          </div>
-          <div class="pool-calc__result-card">
-            <p class="pool-calc__result-line">
-              Your pool volume: <strong id="pool-calc-volume-result">0</strong> Gallons
-            </p>
-            <button
-              type="button"
-              class="btn pool-calc__btn-outline"
-              id="pool-calc-try-again">Try again</button
-            >
           </div>
         </div>
 
@@ -460,6 +454,7 @@ const intro =
               <div class="pool-calc__accordion-panel" hidden></div>
             </div>
           </div>
+        </div>
         </div>
 
         <div class="pool-calc__footer-actions" id="pool-calc-footer">

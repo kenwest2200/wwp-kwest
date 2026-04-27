@@ -21,6 +21,16 @@ let cachedGpm = 0;
 /** Step 2: footer Next stays disabled until user clicks Estimate volume. */
 let step2HasEstimatedVolume = false;
 
+const PANEL_FADE_MS = 340;
+let panelFadeToken = 0;
+let step2ViewFadeToken = 0;
+/** Last applied step-2 layer (false = dimensions, true = result); null = re-apply on next sync without fade. */
+let step2VolumeLayerApplied: boolean | null = null;
+
+function prefersReducedMotion(): boolean {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 function $(sel: string, root: ParentNode = document): HTMLElement | null {
   const el = root.querySelector(sel);
   return el instanceof HTMLElement ? el : null;
@@ -34,10 +44,16 @@ function digitsOnlyIn(raw: string): string {
   return raw.replace(/\D/g, "").slice(0, MAX_IN_DIGITS);
 }
 
-function stepperSegment(step: number): 1 | 2 | 3 {
+/**
+ * Maps internal `currentStep` (panels 1, 2, 4, 5 — no panel 3) to the three
+ * `data-pool-stepper-index` items: 1 config, 2 volume, 3 GPM. Value 4 = results
+ * (all segments done, none current).
+ */
+function stepperSegment(step: number): 1 | 2 | 3 | 4 {
   if (step <= 1) return 1;
-  if (step <= 3) return 2;
-  return 3;
+  if (step <= 2) return 2;
+  if (step < 5) return 3;
+  return 4;
 }
 
 function syncStepper(): void {
@@ -46,11 +62,12 @@ function syncStepper(): void {
   for (let i = 1; i <= 3; i++) {
     const item = $(`[data-pool-stepper-index="${i}"]`);
     if (!item) continue;
-    item.classList.toggle("pool-calc__stepper-item--current", i === seg);
-    item.classList.toggle(
-      "pool-calc__stepper-item--done",
-      i < seg && !skipFirstTwo,
-    );
+    const isCurrent = seg <= 3 && i === seg;
+    const isDone =
+      (i < seg && !skipFirstTwo) ||
+      (seg === 4 && !(skipFirstTwo && i < 3));
+    item.classList.toggle("pool-calc__stepper-item--current", isCurrent);
+    item.classList.toggle("pool-calc__stepper-item--done", isDone);
     item.classList.toggle(
       "pool-calc__stepper-item--skip",
       skipFirstTwo && i < 3,
@@ -58,11 +75,108 @@ function syncStepper(): void {
   }
 }
 
-function showPanel(step: number): void {
+function applyPanelVisibility(step: number): void {
   document.querySelectorAll<HTMLElement>("[data-pool-panel]").forEach((el) => {
     const n = Number(el.dataset.poolPanel);
     el.hidden = n !== step;
   });
+}
+
+function showPanel(step: number, fromStep: number): void {
+  const vp = $("#pool-calc-panels-viewport");
+  const skipFade = prefersReducedMotion() || fromStep === step || !vp;
+  const token = ++panelFadeToken;
+
+  const finishFade = (): void => {
+    if (token !== panelFadeToken) return;
+    applyPanelVisibility(step);
+    $("#pool-calc-panels-viewport")?.classList.remove(
+      "pool-calc__panels--fade-out",
+    );
+  };
+
+  if (skipFade) {
+    vp?.classList.remove("pool-calc__panels--fade-out");
+    applyPanelVisibility(step);
+    return;
+  }
+
+  vp.classList.remove("pool-calc__panels--fade-out");
+  void vp.offsetWidth;
+  vp.classList.add("pool-calc__panels--fade-out");
+  const onEnd = (e: TransitionEvent): void => {
+    if (e.target !== vp || e.propertyName !== "opacity") return;
+    vp.removeEventListener("transitionend", onEnd);
+    window.clearTimeout(tid);
+    if (token === panelFadeToken) finishFade();
+  };
+  vp.addEventListener("transitionend", onEnd);
+  const tid = window.setTimeout(() => {
+    vp.removeEventListener("transitionend", onEnd);
+    if (token === panelFadeToken) finishFade();
+  }, PANEL_FADE_MS + 80);
+}
+
+function applyStep2VolumeLayer(showResult: boolean): void {
+  const dim = $("#pool-calc-dimensions");
+  const res = $("#pool-calc-step2-result");
+  if (!dim || !res) return;
+  dim.hidden = showResult;
+  res.hidden = !showResult;
+}
+
+/** Step 2: dimensions vs volume result card; fades when toggling on the same panel. */
+function syncStep2VolumeUi(): void {
+  const vp = $("#pool-calc-step2-viewport");
+  if (currentStep !== 2) {
+    $("#pool-calc-step2-viewport")?.classList.remove(
+      "pool-calc__step2-viewport--fade-out",
+    );
+    step2VolumeLayerApplied = null;
+    return;
+  }
+
+  const showResult = step2HasEstimatedVolume;
+  if (step2VolumeLayerApplied === null) {
+    vp?.classList.remove("pool-calc__step2-viewport--fade-out");
+    applyStep2VolumeLayer(showResult);
+    step2VolumeLayerApplied = showResult;
+    return;
+  }
+  if (step2VolumeLayerApplied === showResult) return;
+
+  const skipFade = prefersReducedMotion() || !vp;
+  if (skipFade) {
+    vp?.classList.remove("pool-calc__step2-viewport--fade-out");
+    applyStep2VolumeLayer(showResult);
+    step2VolumeLayerApplied = showResult;
+    return;
+  }
+
+  const token = ++step2ViewFadeToken;
+  const finishFade = (): void => {
+    if (token !== step2ViewFadeToken) return;
+    applyStep2VolumeLayer(showResult);
+    step2VolumeLayerApplied = showResult;
+    $("#pool-calc-step2-viewport")?.classList.remove(
+      "pool-calc__step2-viewport--fade-out",
+    );
+  };
+
+  vp.classList.remove("pool-calc__step2-viewport--fade-out");
+  void vp.offsetWidth;
+  vp.classList.add("pool-calc__step2-viewport--fade-out");
+  const onEnd = (e: TransitionEvent): void => {
+    if (e.target !== vp || e.propertyName !== "opacity") return;
+    vp.removeEventListener("transitionend", onEnd);
+    window.clearTimeout(tid);
+    if (token === step2ViewFadeToken) finishFade();
+  };
+  vp.addEventListener("transitionend", onEnd);
+  const tid = window.setTimeout(() => {
+    vp.removeEventListener("transitionend", onEnd);
+    if (token === step2ViewFadeToken) finishFade();
+  }, PANEL_FADE_MS + 80);
 }
 
 function escapeHtml(s: string): string {
@@ -404,15 +518,12 @@ function syncChrome(): void {
   if (nextTop) {
     const showNext =
       currentStep === 1 ||
-      (currentStep === 2 && flowMode === "dimensions") ||
-      currentStep === 3;
+      (currentStep === 2 && flowMode === "dimensions");
     nextTop.hidden = !showNext;
     if (currentStep === 1) {
       nextTop.disabled = flowMode === "dimensions" && !selectedShape;
     } else if (currentStep === 2) {
       nextTop.disabled = !step2HasEstimatedVolume;
-    } else if (currentStep === 3) {
-      nextTop.disabled = false;
     } else {
       nextTop.disabled = true;
     }
@@ -425,14 +536,19 @@ function syncChrome(): void {
 
   updateShapeBadges();
   if (currentStep === 5) updateFinalSummary();
+  if (currentStep === 2) syncStep2VolumeUi();
 }
 
 function goToStep(step: number): void {
-  if (step === 2) {
+  const fromStep = currentStep;
+  if (step === 2 && fromStep !== 4) {
     step2HasEstimatedVolume = false;
   }
+  if (step === 2 && (fromStep === 1 || fromStep === 4)) {
+    step2VolumeLayerApplied = null;
+  }
   currentStep = step;
-  showPanel(step);
+  showPanel(step, fromStep);
   syncStepper();
   syncChrome();
 
@@ -467,6 +583,11 @@ function resetAll(): void {
   document.querySelectorAll(".pool-calc__stepper-item").forEach((el) => {
     el.classList.remove("pool-calc__stepper-item--skip");
   });
+  step2ViewFadeToken += 1;
+  $("#pool-calc-step2-viewport")?.classList.remove(
+    "pool-calc__step2-viewport--fade-out",
+  );
+  step2VolumeLayerApplied = null;
   goToStep(1);
 }
 
@@ -481,10 +602,6 @@ function onPrevStep(): void {
     return;
   }
   if (currentStep === 4) {
-    goToStep(3);
-    return;
-  }
-  if (currentStep === 3) {
     goToStep(2);
     return;
   }
@@ -546,8 +663,6 @@ export function initPoolCalculator(): void {
       selectedShape
     ) {
       if (!step2HasEstimatedVolume) return;
-      goToStep(3);
-    } else if (currentStep === 3) {
       goToStep(4);
     }
   };

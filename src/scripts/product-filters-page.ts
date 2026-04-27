@@ -35,6 +35,9 @@ const pagerNextBtns = queryPagerButtons([
 const pagerRangeEl = document.getElementById("product-filters-pager-range");
 const pagerPagesEl = document.getElementById("product-filters-pager-pages");
 const pagerRootEl = document.getElementById("product-filters-pager");
+const toolbarPagerNavEl = document.getElementById(
+  "product-filters-toolbar-pager-nav",
+);
 const clearBtn = document.getElementById("product-filters-clear");
 const noFiltersLabelEl = document.getElementById(
   "product-filters-no-filters-label",
@@ -1060,14 +1063,16 @@ function renderPaginationPagesHtml(
 
 function syncPager() {
   if (currentTotal === 0) {
+    if (pagerRootEl) pagerRootEl.hidden = true;
+    if (toolbarPagerNavEl) toolbarPagerNavEl.hidden = true;
     if (pagerRangeEl) pagerRangeEl.textContent = "—";
     if (pagerPagesEl) pagerPagesEl.innerHTML = "";
-    pagerRootEl?.classList.add("product-filters__pager--empty");
     for (const b of pagerPrevBtns) b.disabled = true;
     for (const b of pagerNextBtns) b.disabled = true;
     return;
   }
-  pagerRootEl?.classList.remove("product-filters__pager--empty");
+  if (pagerRootEl) pagerRootEl.hidden = false;
+  if (toolbarPagerNavEl) toolbarPagerNavEl.hidden = false;
 
   const page = Math.floor(currentOffset / pageSize) + 1;
   const totalPages = Math.max(1, Math.ceil(currentTotal / pageSize));

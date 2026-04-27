@@ -56,14 +56,14 @@ const heroIntro =
                   aria-describedby="sr-zip-hint"
                   autocomplete="postal-code"
                 />
+                <button
+                  type="submit"
+                  class="btn btn--primary-dark sr-page__submit"
+                >
+                  Search
+                </button>
               </div>
-              <p id="sr-zip-hint" class="sr-page__hint">
-                U.S. ZIP only — 5 digits or ZIP+4 (e.g. 33304 or 33304-1234).
-              </p>
             </div>
-            <button type="submit" class="btn btn--primary-dark sr-page__submit">
-              Search
-            </button>
           </div>
         </form>
 
@@ -77,9 +77,70 @@ const heroIntro =
             <table class="sr-page__table">
               <thead>
                 <tr>
-                  <th scope="col">Name</th>
-                  <th scope="col">Phone number</th>
-                  <th scope="col">Email</th>
+                  <th
+                    scope="col"
+                    class="sr-page__th sr-page__th--sortable"
+                    id="sr-th-name"
+                    aria-sort="none"
+                  >
+                    Name
+                    <span
+                      class="sr-page__sort-btns"
+                      role="group"
+                      aria-label="Sort by: Name"
+                    >
+                      <button
+                        type="button"
+                        class="sr-page__sort-btn sr-page__sort-btn--asc"
+                        id="sr-sort-name-asc"
+                        aria-label="Sort by ascending: Name"
+                        title="Sort by ascending"
+                      >
+                        <svg
+                          class="sr-page__sort-svg"
+                          width="12"
+                          height="8"
+                          viewBox="0 0 12 8"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                        >
+                          <path
+                            class="sr-page__sort-path"
+                            d="M1.5 6.5L6 2L10.5 6.5"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="sr-page__sort-btn sr-page__sort-btn--desc"
+                        id="sr-sort-name-desc"
+                        aria-label="Sort by descending: Name"
+                        title="Sort by descending"
+                      >
+                        <svg
+                          class="sr-page__sort-svg"
+                          width="12"
+                          height="8"
+                          viewBox="0 0 12 8"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                        >
+                          <path
+                            class="sr-page__sort-path"
+                            d="M1.5 2L6 6.5L10.5 2"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                        </svg>
+                      </button>
+                    </span>
+                  </th>
+                  <th scope="col" class="sr-page__th">Phone number</th>
+                  <th scope="col" class="sr-page__th">Email</th>
                 </tr>
               </thead>
               <tbody id="sr-table-body"></tbody>
