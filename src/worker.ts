@@ -19,6 +19,12 @@ export default {
     if (url.pathname === "/api/store-locations") {
       return handleStoreLocationsApi(request, env);
     }
+    if (url.pathname === "/api/distributor-locations") {
+      return handleDistributorLocationsInRadiusApi(request, env);
+    }
+    if (url.pathname === "/api/geocode-zip") {
+      return handleGeocodeZipApi(request, env);
+    }
     if (url.pathname === "/api/product-category-products") {
       return handleProductCategoryProductsApi(request, env);
     }
@@ -475,6 +481,10 @@ async function handleProductCategoryProductsApi(
 const DEFAULT_SALES_REPS_API_ROOT =
   "https://wwoperations.waterwayplastics.com/WaterwayAPI/locations";
 
+/** Base URL for `…/in-radius` (same host as ERP; optional env override). */
+const DEFAULT_DISTRIBUTOR_LOCATIONS_ROOT =
+  "https://wwoperations.waterwayplastics.com/WaterwayAPI/locations";
+
 const DEFAULT_CROSS_REF_API_ROOT = "https://api.waterwayplastics.com";
 const CROSS_REF_FIND_PATH = "/wp-json/waterway-cross-ref/v1/find";
 const CROSS_REF_FILTERS_PATH = "/wp-json/waterway-cross-ref/v1/filters";
@@ -645,6 +655,232 @@ async function handleSalesRepsApi(
     return jsonResponse(
       {
         reps: [],
+        error: error instanceof Error ? error.message : String(error),
+      },
+      { status: 502, origin },
+    );
+  }
+}
+
+function readDistributorLocationsRoot(env: Env): string {
+  const custom = (
+    env as Env & { DISTRIBUTOR_LOCATOR_LOCATIONS_ROOT?: string }
+  ).DISTRIBUTOR_LOCATOR_LOCATIONS_ROOT;
+  const raw = (custom ?? DEFAULT_DISTRIBUTOR_LOCATIONS_ROOT).trim();
+  return raw.replace(/\/+$/, "");
+}
+
+async function handleDistributorLocationsInRadiusApi(
+  request: Request,
+  env: Env,
+): Promise<Response> {
+  const origin = request.headers.get("Origin");
+  if (request.method === "OPTIONS") {
+    const headers = new Headers();
+    headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
+    headers.set("Access-Control-Allow-Headers", "Content-Type");
+    headers.set("Access-Control-Max-Age", "86400");
+    if (origin) headers.set("Access-Control-Allow-Origin", origin);
+    return new Response(null, { status: 204, headers });
+  }
+  if (request.method !== "GET") {
+    return jsonResponse(
+      { locations: [], error: "Method Not Allowed" },
+      { status: 405, origin },
+    );
+  }
+
+  const url = new URL(request.url);
+  const zip = normalizeSalesRepsZipParam(url.searchParams.get("zip") ?? "");
+  if (!zip || !isValidSalesRepsZip(zip)) {
+    return jsonResponse(
+      { locations: [], error: "A valid U.S. ZIP code is required." },
+      { status: 400, origin },
+    );
+  }
+
+  const country =
+    (url.searchParams.get("country") ?? "US").trim().slice(0, 2).toUpperCase() ||
+    "US";
+  const distRaw = url.searchParams.get("distance");
+  let distance = 20;
+  if (distRaw != null && distRaw !== "") {
+    const n = Number(distRaw);
+    if (Number.isFinite(n)) distance = Math.min(5000, Math.max(1, Math.floor(n)));
+  }
+  const unitRaw = (url.searchParams.get("unit") ?? "mi").toLowerCase();
+  const unit = ["m", "km", "mi", "ft"].includes(unitRaw) ? unitRaw : "mi";
+  const btRaw = (url.searchParams.get("businessType") ?? "All").trim();
+  const businessType = ["Pool", "Spa", "All"].includes(btRaw) ? btRaw : "All";
+
+  let bearer = await getSalesRepsOAuthBearer(env);
+  if (!bearer) {
+    return jsonResponse(
+      {
+        locations: [],
+        error:
+          "Distributor locator: set worker secret SALES_REPS_OAUTH_PASSWORD (ERP token, same as sales reps).",
+      },
+      { status: 503, origin },
+    );
+  }
+
+  const root = readDistributorLocationsRoot(env);
+  const params = new URLSearchParams({
+    zip,
+    country,
+    distance: String(distance),
+    unit,
+    businessType,
+  });
+  const upstreamUrl = `${root}/in-radius?${params.toString()}`;
+
+  try {
+    const runFetch = (auth: string) =>
+      fetch(upstreamUrl, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${auth}`,
+        },
+      });
+
+    let upstream = await runFetch(bearer);
+    if (upstream.status === 401) {
+      invalidateSalesRepsOpsOAuth();
+      const again = await getSalesRepsOAuthBearer(env);
+      if (again) {
+        bearer = again;
+        upstream = await runFetch(bearer);
+      }
+    }
+
+    const text = await upstream.text();
+    if (!upstream.ok) {
+      let detail = text.slice(0, 200);
+      try {
+        const j = JSON.parse(text) as { message?: string };
+        if (j?.message) detail = String(j.message);
+      } catch {
+        /* keep slice */
+      }
+      return jsonResponse(
+        {
+          locations: [],
+          error: `Locator service error (${upstream.status}). ${detail}`.trim(),
+        },
+        { status: 502, origin },
+      );
+    }
+
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(text) as unknown;
+    } catch {
+      return jsonResponse(
+        { locations: [], error: "Invalid JSON from locator service." },
+        { status: 502, origin },
+      );
+    }
+
+    if (!Array.isArray(parsed)) {
+      return jsonResponse(
+        { locations: [], error: "Unexpected locator response." },
+        { status: 502, origin },
+      );
+    }
+
+    return jsonResponse({ locations: parsed }, { origin });
+  } catch (error) {
+    return jsonResponse(
+      {
+        locations: [],
+        error: error instanceof Error ? error.message : String(error),
+      },
+      { status: 502, origin },
+    );
+  }
+}
+
+type GeocodeZipJson = {
+  results?: Array<{
+    geometry?: { location?: { lat: number; lng: number } };
+  }>;
+  status?: string;
+};
+
+async function handleGeocodeZipApi(
+  request: Request,
+  env: Env,
+): Promise<Response> {
+  const origin = request.headers.get("Origin");
+  if (request.method === "OPTIONS") {
+    const headers = new Headers();
+    headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
+    headers.set("Access-Control-Allow-Headers", "Content-Type");
+    headers.set("Access-Control-Max-Age", "86400");
+    if (origin) headers.set("Access-Control-Allow-Origin", origin);
+    return new Response(null, { status: 204, headers });
+  }
+  if (request.method !== "GET") {
+    return jsonResponse(
+      { lat: null, lng: null, error: "Method Not Allowed" },
+      { status: 405, origin },
+    );
+  }
+
+  const url = new URL(request.url);
+  const zip = normalizeSalesRepsZipParam(url.searchParams.get("zip") ?? "");
+  if (!zip || !isValidSalesRepsZip(zip)) {
+    return jsonResponse(
+      { lat: null, lng: null, error: "A valid U.S. ZIP code is required." },
+      { status: 400, origin },
+    );
+  }
+
+  const key = (
+    env as Env & { GOOGLE_GEOCODING_KEY?: string }
+  ).GOOGLE_GEOCODING_KEY?.trim();
+  if (!key) {
+    return jsonResponse(
+      { lat: null, lng: null, configured: false },
+      { origin },
+    );
+  }
+
+  const zip5 = zip.replace(/\D/g, "").slice(0, 5);
+  const gUrl =
+    "https://maps.googleapis.com/maps/api/geocode/json?" +
+    new URLSearchParams({
+      components: `country:US|postal_code:${zip5}`,
+      key,
+    }).toString();
+
+  try {
+    const res = await fetch(gUrl);
+    const data = (await res.json()) as GeocodeZipJson;
+    const loc = data.results?.[0]?.geometry?.location;
+    if (
+      !loc ||
+      typeof loc.lat !== "number" ||
+      typeof loc.lng !== "number" ||
+      !Number.isFinite(loc.lat) ||
+      !Number.isFinite(loc.lng)
+    ) {
+      return jsonResponse(
+        { lat: null, lng: null, status: data.status ?? "UNKNOWN" },
+        { origin },
+      );
+    }
+    return jsonResponse(
+      { lat: loc.lat, lng: loc.lng, configured: true },
+      { origin },
+    );
+  } catch (error) {
+    return jsonResponse(
+      {
+        lat: null,
+        lng: null,
         error: error instanceof Error ? error.message : String(error),
       },
       { status: 502, origin },

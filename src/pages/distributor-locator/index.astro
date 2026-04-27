@@ -2,176 +2,156 @@
 import Layout from "../../layouts/Layout.astro";
 import PageHeaderOffset from "../../components/PageHeaderOffset.astro";
 import SectionHero from "../../components/SectionHero/SectionHero.astro";
-import { getGraphQLClient, requestGraphql } from "../../lib/graphql";
-import {
-  DISTRIBUTOR_LOCATOR_PAGE_QUERY,
-  DISTRIBUTOR_LOCATOR_PAGE_URI,
-  normalizeDistributorLocatorSidebar,
-  type DistributorLocatorPageData,
-} from "../../lib/queries/distributor-locator-page";
-import {
-  fetchStoreLocationsPage,
-  getWordPressOrigin,
-  storeLocationDisplayLines,
-} from "../../lib/store-locations";
 
 export const prerender = true;
 
-const graphqlConfigured = Boolean(getGraphQLClient());
-const STORE_PAGE_SIZE = 10;
+const defaultZip =
+  import.meta.env.PUBLIC_DISTRIBUTOR_LOCATOR_DEFAULT_ZIP?.trim() || "90210";
+const mapsBrowserKey =
+  import.meta.env.PUBLIC_GOOGLE_MAPS_BROWSER_KEY?.trim() ?? "";
 
+const pageTitle = "Distributor locator";
 const introDefault =
-  "Find authorized distributors and dealers. Use the list below or browse by region.";
-
-async function loadPage(): Promise<DistributorLocatorPageData["page"] | null> {
-  if (!graphqlConfigured) return null;
-  const uris = [
-    DISTRIBUTOR_LOCATOR_PAGE_URI,
-    DISTRIBUTOR_LOCATOR_PAGE_URI.replace(/\/$/, ""),
-  ];
-  for (const id of uris) {
-    try {
-      const data = await requestGraphql<DistributorLocatorPageData>(
-        DISTRIBUTOR_LOCATOR_PAGE_QUERY,
-        { id },
-      );
-      if (data.page?.title) return data.page;
-    } catch {
-      /* try next */
-    }
-  }
-  return null;
-}
-
-const pageNode = await loadPage();
-const pageTitle = pageNode?.title?.trim() || "Dealer locator";
-const mainHtml = (pageNode?.content ?? "").trim();
-const sidebarColumns = normalizeDistributorLocatorSidebar(
-  pageNode?.distributorLocatorSidebarContent ?? null,
-);
-
-const wpOrigin = getWordPressOrigin();
-const initialStores = wpOrigin
-  ? await fetchStoreLocationsPage({
-      origin: wpOrigin,
-      limit: STORE_PAGE_SIZE,
-      offset: 0,
-    })
-  : { rows: [], total: null, raw: null };
-
-const storeHasMore =
-  initialStores.rows.length > 0 &&
-  (typeof initialStores.total === "number"
-    ? initialStores.total > initialStores.rows.length
-    : initialStores.rows.length >= STORE_PAGE_SIZE);
+  "Find authorized distributors and dealers near you. Enter a ZIP code, choose a radius and category, then click Search to load the list and map.";
 ---
 
-<Layout headerType="white">
+<Layout headerType="white" pageTitle={pageTitle} description={introDefault}>
   <main
     class="dl-page"
     data-page-header-offset
     data-dl-locator
-    data-limit={String(STORE_PAGE_SIZE)}
-    data-next-offset={String(initialStores.rows.length)}
-    data-has-more={storeHasMore ? "1" : "0"}
+    data-dl-maps-key={mapsBrowserKey}
   >
     <SectionHero title={pageTitle} intro={introDefault} />
 
     <div class="dl-page__body">
       <div class="dl-page__body-inner">
-        <div class="dl-page__layout">
-          <div class="dl-page__main">
-            {
-              mainHtml ? (
-                <div
-                  class="product-page__optional-html"
-                  set:html={mainHtml}
-                />
-              ) : (
-                <p class="sr-page__empty">
-                  {graphqlConfigured
-                    ? "No main content for this page."
-                    : "GraphQL is not configured."}
-                </p>
-              )
-            }
-          </div>
-
-          {
-            sidebarColumns.length > 0 && (
-              <aside class="dl-page__sidebar" aria-label="Locator sidebar">
-                {sidebarColumns.map((col) => (
-                  <div class="dl-page__sidebar-col">
-                    {col.columnTitle && (
-                      <h2 class="dl-page__sidebar-col-title">{col.columnTitle}</h2>
-                    )}
-                    {col.sections.map((sec) => (
-                      <section class="dl-page__sidebar-section">
-                        {sec.title && (
-                          <h3 class="dl-page__sidebar-section-title">{sec.title}</h3>
-                        )}
-                        {sec.subsections.map((sub) => (
-                          <div class="dl-page__sidebar-sub">
-                            {sub.title && (
-                              <h4 class="dl-page__sidebar-sub-title">{sub.title}</h4>
-                            )}
-                            {sub.contentHtml && (
-                              <div
-                                class="dl-page__sidebar-sub-html product-page__optional-html"
-                                set:html={sub.contentHtml}
-                              />
-                            )}
-                          </div>
-                        ))}
-                      </section>
-                    ))}
-                  </div>
-                ))}
-              </aside>
-            )
-          }
-        </div>
-
-        <section class="dl-page__locations" aria-labelledby="dl-locations-heading">
-          <h2 class="dl-page__locations-title" id="dl-locations-heading">
-            Locations
+        <section
+          class="dl-page__locator"
+          aria-labelledby="dl-locator-heading"
+          data-dl-tool
+        >
+          <h2 class="dl-page__locator-heading" id="dl-locator-heading">
+            Search distributors
           </h2>
-          {
-            !wpOrigin ? (
-              <p class="sr-page__empty">
-                Set <code>PUBLIC_WORDPRESS_ORIGIN</code> in <code>.env</code> to load
-                store locations (same origin as the WordPress site with the plugin).
-              </p>
-            ) : initialStores.rows.length === 0 ? (
-              <p class="sr-page__empty">No locations returned from the store API.</p>
-            ) : (
-              <>
-                <ul class="dl-page__locations-list" data-dl-list>
-                  {initialStores.rows.map((row) => (
-                    <li class="dl-page__location">
-                      {storeLocationDisplayLines(row).map((line) => (
-                        <p class="dl-page__location-line">{line}</p>
-                      ))}
-                    </li>
-                  ))}
-                </ul>
-                {storeHasMore && (
-                  <div class="dl-page__more-wrap">
-                    <button
-                      type="button"
-                      class="btn btn--primary-dark dl-page__more-btn"
-                      data-dl-more
+
+          <form
+            class="dl-page__locator-form"
+            id="dl-locator-form"
+            autocomplete="postal-code"
+            aria-label="Search distributors by ZIP code"
+          >
+            <div class="dl-page__locator-search-block">
+              <label class="dl-page__locator-label" for="dl-zip-input"
+                >Search by address / ZIP / city</label
+              >
+              <div class="dl-page__locator-search-row">
+                <div class="dl-page__locator-input-wrap">
+                  <span class="dl-page__locator-input-icon" aria-hidden="true">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
                     >
-                      Load more
-                    </button>
-                    <p class="dl-page__hint">
-                      Loads the next {STORE_PAGE_SIZE} locations from the catalog.
-                    </p>
+                      <circle cx="11" cy="11" r="7"></circle>
+                      <path d="M21 21l-4.3-4.3"></path>
+                    </svg>
+                  </span>
+                  <input
+                    id="dl-zip-input"
+                    name="zip"
+                    type="text"
+                    class="dl-page__locator-input"
+                    inputmode="numeric"
+                    maxlength="10"
+                    placeholder={`e.g. ${defaultZip}`}
+                    aria-describedby="dl-locator-hint"
+                    autocomplete="postal-code"
+                  />
+                </div>
+
+                <div class="dl-page__locator-within" role="group" aria-labelledby="dl-within-label">
+                  <span class="dl-page__locator-within-label" id="dl-within-label"
+                    >Within</span
+                  >
+                  <div class="dl-page__radius-chips" data-dl-radius-group>
+                    {
+                      ["10", "25", "50", "100", "200", "500", "any"].map((mi, i) => (
+                        <label class="dl-page__radius-chip">
+                          <input
+                            type="radio"
+                            name="dl-radius"
+                            value={mi}
+                            checked={i === 0}
+                            class="dl-page__radius-input visually-hidden"
+                          />
+                          <span class="dl-page__radius-chip-ui">
+                            {mi === "any" ? "Any" : `${mi} mi`}
+                          </span>
+                        </label>
+                      ))
+                    }
                   </div>
-                )}
-              </>
-            )
-          }
+                </div>
+
+                <div class="dl-page__locator-category">
+                  <label class="visually-hidden" for="dl-business-type">Category</label>
+                  <div class="dl-page__category-wrap">
+                    <span class="dl-page__category-prefix" aria-hidden="true"
+                      >Category:</span
+                    >
+                    <select
+                      id="dl-business-type"
+                      class="dl-page__category-select"
+                      name="businessType"
+                    >
+                      <option value="All">All</option>
+                      <option value="Pool">Pool</option>
+                      <option value="Spa">Spa</option>
+                    </select>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn--primary-dark dl-page__locator-submit">
+                  Search
+                </button>
+              </div>
+              <p id="dl-locator-hint" class="dl-page__locator-hint">
+                Enter a U.S. ZIP code (5 digits or ZIP+4), set radius and category if needed,
+                then click Search. Results and the map appear after you search.
+              </p>
+            </div>
+          </form>
+
+          <p id="dl-locator-message" class="dl-page__locator-message" hidden role="alert"></p>
+
+          <div class="dl-page__locator-split">
+            <div class="dl-page__locator-list-wrap">
+              <ul class="dl-page__locator-results" id="dl-results-list" data-dl-results></ul>
+            </div>
+            <div class="dl-page__locator-map-wrap">
+              <p
+                id="dl-map-placeholder"
+                class="dl-page__map-placeholder"
+                role="status"
+              >
+                Map and pins appear after you click Search.
+              </p>
+              <div
+                id="dl-map"
+                class="dl-page__locator-map"
+                role="application"
+                aria-label="Map of distributor locations"
+              >
+              </div>
+            </div>
+          </div>
         </section>
       </div>
     </div>

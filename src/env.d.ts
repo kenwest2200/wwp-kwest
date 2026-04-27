@@ -5,6 +5,10 @@ interface ImportMetaEnv {
   readonly PUBLIC_GRAPHQL_URL: string;
   /** Site origin for WP REST (e.g. https://www.waterwayplastics.com) — store-locations plugin */
   readonly PUBLIC_WORDPRESS_ORIGIN?: string;
+  /** Maps JavaScript API — browser key (HTTP referrer restrictions). */
+  readonly PUBLIC_GOOGLE_MAPS_BROWSER_KEY?: string;
+  /** Example ZIP for distributor locator placeholder text only. */
+  readonly PUBLIC_DISTRIBUTOR_LOCATOR_DEFAULT_ZIP?: string;
   readonly GRAPHQL_BASIC_USER?: string;
   readonly GRAPHQL_BASIC_PASSWORD?: string;
 }
@@ -28,5 +32,7 @@ declare namespace Cloudflare {
     ZONE_ID: string;
     CF_API_TOKEN: string;
     PUBLIC_WORDPRESS_ORIGIN?: string;
+    /** Server-side Geocoding API key (not exposed to the browser). */
+    GOOGLE_GEOCODING_KEY?: string;
   }
 }

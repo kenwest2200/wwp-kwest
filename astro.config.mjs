@@ -15,6 +15,8 @@ export default defineConfig({
         "/api/search-autocomplete": wranglerDev,
         "/api/search": wranglerDev,
         "/api/store-locations": wranglerDev,
+        "/api/distributor-locations": wranglerDev,
+        "/api/geocode-zip": wranglerDev,
         "/api/product-category-products": wranglerDev,
         "/api/sales-reps": wranglerDev,
         "/api/cross-ref-find": wranglerDev,
