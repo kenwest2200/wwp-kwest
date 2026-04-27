@@ -34,5 +34,7 @@ declare namespace Cloudflare {
     PUBLIC_WORDPRESS_ORIGIN?: string;
     /** Server-side Geocoding API key (not exposed to the browser). */
     GOOGLE_GEOCODING_KEY?: string;
+    /** Maps JS browser key; optional GET /api/maps-browser-key when not embedded at build. */
+    GOOGLE_MAPS_BROWSER_KEY?: string;
   }
 }

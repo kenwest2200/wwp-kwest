@@ -29,7 +29,7 @@ jobs:
           PUBLIC_GRAPHQL_URL: ${{ vars.PUBLIC_GRAPHQL_URL_DEV }}
           GRAPHQL_BASIC_USER: ${{ secrets.GRAPHQL_BASIC_USER }}
           GRAPHQL_BASIC_PASSWORD: ${{ secrets.GRAPHQL_BASIC_PASSWORD }}
-          PUBLIC_GOOGLE_MAPS_BROWSER_KEY: ${{ secrets.PUBLIC_GOOGLE_MAPS_BROWSER_KEY }}
+          PUBLIC_GOOGLE_MAPS_BROWSER_KEY: ${{ secrets.PUBLIC_GOOGLE_MAPS_BROWSER_KEY || vars.PUBLIC_GOOGLE_MAPS_BROWSER_KEY }}
 
       - name: Deploy (DEV)
         run: npx wrangler deploy --env dev

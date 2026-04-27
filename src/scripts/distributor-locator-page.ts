@@ -190,7 +190,7 @@ function markerIconUrl(): string {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
-function init(): void {
+async function init(): Promise<void> {
   const root = document.querySelector<HTMLElement>("[data-dl-locator]");
   const form = document.getElementById(
     "dl-locator-form",
@@ -215,7 +215,18 @@ function init(): void {
   const dlMapEl = mapEl;
   const dlBusinessSel = businessSel;
 
-  const mapsKey = (root.dataset.dlMapsKey ?? "").trim();
+  let mapsKey = (root.dataset.dlMapsKey ?? "").trim();
+  if (!mapsKey) {
+    try {
+      const r = await fetch("/api/maps-browser-key");
+      if (r.ok) {
+        const j = (await r.json()) as { key?: string };
+        mapsKey = (j.key ?? "").trim();
+      }
+    } catch {
+      /* ignore */
+    }
+  }
   const mapPlaceholder = document.getElementById("dl-map-placeholder");
 
   let map: google.maps.Map | null = null;
@@ -252,7 +263,7 @@ function init(): void {
     if (map) return map;
     if (!mapsKey) {
       throw new Error(
-        "Map is not configured: PUBLIC_GOOGLE_MAPS_BROWSER_KEY must be present at build time (see site setup).",
+        "Map is not configured: set PUBLIC_GOOGLE_MAPS_BROWSER_KEY for the GitHub build, or Worker secret GOOGLE_MAPS_BROWSER_KEY.",
       );
     }
     try {
@@ -493,9 +504,10 @@ function init(): void {
 
   if (!mapsKey) {
     setMessage(
-      "Map unavailable: PUBLIC_GOOGLE_MAPS_BROWSER_KEY was empty when this site was built. " +
-        "Local: add it to .env and restart npm run dev. " +
-        "Production/stage/dev: this project builds on GitHub Actions — add repository secret PUBLIC_GOOGLE_MAPS_BROWSER_KEY (Settings → Secrets and variables → Actions) and redeploy via workflow.",
+      "Map unavailable: the key was not embedded at build and /api/maps-browser-key returned empty. " +
+        "This app is built on GitHub Actions — variables in the Cloudflare dashboard are NOT used for that build. " +
+        "Fix: (1) GitHub → repo Settings → Secrets and variables → Actions — add secret OR variable PUBLIC_GOOGLE_MAPS_BROWSER_KEY, push/redeploy. " +
+        "Or (2) Cloudflare Worker secret GOOGLE_MAPS_BROWSER_KEY (same browser key) + wrangler deploy — see .env.example.",
       true,
     );
     return;
@@ -505,7 +517,7 @@ function init(): void {
 }
 
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", init);
+  document.addEventListener("DOMContentLoaded", () => void init());
 } else {
-  init();
+  void init();
 }

@@ -25,6 +25,9 @@ export default {
     if (url.pathname === "/api/geocode-zip") {
       return handleGeocodeZipApi(request, env);
     }
+    if (url.pathname === "/api/maps-browser-key") {
+      return handleMapsBrowserKeyApi(request, env);
+    }
     if (url.pathname === "/api/product-category-products") {
       return handleProductCategoryProductsApi(request, env);
     }
@@ -888,6 +891,29 @@ async function handleGeocodeZipApi(
       { status: 502, origin },
     );
   }
+}
+
+/** Google Maps JS browser key at runtime (Worker secret). Used when GitHub build did not embed PUBLIC_GOOGLE_MAPS_BROWSER_KEY. */
+async function handleMapsBrowserKeyApi(
+  request: Request,
+  env: Env,
+): Promise<Response> {
+  const origin = request.headers.get("Origin");
+  if (request.method === "OPTIONS") {
+    const headers = new Headers();
+    headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
+    headers.set("Access-Control-Allow-Headers", "Content-Type");
+    headers.set("Access-Control-Max-Age", "86400");
+    if (origin) headers.set("Access-Control-Allow-Origin", origin);
+    return new Response(null, { status: 204, headers });
+  }
+  if (request.method !== "GET") {
+    return jsonResponse({ key: "", error: "Method Not Allowed" }, { status: 405, origin });
+  }
+  const key =
+    (env as Env & { GOOGLE_MAPS_BROWSER_KEY?: string }).GOOGLE_MAPS_BROWSER_KEY?.trim() ??
+    "";
+  return jsonResponse({ key }, { origin });
 }
 
 type CrossRefApiMode = "find" | "filters";
