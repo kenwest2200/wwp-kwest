@@ -1,0 +1,219 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PageHeaderOffset from "../../components/PageHeaderOffset.astro";
+import SectionHero from "../../components/SectionHero/SectionHero.astro";
+import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs.astro";
+import ScrollToTopButton from "../../components/ScrollToTopButton/ScrollToTopButton.astro";
+import IconContactPhone from "../../components/icons/IconContactPhone.astro";
+import IconContactFax from "../../components/icons/IconContactFax.astro";
+import IconContactEmail from "../../components/icons/IconContactEmail.astro";
+import { getGraphQLClient, requestGraphql } from "../../lib/graphql";
+import {
+  HELP_PAGE_QUERY,
+  HELP_PAGE_URI,
+  normalizeHelpCenterBlocks,
+  normalizeHelpSupportBlocks,
+  type HelpPageData,
+} from "../../lib/queries/help-page";
+
+export const prerender = true;
+
+const graphqlConfigured = Boolean(getGraphQLClient());
+
+const introDefault =
+  "Get support contacts and quick links to the Waterway Help Center resources.";
+
+async function loadHelpPage(): Promise<HelpPageData["page"] | null> {
+  if (!graphqlConfigured) return null;
+  const uris = [HELP_PAGE_URI, HELP_PAGE_URI.replace(/\/$/, "")];
+  for (const id of uris) {
+    try {
+      const data = await requestGraphql<HelpPageData>(HELP_PAGE_QUERY, { id });
+      if (data.page?.title) return data.page;
+    } catch {
+      /* try next */
+    }
+  }
+  return null;
+}
+
+const pageNode = await loadHelpPage();
+const pageTitle = pageNode?.title?.trim() || "Help";
+const supportGroup = pageNode?.helpSettings?.helpSupportGroup ?? null;
+const centerGroup = pageNode?.helpSettings?.helpCenterGroup ?? null;
+const supportTitle = supportGroup?.title?.trim() || "Support";
+const centerTitle = centerGroup?.title?.trim() || "Help Center";
+const supportBlocks = normalizeHelpSupportBlocks(supportGroup);
+const centerBlocks = normalizeHelpCenterBlocks(centerGroup);
+const hasContent = supportBlocks.length > 0 || centerBlocks.length > 0;
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Support", href: "/support" },
+  { label: pageTitle || "Help" },
+];
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function asMailtoHref(value: string): string | null {
+  const raw = value.trim();
+  if (!raw) return null;
+  if (raw.toLowerCase().startsWith("mailto:")) {
+    const addr = raw.slice("mailto:".length).trim();
+    return EMAIL_RE.test(addr) ? `mailto:${addr}` : null;
+  }
+  return EMAIL_RE.test(raw) ? `mailto:${raw}` : null;
+}
+
+type ContactIconType = "phone" | "fax" | "email";
+
+function contactIconType(iconRaw: string): ContactIconType {
+  const icon = iconRaw.trim().toLowerCase();
+  if (icon.includes("fax")) return "fax";
+  if (icon.includes("email") || icon.includes("mail")) return "email";
+  return "phone";
+}
+---
+
+<Layout headerType="white" pageTitle={pageTitle} description={introDefault}>
+  <main class="help-page" data-page-header-offset>
+    <SectionHero title={pageTitle} intro={introDefault} />
+    <div class="help-page__breadcrumb-wrap">
+      <Breadcrumbs items={breadcrumbs} />
+    </div>
+
+    <section class="help-page__body">
+      <div class="help-page__body-inner">
+        {
+          !graphqlConfigured && (
+            <p class="help-page__notice">
+              GraphQL is not configured. Set <code>PUBLIC_GRAPHQL_URL</code> in{" "}
+              <code>.env</code> to load this page.
+            </p>
+          )
+        }
+        {
+          graphqlConfigured && !hasContent && (
+            <p class="help-page__notice">
+              No data was returned for <code>{HELP_PAGE_URI}</code>. Check the
+              page URI in WordPress and GraphQL field names.
+            </p>
+          )
+        }
+
+        {
+          supportBlocks.length > 0 && (
+            <div class="help-page__group" aria-labelledby="help-support-title">
+              <h2 id="help-support-title" class="help-page__group-title">
+                {supportTitle}
+              </h2>
+              <div class="help-page__support-grid">
+                {supportBlocks.map((block) => (
+                  <article class="help-page__support-card">
+                    <h3 class="help-page__card-title">{block.title}</h3>
+                    {block.contacts.length > 0 ? (
+                      <ul class="help-page__contacts">
+                        {block.contacts.map((contact) => {
+                          const mailto = asMailtoHref(contact.text);
+                          const contactText = contact.text.replace(
+                            /^mailto:/i,
+                            "",
+                          );
+                          const iconType = contactIconType(contact.icon);
+                          return (
+                            <li class="help-page__contact">
+                              <span class="help-page__contact-icon">
+                                {iconType === "fax" ? (
+                                  <IconContactFax />
+                                ) : iconType === "email" ? (
+                                  <IconContactEmail />
+                                ) : (
+                                  <IconContactPhone />
+                                )}
+                              </span>
+                              {mailto ? (
+                                <a
+                                  class="help-page__contact-text help-page__contact-text--link"
+                                  href={mailto}
+                                >
+                                  {contactText}
+                                </a>
+                              ) : (
+                                <span class="help-page__contact-text">
+                                  {contact.text}
+                                </span>
+                              )}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    ) : (
+                      <p class="help-page__empty">No contacts in this block.</p>
+                    )}
+                  </article>
+                ))}
+              </div>
+            </div>
+          )
+        }
+
+        {
+          centerBlocks.length > 0 && (
+            <div class="help-page__group" aria-labelledby="help-center-title">
+              <h2 id="help-center-title" class="help-page__group-title">
+                {centerTitle}
+              </h2>
+              <div class="help-page__center-grid">
+                {centerBlocks.map((block) => (
+                  <article class="help-page__center-card">
+                    {block.imageUrl && (
+                      <div class="help-page__center-image-wrap">
+                        <img
+                          class="help-page__center-image"
+                          src={block.imageUrl}
+                          alt={block.imageAlt || block.title}
+                          width={block.imageWidth ?? undefined}
+                          height={block.imageHeight ?? undefined}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
+                    )}
+                    <div class="help-page__center-body">
+                      <h3 class="help-page__card-title">{block.title}</h3>
+                      {block.descriptionHtml ? (
+                        <div
+                          class="help-page__description product-page__optional-html"
+                          set:html={block.descriptionHtml}
+                        />
+                      ) : (
+                        <p class="help-page__empty">No description provided.</p>
+                      )}
+                      {block.linkUrl && (
+                        <a
+                          class="help-page__link btn btn--primary-dark"
+                          href={block.linkUrl}
+                          target={block.linkTarget || "_self"}
+                          rel={
+                            block.linkTarget === "_blank"
+                              ? "noopener noreferrer"
+                              : undefined
+                          }
+                        >
+                          {block.linkTitle || "Read more"}
+                        </a>
+                      )}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          )
+        }
+      </div>
+    </section>
+
+    <ScrollToTopButton />
+  </main>
+</Layout>
+
+<PageHeaderOffset />

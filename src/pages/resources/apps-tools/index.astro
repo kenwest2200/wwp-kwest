@@ -2,6 +2,7 @@
 import Layout from "../../../layouts/Layout.astro";
 import PageHeaderOffset from "../../../components/PageHeaderOffset.astro";
 import SectionHero from "../../../components/SectionHero/SectionHero.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs.astro";
 import { getGraphQLClient, requestGraphql } from "../../../lib/graphql";
 import IconApple from "../../../assets/images/buttonAppStore.png";
 import IconGooglePlay from "../../../assets/images/buttonGooglePlay.png";
@@ -42,11 +43,19 @@ const pageNode = await loadPage();
 const pageTitle = pageNode?.title?.trim() || "Apps & tools";
 const pageData = normalizeAppsToolsPage(pageNode);
 const hasContent = pageData.apps.length > 0 || pageData.tools.length > 0;
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Resources", href: "/resources" },
+  { label: pageTitle || "Apps & tools" },
+];
 ---
 
 <Layout headerType="white" pageTitle={pageTitle} description={introDefault}>
   <main class="apps-tools-page" data-page-header-offset>
     <SectionHero title={pageTitle} intro={introDefault} />
+    <div class="apps-tools-page__breadcrumb-wrap">
+      <Breadcrumbs items={breadcrumbs} />
+    </div>
 
     <div class="apps-tools-page__body">
       <div class="apps-tools-page__body-inner">

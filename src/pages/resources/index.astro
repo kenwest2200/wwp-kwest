@@ -1,30 +1,23 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
-import PageHeaderOffset from "../../../components/PageHeaderOffset.astro";
-import SectionHero from "../../../components/SectionHero/SectionHero.astro";
-import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs.astro";
-import IconArrowRight from "../../../components/icons/IconArrowRight.astro";
-import { getGraphQLClient, requestGraphql } from "../../../lib/graphql";
+import Layout from "../../layouts/Layout.astro";
+import PageHeaderOffset from "../../components/PageHeaderOffset.astro";
+import SectionHero from "../../components/SectionHero/SectionHero.astro";
+import IconArrowRight from "../../components/icons/IconArrowRight.astro";
+import { requestGraphql } from "../../lib/graphql";
 import {
   TECHNICAL_BULLETINS_PAGE_QUERY,
-  TECHNICAL_BULLETINS_PAGE_URI,
   normalizeTechnicalBulletinsCards,
   type TechnicalBulletinsPageData,
-} from "../../../lib/queries/resources-technical-bulletins-page";
+} from "../../lib/queries/resources-technical-bulletins-page";
 
 export const prerender = true;
 
-const graphqlConfigured = Boolean(getGraphQLClient());
-
+const RESOURCES_PARENT_URI = "/resources/";
 const introDefault =
-  "Use practical tools and reference guides to calculate flow, size equipment, and design efficient pool and spa systems.";
+  "Access catalogs, brochures, technical documents, and apps - all in one place.";
 
 async function loadPage(): Promise<TechnicalBulletinsPageData["page"] | null> {
-  if (!graphqlConfigured) return null;
-  const uris = [
-    TECHNICAL_BULLETINS_PAGE_URI,
-    TECHNICAL_BULLETINS_PAGE_URI.replace(/\/$/, ""),
-  ];
+  const uris = [RESOURCES_PARENT_URI, RESOURCES_PARENT_URI.replace(/\/$/, "")];
   for (const id of uris) {
     try {
       const data = await requestGraphql<TechnicalBulletinsPageData>(
@@ -40,41 +33,16 @@ async function loadPage(): Promise<TechnicalBulletinsPageData["page"] | null> {
 }
 
 const pageNode = await loadPage();
-const pageTitle = pageNode?.title?.trim() || "Technical guide";
+const pageTitle = pageNode?.title?.trim() || "Resources";
 const cards = normalizeTechnicalBulletinsCards(pageNode);
-const breadcrumbs = [
-  { label: "Home", href: "/" },
-  { label: "Resources", href: "/resources" },
-  { label: pageTitle || "Technical guide" },
-];
 ---
 
 <Layout headerType="white" pageTitle={pageTitle} description={introDefault}>
   <main class="tb-page" data-page-header-offset>
     <SectionHero title={pageTitle} intro={introDefault} />
-    <div class="tb-page__breadcrumb-wrap">
-      <Breadcrumbs items={breadcrumbs} />
-    </div>
 
     <div class="tb-page__body">
       <div class="tb-page__body-inner">
-        {
-          !graphqlConfigured && (
-            <p class="tb-page__notice">
-              GraphQL is not configured. Set <code>PUBLIC_GRAPHQL_URL</code> in{" "}
-              <code>.env</code> to load this page.
-            </p>
-          )
-        }
-        {
-          graphqlConfigured && cards.length === 0 && (
-            <p class="tb-page__notice">
-              No cards were returned for{" "}
-              <code>{TECHNICAL_BULLETINS_PAGE_URI}</code>. Check ACF field{" "}
-              <code>cardsSettings</code> and WPGraphQL schema.
-            </p>
-          )
-        }
         {
           cards.length > 0 && (
             <div class="tb-page__grid">
@@ -83,11 +51,9 @@ const breadcrumbs = [
                   class="tb-page__card"
                   href={card.linkUrl}
                   target={card.linkTarget}
-                  rel={
-                    card.linkTarget === "_blank"
-                      ? "noopener noreferrer"
-                      : undefined
-                  }
+                  rel={card.linkTarget === "_blank"
+                    ? "noopener noreferrer"
+                    : undefined}
                 >
                   {card.iconUrl ? (
                     <div class="tb-page__card-icon-wrap">
@@ -104,10 +70,7 @@ const breadcrumbs = [
                   ) : null}
                   <h2 class="tb-page__card-title">{card.title}</h2>
                   {card.descriptionHtml ? (
-                    <div
-                      class="tb-page__card-desc"
-                      set:html={card.descriptionHtml}
-                    />
+                    <div class="tb-page__card-desc" set:html={card.descriptionHtml} />
                   ) : null}
                   <span class="tb-page__card-action">
                     {card.linkLabel || "View guide"}

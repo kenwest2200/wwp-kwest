@@ -166,6 +166,76 @@ function businessTypeValue(sel: HTMLSelectElement): string {
   return v === "Pool" || v === "Spa" || v === "All" ? v : "All";
 }
 
+function setupBusinessTypeSelect(
+  root: HTMLElement,
+  selectEl: HTMLSelectElement,
+): void {
+  const wrap = root.querySelector<HTMLElement>("[data-dl-business-root]");
+  const trigger = root.querySelector<HTMLButtonElement>(
+    "[data-dl-business-trigger]",
+  );
+  const valueEl = root.querySelector<HTMLElement>("[data-dl-business-value]");
+  const menu = root.querySelector<HTMLElement>("[data-dl-business-menu]");
+  if (!wrap || !trigger || !valueEl || !menu) return;
+
+  const optionButtons = Array.from(
+    menu.querySelectorAll<HTMLButtonElement>("[data-dl-business-option]"),
+  );
+  if (optionButtons.length === 0) return;
+
+  const closeMenu = (): void => {
+    wrap.classList.remove("is-open");
+    trigger.setAttribute("aria-expanded", "false");
+    menu.hidden = true;
+  };
+
+  const openMenu = (): void => {
+    wrap.classList.add("is-open");
+    trigger.setAttribute("aria-expanded", "true");
+    menu.hidden = false;
+  };
+
+  const setActiveValue = (value: string): void => {
+    const normalized =
+      value === "Pool" || value === "Spa" || value === "All" ? value : "All";
+    selectEl.value = normalized;
+    valueEl.textContent = normalized;
+    optionButtons.forEach((btn) => {
+      const isActive = btn.dataset.dlBusinessOption === normalized;
+      btn.classList.toggle("is-active", isActive);
+      btn.setAttribute("aria-selected", isActive ? "true" : "false");
+    });
+  };
+
+  setActiveValue(selectEl.value);
+
+  trigger.addEventListener("click", () => {
+    if (menu.hidden) {
+      openMenu();
+      return;
+    }
+    closeMenu();
+  });
+
+  optionButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      setActiveValue(btn.dataset.dlBusinessOption ?? "All");
+      closeMenu();
+      trigger.focus();
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Node)) return;
+    if (!wrap.contains(target)) closeMenu();
+  });
+
+  root.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeMenu();
+  });
+}
+
 function escapeHtml(s: string): string {
   return s
     .replace(/&/g, "&amp;")
@@ -202,6 +272,7 @@ async function init(): Promise<void> {
     "dl-results-list",
   ) as HTMLUListElement | null;
   const mapEl = document.getElementById("dl-map") as HTMLElement | null;
+  const mapWrap = document.getElementById("dl-map-wrap") as HTMLElement | null;
   const msg = document.getElementById("dl-locator-message");
   const businessSel = document.getElementById(
     "dl-business-type",
@@ -213,7 +284,9 @@ async function init(): Promise<void> {
   const dlZipInput = zipInput;
   const dlList = list;
   const dlMapEl = mapEl;
+  const dlMapWrap = mapWrap;
   const dlBusinessSel = businessSel;
+  setupBusinessTypeSelect(root, dlBusinessSel);
 
   let mapsKey = (root.dataset.dlMapsKey ?? "").trim();
   if (!mapsKey) {
@@ -414,6 +487,7 @@ async function init(): Promise<void> {
 
     const distance = readRadiusMiles(dlForm);
     const businessType = businessTypeValue(dlBusinessSel);
+    if (dlMapWrap) dlMapWrap.hidden = false;
     const params = new URLSearchParams({
       zip,
       country: "US",
@@ -494,13 +568,6 @@ async function init(): Promise<void> {
   window.addEventListener("resize", () => {
     if (mapReady && map) google.maps.event.trigger(map, "resize");
   });
-
-  const prompt = document.createElement("li");
-  prompt.className = "dl-page__result-prompt";
-  prompt.setAttribute("role", "status");
-  prompt.textContent =
-    "Enter a U.S. ZIP code, adjust radius or category if you like, then click Search to see distributors on the list and map.";
-  dlList.appendChild(prompt);
 
   if (!mapsKey) {
     setMessage(

@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import PageHeaderOffset from "../../components/PageHeaderOffset.astro";
 import SectionHero from "../../components/SectionHero/SectionHero.astro";
+import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs.astro";
 
 export const prerender = true;
 
@@ -12,7 +13,12 @@ const mapsBrowserKey =
 
 const pageTitle = "Distributor locator";
 const introDefault =
-  "Find authorized distributors and dealers near you. Enter a ZIP code, choose a radius and category, then click Search to load the list and map.";
+  "Find authorized distributors and dealers near you. Enter a ZIP code, choose a radius and category, then press Enter to load the list and map.";
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "For homeowners", href: "/for-homeowners" },
+  { label: pageTitle },
+];
 ---
 
 <Layout headerType="white" pageTitle={pageTitle} description={introDefault}>
@@ -23,6 +29,9 @@ const introDefault =
     data-dl-maps-key={mapsBrowserKey}
   >
     <SectionHero title={pageTitle} intro={introDefault} />
+    <div class="dl-page__breadcrumb-wrap">
+      <Breadcrumbs items={breadcrumbs} />
+    </div>
 
     <div class="dl-page__body">
       <div class="dl-page__body-inner">
@@ -31,10 +40,6 @@ const introDefault =
           aria-labelledby="dl-locator-heading"
           data-dl-tool
         >
-          <h2 class="dl-page__locator-heading" id="dl-locator-heading">
-            Search distributors
-          </h2>
-
           <form
             class="dl-page__locator-form"
             id="dl-locator-form"
@@ -76,72 +81,164 @@ const introDefault =
                   />
                 </div>
 
-                <div class="dl-page__locator-within" role="group" aria-labelledby="dl-within-label">
-                  <span class="dl-page__locator-within-label" id="dl-within-label"
-                    >Within</span
+                <div
+                  class="dl-page__locator-within"
+                  role="group"
+                  aria-labelledby="dl-within-label"
+                >
+                  <span
+                    class="dl-page__locator-within-label"
+                    id="dl-within-label">Within</span
                   >
                   <div class="dl-page__radius-chips" data-dl-radius-group>
                     {
-                      ["10", "25", "50", "100", "200", "500", "any"].map((mi, i) => (
-                        <label class="dl-page__radius-chip">
-                          <input
-                            type="radio"
-                            name="dl-radius"
-                            value={mi}
-                            checked={i === 0}
-                            class="dl-page__radius-input visually-hidden"
-                          />
-                          <span class="dl-page__radius-chip-ui">
-                            {mi === "any" ? "Any" : `${mi} mi`}
-                          </span>
-                        </label>
-                      ))
+                      ["10", "25", "50", "100", "200", "500", "any"].map(
+                        (mi, i) => (
+                          <label class="dl-page__radius-chip">
+                            <input
+                              type="radio"
+                              name="dl-radius"
+                              value={mi}
+                              checked={i === 0}
+                              class="dl-page__radius-input visually-hidden"
+                            />
+                            <span class="dl-page__radius-chip-ui">
+                              {mi === "any" ? "Any" : `${mi} mi`}
+                            </span>
+                          </label>
+                        ),
+                      )
                     }
                   </div>
                 </div>
 
                 <div class="dl-page__locator-category">
-                  <label class="visually-hidden" for="dl-business-type">Category</label>
-                  <div class="dl-page__category-wrap">
-                    <span class="dl-page__category-prefix" aria-hidden="true"
-                      >Category:</span
+                  <label class="visually-hidden" for="dl-business-type"
+                    >Category</label
+                  >
+                  <div class="dl-page__category-wrap" data-dl-business-root>
+                    <button
+                      type="button"
+                      class="dl-page__category-trigger"
+                      id="dl-business-trigger"
+                      aria-label="Category"
+                      aria-haspopup="listbox"
+                      aria-expanded="false"
+                      aria-controls="dl-business-menu"
+                      data-dl-business-trigger
                     >
+                      <span class="dl-page__category-prefix" aria-hidden="true"
+                        >Category:</span
+                      >
+                      <span
+                        id="dl-business-value"
+                        class="dl-page__category-value"
+                        data-dl-business-value>All</span
+                      >
+                      <span
+                        class="dl-page__category-chevron"
+                        aria-hidden="true"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="10"
+                          height="6"
+                          viewBox="0 0 10 6"
+                          fill="none"
+                        >
+                          <path
+                            d="M0.75 0.75L4.75 4.75L8.75 0.75"
+                            stroke="#9C9C9C"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                        </svg>
+                      </span>
+                    </button>
+                    <ul
+                      id="dl-business-menu"
+                      class="dl-page__category-menu"
+                      role="listbox"
+                      aria-labelledby="dl-business-trigger"
+                      hidden
+                      data-dl-business-menu
+                    >
+                      <li role="presentation">
+                        <button
+                          type="button"
+                          class="dl-page__category-option is-active"
+                          role="option"
+                          aria-selected="true"
+                          data-dl-business-option="All"
+                        >
+                          All
+                        </button>
+                      </li>
+                      <li role="presentation">
+                        <button
+                          type="button"
+                          class="dl-page__category-option"
+                          role="option"
+                          aria-selected="false"
+                          data-dl-business-option="Pool"
+                        >
+                          Pool
+                        </button>
+                      </li>
+                      <li role="presentation">
+                        <button
+                          type="button"
+                          class="dl-page__category-option"
+                          role="option"
+                          aria-selected="false"
+                          data-dl-business-option="Spa"
+                        >
+                          Spa
+                        </button>
+                      </li>
+                    </ul>
                     <select
                       id="dl-business-type"
-                      class="dl-page__category-select"
+                      class="visually-hidden"
                       name="businessType"
+                      tabindex="-1"
+                      aria-hidden="true"
                     >
-                      <option value="All">All</option>
+                      <option value="All" selected>All</option>
                       <option value="Pool">Pool</option>
                       <option value="Spa">Spa</option>
                     </select>
                   </div>
                 </div>
 
-                <button type="submit" class="btn btn--primary-dark dl-page__locator-submit">
-                  Search
-                </button>
               </div>
-              <p id="dl-locator-hint" class="dl-page__locator-hint">
-                Enter a U.S. ZIP code (5 digits or ZIP+4), set radius and category if needed,
-                then click Search. Results and the map appear after you search.
-              </p>
             </div>
           </form>
 
-          <p id="dl-locator-message" class="dl-page__locator-message" hidden role="alert"></p>
+          <p
+            id="dl-locator-message"
+            class="dl-page__locator-message"
+            hidden
+            role="alert"
+          >
+          </p>
 
           <div class="dl-page__locator-split">
             <div class="dl-page__locator-list-wrap">
-              <ul class="dl-page__locator-results" id="dl-results-list" data-dl-results></ul>
+              <ul
+                class="dl-page__locator-results"
+                id="dl-results-list"
+                data-dl-results
+              >
+              </ul>
             </div>
-            <div class="dl-page__locator-map-wrap">
+            <div class="dl-page__locator-map-wrap" id="dl-map-wrap" hidden>
               <p
                 id="dl-map-placeholder"
                 class="dl-page__map-placeholder"
                 role="status"
               >
-                Map and pins appear after you click Search.
+                Map and pins appear after search.
               </p>
               <div
                 id="dl-map"

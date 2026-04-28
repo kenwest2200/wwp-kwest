@@ -16,10 +16,16 @@ const RESERVED_PATHS = new Set([
   "/search",
   "/404",
   "/resources/faq",
+  "/resources",
   "/resources/instructional-videos",
   "/resources/product-support",
   "/resources/sales-representatives",
+  "/resources/catalog-choices",
   "/distributor-locator",
+  "/help",
+  "/support",
+  "/company",
+  "/for-homeowners",
 ]);
 
 function normalizeMatchPath(uri: string): string {

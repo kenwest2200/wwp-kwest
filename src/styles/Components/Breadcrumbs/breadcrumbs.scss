@@ -1,0 +1,44 @@
+@use "../../variables" as *;
+@use "../../functions" as *;
+
+.breadcrumbs__list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: px-to-rem(16);
+  line-height: px-to-rem(24);
+  letter-spacing: 0.03em;
+  font-weight: 500;
+  color: $dark;
+  gap: px-to-rem(10);
+}
+
+.breadcrumbs__item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.breadcrumbs__separator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: px-to-rem(8);
+  color: $cool-gray-60;
+}
+
+.breadcrumbs__link {
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    color: $dark-teal;
+    text-decoration: underline;
+  }
+}
+
+.breadcrumbs__current {
+  color: $cool-gray-60;
+}

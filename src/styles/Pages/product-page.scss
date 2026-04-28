@@ -996,6 +996,13 @@
     }
   }
 
+  .product-page__breadcrumb-wrap {
+    max-width: px-to-rem(960);
+    margin: px-to-rem(40) auto 0;
+    padding-left: var(--section-left, var(--s-padding-x));
+    padding-right: var(--section-right, var(--s-padding-x));
+  }
+
   .product-page__wysiwyg {
     strong {
       padding: px-to-rem(4) 0;

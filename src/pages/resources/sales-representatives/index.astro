@@ -2,6 +2,7 @@
 import Layout from "../../../layouts/Layout.astro";
 import PageHeaderOffset from "../../../components/PageHeaderOffset.astro";
 import SectionHero from "../../../components/SectionHero/SectionHero.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs.astro";
 
 export const prerender = true;
 
@@ -9,11 +10,19 @@ const pageTitle = "Sales representatives";
 const heroTitle = "Find your sales representative by ZIP code";
 const heroIntro =
   "Enter your U.S. ZIP code to see the sales representatives assigned to your territory.";
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Resources", href: "/resources" },
+  { label: pageTitle },
+];
 ---
 
 <Layout headerType="white" pageTitle={pageTitle} description={heroIntro}>
   <main class="sr-page" data-page-header-offset data-sales-reps-page>
     <SectionHero title={heroTitle} intro={heroIntro} />
+    <div class="sr-page__breadcrumb-wrap">
+      <Breadcrumbs items={breadcrumbs} />
+    </div>
 
     <div class="sr-page__body">
       <div class="sr-page__body-inner">

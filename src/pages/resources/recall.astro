@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import PageHeaderOffset from "../../components/PageHeaderOffset.astro";
 import SectionHero from "../../components/SectionHero/SectionHero.astro";
+import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs.astro";
 import DownloadIcon from "../../components/icons/downloadIcon.astro";
 import DownloadPdfIcon from "../../assets/images/downloadpdf.png";
 import { getGraphQLClient, requestGraphql } from "../../lib/graphql";
@@ -33,6 +34,11 @@ const pageNode = await loadPage();
 const pageTitle =
   pageNode?.title?.trim() || "Product Safety & Recall Information";
 const cards = normalizeRecallCards(pageNode);
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Support", href: "/support" },
+  { label: pageTitle || "Recall" },
+];
 
 const downloadPdfIconSrc =
   typeof DownloadPdfIcon === "string" ? DownloadPdfIcon : DownloadPdfIcon.src;
@@ -41,6 +47,9 @@ const downloadPdfIconSrc =
 <Layout headerType="white" pageTitle={pageTitle} description={introDefault}>
   <main class="recall-page" data-page-header-offset>
     <SectionHero title={pageTitle} intro={introDefault} />
+    <div class="recall-page__breadcrumb-wrap">
+      <Breadcrumbs items={breadcrumbs} />
+    </div>
 
     <div class="recall-page__body">
       <div class="recall-page__body-inner">

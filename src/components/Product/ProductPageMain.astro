@@ -1,5 +1,6 @@
 ---
 import ProductPageBody from "./ProductPageBody.astro";
+import Breadcrumbs from "../Breadcrumbs/Breadcrumbs.astro";
 import type { ProductPageData } from "../../lib/queries/product-detail";
 import type { ProductPageView } from "../../lib/product-page-view";
 
@@ -12,6 +13,12 @@ interface Props {
 
 const { graphqlConfigured, slug, product, view } = Astro.props;
 const { title, brandImg } = view;
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Products", href: "/products/" },
+  ...view.breadcrumbLinks.map((crumb) => ({ label: crumb.label, href: crumb.href })),
+  { label: title },
+];
 ---
 
 <main class="product-page">
@@ -19,24 +26,7 @@ const { title, brandImg } = view;
     <div class="product-page__hero">
       <div class="product-page__hero-main">
         <h1 class="product-page__title">{title}</h1>
-        <nav class="product-page__breadcrumb" aria-label="Breadcrumb">
-          <ol class="product-page__breadcrumb-list">
-            <li>
-              <a href="/">Home</a>
-            </li>
-            <li>
-              <a href="/products/">Products</a>
-            </li>
-            {
-              view.breadcrumbLinks.map((crumb) => (
-                <li>
-                  <a href={crumb.href}>{crumb.label}</a>
-                </li>
-              ))
-            }
-            <li aria-current="page">{title}</li>
-          </ol>
-        </nav>
+        <Breadcrumbs items={breadcrumbs} class="product-page__breadcrumb" />
       </div>
       {
         brandImg?.sourceUrl && (

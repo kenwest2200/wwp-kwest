@@ -1,0 +1,564 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import PageHeaderOffset from "../../../components/PageHeaderOffset.astro";
+import SectionHero from "../../../components/SectionHero/SectionHero.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs.astro";
+import DownloadIcon from "../../../components/icons/downloadIcon.astro";
+import DownloadPdfIcon from "../../../assets/images/downloadpdf.png";
+import SearchIcon from "../../../components/icons/searchIcon.astro";
+import { requestGraphql } from "../../../lib/graphql";
+import {
+  CATALOG_CHOICES_PAGE_QUERY,
+  CATALOG_CHOICES_PAGE_URI,
+  normalizeCatalogChoices,
+  type CatalogChoicesPageData,
+} from "../../../lib/queries/resources-catalog-choices-page";
+
+export const prerender = true;
+
+async function loadPage(): Promise<CatalogChoicesPageData["page"] | null> {
+  const uris = [
+    CATALOG_CHOICES_PAGE_URI,
+    CATALOG_CHOICES_PAGE_URI.replace(/\/$/, ""),
+  ];
+  for (const id of uris) {
+    try {
+      const data = await requestGraphql<CatalogChoicesPageData>(
+        CATALOG_CHOICES_PAGE_QUERY,
+        { id },
+      );
+      if (data.page) return data.page;
+    } catch {
+      /* try next */
+    }
+  }
+  return null;
+}
+
+const pageNode = await loadPage();
+const pageTitle = (pageNode?.title ?? "").trim();
+const data = normalizeCatalogChoices(pageNode);
+const intro =
+  "Browse Waterway digital catalogs and brochures to explore product lines, specifications, and available options for pools and spas.";
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Resources", href: "/resources" },
+  { label: pageTitle || "Catalog Choices" },
+];
+---
+
+<Layout headerType="white" pageTitle={pageTitle}>
+  <main
+    class="catalog-choices-page"
+    data-page-header-offset
+    data-catalog-choices-page
+  >
+    <SectionHero title={pageTitle} intro={intro} />
+    <div class="catalog-choices-page__breadcrumb-wrap">
+      <Breadcrumbs items={breadcrumbs} />
+    </div>
+    <div class="catalog-choices-page__body">
+      <div class="catalog-choices-page__inner">
+        <div
+          class="catalog-choices-page__tabs"
+          role="tablist"
+          aria-label="Catalog sections"
+        >
+          <button
+            type="button"
+            class="catalog-choices-page__tab is-active"
+            id="catalog-choices-tab-all"
+            role="tab"
+            aria-selected="true"
+            aria-controls="catalog-choices-panel-all"
+            data-catalog-tab="all"
+          >
+            All
+          </button>
+          <button
+            type="button"
+            class="catalog-choices-page__tab"
+            id="catalog-choices-tab-catalogs"
+            role="tab"
+            aria-selected="false"
+            aria-controls="catalog-choices-panel-catalogs"
+            data-catalog-tab="catalogs"
+          >
+            Digital catalogs
+          </button>
+          <button
+            type="button"
+            class="catalog-choices-page__tab"
+            id="catalog-choices-tab-brochures"
+            role="tab"
+            aria-selected="false"
+            aria-controls="catalog-choices-panel-brochures"
+            data-catalog-tab="brochures"
+          >
+            Brochures
+          </button>
+        </div>
+
+        <section
+          id="catalog-choices-panel-all"
+          class="catalog-choices-page__tabpanel"
+          role="tabpanel"
+          aria-labelledby="catalog-choices-tab-all"
+          data-catalog-panel="all"
+        >
+          {
+            data.catalogs.length > 0 && (
+              <div class="catalog-choices-page__catalogs">
+                {data.catalogs.map((item) => (
+                  <article class="catalog-choices-page__card">
+                    <div class="catalog-choices-page__card-icon-wrap">
+                      <img
+                        src={DownloadPdfIcon.src}
+                        alt="PDF document"
+                        width={80}
+                        height={85}
+                        loading="lazy"
+                        class="catalog-choices-page__card-icon"
+                        decoding="async"
+                      />
+                    </div>
+                    <div class="catalog-choices-page__card-content">
+                      {item.title && (
+                        <h2
+                          class="catalog-choices-page__card-title catalog-choices-page__card-title--truncate"
+                          title={item.title}
+                        >
+                          {item.title}
+                        </h2>
+                      )}
+                      {item.descriptionHtml && (
+                        <div
+                          class="catalog-choices-page__card-description"
+                          set:html={item.descriptionHtml}
+                        />
+                      )}
+                      {item.linkUrl && (
+                        <a
+                          class="catalog-choices-page__link btn btn--primary-dark"
+                          href={item.linkUrl}
+                          target={item.linkTarget || "_self"}
+                          rel={
+                            item.linkTarget === "_blank"
+                              ? "noopener noreferrer"
+                              : undefined
+                          }
+                        >
+                          <DownloadIcon />
+                          {item.linkTitle || item.linkUrl}
+                        </a>
+                      )}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )
+          }
+
+          {
+            data.brochures.length > 0 && (
+              <section
+                class="catalog-choices-page__brochures"
+                data-brochure-scope="all"
+              >
+                {data.brochuresTitle && (
+                  <h2 class="catalog-choices-page__brochures-title">
+                    {data.brochuresTitle}
+                  </h2>
+                )}
+                <div class="catalog-choices-page__brochure-search-wrap">
+                  <SearchIcon class="catalog-choices-page__brochure-search-icon" />
+                  <input
+                    type="search"
+                    class="catalog-choices-page__brochure-search"
+                    placeholder="Search brochures"
+                    autocomplete="off"
+                    data-brochure-search
+                  />
+                </div>
+                <div
+                  class="catalog-choices-page__brochures-list"
+                  data-brochure-list
+                >
+                  {data.brochures.map((item) => (
+                    <article
+                      class="catalog-choices-page__card"
+                      data-brochure-item
+                    >
+                      {item.partNumber && (
+                        <p class="catalog-choices-page__part-number">
+                          {item.partNumber}
+                        </p>
+                      )}
+                      <img
+                        src={DownloadPdfIcon.src}
+                        alt="PDF document"
+                        width={100}
+                        height={105}
+                        loading="lazy"
+                        class="catalog-choices-page__card-icon"
+                        decoding="async"
+                      />
+                      {item.title && (
+                        <h3
+                          class="catalog-choices-page__card-title catalog-choices-page__card-title--truncate"
+                        >
+                          {item.title}
+                        </h3>
+                      )}
+
+                      {item.linkUrl && (
+                        <a
+                          class="catalog-choices-page__link"
+                          href={item.linkUrl}
+                          target={item.linkTarget || "_self"}
+                          rel={
+                            item.linkTarget === "_blank"
+                              ? "noopener noreferrer"
+                              : undefined
+                          }
+                        >
+                          {item.linkTitle || "View PDF"}
+                        </a>
+                      )}
+                    </article>
+                  ))}
+                </div>
+                <p
+                  class="catalog-choices-page__empty"
+                  data-brochure-empty
+                  hidden
+                >
+                  No brochures found.
+                </p>
+              </section>
+            )
+          }
+        </section>
+
+        <section
+          id="catalog-choices-panel-catalogs"
+          class="catalog-choices-page__tabpanel"
+          role="tabpanel"
+          aria-labelledby="catalog-choices-tab-catalogs"
+          data-catalog-panel="catalogs"
+          hidden
+        >
+          {
+            data.catalogs.length > 0 && (
+              <div class="catalog-choices-page__catalogs">
+                {data.catalogs.map((item) => (
+                  <article class="catalog-choices-page__card">
+                    <div class="catalog-choices-page__card-icon-wrap">
+                      <img
+                        src={DownloadPdfIcon.src}
+                        alt="PDF document"
+                        width={80}
+                        height={85}
+                        loading="lazy"
+                        class="catalog-choices-page__card-icon"
+                        decoding="async"
+                      />
+                    </div>
+                    <div class="catalog-choices-page__card-content">
+                      {item.title && (
+                        <h2
+                          class="catalog-choices-page__card-title catalog-choices-page__card-title--truncate"
+                          title={item.title}
+                        >
+                          {item.title}
+                        </h2>
+                      )}
+                      {item.descriptionHtml && (
+                        <div
+                          class="catalog-choices-page__card-description"
+                          set:html={item.descriptionHtml}
+                        />
+                      )}
+                      {item.linkUrl && (
+                        <a
+                          class="catalog-choices-page__link btn btn--primary-dark"
+                          href={item.linkUrl}
+                          target={item.linkTarget || "_self"}
+                          rel={
+                            item.linkTarget === "_blank"
+                              ? "noopener noreferrer"
+                              : undefined
+                          }
+                        >
+                          <DownloadIcon />
+                          {item.linkTitle || item.linkUrl}
+                        </a>
+                      )}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )
+          }
+        </section>
+
+        <section
+          id="catalog-choices-panel-brochures"
+          class="catalog-choices-page__tabpanel"
+          role="tabpanel"
+          aria-labelledby="catalog-choices-tab-brochures"
+          data-catalog-panel="brochures"
+          hidden
+        >
+          {
+            data.brochures.length > 0 && (
+              <section
+                class="catalog-choices-page__brochures"
+                data-brochure-scope="brochures"
+              >
+                <div class="catalog-choices-page__brochure-search-wrap">
+                  <input
+                    type="search"
+                    class="catalog-choices-page__brochure-search"
+                    placeholder="Search brochures"
+                    autocomplete="off"
+                    data-brochure-search
+                  />
+                </div>
+                {data.brochuresTitle && (
+                  <h2 class="catalog-choices-page__brochures-title">
+                    {data.brochuresTitle}
+                  </h2>
+                )}
+                <div
+                  class="catalog-choices-page__brochures-list"
+                  data-brochure-list
+                >
+                  {data.brochures.map((item) => (
+                    <article
+                      class="catalog-choices-page__card"
+                      data-brochure-item
+                    >
+                      {item.partNumber && (
+                        <p class="catalog-choices-page__part-number">
+                          {item.partNumber}
+                        </p>
+                      )}
+                      <img
+                        src={DownloadPdfIcon.src}
+                        alt="PDF document"
+                        width={100}
+                        height={105}
+                        loading="lazy"
+                        class="catalog-choices-page__card-icon"
+                        decoding="async"
+                      />
+                      {item.title && (
+                        <h3
+                          class="catalog-choices-page__card-title catalog-choices-page__card-title--truncate"
+                        >
+                          {item.title}
+                        </h3>
+                      )}
+
+                      {item.linkUrl && (
+                        <a
+                          class="catalog-choices-page__link"
+                          href={item.linkUrl}
+                          target={item.linkTarget || "_self"}
+                          rel={
+                            item.linkTarget === "_blank"
+                              ? "noopener noreferrer"
+                              : undefined
+                          }
+                        >
+                          {item.linkTitle || "View PDF"}
+                        </a>
+                      )}
+                    </article>
+                  ))}
+                </div>
+                <p
+                  class="catalog-choices-page__empty"
+                  data-brochure-empty
+                  hidden
+                >
+                  No brochures found.
+                </p>
+              </section>
+            )
+          }
+        </section>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<PageHeaderOffset />
+
+<script>
+  const root = document.querySelector("[data-catalog-choices-page]");
+  if (root instanceof HTMLElement) {
+    const tabs = Array.from(
+      root.querySelectorAll<HTMLButtonElement>("[data-catalog-tab]"),
+    );
+    const panels = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-catalog-panel]"),
+    );
+
+    const setActiveTab = (tabId: string) => {
+      for (const tab of tabs) {
+        const isActive = tab.dataset.catalogTab === tabId;
+        tab.classList.toggle("is-active", isActive);
+        tab.setAttribute("aria-selected", isActive ? "true" : "false");
+      }
+      for (const panel of panels) {
+        panel.hidden = panel.dataset.catalogPanel !== tabId;
+      }
+    };
+
+    for (const tab of tabs) {
+      tab.addEventListener("click", () => {
+        const tabId = tab.dataset.catalogTab;
+        if (!tabId) return;
+        setActiveTab(tabId);
+      });
+    }
+
+    const brochureScopes = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-brochure-scope]"),
+    );
+    let brochureTitleTooltipEl: HTMLDivElement | null = null;
+    let brochureTitleTooltipActiveCard: HTMLElement | null = null;
+
+    const ensureBrochureTitleTooltipEl = (): HTMLDivElement => {
+      if (brochureTitleTooltipEl) return brochureTitleTooltipEl;
+      const el = document.createElement("div");
+      el.className = "catalog-choices-page__title-tooltip";
+      el.setAttribute("role", "tooltip");
+      el.hidden = true;
+      document.body.appendChild(el);
+      brochureTitleTooltipEl = el;
+      return el;
+    };
+
+    const hideBrochureTitleTooltip = () => {
+      brochureTitleTooltipActiveCard = null;
+      if (!brochureTitleTooltipEl) return;
+      brochureTitleTooltipEl.hidden = true;
+      brochureTitleTooltipEl.textContent = "";
+    };
+
+    const positionBrochureTitleTooltip = (clientX: number, clientY: number) => {
+      const el = ensureBrochureTitleTooltipEl();
+      if (el.hidden) return;
+      const pad = 14;
+      el.style.left = "0px";
+      el.style.top = "0px";
+      void el.offsetHeight;
+      const rect = el.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      let x = clientX + pad;
+      let y = clientY + pad;
+      if (x + rect.width > vw - 8) x = Math.max(8, clientX - rect.width - pad);
+      if (y + rect.height > vh - 8) y = Math.max(8, clientY - rect.height - pad);
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+    };
+
+    const titleIsClamped = (titleEl: HTMLElement) =>
+      titleEl.scrollHeight > titleEl.clientHeight + 1;
+
+    for (const scope of brochureScopes) {
+      const searchInput = scope.querySelector<HTMLInputElement>(
+        "[data-brochure-search]",
+      );
+      const brochureItems = Array.from(
+        scope.querySelectorAll<HTMLElement>("[data-brochure-item]"),
+      );
+      const emptyEl = scope.querySelector<HTMLElement>("[data-brochure-empty]");
+
+      const runBrochureFilter = () => {
+        if (!searchInput) return;
+        const q = searchInput.value.trim().toLowerCase();
+        let visibleCount = 0;
+        for (const item of brochureItems) {
+          const haystack = (item.textContent || "").toLowerCase();
+          const show = !q || haystack.includes(q);
+          item.hidden = !show;
+          if (show) visibleCount += 1;
+        }
+        if (emptyEl) emptyEl.hidden = visibleCount > 0;
+      };
+
+      searchInput?.addEventListener("input", runBrochureFilter);
+
+      scope.addEventListener(
+        "mouseover",
+        (e) => {
+          const card = (e.target as HTMLElement).closest<HTMLElement>(
+            "[data-brochure-item]",
+          );
+          if (!card || !scope.contains(card)) return;
+          const titleEl = card.querySelector<HTMLElement>(
+            ".catalog-choices-page__card-title--truncate",
+          );
+          if (!titleEl || !titleIsClamped(titleEl)) {
+            hideBrochureTitleTooltip();
+            return;
+          }
+          const full = (titleEl.textContent || "").trim();
+          if (!full) return;
+          brochureTitleTooltipActiveCard = card;
+          const tip = ensureBrochureTitleTooltipEl();
+          tip.textContent = full;
+          tip.hidden = false;
+          positionBrochureTitleTooltip(e.clientX, e.clientY);
+        },
+        true,
+      );
+
+      scope.addEventListener(
+        "mousemove",
+        (e) => {
+          if (!brochureTitleTooltipActiveCard || brochureTitleTooltipEl?.hidden) return;
+          const card = (e.target as HTMLElement).closest<HTMLElement>(
+            "[data-brochure-item]",
+          );
+          if (card !== brochureTitleTooltipActiveCard) return;
+          positionBrochureTitleTooltip(e.clientX, e.clientY);
+        },
+        true,
+      );
+
+      scope.addEventListener(
+        "mouseout",
+        (e) => {
+          const card = (e.target as HTMLElement).closest<HTMLElement>(
+            "[data-brochure-item]",
+          );
+          if (!card || !scope.contains(card)) return;
+          const related = e.relatedTarget as Node | null;
+          if (related && card.contains(related)) return;
+          hideBrochureTitleTooltip();
+        },
+        true,
+      );
+    }
+
+    window.addEventListener("scroll", hideBrochureTitleTooltip, { passive: true });
+    let resizeHideTooltipTimer: number | null = null;
+    window.addEventListener(
+      "resize",
+      () => {
+        if (resizeHideTooltipTimer != null) window.clearTimeout(resizeHideTooltipTimer);
+        resizeHideTooltipTimer = window.setTimeout(() => {
+          resizeHideTooltipTimer = null;
+          hideBrochureTitleTooltip();
+        }, 120);
+      },
+      { passive: true },
+    );
+  }
+</script>

@@ -14,6 +14,7 @@
 @use "Components/Cta/cta.scss";
 @use "Components/SectionHero/sectionHero.scss";
 @use "Components/ScrollToTopButton/scroll-to-top-button.scss";
+@use "Components/Breadcrumbs/breadcrumbs.scss";
 @use "Pages/product-filters.scss";
 @use "Pages/search.scss";
 @use "Pages/product-cross-reference-page.scss";
@@ -27,3 +28,5 @@
 @use "Pages/distributor-locator-page.scss";
 @use "Pages/page-404.scss";
 @use "Pages/pool-calculator-page.scss";
+@use "Pages/help-page.scss";
+@use "Pages/catalog-choices-page.scss";

@@ -6,6 +6,13 @@
   padding-top: var(--page-header-offset, #{px-to-rem(112)});
   padding-bottom: px-to-rem(100);
 
+  &__breadcrumb-wrap {
+    max-width: px-to-rem(992);
+    margin: px-to-rem(40) auto 0;
+    padding-left: var(--section-left, var(--s-padding-x));
+    padding-right: var(--section-right, var(--s-padding-x));
+  }
+
   &__body {
     padding-top: px-to-rem(100);
   }

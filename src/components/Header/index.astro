@@ -28,6 +28,7 @@ function topBarNodesFromHeaderData(data: HeaderLayoutData | null | undefined) {
 const { data, headerType } = Astro.props;
 const items = menuNodesFromHeaderData(data);
 const topBarFlat = topBarNodesFromHeaderData(data);
+const currentPathname = Astro.url.pathname;
 
 type MenuLink = { label: string; href: string };
 type FlatMenuNode = {
@@ -44,19 +45,50 @@ type HeaderMenuNode = {
   children: HeaderMenuNode[];
 };
 
+function normalizeMenuHref(pathRaw: string, urlRaw: string): string {
+  const path = (pathRaw ?? "").trim();
+  if (path && path !== "#") return path;
+  const url = (urlRaw ?? "").trim();
+  if (!url || url === "#") return "#";
+  if (url.startsWith("/")) return url;
+  try {
+    const parsed = new URL(url);
+    return parsed.pathname || "#";
+  } catch {
+    return "#";
+  }
+}
+
+function inferParentHrefFromChildren(children: HeaderMenuNode[]): string {
+  for (const child of children) {
+    const href = (child.href ?? "").trim();
+    if (!href || href === "#") continue;
+    if (href.startsWith("/products")) return "/products";
+    const parts = href.split("?")[0].split("/").filter(Boolean);
+    if (parts.length > 0) return `/${parts[0]}`;
+  }
+  return "#";
+}
+
+function slugFromLabel(label: string): string {
+  return label
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 function buildHeaderMenuTree(flatNodes: FlatMenuNode[]): HeaderMenuNode[] {
   const byId = new Map<string, HeaderMenuNode>();
   const roots: HeaderMenuNode[] = [];
 
   flatNodes.forEach((node) => {
     if (!node.id || !node.label) return;
-    const normalizedLabel = node.label.trim().toLowerCase();
-    const pathRaw = (node.path ?? "").trim();
-    const hrefFromPath = !pathRaw || pathRaw === "#" ? "#" : pathRaw;
+    const href = normalizeMenuHref(node.path, node.url);
     byId.set(node.id, {
       id: node.id,
       label: node.label,
-      href: normalizedLabel === "products" ? "/products" : hrefFromPath,
+      href,
       children: [],
     });
   });
@@ -70,6 +102,17 @@ function buildHeaderMenuTree(flatNodes: FlatMenuNode[]): HeaderMenuNode[] {
       roots.push(current);
     }
   });
+
+  for (const item of byId.values()) {
+    if (item.children.length > 0) {
+      const slug = slugFromLabel(item.label);
+      if (slug) {
+        item.href = `/${slug}`;
+      } else if (item.href === "#") {
+        item.href = inferParentHrefFromChildren(item.children);
+      }
+    }
+  }
 
   return roots;
 }
@@ -117,6 +160,56 @@ function splitMenuIntoColumns(
     if (slice.length > 0) out.push(slice);
   }
   return out.length > 0 ? out : [links];
+}
+
+function normalizePathname(pathname: string): string {
+  const p = (pathname || "/").trim();
+  if (!p) return "/";
+  const noQuery = p.split("?")[0] || "/";
+  const noHash = noQuery.split("#")[0] || "/";
+  const noTrail = noHash.replace(/\/+$/, "");
+  return noTrail === "" ? "/" : noTrail;
+}
+
+function isMenuItemActive(href: string, pathname: string): boolean {
+  const h = normalizePathname(href);
+  const p = normalizePathname(pathname);
+  const isRecallPath = p === "/resources/recall" || p.startsWith("/resources/recall/");
+  const isHelpPath = p === "/help" || p.startsWith("/help/");
+  const isProductInfoPath =
+    p === "/product/information" || p.startsWith("/product/information/");
+  const isCompanyMappedPath =
+    p === "/about-us" ||
+    p.startsWith("/about-us/") ||
+    p === "/contact" ||
+    p.startsWith("/contact/") ||
+    p === "/news" ||
+    p.startsWith("/news/") ||
+    p === "/resources/employment-opportunities" ||
+    p.startsWith("/resources/employment-opportunities/");
+  const isForHomeownersMappedPath =
+    p === "/distributor-locator" || p.startsWith("/distributor-locator/");
+  const isSupportMappedPath = isRecallPath || isHelpPath || isProductInfoPath;
+  if (!h || h === "#") return false;
+  if (h === "/") return p === "/";
+  if (
+    h === "/products" &&
+    !isProductInfoPath &&
+    (p === "/product" || p.startsWith("/product/"))
+  ) {
+    return true;
+  }
+  if (h === "/support" && isSupportMappedPath) {
+    return true;
+  }
+  if (h === "/company" && isCompanyMappedPath) {
+    return true;
+  }
+  if (h === "/for-homeowners" && isForHomeownersMappedPath) {
+    return true;
+  }
+  if (h === "/resources" && (isSupportMappedPath || isCompanyMappedPath)) return false;
+  return p === h || p.startsWith(`${h}/`);
 }
 ---
 
@@ -208,14 +301,23 @@ function splitMenuIntoColumns(
           {
             realMenu.map((item) => {
               const hasSubmenu = item.children.length > 0;
+              const isActive = isMenuItemActive(item.href, currentPathname);
               return (
                 <li
                   class:list={[
                     "header__item",
                     hasSubmenu && "header__item--has-submenu",
+                    isActive && "is-active",
                   ]}
                 >
-                  <a class="header__link" href={item.href}>
+                  <a
+                    class:list={[
+                      "header__link",
+                      hasSubmenu && "header__link--has-icon",
+                      isActive && "is-active",
+                    ]}
+                    href={item.href}
+                  >
                     {item.label}
                     {hasSubmenu && <IconArrowDown class="header__link-icon" />}
                   </a>

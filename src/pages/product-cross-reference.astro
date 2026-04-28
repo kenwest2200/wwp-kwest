@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import PageHeaderOffset from "../components/PageHeaderOffset.astro";
 import SectionHero from "../components/SectionHero/SectionHero.astro";
+import Breadcrumbs from "../components/Breadcrumbs/Breadcrumbs.astro";
 import ScrollToTopButton from "../components/ScrollToTopButton/ScrollToTopButton.astro";
 
 export const prerender = true;
@@ -9,11 +10,19 @@ export const prerender = true;
 const pageTitle = "Product Cross Reference";
 const intro =
   "Quickly find compatible Waterway replacements for existing equipment. Search by brand, model, part number, or specifications to match components and ensure the right fit.";
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Products", href: "/products" },
+  { label: pageTitle },
+];
 ---
 
 <Layout headerType="white" pageTitle={pageTitle} description={intro}>
   <main class="cross-ref-page" data-page-header-offset data-cross-ref-page>
     <SectionHero title={pageTitle} intro={intro} />
+    <div class="cross-ref-page__breadcrumb-wrap">
+      <Breadcrumbs items={breadcrumbs} />
+    </div>
 
     <section
       class="cross-ref-page__body"

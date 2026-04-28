@@ -1,5 +1,6 @@
 ---
 import ProductPageBody from "./ProductPageBody.astro";
+import Breadcrumbs from "../Breadcrumbs/Breadcrumbs.astro";
 import type { ProductPageData } from "../../lib/queries/product-detail";
 import type { ProductPageView } from "../../lib/product-page-view";
 
@@ -12,6 +13,11 @@ interface Props {
 
 const { graphqlConfigured, slug, product, view } = Astro.props;
 const { title, mainImg } = view;
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Support", href: "/support" },
+  { label: title || "Information" },
+];
 ---
 
 <main class="product-page product-page--information" data-page-header-offset>
@@ -33,6 +39,9 @@ const { title, mainImg } = view;
           </div>
         )
       }
+    </div>
+    <div class="product-page__breadcrumb-wrap">
+      <Breadcrumbs items={breadcrumbs} />
     </div>
     <div class="product-page__inner product-page__wysiwyg">
       <ProductPageBody
