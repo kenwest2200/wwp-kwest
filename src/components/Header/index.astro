@@ -171,10 +171,31 @@ function normalizePathname(pathname: string): string {
   return noTrail === "" ? "/" : noTrail;
 }
 
+function isProductsMegaMenuRoot(item: HeaderMenuNode): boolean {
+  const h = normalizePathname(item.href);
+  return h === "/products" || h.startsWith("/products/");
+}
+
+function productsCategoryFilterHref(categoryLabel: string): string {
+  const slug = slugFromLabel(categoryLabel);
+  if (!slug) return "/products/";
+  return `/products/?category=${encodeURIComponent(slug)}`;
+}
+
+/** Column title + Find more: `/products/?category=<slug>` when under the Products mega item. */
+function columnCategoryHref(
+  col: HeaderMenuNode,
+  megaRoot: HeaderMenuNode,
+): string {
+  if (!isProductsMegaMenuRoot(megaRoot)) return col.href;
+  return productsCategoryFilterHref(col.label);
+}
+
 function isMenuItemActive(href: string, pathname: string): boolean {
   const h = normalizePathname(href);
   const p = normalizePathname(pathname);
-  const isRecallPath = p === "/resources/recall" || p.startsWith("/resources/recall/");
+  const isRecallPath =
+    p === "/resources/recall" || p.startsWith("/resources/recall/");
   const isHelpPath = p === "/help" || p.startsWith("/help/");
   const isProductInfoPath =
     p === "/product/information" || p.startsWith("/product/information/");
@@ -208,7 +229,8 @@ function isMenuItemActive(href: string, pathname: string): boolean {
   if (h === "/for-homeowners" && isForHomeownersMappedPath) {
     return true;
   }
-  if (h === "/resources" && (isSupportMappedPath || isCompanyMappedPath)) return false;
+  if (h === "/resources" && (isSupportMappedPath || isCompanyMappedPath))
+    return false;
   return p === h || p.startsWith(`${h}/`);
 }
 ---
@@ -332,7 +354,10 @@ function isMenuItemActive(href: string, pathname: string): boolean {
                               aria-label={col.label}
                             >
                               <li class="header__submenu-item">
-                                <a class="header__submenu-link" href={col.href}>
+                                <a
+                                  class="header__submenu-link"
+                                  href={columnCategoryHref(col, item)}
+                                >
                                   {col.label}
                                 </a>
                               </li>
@@ -349,7 +374,7 @@ function isMenuItemActive(href: string, pathname: string): boolean {
                               <li class="header__submenu-item-link--find-more">
                                 <a
                                   class="header__mobile-find-more"
-                                  href={col.href}
+                                  href={columnCategoryHref(col, item)}
                                 >
                                   Find more
                                   <IconArrowRight />
@@ -463,7 +488,7 @@ function isMenuItemActive(href: string, pathname: string): boolean {
                             <p class="header__mega-narrow-col-title">
                               <a
                                 class="header__mega-narrow-link"
-                                href={col.href}
+                                href={columnCategoryHref(col, item)}
                               >
                                 {col.label}
                               </a>
@@ -485,7 +510,7 @@ function isMenuItemActive(href: string, pathname: string): boolean {
                               <li class="header__submenu-item-link--find-more">
                                 <a
                                   class="header__mobile-find-more"
-                                  href={col.href}
+                                  href={columnCategoryHref(col, item)}
                                 >
                                   Find more
                                   <IconArrowRight />
@@ -594,7 +619,7 @@ function isMenuItemActive(href: string, pathname: string): boolean {
                             <div class="header__mobile-nested-group">
                               <a
                                 class="header__mobile-nested-heading"
-                                href={col.href}
+                                href={columnCategoryHref(col, item)}
                               >
                                 {col.label}
                               </a>
@@ -615,7 +640,7 @@ function isMenuItemActive(href: string, pathname: string): boolean {
                                 <li class="header__submenu-item-link--find-more">
                                   <a
                                     class="header__mobile-find-more"
-                                    href={col.href}
+                                    href={columnCategoryHref(col, item)}
                                   >
                                     Find more
                                     <IconArrowRight />

@@ -18,7 +18,7 @@
         justify-content: space-between;
         width: 100%;
         gap: px-to-rem(40);
-        padding: px-to-rem(100) px-to-rem(21) px-to-rem(60);
+        padding: px-to-rem(72) px-to-rem(21) px-to-rem(60);
         max-width: px-to-rem(1192);
 
     }
@@ -89,15 +89,33 @@
     &__button {
         align-items: center;
         gap: px-to-rem(12);
-        max-width: px-to-rem(372);
+        max-width: px-to-rem(210) !important;
+        padding-top: px-to-rem(15);
+        padding-bottom: px-to-rem(15);
+        line-height: px-to-rem(24);
         width: 100%;
+        transition: color 0.3s ease;
+
+        &:hover {
+            color: $medium-teal;
+            transition: color 0.3s ease;
+        }
+
+        &:active {
+            color: $medium-teal;
+        }
+
+        svg {
+            width: px-to-rem(24);
+            height: px-to-rem(24);
+        }
     }
 
     @include media-breakpoint-up(sm) {
 
         // min-height: px-to-rem(924);
         &__container {
-            padding: px-to-rem(184) px-to-rem(28) px-to-rem(60);
+            padding: px-to-rem(80) px-to-rem(28) px-to-rem(60);
         }
 
         &__image-container {
@@ -111,7 +129,7 @@
 
         &__container {
             gap: px-to-rem(80);
-            padding: px-to-rem(100) px-to-rem(40) px-to-rem(80);
+            padding: px-to-rem(80) px-to-rem(40) px-to-rem(80);
         }
 
         &__title {
@@ -162,6 +180,8 @@
 
         // min-height: px-to-rem(1106);
         &__container {
+            padding: px-to-rem(100) px-to-rem(40) px-to-rem(80);
+
             gap: px-to-rem(80);
         }
 
