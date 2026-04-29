@@ -1,4 +1,6 @@
 import { importLibrary, setOptions } from "@googlemaps/js-api-loader";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 export {};
 
@@ -22,6 +24,7 @@ type DistributorLocation = {
 type ApiResponse = {
   locations?: RawLocation[];
   error?: string;
+  searchCenter?: { lat: number; lng: number };
 };
 
 type GeocodeZipResponse = {
@@ -30,6 +33,21 @@ type GeocodeZipResponse = {
   error?: string;
   configured?: boolean;
 };
+
+type MapState =
+  | {
+      kind: "google";
+      map: google.maps.Map;
+      markers: Map<number, google.maps.Marker>;
+      infoWindow: google.maps.InfoWindow;
+      markerIcon: google.maps.Icon;
+    }
+  | {
+      kind: "leaflet";
+      map: L.Map;
+      markers: Map<number, L.Marker>;
+      markerIcon: L.Icon;
+    };
 
 function str(v: unknown): string {
   return v == null ? "" : String(v).trim();
@@ -142,6 +160,35 @@ async function zipCenterUs(
   return (await zipCenterFromGoogle(zip)) ?? (await zipCenterZippopotam(zip));
 }
 
+/** Client-side reverse geocode (no API key). */
+async function reverseGeocodeToZip(
+  lat: number,
+  lng: number,
+): Promise<string | null> {
+  try {
+    const res = await fetch(
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${encodeURIComponent(String(lat))}&longitude=${encodeURIComponent(String(lng))}&localityLanguage=en`,
+    );
+    if (!res.ok) return null;
+    const data = (await res.json()) as { postcode?: string };
+    const raw = (data.postcode ?? "").trim();
+    const digits = raw.replace(/\D/g, "").slice(0, 5);
+    return digits.length === 5 ? digits : null;
+  } catch {
+    return null;
+  }
+}
+
+function userGoogleLocationIcon(): google.maps.Icon {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5" fill="#1a6b6b" stroke="#fff" stroke-width="2"/></svg>`;
+  const url = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+  return {
+    url,
+    scaledSize: new google.maps.Size(16, 16),
+    anchor: new google.maps.Point(8, 8),
+  };
+}
+
 function mapsDirectionsUrl(lat: number, lng: number): string {
   return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${lat},${lng}`)}`;
 }
@@ -169,6 +216,7 @@ function businessTypeValue(sel: HTMLSelectElement): string {
 function setupBusinessTypeSelect(
   root: HTMLElement,
   selectEl: HTMLSelectElement,
+  options?: { onPick?: () => void },
 ): void {
   const wrap = root.querySelector<HTMLElement>("[data-dl-business-root]");
   const trigger = root.querySelector<HTMLButtonElement>(
@@ -219,9 +267,14 @@ function setupBusinessTypeSelect(
 
   optionButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
-      setActiveValue(btn.dataset.dlBusinessOption ?? "All");
+      const next = btn.dataset.dlBusinessOption ?? "All";
+      const normalized =
+        next === "Pool" || next === "Spa" || next === "All" ? next : "All";
+      const prev = selectEl.value;
+      setActiveValue(normalized);
       closeMenu();
       trigger.focus();
+      if (prev !== selectEl.value) options?.onPick?.();
     });
   });
 
@@ -244,20 +297,90 @@ function escapeHtml(s: string): string {
     .replace(/"/g, "&quot;");
 }
 
-const MAPS_AUTH_HELP =
-  "Google Maps could not authorize this page. Open the browser console (F12) for the exact error " +
-  "(e.g. RefererNotAllowedMapError). For your Browser API key: add HTTP referrer " +
-  "`" +
-  (typeof location !== "undefined"
-    ? `${location.origin}/*`
-    : "https://your-domain.com/*") +
-  "`" +
-  " in Google Cloud Console, enable Maps JavaScript API for the project, and ensure billing is on.";
+/**
+ * Google Maps browser keys almost never list `http://localhost:4321/*` as an
+ * allowed referrer, which spams RefererNotAllowedMapError. Use OSM on local
+ * hosts unless the URL contains `?dlGoogleMaps=1` (after you add the referrer).
+ */
+function googleMapsBrowserKeyForThisHost(key: string): string {
+  if (typeof location === "undefined") return key;
+  const host = location.hostname;
+  const isLocal =
+    host === "localhost" ||
+    host === "127.0.0.1" ||
+    host === "[::1]" ||
+    host === "::1" ||
+    host === "0.0.0.0";
+  if (!isLocal) return key;
+  try {
+    if (new URLSearchParams(location.search).get("dlGoogleMaps") === "1")
+      return key;
+  } catch {
+    /* ignore */
+  }
+  return "";
+}
 
 /** Teal pin (approx. previous Leaflet div icon). */
 function markerIconUrl(): string {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="36" viewBox="0 0 28 36"><path fill="#1a6b6b" stroke="#fff" stroke-width="2" d="M14 2C8 2 3 7 3 13c0 8 11 21 11 21s11-13 11-21c0-6-5-11-11-11z"/><circle cx="14" cy="13" r="4" fill="#fff"/></svg>`;
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
+function buildGoogleMarkerIcon(): google.maps.Icon {
+  return {
+    url: markerIconUrl(),
+    scaledSize: new google.maps.Size(28, 36),
+    anchor: new google.maps.Point(14, 34),
+  };
+}
+
+function buildLeafletMarkerIcon(): L.Icon {
+  return L.icon({
+    iconUrl: markerIconUrl(),
+    iconSize: [28, 36],
+    iconAnchor: [14, 34],
+    popupAnchor: [0, -32],
+  });
+}
+
+/** Wait for first idle or auth failure (invalid key / referrer). */
+function waitGoogleMapReadyOrAuthFail(
+  gMap: google.maps.Map,
+  timeoutMs: number,
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const w = window as Window & { gm_authFailure?: () => void };
+    let settled = false;
+    const prevGm = w.gm_authFailure;
+    const settleAuth = (): void => {
+      if (settled) return;
+      settled = true;
+      google.maps.event.removeListener(idleListener);
+      w.gm_authFailure = prevGm;
+      reject(new Error("GOOGLE_MAPS_AUTH"));
+    };
+    const settleOk = (): void => {
+      if (settled) return;
+      settled = true;
+      w.gm_authFailure = prevGm;
+      resolve();
+    };
+    w.gm_authFailure = () => {
+      if (typeof prevGm === "function") prevGm();
+      settleAuth();
+    };
+    const idleListener = google.maps.event.addListenerOnce(gMap, "idle", () =>
+      settleOk(),
+    );
+    window.setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      google.maps.event.removeListener(idleListener);
+      w.gm_authFailure = prevGm;
+      resolve();
+    }, timeoutMs);
+  });
 }
 
 async function init(): Promise<void> {
@@ -273,7 +396,9 @@ async function init(): Promise<void> {
   ) as HTMLUListElement | null;
   const mapEl = document.getElementById("dl-map") as HTMLElement | null;
   const mapWrap = document.getElementById("dl-map-wrap") as HTMLElement | null;
-  const msg = document.getElementById("dl-locator-message");
+  const msg = document.getElementById(
+    "dl-locator-message",
+  ) as HTMLElement | null;
   const businessSel = document.getElementById(
     "dl-business-type",
   ) as HTMLSelectElement | null;
@@ -286,7 +411,6 @@ async function init(): Promise<void> {
   const dlMapEl = mapEl;
   const dlMapWrap = mapWrap;
   const dlBusinessSel = businessSel;
-  setupBusinessTypeSelect(root, dlBusinessSel);
 
   let mapsKey = (root.dataset.dlMapsKey ?? "").trim();
   if (!mapsKey) {
@@ -300,75 +424,166 @@ async function init(): Promise<void> {
       /* ignore */
     }
   }
+  mapsKey = googleMapsBrowserKeyForThisHost(mapsKey);
   const mapPlaceholder = document.getElementById("dl-map-placeholder");
 
-  let map: google.maps.Map | null = null;
+  let mapState: MapState | null = null;
   let mapReady = false;
-  let markerById = new Map<number, google.maps.Marker>();
-  let infoWindow: google.maps.InfoWindow | null = null;
-  let markerIcon: google.maps.Icon | null = null;
+  let userLocMarker: google.maps.Marker | L.CircleMarker | null = null;
 
-  function getMarkerIcon(): google.maps.Icon {
-    if (!markerIcon) {
-      markerIcon = {
-        url: markerIconUrl(),
-        scaledSize: new google.maps.Size(28, 36),
-        anchor: new google.maps.Point(14, 34),
-      };
-    }
-    return markerIcon;
+  function resetMapDom(): void {
+    dlMapEl.replaceChildren();
   }
 
-  function setMessage(text: string, visible: boolean): void {
+  function setMessage(
+    text: string,
+    visible: boolean,
+    variant: "loading" | "error" = "error",
+  ): void {
     if (!msg) return;
-    msg.textContent = text;
+    const spinner = msg.querySelector<HTMLElement>(
+      ".dl-page__locator-message-spinner",
+    );
+    const textEl = msg.querySelector<HTMLElement>(
+      ".dl-page__locator-message-text",
+    );
+
     msg.hidden = !visible;
+    if (!visible) {
+      msg.classList.remove("is-loading", "is-error");
+      msg.removeAttribute("aria-busy");
+      msg.setAttribute("role", "status");
+      msg.setAttribute("aria-live", "polite");
+      if (textEl) textEl.textContent = "";
+      if (spinner) spinner.hidden = true;
+      return;
+    }
+
+    if (!textEl) {
+      msg.textContent = text;
+      return;
+    }
+
+    msg.classList.remove("is-loading", "is-error");
+    textEl.textContent = text;
+
+    if (variant === "loading") {
+      msg.classList.add("is-loading");
+      msg.setAttribute("role", "status");
+      msg.setAttribute("aria-live", "polite");
+      msg.setAttribute("aria-busy", "true");
+      if (spinner) spinner.hidden = false;
+    } else {
+      msg.classList.add("is-error");
+      msg.setAttribute("role", "alert");
+      msg.setAttribute("aria-live", "assertive");
+      msg.removeAttribute("aria-busy");
+      if (spinner) spinner.hidden = true;
+    }
   }
 
-  function installMapsAuthFailureHandler(): void {
-    (window as Window & { gm_authFailure?: () => void }).gm_authFailure =
-      () => {
-        setMessage(MAPS_AUTH_HELP, true);
-      };
+  async function initLeafletMap(): Promise<void> {
+    resetMapDom();
+    const leafletMap = L.map(dlMapEl, {
+      center: [39.8283, -98.5795],
+      zoom: 4,
+      scrollWheelZoom: true,
+    });
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 19,
+    }).addTo(leafletMap);
+    mapState = {
+      kind: "leaflet",
+      map: leafletMap,
+      markers: new Map(),
+      markerIcon: buildLeafletMarkerIcon(),
+    };
+    mapReady = true;
+    mapPlaceholder?.setAttribute("hidden", "");
+    requestAnimationFrame(() => leafletMap.invalidateSize());
   }
 
-  async function ensureMap(): Promise<google.maps.Map> {
-    if (map) return map;
-    if (!mapsKey) {
-      throw new Error(
-        "Map is not configured: set PUBLIC_GOOGLE_MAPS_BROWSER_KEY for the GitHub build, or Worker secret GOOGLE_MAPS_BROWSER_KEY.",
-      );
-    }
-    try {
-      setOptions({ key: mapsKey, v: "weekly" });
-      await importLibrary("maps");
-    } catch (loadErr) {
-      throw new Error(
-        `Could not load the Google Maps script. Check PUBLIC_GOOGLE_MAPS_BROWSER_KEY and the network. ${
-          loadErr instanceof Error ? loadErr.message : String(loadErr)
-        }`,
-      );
-    }
-    map = new google.maps.Map(dlMapEl, {
+  async function initGoogleMap(): Promise<void> {
+    resetMapDom();
+    setOptions({ key: mapsKey, v: "weekly" });
+    await importLibrary("maps");
+    const gMap = new google.maps.Map(dlMapEl, {
       center: { lat: 39.8283, lng: -98.5795 },
       zoom: 4,
       mapTypeControl: false,
       streetViewControl: false,
       fullscreenControl: true,
     });
-    infoWindow = new google.maps.InfoWindow();
-    markerIcon = null;
+    await waitGoogleMapReadyOrAuthFail(gMap, 12000);
+    mapState = {
+      kind: "google",
+      map: gMap,
+      markers: new Map(),
+      infoWindow: new google.maps.InfoWindow(),
+      markerIcon: buildGoogleMarkerIcon(),
+    };
     mapReady = true;
     mapPlaceholder?.setAttribute("hidden", "");
-    requestAnimationFrame(() => google.maps.event.trigger(map!, "resize"));
-    return map;
+    requestAnimationFrame(() => google.maps.event.trigger(gMap, "resize"));
+  }
+
+  async function ensureMap(): Promise<void> {
+    if (mapState) return;
+    if (mapsKey) {
+      try {
+        await initGoogleMap();
+        return;
+      } catch {
+        mapState = null;
+        mapReady = false;
+        resetMapDom();
+      }
+    }
+    try {
+      await initLeafletMap();
+    } catch (leafErr) {
+      const message = `Could not load the map (OpenStreetMap). ${
+        leafErr instanceof Error ? leafErr.message : String(leafErr)
+      }`;
+      throw leafErr instanceof Error
+        ? new Error(message, { cause: leafErr })
+        : new Error(message);
+    }
+  }
+
+  function clearUserLocMarker(): void {
+    if (!userLocMarker) return;
+    if (mapState?.kind === "google") {
+      (userLocMarker as google.maps.Marker).setMap(null);
+    } else if (mapState?.kind === "leaflet") {
+      (userLocMarker as L.CircleMarker).remove();
+    }
+    userLocMarker = null;
+  }
+
+  function clearMapMarkers(): void {
+    clearUserLocMarker();
+    if (!mapState) return;
+    if (mapState.kind === "google") {
+      mapState.markers.forEach((m) => m.setMap(null));
+      mapState.markers.clear();
+      mapState.infoWindow.close();
+    } else {
+      mapState.markers.forEach((m) => {
+        m.remove();
+      });
+      mapState.markers.clear();
+      mapState.map.closePopup();
+    }
   }
 
   function clearResults(): void {
     dlList.replaceChildren();
-    markerById.forEach((m) => m.setMap(null));
-    markerById = new Map();
-    infoWindow?.close();
+    const wrap = dlList.closest<HTMLElement>(".dl-page__locator-list-wrap");
+    if (wrap) wrap.scrollTop = 0;
+    clearMapMarkers();
   }
 
   function shortPopupHtml(loc: DistributorLocation): string {
@@ -388,13 +603,24 @@ async function init(): Promise<void> {
       el.classList.toggle("is-active", on);
       el.setAttribute("aria-selected", on ? "true" : "false");
     });
-    const m = markerById.get(loc.id);
-    if (m && map && infoWindow) {
-      map.panTo(m.getPosition()!);
-      const z = map.getZoom() ?? 4;
-      if (z < 11) map.setZoom(11);
-      infoWindow.setContent(shortPopupHtml(loc));
-      infoWindow.open({ map, anchor: m });
+    if (!mapState) return;
+    if (mapState.kind === "google") {
+      const m = mapState.markers.get(loc.id);
+      if (m) {
+        mapState.map.panTo(m.getPosition()!);
+        const z = mapState.map.getZoom() ?? 4;
+        if (z < 11) mapState.map.setZoom(11);
+        mapState.infoWindow.setContent(shortPopupHtml(loc));
+        mapState.infoWindow.open({ map: mapState.map, anchor: m });
+      }
+    } else {
+      const m = mapState.markers.get(loc.id);
+      if (m) {
+        mapState.map.panTo(m.getLatLng());
+        if ((mapState.map.getZoom() ?? 4) < 11) mapState.map.setZoom(11);
+        m.getPopup()?.setContent(shortPopupHtml(loc));
+        m.openPopup();
+      }
     }
   }
 
@@ -428,7 +654,7 @@ async function init(): Promise<void> {
     pin.className = "dl-page__result-card-pin";
     pin.setAttribute("aria-hidden", "true");
     pin.innerHTML =
-      '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-8-4.35-8-11a8 8 0 0 1 16 0c0 6.65-8 11-8 11z"/><circle cx="12" cy="10" r="3"/></svg>';
+      '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20 10C20 14.993 14.461 20.193 12.601 21.799C12.4277 21.9293 12.2168 21.9998 12 21.9998C11.7832 21.9998 11.5723 21.9293 11.399 21.799C9.539 20.193 4 14.993 4 10C4 7.87827 4.84285 5.84344 6.34315 4.34315C7.84344 2.84285 9.87827 2 12 2C14.1217 2 16.1566 2.84285 17.6569 4.34315C19.1571 5.84344 20 7.87827 20 10Z" stroke="#007D8A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z" stroke="#007D8A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     const addrText = document.createElement("span");
     addrText.className = "dl-page__result-card-addr";
     addrText.textContent = formatAddress(loc);
@@ -445,8 +671,12 @@ async function init(): Promise<void> {
 
     const foot = document.createElement("div");
     foot.className = "dl-page__result-card-foot";
-    const biz = dlBusinessSel.value === "Spa" ? "Spa" : "Pool";
-    foot.appendChild(document.createTextNode(`${biz} • `));
+    const biz = businessTypeValue(dlBusinessSel);
+    foot.appendChild(document.createTextNode(`${biz} `));
+    const footSep = document.createElement("span");
+    footSep.textContent = "•";
+    foot.appendChild(footSep);
+    foot.appendChild(document.createTextNode(" "));
     if (loc.phone) {
       const a = document.createElement("a");
       a.href = telHref(loc.phone);
@@ -472,24 +702,50 @@ async function init(): Promise<void> {
     return li;
   }
 
-  async function runSearch(): Promise<void> {
-    const zip = dlZipInput.value.trim().replace(/\s+/g, "");
+  function placeUserLocationPin(u: { lat: number; lng: number }): void {
+    clearUserLocMarker();
+    if (!mapState) return;
+    if (mapState.kind === "google") {
+      userLocMarker = new google.maps.Marker({
+        position: { lat: u.lat, lng: u.lng },
+        map: mapState.map,
+        icon: userGoogleLocationIcon(),
+        zIndex: 999,
+        title: "Your location",
+      });
+    } else {
+      userLocMarker = L.circleMarker([u.lat, u.lng], {
+        radius: 8,
+        color: "#ffffff",
+        weight: 2,
+        fillColor: "#1a6b6b",
+        fillOpacity: 1,
+      })
+        .addTo(mapState.map)
+        .bindTooltip("Your location", { direction: "top", opacity: 0.95 });
+    }
+  }
+
+  async function runSearch(opts?: {
+    userLatLng?: { lat: number; lng: number };
+  }): Promise<void> {
+    const query = dlZipInput.value.trim().replace(/\s+/g, " ");
     setMessage("", false);
 
-    if (!zip) {
-      setMessage("Please enter a ZIP code.", true);
+    if (!query) {
+      setMessage("Please enter a ZIP code, city, or address.", true);
       return;
     }
-    if (!/^\d{5}(-\d{4})?$/.test(zip)) {
-      setMessage("Enter a valid U.S. ZIP code (5 digits or ZIP+4).", true);
+    if (query.length < 3) {
+      setMessage("Enter at least 3 characters.", true);
       return;
     }
 
     const distance = readRadiusMiles(dlForm);
     const businessType = businessTypeValue(dlBusinessSel);
-    if (dlMapWrap) dlMapWrap.hidden = false;
+    if (dlMapWrap) dlMapWrap.hidden = true;
     const params = new URLSearchParams({
-      zip,
+      zip: query,
       country: "US",
       distance: String(distance),
       unit: "mi",
@@ -497,13 +753,13 @@ async function init(): Promise<void> {
     });
 
     clearResults();
-    setMessage("Loading…", true);
+    setMessage("Loading…", true, "loading");
 
     try {
-      const mapInstance = await ensureMap();
-
-      const [center, res] = await Promise.all([
-        zipCenterUs(zip),
+      const userLL = opts?.userLatLng;
+      const strictZip = /^\d{5}(-\d{4})?$/.test(query.replace(/\s/g, ""));
+      const [centerZip, res] = await Promise.all([
+        userLL || !strictZip ? Promise.resolve(null) : zipCenterUs(query),
         fetch(`/api/distributor-locations?${params.toString()}`),
       ]);
       const data = (await res.json()) as ApiResponse;
@@ -511,6 +767,19 @@ async function init(): Promise<void> {
       if (!res.ok || data.error) {
         setMessage(data.error ?? "Could not load locations.", true);
         return;
+      }
+
+      let center: { lat: number; lng: number } | null = userLL ?? centerZip;
+      const sc = data.searchCenter;
+      if (
+        !userLL &&
+        sc &&
+        typeof sc.lat === "number" &&
+        typeof sc.lng === "number" &&
+        Number.isFinite(sc.lat) &&
+        Number.isFinite(sc.lng)
+      ) {
+        center = { lat: sc.lat, lng: sc.lng };
       }
 
       const rawList = Array.isArray(data.locations) ? data.locations : [];
@@ -521,44 +790,171 @@ async function init(): Promise<void> {
       });
       setMessage("", false);
 
+      if (dlMapWrap) dlMapWrap.hidden = false;
+      await ensureMap();
+      if (!mapState) {
+        setMessage("Could not initialize the map.", true);
+        if (dlMapWrap) dlMapWrap.hidden = true;
+        return;
+      }
+
       if (locs.length === 0) {
         const empty = document.createElement("li");
         empty.className = "dl-page__result-empty";
         empty.textContent = "No locations found in this area.";
         dlList.appendChild(empty);
+        if (userLL) {
+          placeUserLocationPin(userLL);
+          if (mapState.kind === "google") {
+            mapState.map.setCenter({ lat: userLL.lat, lng: userLL.lng });
+            mapState.map.setZoom(11);
+            google.maps.event.trigger(mapState.map, "resize");
+          } else {
+            mapState.map.setView([userLL.lat, userLL.lng], 11);
+            mapState.map.invalidateSize();
+          }
+        }
         return;
       }
 
-      const bounds = new google.maps.LatLngBounds();
-      for (const loc of locs) {
-        const miles =
-          center != null
-            ? haversineMi(center.lat, center.lng, loc.lat, loc.lng)
-            : null;
-        dlList.appendChild(renderCard(loc, miles));
+      if (mapState.kind === "google") {
+        const bounds = new google.maps.LatLngBounds();
+        for (const loc of locs) {
+          const miles =
+            center != null
+              ? haversineMi(center.lat, center.lng, loc.lat, loc.lng)
+              : null;
+          dlList.appendChild(renderCard(loc, miles));
 
-        const marker = new google.maps.Marker({
-          position: { lat: loc.lat, lng: loc.lng },
-          map: mapInstance,
-          title: loc.customerName,
-          icon: getMarkerIcon(),
-        });
-        marker.addListener("click", () => activateLocation(loc));
-        markerById.set(loc.id, marker);
-        bounds.extend({ lat: loc.lat, lng: loc.lng });
-      }
+          const marker = new google.maps.Marker({
+            position: { lat: loc.lat, lng: loc.lng },
+            map: mapState.map,
+            title: loc.customerName,
+            icon: mapState.markerIcon,
+          });
+          marker.addListener("click", () => activateLocation(loc));
+          mapState.markers.set(loc.id, marker);
+          bounds.extend({ lat: loc.lat, lng: loc.lng });
+        }
+        if (userLL) bounds.extend({ lat: userLL.lat, lng: userLL.lng });
 
-      if (locs.length === 1) {
-        mapInstance.setCenter({ lat: locs[0]!.lat, lng: locs[0]!.lng });
-        mapInstance.setZoom(12);
+        if (locs.length === 1 && !userLL) {
+          mapState.map.setCenter({ lat: locs[0]!.lat, lng: locs[0]!.lng });
+          mapState.map.setZoom(12);
+        } else {
+          mapState.map.fitBounds(bounds, 48);
+        }
+        if (userLL) placeUserLocationPin(userLL);
+        google.maps.event.trigger(mapState.map, "resize");
       } else {
-        mapInstance.fitBounds(bounds, 48);
+        const bounds = L.latLngBounds([]);
+        for (const loc of locs) {
+          const miles =
+            center != null
+              ? haversineMi(center.lat, center.lng, loc.lat, loc.lng)
+              : null;
+          dlList.appendChild(renderCard(loc, miles));
+
+          const marker = L.marker([loc.lat, loc.lng], {
+            icon: mapState.markerIcon,
+            title: loc.customerName,
+          })
+            .addTo(mapState.map)
+            .bindPopup(shortPopupHtml(loc));
+          marker.on("click", () => activateLocation(loc));
+          mapState.markers.set(loc.id, marker);
+          bounds.extend([loc.lat, loc.lng]);
+        }
+        if (userLL) bounds.extend([userLL.lat, userLL.lng]);
+
+        if (locs.length === 1 && !userLL) {
+          mapState.map.setView([locs[0]!.lat, locs[0]!.lng], 12);
+        } else if (bounds.isValid()) {
+          mapState.map.fitBounds(bounds, { padding: [48, 48] });
+        }
+        if (userLL) placeUserLocationPin(userLL);
+        mapState.map.invalidateSize();
       }
-      google.maps.event.trigger(mapInstance, "resize");
     } catch (err) {
       setMessage(err instanceof Error ? err.message : String(err), true);
     }
   }
+
+  function locationReadyForSearch(): boolean {
+    const q = dlZipInput.value.trim();
+    return q.length >= 3;
+  }
+
+  function runSearchIfZipReady(): void {
+    if (!locationReadyForSearch()) return;
+    void runSearch();
+  }
+
+  dlForm
+    .querySelectorAll<HTMLInputElement>('input[name="dl-radius"]')
+    .forEach((radio) => {
+      radio.addEventListener("change", () => runSearchIfZipReady());
+    });
+
+  setupBusinessTypeSelect(root, dlBusinessSel, {
+    onPick: () => runSearchIfZipReady(),
+  });
+
+  const geoBtn = root.querySelector<HTMLButtonElement>("[data-dl-geolocate]");
+  geoBtn?.addEventListener("click", () => {
+    void (async () => {
+      if (!navigator.geolocation) {
+        setMessage("Geolocation is not supported in this browser.", true);
+        return;
+      }
+      setMessage("Finding your location…", true, "loading");
+      try {
+        const pos = await new Promise<GeolocationPosition>(
+          (resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+              enableHighAccuracy: true,
+              timeout: 20000,
+              maximumAge: 120_000,
+            });
+          },
+        );
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        const z = await reverseGeocodeToZip(lat, lng);
+        if (!z) {
+          setMessage(
+            "Could not determine a U.S. ZIP code from your location.",
+            true,
+          );
+          return;
+        }
+        dlZipInput.value = z;
+        await runSearch({ userLatLng: { lat, lng } });
+      } catch (e) {
+        const denied =
+          e instanceof GeolocationPositionError &&
+          e.code === e.PERMISSION_DENIED;
+        setMessage(
+          denied
+            ? "Location access was denied. Allow location for this site in browser settings."
+            : "Could not get your location. Try entering a ZIP code.",
+          true,
+        );
+      }
+    })();
+  });
+
+  dlZipInput.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    void runSearch();
+  });
+
+  dlForm
+    .querySelector<HTMLButtonElement>("[data-dl-search-submit]")
+    ?.addEventListener("click", () => {
+      void runSearch();
+    });
 
   dlForm.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -566,21 +962,13 @@ async function init(): Promise<void> {
   });
 
   window.addEventListener("resize", () => {
-    if (mapReady && map) google.maps.event.trigger(map, "resize");
+    if (!mapReady || !mapState) return;
+    if (mapState.kind === "google") {
+      google.maps.event.trigger(mapState.map, "resize");
+    } else {
+      mapState.map.invalidateSize();
+    }
   });
-
-  if (!mapsKey) {
-    setMessage(
-      "Map unavailable: the key was not embedded at build and /api/maps-browser-key returned empty. " +
-        "This app is built on GitHub Actions — variables in the Cloudflare dashboard are NOT used for that build. " +
-        "Fix: (1) GitHub → repo Settings → Secrets and variables → Actions — add secret OR variable PUBLIC_GOOGLE_MAPS_BROWSER_KEY, push/redeploy. " +
-        "Or (2) Cloudflare Worker secret GOOGLE_MAPS_BROWSER_KEY (same browser key) + wrangler deploy — see .env.example.",
-      true,
-    );
-    return;
-  }
-
-  installMapsAuthFailureHandler();
 }
 
 if (document.readyState === "loading") {

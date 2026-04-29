@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-28T12:17:49.758Z",
+  "generatedAt": "2026-04-29T05:15:47.769Z",
   "attributesByCategory": {
     "bath": [],
     "pool": [
@@ -568,6 +568,28 @@
           {
             "label": "standard",
             "slug": "material-standard"
+          }
+        ]
+      },
+      {
+        "name": "Ports",
+        "slug": "ports",
+        "values": [
+          {
+            "label": "2",
+            "slug": "ports-2"
+          },
+          {
+            "label": "4",
+            "slug": "ports-4"
+          },
+          {
+            "label": "5",
+            "slug": "ports-5"
+          },
+          {
+            "label": "6",
+            "slug": "ports-6"
           }
         ]
       },
@@ -1317,9 +1339,35 @@
         ]
       },
       {
+        "name": "Ports",
+        "slug": "ports",
+        "values": [
+          {
+            "label": "2",
+            "slug": "ports-2"
+          },
+          {
+            "label": "4",
+            "slug": "ports-4"
+          },
+          {
+            "label": "5",
+            "slug": "ports-5"
+          },
+          {
+            "label": "6",
+            "slug": "ports-6"
+          }
+        ]
+      },
+      {
         "name": "Size",
         "slug": "size",
         "values": [
+          {
+            "label": "1",
+            "slug": "size-1"
+          },
           {
             "label": "3.4",
             "slug": "size-3-4"
@@ -3697,6 +3745,25 @@
   },
   "products": [
     {
+      "title": "2-4-6 Air Manifold Systems",
+      "slug": "2-4-6-air-manifold-systems",
+      "databaseId": 40688,
+      "date": "2026-04-28T16:39:53",
+      "modified": "2026-04-28T16:39:53",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-7190.png",
+      "imageAlt": null,
+      "imageWidth": 1689,
+      "imageHeight": 1064,
+      "categorySlugs": [
+        "spa-manifolds"
+      ],
+      "attributeSlugs": [
+        "ports-2",
+        "ports-4",
+        "ports-6"
+      ]
+    },
+    {
       "title": "Check Valves",
       "slug": "check-valves",
       "databaseId": 40681,
@@ -4861,34 +4928,43 @@
       ]
     },
     {
-      "title": "Spa 2″ & 2 1/2″ Union Components",
+      "title": "2″ & 2 1/2″ Spa Union Components",
       "slug": "2-2-1-2-union-components",
       "databaseId": 31775,
       "date": "2023-05-31T12:36:50",
-      "modified": "2023-06-07T16:05:58",
-      "imageUrl": null,
+      "modified": "2026-04-28T17:06:01",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/415-5000.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1920,
+      "imageHeight": 1440,
       "categorySlugs": [
         "spa-unions"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "color-black",
+        "color-white",
+        "size-2-1-2",
+        "size-2"
+      ]
     },
     {
-      "title": "1″ Manifolds and 2-4-6 Air Manifold Systems",
+      "title": "1″ Manifolds",
       "slug": "1-manifolds-and-2-4-6-air-manifold-systems",
       "databaseId": 31733,
       "date": "2023-05-31T12:36:50",
-      "modified": "2023-07-17T17:31:31",
-      "imageUrl": null,
+      "modified": "2026-04-28T15:44:25",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-4390.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1330,
+      "imageHeight": 1200,
       "categorySlugs": [
         "spa-manifolds"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "ports-4",
+        "ports-5",
+        "size-1"
+      ]
     },
     {
       "title": "1 1/2″ Spa Union Components",

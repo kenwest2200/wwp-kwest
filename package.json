@@ -27,11 +27,13 @@
     "astro-seo": "^1.1.0",
     "graphql": "^16.13.1",
     "graphql-request": "^7.4.0",
+    "leaflet": "^1.9.4",
     "wrangler": "^4.77.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/google.maps": "^3.58.1",
+    "@types/leaflet": "^1.9.21",
     "@types/node": "^25.5.0",
     "eslint": "^10.0.3",
     "eslint-plugin-astro": "^1.6.0",

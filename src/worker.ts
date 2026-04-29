@@ -500,6 +500,132 @@ function isValidSalesRepsZip(zip: string): boolean {
   return /^\d{5}(-\d{4})?$/.test(zip);
 }
 
+type GoogleAddressComponent = {
+  long_name: string;
+  short_name: string;
+  types: string[];
+};
+
+type GoogleGeocodeResultRow = {
+  geometry?: { location?: { lat: number; lng: number } };
+  address_components?: GoogleAddressComponent[];
+  /** e.g. `["country", "political"]` — too broad for distributor radius search */
+  types?: string[];
+};
+
+type GoogleGeocodeResponse = {
+  results?: GoogleGeocodeResultRow[];
+  status?: string;
+};
+
+function extractUsZip5FromGeocodeRow(row: GoogleGeocodeResultRow): string | null {
+  const comps = row.address_components;
+  if (!comps) return null;
+  for (const c of comps) {
+    if (c.types.includes("postal_code")) {
+      const digits = c.long_name.replace(/\D/g, "").slice(0, 5);
+      if (digits.length === 5) return digits;
+    }
+  }
+  return null;
+}
+
+/**
+ * Geocode a free-text U.S. address or city; returns a 5-digit ZIP for ERP `in-radius`.
+ */
+function isGeocodeRowTooBroadForLocator(row: GoogleGeocodeResultRow): boolean {
+  const types = row.types ?? [];
+  if (types.includes("country")) return true;
+  if (types.includes("continent")) return true;
+  return false;
+}
+
+/** Queries that are not a ZIP/city/street — they geocode to the whole U.S. or noise. */
+function isTriviallyBroadLocationQuery(q: string): boolean {
+  const s = q.trim().replace(/\s+/g, " ").toLowerCase();
+  return /^(usa|us|u\.s\.?|u\.s\.a\.?|america|united states|united states of america)$/.test(
+    s,
+  );
+}
+
+async function geocodeUsLocationQuery(
+  query: string,
+  apiKey: string,
+): Promise<
+  | { ok: true; zip: string; lat: number; lng: number }
+  | { ok: false; error: string }
+> {
+  const q = query.trim().replace(/\s+/g, " ");
+  if (q.length < 3) {
+    return { ok: false, error: "Enter at least 3 characters." };
+  }
+  if (isTriviallyBroadLocationQuery(q)) {
+    return {
+      ok: false,
+      error:
+        "That search is too broad (e.g. a country name). Enter a U.S. ZIP code, city, or street address.",
+    };
+  }
+  const params = new URLSearchParams({
+    address: q,
+    components: "country:US",
+    key: apiKey,
+  });
+  try {
+    const res = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?${params.toString()}`,
+    );
+    const data = (await res.json()) as GoogleGeocodeResponse;
+    if (data.status === "ZERO_RESULTS" || !data.results?.length) {
+      return {
+        ok: false,
+        error: "No results for that location. Try a ZIP code or a more specific address.",
+      };
+    }
+    if (data.status !== "OK") {
+      return {
+        ok: false,
+        error: `Geocoding failed (${data.status ?? "UNKNOWN"}).`,
+      };
+    }
+    const first = data.results[0];
+    if (!first) {
+      return { ok: false, error: "No geocode results." };
+    }
+    if (isGeocodeRowTooBroadForLocator(first)) {
+      return {
+        ok: false,
+        error:
+          "That search resolved only to the whole country. Enter a city, street address, or U.S. ZIP code.",
+      };
+    }
+    const loc = first.geometry?.location;
+    if (
+      !loc ||
+      typeof loc.lat !== "number" ||
+      typeof loc.lng !== "number" ||
+      !Number.isFinite(loc.lat) ||
+      !Number.isFinite(loc.lng)
+    ) {
+      return { ok: false, error: "Invalid geocode response." };
+    }
+    const zip5 = extractUsZip5FromGeocodeRow(first);
+    if (!zip5) {
+      return {
+        ok: false,
+        error:
+          "Could not determine a U.S. ZIP for that search. Try a street address or enter a ZIP code.",
+      };
+    }
+    return { ok: true, zip: zip5, lat: loc.lat, lng: loc.lng };
+  } catch (e) {
+    return {
+      ok: false,
+      error: e instanceof Error ? e.message : String(e),
+    };
+  }
+}
+
 type SalesRepUpstreamRow = {
   Name?: string;
   Phone?: string;
@@ -665,6 +791,31 @@ async function handleSalesRepsApi(
   }
 }
 
+/**
+ * For non–ZIP-only queries (after geocoding to a radius), keep locations whose
+ * City, Address1, Address2, or Zip text match all whitespace-separated tokens.
+ */
+function filterDistributorLocationsByAddressQuery(
+  locations: unknown[],
+  rawQuery: string,
+): unknown[] {
+  const trimmed = normalizeSalesRepsZipParam(rawQuery);
+  if (!trimmed || isValidSalesRepsZip(trimmed)) return locations;
+  const q = trimmed.toLowerCase();
+  const tokens = q.split(/\s+/).filter((t) => t.length > 0);
+  if (tokens.length === 0) return locations;
+  return locations.filter((row) => {
+    if (!row || typeof row !== "object") return false;
+    const o = row as Record<string, unknown>;
+    const city = String(o.City ?? "").toLowerCase();
+    const a1 = String(o.Address1 ?? "").toLowerCase();
+    const a2 = String(o.Address2 ?? "").toLowerCase();
+    const zipField = String(o.Zip ?? "").toLowerCase().replace(/\s/g, "");
+    const hay = `${city} ${a1} ${a2} ${zipField}`;
+    return tokens.every((t) => hay.includes(t));
+  });
+}
+
 function readDistributorLocationsRoot(env: Env): string {
   const custom = (env as Env & { DISTRIBUTOR_LOCATOR_LOCATIONS_ROOT?: string })
     .DISTRIBUTOR_LOCATOR_LOCATIONS_ROOT;
@@ -672,6 +823,19 @@ function readDistributorLocationsRoot(env: Env): string {
   return raw.replace(/\/+$/, "");
 }
 
+/**
+ * GET /api/distributor-locations — proxies ERP `…/in-radius` (bearer same as sales reps).
+ *
+ * Upstream contract:
+ * - **Zip** (required): U.S. ZIP for the radius center. This handler also accepts city/address
+ *   in the `zip` query value when `GOOGLE_GEOCODING_KEY` is set; it resolves to a 5-digit ZIP
+ *   before calling upstream (upstream still always receives a real `zip`).
+ * - **Country** (optional, default `US`): ISO 3166-1 alpha-2.
+ * - **Distance** (optional, default `20`).
+ * - **Unit** (optional, default `mi`): `m` | `km` | `mi` | `ft`.
+ * - **BusinessType** (optional, default `All`): `Pool` | `Spa` | `All` only.
+ * - Upstream requires `Authorization: Bearer <access_token>` (added below).
+ */
 async function handleDistributorLocationsInRadiusApi(
   request: Request,
   env: Env,
@@ -693,12 +857,37 @@ async function handleDistributorLocationsInRadiusApi(
   }
 
   const url = new URL(request.url);
-  const zip = normalizeSalesRepsZipParam(url.searchParams.get("zip") ?? "");
-  if (!zip || !isValidSalesRepsZip(zip)) {
+  const rawLocation = normalizeSalesRepsZipParam(url.searchParams.get("zip") ?? "");
+  if (!rawLocation) {
     return jsonResponse(
-      { locations: [], error: "A valid U.S. ZIP code is required." },
+      { locations: [], error: "Zip is required (use a U.S. ZIP, or city/address if geocoding is configured)." },
       { status: 400, origin },
     );
+  }
+
+  let zip = rawLocation;
+  let searchCenter: { lat: number; lng: number } | undefined;
+
+  if (!isValidSalesRepsZip(rawLocation)) {
+    const geoKey = (
+      env as Env & { GOOGLE_GEOCODING_KEY?: string }
+    ).GOOGLE_GEOCODING_KEY?.trim();
+    if (!geoKey) {
+      return jsonResponse(
+        {
+          locations: [],
+          error:
+            "Searching by city or address requires GOOGLE_GEOCODING_KEY on the Worker. Enter a U.S. ZIP code (5 digits or ZIP+4), or ask your admin to configure geocoding.",
+        },
+        { status: 400, origin },
+      );
+    }
+    const geo = await geocodeUsLocationQuery(rawLocation, geoKey);
+    if (!geo.ok) {
+      return jsonResponse({ locations: [], error: geo.error }, { status: 400, origin });
+    }
+    zip = geo.zip;
+    searchCenter = { lat: geo.lat, lng: geo.lng };
   }
 
   const country =
@@ -795,7 +984,16 @@ async function handleDistributorLocationsInRadiusApi(
       );
     }
 
-    return jsonResponse({ locations: parsed }, { origin });
+    const locationsOut = isValidSalesRepsZip(rawLocation)
+      ? parsed
+      : filterDistributorLocationsByAddressQuery(parsed, rawLocation);
+
+    const body: {
+      locations: unknown[];
+      searchCenter?: { lat: number; lng: number };
+    } = { locations: locationsOut };
+    if (searchCenter) body.searchCenter = searchCenter;
+    return jsonResponse(body, { origin });
   } catch (error) {
     return jsonResponse(
       {

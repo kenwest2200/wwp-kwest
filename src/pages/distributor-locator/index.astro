@@ -6,8 +6,6 @@ import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs.astro";
 
 export const prerender = true;
 
-const defaultZip =
-  import.meta.env.PUBLIC_DISTRIBUTOR_LOCATOR_DEFAULT_ZIP?.trim() || "90210";
 const mapsBrowserKey =
   import.meta.env.PUBLIC_GOOGLE_MAPS_BROWSER_KEY?.trim() ?? "";
 
@@ -52,33 +50,95 @@ const breadcrumbs = [
               >
               <div class="dl-page__locator-search-row">
                 <div class="dl-page__locator-input-wrap">
-                  <span class="dl-page__locator-input-icon" aria-hidden="true">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.75"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                  <button
+                    type="button"
+                    class="dl-page__locator-search-icon-btn"
+                    aria-label="Search"
+                    data-dl-search-submit
+                  >
+                    <span
+                      class="dl-page__locator-search-icon-btn-inner"
+                      aria-hidden="true"
                     >
-                      <circle cx="11" cy="11" r="7"></circle>
-                      <path d="M21 21l-4.3-4.3"></path>
-                    </svg>
-                  </span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <path d="M21 21l-4.3-4.3"></path>
+                      </svg>
+                    </span>
+                  </button>
                   <input
                     id="dl-zip-input"
                     name="zip"
                     type="text"
                     class="dl-page__locator-input"
-                    inputmode="numeric"
-                    maxlength="10"
-                    placeholder={`e.g. ${defaultZip}`}
-                    aria-describedby="dl-locator-hint"
+                    maxlength="200"
+                    placeholder="ZIP, city, or address (line 1 / line 2)"
                     autocomplete="postal-code"
                   />
+                  <button
+                    type="button"
+                    class="dl-page__locator-geolocate"
+                    id="dl-geolocate-btn"
+                    aria-label="Use your current location"
+                    data-dl-geolocate
+                  >
+                    <span class="dl-page__locator-geolocate-tooltip"
+                      >Use your current location</span
+                    >
+                    <span
+                      class="dl-page__locator-geolocate-icon"
+                      aria-hidden="true"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M2 12H5"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"></path>
+                        <path
+                          d="M19 12H22"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"></path>
+                        <path
+                          d="M12 2V5"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"></path>
+                        <path
+                          d="M12 19V22"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"></path>
+                        <path
+                          d="M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19Z"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"></path>
+                      </svg>
+                    </span>
+                  </button>
                 </div>
 
                 <div
@@ -210,18 +270,26 @@ const breadcrumbs = [
                     </select>
                   </div>
                 </div>
-
               </div>
             </div>
           </form>
 
-          <p
+          <div
             id="dl-locator-message"
             class="dl-page__locator-message"
             hidden
-            role="alert"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
           >
-          </p>
+            <div class="dl-page__locator-message-inner">
+              <span
+                class="dl-page__locator-message-spinner"
+                aria-hidden="true"
+                hidden></span>
+              <p class="dl-page__locator-message-text"></p>
+            </div>
+          </div>
 
           <div class="dl-page__locator-split">
             <div class="dl-page__locator-list-wrap">

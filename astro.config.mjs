@@ -7,9 +7,14 @@ import { defineConfig } from "astro/config";
 const wranglerDev = "http://127.0.0.1:8787";
 
 // https://astro.build/config
+const isAstroDev =
+  process.env.npm_lifecycle_event === "dev" ||
+  process.argv.includes("dev");
+
 export default defineConfig({
   output: "static",
   vite: {
+    ...(isAstroDev ? { optimizeDeps: { force: true } } : {}),
     server: {
       proxy: {
         "/api/search-autocomplete": wranglerDev,
