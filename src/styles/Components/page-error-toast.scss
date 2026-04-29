@@ -1,0 +1,88 @@
+@use "../variables" as *;
+@use "../functions" as *;
+@use "../breakpoints" as *;
+
+.page-error-toast {
+  position: fixed;
+  z-index: 1200;
+  top: px-to-rem(68);
+  right: px-to-rem(40);
+  left: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: px-to-rem(14);
+  max-width: min(#{px-to-rem(440)}, calc(100vw - #{px-to-rem(32)}));
+  padding: px-to-rem(18) px-to-rem(20);
+  box-sizing: border-box;
+  border-radius: px-to-rem(10);
+  border: 1px solid rgba($error, 0.35);
+  background: $white;
+  box-shadow: 0 px-to-rem(12) px-to-rem(40) rgba($dark, 0.12);
+  color: $dark;
+
+  &[hidden] {
+    display: none;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    display: flex;
+    margin-top: px-to-rem(2);
+
+    svg {
+      display: block;
+    }
+  }
+
+  &__main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    margin: 0 0 px-to-rem(6);
+    font-size: px-to-rem(16);
+    line-height: px-to-rem(22);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: $dark;
+  }
+
+  &__text {
+    margin: 0;
+    font-size: px-to-rem(14);
+    line-height: px-to-rem(22);
+    font-weight: 400;
+    color: $dark-medium;
+  }
+
+  &__close {
+    flex-shrink: 0;
+    margin: px-to-rem(-4) px-to-rem(-6) 0 0;
+    padding: px-to-rem(6);
+    border: none;
+    background: transparent;
+    color: $dark-medium;
+    font-size: px-to-rem(22);
+    line-height: 1;
+    cursor: pointer;
+    border-radius: px-to-rem(4);
+    transition: color 0.15s ease, background 0.15s ease;
+
+    &:hover {
+      color: $dark;
+      background: rgba($dark, 0.06);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $dark-teal;
+      outline-offset: 2px;
+    }
+  }
+
+  @include media-breakpoint-down(sm) {
+    left: max(#{px-to-rem(16)}, var(--section-left, var(--s-padding-x)));
+    right: max(#{px-to-rem(16)}, var(--section-right, var(--s-padding-x)));
+    max-width: none;
+  }
+}

@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import PageHeaderOffset from "../../components/PageHeaderOffset.astro";
 import SectionHero from "../../components/SectionHero/SectionHero.astro";
 import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs.astro";
+import PageErrorToast from "../../components/PageErrorToast.astro";
 
 export const prerender = true;
 
@@ -320,6 +321,8 @@ const breadcrumbs = [
         </section>
       </div>
     </div>
+
+    <PageErrorToast id="dl-locator-error-toast" />
   </main>
 </Layout>
 

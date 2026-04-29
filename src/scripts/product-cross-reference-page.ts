@@ -1,3 +1,9 @@
+import {
+  hidePageErrorToast,
+  installPageErrorToast,
+  showPageErrorToast,
+} from "../lib/page-error-toast";
+
 type CrossRefFiltersResponse = Record<string, unknown>;
 type CrossRefFindResponse = Record<string, unknown> | unknown[];
 
@@ -274,8 +280,11 @@ function renderResults(
 }
 
 function setError(el: HTMLElement, msg: string): void {
-  el.textContent = msg;
-  el.hidden = !msg;
+  if (!msg.trim()) {
+    hidePageErrorToast(el);
+    return;
+  }
+  showPageErrorToast(el, msg);
 }
 
 function buildFindQuery(values: ReferenceValues): URLSearchParams {
@@ -426,6 +435,8 @@ export function initProductCrossReferencePage(): void {
   ) {
     return;
   }
+
+  installPageErrorToast(errorEl);
 
   let currentLists: FilterLists = {
     brands: [],

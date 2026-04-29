@@ -252,12 +252,6 @@
     animation: cross-ref-suggest-spin 0.75s linear infinite;
   }
 
-  &__error {
-    margin: px-to-rem(14) 0 0;
-    color: #a02d2d;
-    font-size: px-to-rem(14);
-  }
-
   &__actions {
     margin-top: px-to-rem(32);
     display: flex;

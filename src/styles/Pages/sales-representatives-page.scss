@@ -110,20 +110,6 @@
     padding-right: px-to-rem(28);
   }
 
-  &__message {
-    margin: 0 0 px-to-rem(20);
-    padding: px-to-rem(12) px-to-rem(16);
-    border-radius: px-to-rem(4);
-    font-size: px-to-rem(15);
-    line-height: px-to-rem(22);
-    color: #7a1f1f;
-    background: rgba(#b00020, 0.08);
-
-    &[hidden] {
-      display: none;
-    }
-  }
-
   &__results {
     margin-top: px-to-rem(40);
   }

@@ -396,7 +396,7 @@
       transition: color 0.3s ease;
 
       &:hover {
-        color: $light-teal;
+        color: $medium-teal !important;
         transition: color 0.3s ease;
       }
     }
@@ -1044,6 +1044,12 @@
     text-transform: uppercase;
     color: $dark-teal;
     text-decoration: none;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: $medium-teal;
+      transition: color 0.3s ease;
+    }
 
     svg {
       width: px-to-rem(14);

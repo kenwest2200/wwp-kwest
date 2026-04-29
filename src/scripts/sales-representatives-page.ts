@@ -1,3 +1,9 @@
+import {
+  hidePageErrorToast,
+  installPageErrorToast,
+  showPageErrorToast,
+} from "../lib/page-error-toast";
+
 export {};
 
 type SortDir = "asc" | "desc";
@@ -30,8 +36,11 @@ function setMessage(
   visible: boolean,
 ): void {
   if (!el) return;
-  el.textContent = text;
-  el.hidden = !visible;
+  if (!visible) {
+    hidePageErrorToast(el);
+    return;
+  }
+  showPageErrorToast(el, text);
 }
 
 function compareByName(a: SalesRepRow, b: SalesRepRow, dir: SortDir): number {
@@ -193,6 +202,8 @@ export function initSalesRepresentativesPage(): void {
   );
 
   if (!form || !zipInput || !tbody) return;
+
+  installPageErrorToast(msgEl);
 
   initialPlaceholderRow(tbody);
   bindNameSortHandlers(tbody);

@@ -1,6 +1,11 @@
 import { importLibrary, setOptions } from "@googlemaps/js-api-loader";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import {
+  hidePageErrorToast,
+  installPageErrorToast,
+  showPageErrorToast,
+} from "../lib/page-error-toast";
 
 export {};
 
@@ -408,11 +413,14 @@ async function init(): Promise<void> {
   const msg = document.getElementById(
     "dl-locator-message",
   ) as HTMLElement | null;
+  const errorToast = document.getElementById("dl-locator-error-toast");
   const businessSel = document.getElementById(
     "dl-business-type",
   ) as HTMLSelectElement | null;
 
   if (!root || !form || !zipInput || !list || !mapEl || !businessSel) return;
+
+  installPageErrorToast(errorToast);
 
   const dlForm = form;
   const dlZipInput = zipInput;
@@ -447,11 +455,94 @@ async function init(): Promise<void> {
     dlMapEl.replaceChildren();
   }
 
+  function setZipFieldError(active: boolean): void {
+    const wrap = dlZipInput.closest(".dl-page__locator-input-wrap");
+    if (!wrap) return;
+    wrap.classList.toggle("is-invalid", active);
+    if (active) {
+      dlZipInput.setAttribute("aria-invalid", "true");
+    } else {
+      dlZipInput.removeAttribute("aria-invalid");
+    }
+  }
+
+  type LocatorMessageVariant = "loading" | "error-inline" | "error-toast";
+
+  /** Inline = client-side form validation; toast = API / server / map / network / geolocation. */
   function setMessage(
     text: string,
     visible: boolean,
-    variant: "loading" | "error" = "error",
+    variant: LocatorMessageVariant = "error-toast",
   ): void {
+    if (!visible) {
+      hidePageErrorToast(errorToast);
+      setZipFieldError(false);
+      if (!msg) return;
+      msg.hidden = true;
+      msg.setAttribute("hidden", "");
+      msg.classList.remove("is-loading", "is-error");
+      msg.removeAttribute("aria-busy");
+      msg.setAttribute("role", "status");
+      msg.setAttribute("aria-live", "polite");
+      const spinner = msg.querySelector<HTMLElement>(
+        ".dl-page__locator-message-spinner",
+      );
+      const textEl = msg.querySelector<HTMLElement>(
+        ".dl-page__locator-message-text",
+      );
+      if (textEl) textEl.textContent = "";
+      if (spinner) spinner.hidden = true;
+      return;
+    }
+
+    if (variant === "error-toast") {
+      setZipFieldError(false);
+      if (msg) {
+        msg.hidden = true;
+        msg.setAttribute("hidden", "");
+        msg.classList.remove("is-loading", "is-error");
+        msg.removeAttribute("aria-busy");
+      }
+      showPageErrorToast(errorToast, text);
+      return;
+    }
+
+    if (variant === "error-inline") {
+      hidePageErrorToast(errorToast);
+      setZipFieldError(!!text);
+      if (!msg) return;
+      const spinner = msg.querySelector<HTMLElement>(
+        ".dl-page__locator-message-spinner",
+      );
+      const textEl = msg.querySelector<HTMLElement>(
+        ".dl-page__locator-message-text",
+      );
+      if (!textEl) {
+        msg.textContent = text;
+        msg.classList.remove("is-loading");
+        msg.classList.add("is-error");
+        msg.hidden = false;
+        msg.removeAttribute("hidden");
+        msg.setAttribute("role", "alert");
+        msg.setAttribute("aria-live", "assertive");
+        msg.removeAttribute("aria-busy");
+        if (spinner) spinner.hidden = true;
+        return;
+      }
+      msg.classList.remove("is-loading");
+      msg.classList.add("is-error");
+      textEl.textContent = text;
+      msg.hidden = false;
+      msg.removeAttribute("hidden");
+      msg.setAttribute("role", "alert");
+      msg.setAttribute("aria-live", "assertive");
+      msg.removeAttribute("aria-busy");
+      if (spinner) spinner.hidden = true;
+      return;
+    }
+
+    setZipFieldError(false);
+    hidePageErrorToast(errorToast);
     if (!msg) return;
     const spinner = msg.querySelector<HTMLElement>(
       ".dl-page__locator-message-spinner",
@@ -459,39 +550,22 @@ async function init(): Promise<void> {
     const textEl = msg.querySelector<HTMLElement>(
       ".dl-page__locator-message-text",
     );
-
-    msg.hidden = !visible;
-    if (!visible) {
-      msg.classList.remove("is-loading", "is-error");
-      msg.removeAttribute("aria-busy");
-      msg.setAttribute("role", "status");
-      msg.setAttribute("aria-live", "polite");
-      if (textEl) textEl.textContent = "";
-      if (spinner) spinner.hidden = true;
-      return;
-    }
-
     if (!textEl) {
       msg.textContent = text;
+      msg.hidden = false;
+      msg.removeAttribute("hidden");
       return;
     }
 
     msg.classList.remove("is-loading", "is-error");
     textEl.textContent = text;
-
-    if (variant === "loading") {
-      msg.classList.add("is-loading");
-      msg.setAttribute("role", "status");
-      msg.setAttribute("aria-live", "polite");
-      msg.setAttribute("aria-busy", "true");
-      if (spinner) spinner.hidden = false;
-    } else {
-      msg.classList.add("is-error");
-      msg.setAttribute("role", "alert");
-      msg.setAttribute("aria-live", "assertive");
-      msg.removeAttribute("aria-busy");
-      if (spinner) spinner.hidden = true;
-    }
+    msg.classList.add("is-loading");
+    msg.hidden = false;
+    msg.removeAttribute("hidden");
+    msg.setAttribute("role", "status");
+    msg.setAttribute("aria-live", "polite");
+    msg.setAttribute("aria-busy", "true");
+    if (spinner) spinner.hidden = false;
   }
 
   async function initLeafletMap(): Promise<void> {
@@ -745,13 +819,14 @@ async function init(): Promise<void> {
     setMessage("", false);
 
     if (!query) {
-      setMessage("Please enter a U.S. ZIP code.", true);
+      setMessage("Please enter a U.S. ZIP code.", true, "error-inline");
       return;
     }
     if (query.length < 3) {
       setMessage(
         "Enter a U.S. ZIP code (5 digits or ZIP+4), or at least 3 characters.",
         true,
+        "error-inline",
       );
       return;
     }
@@ -780,7 +855,7 @@ async function init(): Promise<void> {
       const data = (await res.json()) as ApiResponse;
 
       if (!res.ok || data.error) {
-        setMessage(data.error ?? "Could not load locations.", true);
+        setMessage(data.error ?? "Could not load locations.", true, "error-toast");
         return;
       }
 
@@ -808,7 +883,7 @@ async function init(): Promise<void> {
       if (dlMapWrap) dlMapWrap.hidden = false;
       await ensureMap();
       if (!mapState) {
-        setMessage("Could not initialize the map.", true);
+        setMessage("Could not initialize the map.", true, "error-toast");
         if (dlMapWrap) dlMapWrap.hidden = true;
         return;
       }
@@ -891,7 +966,11 @@ async function init(): Promise<void> {
         mapState.map.invalidateSize();
       }
     } catch (err) {
-      setMessage(err instanceof Error ? err.message : String(err), true);
+      setMessage(
+        err instanceof Error ? err.message : String(err),
+        true,
+        "error-toast",
+      );
     }
   }
 
@@ -919,7 +998,11 @@ async function init(): Promise<void> {
   geoBtn?.addEventListener("click", () => {
     void (async () => {
       if (!navigator.geolocation) {
-        setMessage("Geolocation is not supported in this browser.", true);
+        setMessage(
+          "Geolocation is not supported in this browser.",
+          true,
+          "error-toast",
+        );
         return;
       }
       setMessage("Finding your location…", true, "loading");
@@ -940,6 +1023,7 @@ async function init(): Promise<void> {
           setMessage(
             "Could not determine a U.S. ZIP code from your location.",
             true,
+            "error-toast",
           );
           return;
         }
@@ -954,9 +1038,17 @@ async function init(): Promise<void> {
             ? "Location access was denied. Allow location for this site in browser settings."
             : "Could not get your location. Try entering a ZIP code.",
           true,
+          "error-toast",
         );
       }
     })();
+  });
+
+  dlZipInput.addEventListener("input", () => {
+    setZipFieldError(false);
+    if (msg?.classList.contains("is-error")) {
+      setMessage("", false);
+    }
   });
 
   dlZipInput.addEventListener("keydown", (e) => {

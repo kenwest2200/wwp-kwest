@@ -3,6 +3,7 @@ import Layout from "../../../layouts/Layout.astro";
 import PageHeaderOffset from "../../../components/PageHeaderOffset.astro";
 import SectionHero from "../../../components/SectionHero/SectionHero.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs.astro";
+import PageErrorToast from "../../../components/PageErrorToast.astro";
 
 export const prerender = true;
 
@@ -76,7 +77,7 @@ const breadcrumbs = [
           </div>
         </form>
 
-        <p id="sr-message" class="sr-page__message" hidden role="alert"></p>
+        <PageErrorToast id="sr-message" />
 
         <section class="sr-page__results" aria-labelledby="sr-results-heading">
           <h2 id="sr-results-heading" class="sr-page__results-title">
