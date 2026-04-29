@@ -9,6 +9,8 @@ interface ImportMetaEnv {
   readonly PUBLIC_GOOGLE_MAPS_BROWSER_KEY?: string;
   /** Example ZIP for distributor locator placeholder text only. */
   readonly PUBLIC_DISTRIBUTOR_LOCATOR_DEFAULT_ZIP?: string;
+  /** When `"true"`, distributor locator uses Google Maps if a browser key exists (otherwise Leaflet/OSM). */
+  readonly PUBLIC_DISTRIBUTOR_LOCATOR_USE_GOOGLE_MAPS?: string;
   readonly GRAPHQL_BASIC_USER?: string;
   readonly GRAPHQL_BASIC_PASSWORD?: string;
 }

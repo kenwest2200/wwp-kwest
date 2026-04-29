@@ -557,13 +557,16 @@ async function geocodeUsLocationQuery(
 > {
   const q = query.trim().replace(/\s+/g, " ");
   if (q.length < 3) {
-    return { ok: false, error: "Enter at least 3 characters." };
+    return {
+      ok: false,
+      error: "Enter a U.S. ZIP code (5 digits or ZIP+4), or at least 3 characters.",
+    };
   }
   if (isTriviallyBroadLocationQuery(q)) {
     return {
       ok: false,
       error:
-        "That search is too broad (e.g. a country name). Enter a U.S. ZIP code, city, or street address.",
+        "That search is too broad. Enter a U.S. ZIP code (5 digits or ZIP+4).",
     };
   }
   const params = new URLSearchParams({
@@ -579,7 +582,8 @@ async function geocodeUsLocationQuery(
     if (data.status === "ZERO_RESULTS" || !data.results?.length) {
       return {
         ok: false,
-        error: "No results for that location. Try a ZIP code or a more specific address.",
+        error:
+          "No match for that ZIP. Check the 5-digit code and try again.",
       };
     }
     if (data.status !== "OK") {
@@ -596,7 +600,7 @@ async function geocodeUsLocationQuery(
       return {
         ok: false,
         error:
-          "That search resolved only to the whole country. Enter a city, street address, or U.S. ZIP code.",
+          "That didn’t resolve to a U.S. ZIP. Enter a valid 5-digit ZIP code.",
       };
     }
     const loc = first.geometry?.location;
@@ -614,7 +618,7 @@ async function geocodeUsLocationQuery(
       return {
         ok: false,
         error:
-          "Could not determine a U.S. ZIP for that search. Try a street address or enter a ZIP code.",
+          "Could not match that to a U.S. ZIP. Enter a valid 5-digit ZIP code.",
       };
     }
     return { ok: true, zip: zip5, lat: loc.lat, lng: loc.lng };
@@ -827,9 +831,9 @@ function readDistributorLocationsRoot(env: Env): string {
  * GET /api/distributor-locations — proxies ERP `…/in-radius` (bearer same as sales reps).
  *
  * Upstream contract:
- * - **Zip** (required): U.S. ZIP for the radius center. This handler also accepts city/address
- *   in the `zip` query value when `GOOGLE_GEOCODING_KEY` is set; it resolves to a 5-digit ZIP
- *   before calling upstream (upstream still always receives a real `zip`).
+ * - **Zip** (required): U.S. ZIP for the radius center. If the value is not a valid ZIP and
+ *   `GOOGLE_GEOCODING_KEY` is set, it is geocoded to a 5-digit ZIP (locator copy is ZIP-first).
+ *   Upstream always receives a real `zip`.
  * - **Country** (optional, default `US`): ISO 3166-1 alpha-2.
  * - **Distance** (optional, default `20`).
  * - **Unit** (optional, default `mi`): `m` | `km` | `mi` | `ft`.
@@ -860,7 +864,7 @@ async function handleDistributorLocationsInRadiusApi(
   const rawLocation = normalizeSalesRepsZipParam(url.searchParams.get("zip") ?? "");
   if (!rawLocation) {
     return jsonResponse(
-      { locations: [], error: "Zip is required (use a U.S. ZIP, or city/address if geocoding is configured)." },
+      { locations: [], error: "Enter a U.S. ZIP code." },
       { status: 400, origin },
     );
   }
@@ -877,7 +881,7 @@ async function handleDistributorLocationsInRadiusApi(
         {
           locations: [],
           error:
-            "Searching by city or address requires GOOGLE_GEOCODING_KEY on the Worker. Enter a U.S. ZIP code (5 digits or ZIP+4), or ask your admin to configure geocoding.",
+            "Enter a valid U.S. ZIP code (5 digits or ZIP+4). Geocoding is not configured on this server.",
         },
         { status: 400, origin },
       );

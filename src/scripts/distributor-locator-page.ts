@@ -4,6 +4,15 @@ import "leaflet/dist/leaflet.css";
 
 export {};
 
+/**
+ * Distributor locator map: `false` = Leaflet / OpenStreetMap only (current default).
+ * Set to `true` here **or** `PUBLIC_DISTRIBUTOR_LOCATOR_USE_GOOGLE_MAPS=true` in `.env` to try Google Maps when a browser key exists.
+ */
+const DL_MAP_PREFER_GOOGLE = false;
+const DISTRIBUTOR_LOCATOR_USE_GOOGLE_MAP =
+  DL_MAP_PREFER_GOOGLE ||
+  import.meta.env.PUBLIC_DISTRIBUTOR_LOCATOR_USE_GOOGLE_MAPS === "true";
+
 type RawLocation = Record<string, unknown>;
 
 type DistributorLocation = {
@@ -412,19 +421,22 @@ async function init(): Promise<void> {
   const dlMapWrap = mapWrap;
   const dlBusinessSel = businessSel;
 
-  let mapsKey = (root.dataset.dlMapsKey ?? "").trim();
-  if (!mapsKey) {
-    try {
-      const r = await fetch("/api/maps-browser-key");
-      if (r.ok) {
-        const j = (await r.json()) as { key?: string };
-        mapsKey = (j.key ?? "").trim();
+  let mapsKey = "";
+  if (DISTRIBUTOR_LOCATOR_USE_GOOGLE_MAP) {
+    mapsKey = (root.dataset.dlMapsKey ?? "").trim();
+    if (!mapsKey) {
+      try {
+        const r = await fetch("/api/maps-browser-key");
+        if (r.ok) {
+          const j = (await r.json()) as { key?: string };
+          mapsKey = (j.key ?? "").trim();
+        }
+      } catch {
+        /* ignore */
       }
-    } catch {
-      /* ignore */
     }
+    mapsKey = googleMapsBrowserKeyForThisHost(mapsKey);
   }
-  mapsKey = googleMapsBrowserKeyForThisHost(mapsKey);
   const mapPlaceholder = document.getElementById("dl-map-placeholder");
 
   let mapState: MapState | null = null;
@@ -531,7 +543,7 @@ async function init(): Promise<void> {
 
   async function ensureMap(): Promise<void> {
     if (mapState) return;
-    if (mapsKey) {
+    if (DISTRIBUTOR_LOCATOR_USE_GOOGLE_MAP && mapsKey) {
       try {
         await initGoogleMap();
         return;
@@ -733,11 +745,14 @@ async function init(): Promise<void> {
     setMessage("", false);
 
     if (!query) {
-      setMessage("Please enter a ZIP code, city, or address.", true);
+      setMessage("Please enter a U.S. ZIP code.", true);
       return;
     }
     if (query.length < 3) {
-      setMessage("Enter at least 3 characters.", true);
+      setMessage(
+        "Enter a U.S. ZIP code (5 digits or ZIP+4), or at least 3 characters.",
+        true,
+      );
       return;
     }
 
