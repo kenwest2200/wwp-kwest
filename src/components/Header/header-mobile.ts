@@ -66,10 +66,13 @@ function bindHeaderStickyScroll(): void {
   }
 
   const onScroll = () => {
-    const threshold = mobileMenuForcesHeaderTopZero
-      ? 0
-      : sumHeaderTopHeightsPx();
-    header.classList.toggle("is-scrolling", getDocumentScrollY() > threshold);
+    const y = getDocumentScrollY();
+    if (mobileMenuForcesHeaderTopZero) {
+      header.classList.toggle("is-scrolling", y > 0);
+      return;
+    }
+    const dataTopH = readHeaderDataTopHeightPx();
+    header.classList.toggle("is-scrolling", y >= dataTopH);
   };
 
   const passive: AddEventListenerOptions = { passive: true };

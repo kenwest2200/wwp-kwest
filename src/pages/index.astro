@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import PageHeaderOffset from "../components/PageHeaderOffset.astro";
 import Hero from "../sections/Hero/index.astro";
 import Featured from "../sections/Featured/index.astro";
 import Resources from "../sections/Resources/index.astro";
@@ -53,7 +54,7 @@ if (getGraphQLClient()) {
 }
 ---
 
-<Layout>
+<Layout headerType="white" bodyClass="is-home">
   <main class="home-main">
     <Hero data={heroData} />
     <Featured data={featuredData} />
@@ -62,6 +63,8 @@ if (getGraphQLClient()) {
     <CallToAction />
   </main>
 </Layout>
+
+<PageHeaderOffset />
 
 <style lang="scss">
   .home-main {

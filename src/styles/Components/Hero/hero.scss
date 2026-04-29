@@ -4,6 +4,7 @@
     position: relative;
     overflow: hidden;
     background: $gradient-background;
+    padding-top: var(--page-header-offset, #{px-to-rem(112)});
 
     .container {
         position: relative;
@@ -17,7 +18,7 @@
         justify-content: space-between;
         width: 100%;
         gap: px-to-rem(40);
-        padding: px-to-rem(176) px-to-rem(21) px-to-rem(60);
+        padding: px-to-rem(100) px-to-rem(21) px-to-rem(60);
         max-width: px-to-rem(1192);
 
     }
@@ -110,7 +111,7 @@
 
         &__container {
             gap: px-to-rem(80);
-            padding: px-to-rem(184) px-to-rem(40) px-to-rem(80);
+            padding: px-to-rem(100) px-to-rem(40) px-to-rem(80);
         }
 
         &__title {
@@ -212,7 +213,7 @@
         &__container {
             gap: px-to-rem(72);
             flex-direction: row;
-            padding: px-to-rem(312) px-to-rem(40) px-to-rem(100);
+            padding: px-to-rem(100) px-to-rem(40) px-to-rem(100);
         }
 
         &__content {

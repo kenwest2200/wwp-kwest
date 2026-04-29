@@ -15,12 +15,15 @@ import {
 
 export interface Props {
   headerType?: "white";
+  /** e.g. `is-home` — body class for page-specific header styling */
+  bodyClass?: string;
   pageTitle?: string;
   description?: string;
   robotsNoIndex?: boolean;
 }
 
-const { headerType, pageTitle, description, robotsNoIndex } = Astro.props;
+const { headerType, bodyClass, pageTitle, description, robotsNoIndex } =
+  Astro.props;
 const shortTitle = pageTitle?.trim() ?? "";
 const hasPageTitle = shortTitle.length > 0;
 const titleDefault = "Waterway Plastics - Pool & Spa Supplies";
@@ -98,7 +101,7 @@ if (getGraphQLClient()) {
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="generator" content={Astro.generator} />
   </head>
-  <body>
+  <body class:list={bodyClass ? [bodyClass] : []}>
     <Header data={headerData} headerType={headerType} />
     <slot />
     <Footer data={footerData} />

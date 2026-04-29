@@ -14,7 +14,7 @@
 .header {
   $header: #{&};
   position: sticky;
-  /* Sticky needs a non-auto inset; white / scrolling states override below. */
+  /* Default: `top: 0`. `header--white` at rest: shift by full stack (`--header-top-height`). */
   top: 0;
   min-height: px-to-rem(112);
   margin-bottom: px-to-rem(-112);
@@ -28,7 +28,6 @@
     background: transparent;
     transition: background 0.2s linear, padding-bottom 0.1s linear;
   }
-
 
   &.header--white:not(.is-scrolling) {
     top: calc(-1 * var(--header-top-height, 0px));
@@ -1277,6 +1276,98 @@
       &-container {
         max-width: unset;
         padding: px-to-rem(12) px-to-rem(40);
+      }
+    }
+  }
+}
+
+/* Home / products: same scroll as elsewhere; transparent chrome until scroll */
+body.is-home .header.header--white:not(.is-scrolling),
+body.is-products .header.header--white:not(.is-scrolling) {
+  .header__top {
+    background: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+
+    &-link {
+      color: $white-90;
+
+      &:hover {
+        color: $light-teal;
+      }
+
+      &--facebook {
+        svg {
+          path {
+            fill: $white-90;
+          }
+
+          rect {
+            stroke: $white-90;
+          }
+        }
+      }
+
+      &--instagram {
+        svg {
+          path {
+            stroke: $white-90;
+          }
+        }
+      }
+    }
+  }
+
+  .header__container {
+    background: transparent;
+    padding-bottom: 0;
+    box-shadow: none;
+  }
+
+  .header__logo-icon {
+    fill: $white;
+  }
+
+  .header__burger {
+    path {
+      stroke: $white;
+    }
+  }
+
+  .header__link {
+    color: $white-90;
+
+    &:hover {
+      color: $light-teal;
+    }
+
+    &.is-active {
+      color: $white !important;
+
+      &::after {
+        background: $white;
+      }
+    }
+  }
+
+  .header__search {
+    &-toggle-icon {
+      path {
+        fill: $white;
+      }
+    }
+
+    &-icon {
+      path {
+        fill: $white;
+      }
+    }
+
+    &-input {
+      background-color: $white-20;
+      color: $white;
+
+      &::placeholder {
+        color: $white;
       }
     }
   }
