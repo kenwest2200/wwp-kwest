@@ -1,0 +1,376 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PageHeaderOffset from "../../components/PageHeaderOffset.astro";
+import SectionHero from "../../components/SectionHero/SectionHero.astro";
+import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs.astro";
+import AdressIcon from "../../components/icons/adressIcon.astro";
+import PhoneIcon from "../../components/icons/phoneIcon.astro";
+import FaxIcon from "../../components/icons/faxIcon.astro";
+import MailIcon from "../../components/icons/mailIcon.astro";
+import CustomSelect from "../../components/CustomSelect/CustomSelect.astro";
+import PageErrorToast from "../../components/PageErrorToast.astro";
+import { getGraphQLClient, requestGraphql } from "../../lib/graphql";
+import {
+  CONTACT_PAGE_QUERY,
+  CONTACT_PAGE_URI,
+  contactRowHasMailtoLink,
+  contactRowMailtoHref,
+  normalizeContactSupportCards,
+  type ContactPageData,
+} from "../../lib/queries/contact-page";
+
+export const prerender = true;
+
+const graphqlConfigured = Boolean(getGraphQLClient());
+
+const introDefault =
+  "For immediate assistance, call +1 805-981-0262 or text +1 805-981-0262. Our team is ready to help!";
+
+async function loadPage(): Promise<ContactPageData["page"] | null> {
+  if (!graphqlConfigured) return null;
+  const uris = [CONTACT_PAGE_URI, CONTACT_PAGE_URI.replace(/\/$/, "")];
+  for (const id of uris) {
+    try {
+      const data = await requestGraphql<ContactPageData>(CONTACT_PAGE_QUERY, {
+        id,
+      });
+      if (data.page?.title) return data.page;
+    } catch {
+      /* try next */
+    }
+  }
+  return null;
+}
+
+const pageNode = await loadPage();
+const pageTitle = pageNode?.title?.trim() || "Contact";
+const support = pageNode?.contactUsSettings?.contactUsSupportGroup ?? null;
+const supportTitle = (support?.title ?? "").trim();
+const cards = normalizeContactSupportCards(support);
+const formGroup = pageNode?.contactUsSettings?.contactUsFormGroup ?? null;
+const formTitle = (formGroup?.title ?? "").trim() || "Send us a message:";
+const fields = formGroup?.fields ?? null;
+
+const f = {
+  firstName: (fields?.firstNameLabel ?? "").trim() || "First name",
+  lastName: (fields?.lastNameLabel ?? "").trim() || "Last name",
+  occupation: (fields?.occupationLabel ?? "").trim() || "Occupation",
+  location: (fields?.locationLabel ?? "").trim() || "Location",
+  email: (fields?.emailLabel ?? "").trim() || "Email",
+  phone: (fields?.phoneLabel ?? "").trim() || "Phone number",
+  message: (fields?.messageLabel ?? "").trim() || "Message or comment",
+  submit: (fields?.submitLabel ?? "").trim() || "Submit message",
+};
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Company", href: "/company/" },
+  { label: pageTitle },
+];
+
+const occupationOptions = [
+  { value: "Distributor", label: "Distributor" },
+  { value: "Dealer", label: "Dealer" },
+  { value: "Contractor", label: "Contractor" },
+  { value: "Pool builder", label: "Pool builder" },
+  { value: "Homeowner", label: "Homeowner" },
+  { value: "Other", label: "Other" },
+];
+
+const locationOptions = [
+  { value: "USA", label: "USA" },
+  { value: "Europe", label: "Europe" },
+  { value: "Other", label: "Other" },
+];
+---
+
+<Layout headerType="white" pageTitle={pageTitle} description={introDefault}>
+  <main class="contact-page" data-contact-page data-page-header-offset>
+    <SectionHero title={pageTitle} intro={introDefault} />
+
+    <div class="contact-page__breadcrumb-wrap">
+      <Breadcrumbs items={breadcrumbs} />
+    </div>
+
+    <div class="contact-page__body">
+      <div class="contact-page__body-inner">
+        {
+          (supportTitle.length > 0 || cards.length > 0) && (
+            <section
+              class="contact-page__support"
+              aria-labelledby="contact-support-heading"
+            >
+              <h2
+                id="contact-support-heading"
+                class="contact-page__section-title"
+              >
+                {supportTitle.length > 0 ? supportTitle : "Customer support"}
+              </h2>
+              {cards.length === 0 ? (
+                <p class="contact-page__empty">
+                  {graphqlConfigured
+                    ? "No contact blocks are configured for this page yet."
+                    : "GraphQL is not configured."}
+                </p>
+              ) : (
+                <div class="contact-page__cards">
+                  {cards.map((card) => (
+                    <article class="contact-page__card">
+                      <h3 class="contact-page__card-title">{card.title}</h3>
+                      <ul class="contact-page__card-list">
+                        {card.rows.map((row) => {
+                          const mailHref =
+                            row.iconKind === "email" &&
+                            !contactRowHasMailtoLink(row.text)
+                              ? contactRowMailtoHref(row.text)
+                              : null;
+                          return (
+                            <li class="contact-page__row">
+                              <span class="contact-page__row-icon">
+                                {row.iconKind === "address" && (
+                                  <AdressIcon class="contact-page__row-icon-svg" />
+                                )}
+                                {row.iconKind === "phone" && (
+                                  <PhoneIcon class="contact-page__row-icon-svg" />
+                                )}
+                                {row.iconKind === "fax" && (
+                                  <FaxIcon class="contact-page__row-icon-svg" />
+                                )}
+                                {row.iconKind === "email" && (
+                                  <MailIcon class="contact-page__row-icon-svg" />
+                                )}
+                              </span>
+                              {mailHref ? (
+                                <a
+                                  class="contact-page__row-text contact-page__row-text--link"
+                                  href={`mailto:${encodeURIComponent(mailHref)}`}
+                                  set:html={row.text}
+                                />
+                              ) : (
+                                <div
+                                  class="contact-page__row-text"
+                                  set:html={row.text}
+                                />
+                              )}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </section>
+          )
+        }
+
+        <section
+          class="contact-page__form-section"
+          aria-labelledby="contact-form-heading"
+        >
+          <h2
+            id="contact-form-heading"
+            class="contact-page__form-section-title"
+          >
+            {formTitle}
+          </h2>
+
+          <form
+            id="contact-form"
+            class="contact-page__form"
+            data-contact-form
+            novalidate
+          >
+            <div class="contact-page__form-grid">
+              <div class="contact-page__field">
+                <label class="contact-page__label" for="cf-first-name">
+                  {f.firstName}
+                  <span class="contact-page__label-req" aria-hidden="true"
+                    >*</span
+                  >
+                </label>
+                <input
+                  id="cf-first-name"
+                  class="contact-page__input"
+                  type="text"
+                  name="first_name"
+                  autocomplete="given-name"
+                  data-field="first_name"
+                  placeholder="First name"
+                  required
+                />
+                <p
+                  class="contact-page__field-error"
+                  data-field-error="first_name"
+                  hidden
+                >
+                </p>
+              </div>
+
+              <div class="contact-page__field">
+                <label class="contact-page__label" for="cf-last-name">
+                  {f.lastName}
+                  <span class="contact-page__label-req" aria-hidden="true"
+                    >*</span
+                  >
+                </label>
+                <input
+                  id="cf-last-name"
+                  class="contact-page__input"
+                  type="text"
+                  name="last_name"
+                  autocomplete="family-name"
+                  data-field="last_name"
+                  placeholder="Your surname"
+                  required
+                />
+                <p
+                  class="contact-page__field-error"
+                  data-field-error="last_name"
+                  hidden
+                >
+                </p>
+              </div>
+
+              <div class="contact-page__field">
+                <label class="contact-page__label" for="cf-occupation-trigger"
+                  >{f.occupation}</label
+                >
+                <CustomSelect
+                  name="occupation"
+                  field="occupation"
+                  id="cf-occupation"
+                  placeholder="Select…"
+                  options={occupationOptions}
+                />
+                <p
+                  class="contact-page__field-error"
+                  data-field-error="occupation"
+                  hidden
+                >
+                </p>
+              </div>
+
+              <div class="contact-page__field">
+                <label class="contact-page__label" for="cf-location-trigger"
+                  >{f.location}</label
+                >
+                <CustomSelect
+                  name="location"
+                  field="location"
+                  id="cf-location"
+                  placeholder="Select…"
+                  options={locationOptions}
+                />
+                <p
+                  class="contact-page__field-error"
+                  data-field-error="location"
+                  hidden
+                >
+                </p>
+              </div>
+
+              <div class="contact-page__field">
+                <label class="contact-page__label" for="cf-email">
+                  {f.email}
+                  <span class="contact-page__label-req" aria-hidden="true"
+                    >*</span
+                  >
+                </label>
+                <input
+                  id="cf-email"
+                  class="contact-page__input"
+                  type="email"
+                  name="email"
+                  autocomplete="email"
+                  data-field="email"
+                  placeholder="Your email"
+                  required
+                />
+                <p
+                  class="contact-page__field-error"
+                  data-field-error="email"
+                  hidden
+                >
+                </p>
+              </div>
+
+              <div class="contact-page__field">
+                <label class="contact-page__label" for="cf-phone">
+                  {f.phone}
+                  <span class="contact-page__label-req" aria-hidden="true"
+                    >*</span
+                  >
+                </label>
+                <input
+                  id="cf-phone"
+                  class="contact-page__input"
+                  type="tel"
+                  name="phone"
+                  autocomplete="tel"
+                  data-field="phone"
+                  placeholder="Your phone number"
+                  required
+                />
+                <p
+                  class="contact-page__field-error"
+                  data-field-error="phone"
+                  hidden
+                >
+                </p>
+              </div>
+
+              <div class="contact-page__field contact-page__field--full">
+                <label class="contact-page__label" for="cf-message">
+                  {f.message}
+                  <span class="contact-page__label-req" aria-hidden="true"
+                    >*</span
+                  >
+                </label>
+                <textarea
+                  id="cf-message"
+                  class="contact-page__textarea"
+                  name="message"
+                  rows="6"
+                  data-field="message"
+                  placeholder="Type your message"
+                  required></textarea>
+                <p
+                  class="contact-page__field-error"
+                  data-field-error="message"
+                  hidden
+                >
+                </p>
+              </div>
+            </div>
+
+            <div class="contact-page__actions">
+              <button
+                type="submit"
+                class="contact-page__submit"
+                data-contact-submit
+              >
+                {f.submit}
+              </button>
+              <p
+                id="contact-form-status"
+                class="contact-page__status"
+                hidden
+                role="status"
+              >
+              </p>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <PageErrorToast id="contact-page-error-toast" />
+</Layout>
+
+<PageHeaderOffset />
+
+<script>
+  import "../../scripts/contact-page.ts";
+</script>

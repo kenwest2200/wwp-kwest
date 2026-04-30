@@ -1,0 +1,93 @@
+---
+export interface CustomSelectOption {
+  value: string;
+  label: string;
+}
+
+export interface Props {
+  name: string;
+  field: string;
+  id: string;
+  placeholder?: string;
+  options: CustomSelectOption[];
+}
+
+const { name, field, id, placeholder = "Select…", options } = Astro.props;
+const triggerId = `${id}-trigger`;
+const menuId = `${id}-menu`;
+---
+
+<div
+  class="custom-select"
+  data-field={field}
+  data-custom-select-root
+  data-custom-select-placeholder={placeholder}
+>
+  <button
+    type="button"
+    id={triggerId}
+    class="custom-select__trigger"
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    aria-controls={menuId}
+    data-custom-select-trigger
+  >
+    <span class="custom-select__value" data-custom-select-value
+      >{placeholder}</span
+    >
+    <span class="custom-select__chevron" aria-hidden="true">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="10"
+        height="6"
+        viewBox="0 0 10 6"
+        fill="none"
+      >
+        <path
+          d="M0.75 0.75L4.75 4.75L8.75 0.75"
+          stroke="#9C9C9C"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </span>
+  </button>
+  <ul
+    id={menuId}
+    class="custom-select__menu"
+    role="listbox"
+    aria-labelledby={triggerId}
+    hidden
+    data-custom-select-menu
+  >
+    {
+      options.map((opt) => (
+        <li role="presentation">
+          <button
+            type="button"
+            class="custom-select__option"
+            role="option"
+            data-custom-select-option
+            data-value={opt.value}
+            aria-selected="false"
+          >
+            {opt.label}
+          </button>
+        </li>
+      ))
+    }
+  </ul>
+  <select
+    id={id}
+    class="custom-select__native visually-hidden"
+    tabindex="-1"
+    aria-hidden="true"
+    name={name}
+    data-custom-select-native
+  >
+    <option value="" selected disabled>
+      {placeholder}
+    </option>
+    {options.map((opt) => <option value={opt.value}>{opt.label}</option>)}
+  </select>
+</div>

@@ -50,6 +50,10 @@
       &-link {
         color: $dark-medium;
 
+        &:hover {
+          color: $dark-teal;
+        }
+
 
         &--facebook {
           svg {
@@ -61,12 +65,32 @@
               stroke: $dark-medium;
             }
           }
+
+          &:hover {
+            svg {
+              path {
+                fill: $dark-teal;
+              }
+
+              rect {
+                stroke: $dark-teal;
+              }
+            }
+          }
         }
 
         &--instagram {
           svg {
             path {
               stroke: $dark-medium;
+            }
+          }
+
+          &:hover {
+            svg {
+              path {
+                stroke: $dark-teal;
+              }
             }
           }
         }

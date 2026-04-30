@@ -26,6 +26,7 @@ const RESERVED_PATHS = new Set([
   "/support",
   "/company",
   "/for-homeowners",
+  "/contact",
 ]);
 
 function normalizeMatchPath(uri: string): string {

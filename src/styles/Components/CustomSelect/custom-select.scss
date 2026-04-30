@@ -1,0 +1,114 @@
+@use "../../variables" as *;
+@use "../../functions" as *;
+
+.custom-select {
+  position: relative;
+  display: block;
+  width: 100%;
+
+  &.is-invalid &__trigger {
+    box-shadow: 0 0 0 1px $error;
+  }
+
+  &--open &__chevron {
+    transform: rotate(180deg);
+  }
+
+  &__trigger {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: px-to-rem(8);
+    width: 100%;
+    min-height: px-to-rem(48);
+    margin: 0;
+    padding: px-to-rem(12) px-to-rem(12) px-to-rem(12) px-to-rem(16);
+    border: none;
+    border-radius: px-to-rem(4);
+    background: $light-gray;
+    cursor: pointer;
+    font-family: $font-sans;
+    font-weight: 400;
+    font-size: px-to-rem(14);
+    line-height: px-to-rem(24);
+    letter-spacing: 0.02em;
+    color: $dark;
+    text-align: left;
+
+    &:focus-visible {
+      outline: 2px solid $dark-teal;
+      outline-offset: 2px;
+    }
+  }
+
+  &__value {
+    flex: 1;
+    min-width: 0;
+    font-weight: 400;
+    color: $dark;
+
+    &.is-placeholder {
+      color: $dark-medium;
+    }
+  }
+
+  &__chevron {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+  }
+
+  &__menu {
+    position: absolute;
+    z-index: 20;
+    top: calc(100% + #{px-to-rem(4)});
+    left: 0;
+    right: 0;
+    min-width: 100%;
+    margin: 0;
+    padding: px-to-rem(16);
+    list-style: none;
+    border-radius: px-to-rem(4);
+    background: $white;
+    box-shadow: 0px px-to-rem(4) px-to-rem(24) 0px rgba(13, 39, 37, 0.2);
+
+    li {
+      margin: 0;
+    }
+  }
+
+  &__option {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: px-to-rem(8) px-to-rem(12);
+    border: none;
+    background: transparent;
+    border-radius: px-to-rem(4);
+
+    cursor: pointer;
+    font-weight: 400;
+    font-size: px-to-rem(14);
+    line-height: px-to-rem(24);
+    letter-spacing: 0.02em;
+    color: $dark;
+    text-align: left;
+
+    &:hover,
+    &:focus-visible {
+      background: $light-gray;
+      color: $dark-teal;
+      outline: none;
+    }
+
+    &[aria-selected="true"] {
+      color: $dark-teal;
+      background: $light-gray;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+  }
+}

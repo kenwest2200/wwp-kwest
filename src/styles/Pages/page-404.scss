@@ -9,50 +9,37 @@
   align-items: center;
   justify-content: center;
   padding-top: var(--page-header-offset, #{px-to-rem(112)});
-  padding-bottom: px-to-rem(80);
   text-align: center;
-  background: linear-gradient(165deg,
-      $light-gray-2 0%,
-      $light-gray 42%,
-      rgba(0, 174, 199, 0.06) 100%);
+  background: $light-gray-2;
 
   &__inner {
     max-width: px-to-rem(1192);
     width: 100%;
-    padding-top: px-to-rem(80);
-    padding-bottom: px-to-rem(80);
+    padding-top: px-to-rem(100);
+    padding-bottom: px-to-rem(100);
     padding-left: var(--section-left, var(--s-padding-x));
     padding-right: var(--section-right, var(--s-padding-x));
   }
 
   &__code {
-    margin: 0 0 px-to-rem(8);
-    font-size: clamp(4.5rem, 14vw, 7.5rem);
-    font-weight: 800;
-    line-height: 0.95;
-    letter-spacing: -0.04em;
-    background: linear-gradient(135deg, $dark-teal 0%, $medium-teal 55%, $light-teal 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    user-select: none;
+    margin: 0 0 px-to-rem(28);
   }
 
   &__title {
     margin: 0 0 px-to-rem(16);
-    font-size: px-to-rem(28);
+    font-size: px-to-rem(24);
     font-weight: 600;
-    line-height: 1.25;
-    letter-spacing: 0.02em;
+    line-height: px-to-rem(32);
+    letter-spacing: 0.03em;
     color: $dark;
   }
 
   &__text {
-    margin: 0 0 px-to-rem(32);
+    margin: 0 0 px-to-rem(40);
     font-size: px-to-rem(16);
-    line-height: px-to-rem(26);
+    line-height: px-to-rem(28);
     letter-spacing: 0.02em;
-    color: $dark-medium;
+    color: $black;
   }
 
   &__actions {
@@ -67,16 +54,20 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: px-to-rem(48);
-    padding: px-to-rem(12) px-to-rem(28);
+    min-height: px-to-rem(40);
+    max-width: px-to-rem(175);
+    width: 100%;
+    height: px-to-rem(40);
+    padding: px-to-rem(8) px-to-rem(12);
     border-radius: px-to-rem(4);
     font-size: px-to-rem(14);
     font-weight: 600;
+    line-height: px-to-rem(24);
     letter-spacing: 0.03em;
     text-decoration: none;
     transition:
-      background 0.2s ease,
       color 0.2s ease,
+      background 0.2s ease,
       border-color 0.2s ease;
 
     &--primary {
@@ -85,8 +76,8 @@
       border: 1px solid $dark-teal;
 
       &:hover {
-        background: $medium-teal;
         border-color: $medium-teal;
+        background: $medium-teal;
         color: $white;
       }
     }
@@ -94,11 +85,13 @@
     &--ghost {
       background: transparent;
       color: $dark-teal;
-      border: 1px solid rgba(0, 125, 138, 0.35);
+      border: 1px solid $dark-teal;
 
       &:hover {
-        border-color: $dark-teal;
-        background: rgba(0, 125, 138, 0.06);
+        &:hover {
+          border-color: $medium-teal;
+          color: $medium-teal;
+        }
       }
     }
   }
