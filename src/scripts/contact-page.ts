@@ -2,6 +2,7 @@ import {
   hidePageErrorToast,
   installPageErrorToast,
   showPageErrorToast,
+  showPageToast,
 } from "../lib/page-error-toast";
 import {
   initFormCustomSelects,
@@ -11,9 +12,7 @@ import {
 const NETWORK_ERROR_TOAST =
   "Network error. Check your connection and try again.";
 
-const CONTACT_FORM_GRAPHQL_URL =
-  (import.meta.env.PUBLIC_GRAPHQL_URL as string | undefined)?.trim() ||
-  "https://api.waterwayplastics.com/graphql";
+const CONTACT_FORM_GRAPHQL_PATH = "/api/contact-graphql";
 
 type SubmitPayload = {
   success?: boolean | null;
@@ -116,12 +115,11 @@ async function init(): Promise<void> {
   const submitBtn = document.querySelector<HTMLButtonElement>(
     "[data-contact-submit]",
   );
-  const statusEl = document.getElementById("contact-form-status");
-  const errorToast = document.getElementById("contact-page-error-toast");
-  if (!root || !form || !submitBtn || !statusEl) return;
+  const pageToast = document.getElementById("contact-page-error-toast");
+  if (!root || !form || !submitBtn) return;
 
-  if (errorToast instanceof HTMLElement) {
-    installPageErrorToast(errorToast);
+  if (pageToast instanceof HTMLElement) {
+    installPageErrorToast(pageToast);
   }
 
   initFormCustomSelects(form);
@@ -147,10 +145,7 @@ async function init(): Promise<void> {
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    statusEl.textContent = "";
-    statusEl.hidden = true;
-    statusEl.classList.remove("is-success", "is-error");
-    hidePageErrorToast(errorToast instanceof HTMLElement ? errorToast : null);
+    hidePageErrorToast(pageToast instanceof HTMLElement ? pageToast : null);
     clearFieldErrors(root);
 
     const entries = readEntries(form);
@@ -158,7 +153,7 @@ async function init(): Promise<void> {
 
     submitBtn.disabled = true;
     try {
-      const res = await fetch(CONTACT_FORM_GRAPHQL_URL, {
+      const res = await fetch(CONTACT_FORM_GRAPHQL_PATH, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -182,30 +177,31 @@ async function init(): Promise<void> {
           .join(" ") ?? "";
 
       if (!res.ok) {
-        statusEl.textContent =
+        showPageErrorToast(
+          pageToast instanceof HTMLElement ? pageToast : null,
           gqlErr ||
-          json.message ||
-          `Request failed (${res.status}). Please try again later.`;
-        statusEl.classList.add("is-error");
-        statusEl.hidden = false;
+            json.message ||
+            `Request failed (${res.status}). Please try again later.`,
+        );
         return;
       }
 
       if (json.errors?.length) {
-        statusEl.textContent =
-          gqlErr || "Something went wrong. Please try again later.";
-        statusEl.classList.add("is-error");
-        statusEl.hidden = false;
+        showPageErrorToast(
+          pageToast instanceof HTMLElement ? pageToast : null,
+          gqlErr || "Something went wrong. Please try again later.",
+        );
         return;
       }
 
       const result = json.data?.submitContactForm7 ?? null;
       if (result?.success) {
-        statusEl.textContent =
+        showPageToast(
+          pageToast instanceof HTMLElement ? pageToast : null,
           (result.message && result.message.trim()) ||
-          "Thank you — your message has been sent.";
-        statusEl.classList.add("is-success");
-        statusEl.hidden = false;
+            "Thank you — your message has been sent.",
+          "success",
+        );
         form.reset();
         syncAllCustomSelectsFromNative(form);
         return;
@@ -218,22 +214,22 @@ async function init(): Promise<void> {
           const msg = (row.message ?? "").trim() || "Invalid value.";
           if (f) showFieldError(root, f, msg);
         }
-        statusEl.textContent =
+        showPageErrorToast(
+          pageToast instanceof HTMLElement ? pageToast : null,
           (result?.message && result.message.trim()) ||
-          "Please fix the highlighted fields.";
-        statusEl.classList.add("is-error");
-        statusEl.hidden = false;
+            "Please fix the highlighted fields.",
+        );
         return;
       }
 
-      statusEl.textContent =
+      showPageErrorToast(
+        pageToast instanceof HTMLElement ? pageToast : null,
         (result?.message && result.message.trim()) ||
-        "Could not send the message. Please try again.";
-      statusEl.classList.add("is-error");
-      statusEl.hidden = false;
+          "Could not send the message. Please try again.",
+      );
     } catch {
       showPageErrorToast(
-        errorToast instanceof HTMLElement ? errorToast : null,
+        pageToast instanceof HTMLElement ? pageToast : null,
         NETWORK_ERROR_TOAST,
       );
     } finally {

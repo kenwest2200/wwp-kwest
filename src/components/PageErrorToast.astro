@@ -17,6 +17,7 @@ const { id, class: className } = Astro.props;
 >
   <span class="page-error-toast__icon" aria-hidden="true">
     <svg
+      class="page-error-toast__icon-svg page-error-toast__icon-svg--error"
       xmlns="http://www.w3.org/2000/svg"
       width="22"
       height="22"
@@ -29,6 +30,22 @@ const { id, class: className } = Astro.props;
         stroke="white"
         stroke-width="1.75"
         stroke-linecap="round"></path>
+    </svg>
+    <svg
+      class="page-error-toast__icon-svg page-error-toast__icon-svg--success"
+      xmlns="http://www.w3.org/2000/svg"
+      width="22"
+      height="22"
+      viewBox="0 0 22 22"
+      fill="none"
+    >
+      <circle cx="11" cy="11" r="11" fill="#42A247"></circle>
+      <path
+        d="M6.5 11.2 9.8 14.5 15.5 7.5"
+        stroke="white"
+        stroke-width="1.85"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
     </svg>
   </span>
   <div class="page-error-toast__main">

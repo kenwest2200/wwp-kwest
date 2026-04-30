@@ -247,26 +247,6 @@
     }
   }
 
-  &__status {
-    margin: 0;
-    max-width: px-to-rem(560);
-    text-align: center;
-    font-size: px-to-rem(15);
-    line-height: px-to-rem(24);
-
-    &[hidden] {
-      display: none;
-    }
-
-    &.is-success {
-      color: $success;
-    }
-
-    &.is-error {
-      color: $error;
-    }
-  }
-
   &__empty {
     margin: 0;
     font-size: px-to-rem(15);

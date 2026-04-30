@@ -40,6 +40,9 @@ export default {
     if (url.pathname === "/api/cross-ref-filters") {
       return handleCrossRefFiltersApi(request, env);
     }
+    if (url.pathname === "/api/contact-graphql") {
+      return handleContactGraphqlApi(request, env);
+    }
 
     return handleFrontend(request, env);
   },
@@ -205,6 +208,85 @@ async function handleWebhook(request: Request, env: Env): Promise<Response> {
   } catch (e) {
     console.error("Purge failed:", e);
     return new Response("Purge failed", { status: 500 });
+  }
+}
+
+async function handleContactGraphqlApi(
+  request: Request,
+  env: Env,
+): Promise<Response> {
+  const origin = request.headers.get("Origin");
+  if (request.method === "OPTIONS") {
+    const headers = new Headers();
+    headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
+    headers.set("Access-Control-Allow-Headers", "Content-Type");
+    headers.set("Access-Control-Max-Age", "86400");
+    if (origin) headers.set("Access-Control-Allow-Origin", origin);
+    return new Response(null, { status: 204, headers });
+  }
+  if (request.method !== "POST") {
+    const headers = new Headers();
+    if (origin) {
+      headers.set("Access-Control-Allow-Origin", origin);
+      headers.set("Vary", "Origin");
+    }
+    return new Response("Method Not Allowed", { status: 405, headers });
+  }
+
+  const endpoint = env.PUBLIC_GRAPHQL_URL?.trim();
+  if (!endpoint) {
+    return jsonResponse(
+      { errors: [{ message: "PUBLIC_GRAPHQL_URL is not configured" }] },
+      { status: 500, origin },
+    );
+  }
+
+  const user = env.GRAPHQL_BASIC_USER || "api";
+  const pass = env.GRAPHQL_BASIC_PASSWORD || "apiwaterway";
+  const auth = btoa(`${user}:${pass}`);
+
+  let body: string;
+  try {
+    body = await request.text();
+  } catch {
+    return jsonResponse(
+      { errors: [{ message: "Invalid request body" }] },
+      { status: 400, origin },
+    );
+  }
+
+  try {
+    const gqlRes = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Basic ${auth}`,
+      },
+      body,
+    });
+    const outHeaders = new Headers();
+    const ct = gqlRes.headers.get("Content-Type");
+    if (ct) outHeaders.set("Content-Type", ct);
+    outHeaders.set("Cache-Control", "no-store");
+    if (origin) {
+      outHeaders.set("Access-Control-Allow-Origin", origin);
+      outHeaders.set("Vary", "Origin");
+    }
+    return new Response(gqlRes.body, {
+      status: gqlRes.status,
+      headers: outHeaders,
+    });
+  } catch (error) {
+    return jsonResponse(
+      {
+        errors: [
+          {
+            message: error instanceof Error ? error.message : String(error),
+          },
+        ],
+      },
+      { status: 502, origin },
+    );
   }
 }
 
@@ -518,7 +600,9 @@ type GoogleGeocodeResponse = {
   status?: string;
 };
 
-function extractUsZip5FromGeocodeRow(row: GoogleGeocodeResultRow): string | null {
+function extractUsZip5FromGeocodeRow(
+  row: GoogleGeocodeResultRow,
+): string | null {
   const comps = row.address_components;
   if (!comps) return null;
   for (const c of comps) {
@@ -559,7 +643,8 @@ async function geocodeUsLocationQuery(
   if (q.length < 3) {
     return {
       ok: false,
-      error: "Enter a U.S. ZIP code (5 digits or ZIP+4), or at least 3 characters.",
+      error:
+        "Enter a U.S. ZIP code (5 digits or ZIP+4), or at least 3 characters.",
     };
   }
   if (isTriviallyBroadLocationQuery(q)) {
@@ -582,8 +667,7 @@ async function geocodeUsLocationQuery(
     if (data.status === "ZERO_RESULTS" || !data.results?.length) {
       return {
         ok: false,
-        error:
-          "No match for that ZIP. Check the 5-digit code and try again.",
+        error: "No match for that ZIP. Check the 5-digit code and try again.",
       };
     }
     if (data.status !== "OK") {
@@ -814,7 +898,9 @@ function filterDistributorLocationsByAddressQuery(
     const city = String(o.City ?? "").toLowerCase();
     const a1 = String(o.Address1 ?? "").toLowerCase();
     const a2 = String(o.Address2 ?? "").toLowerCase();
-    const zipField = String(o.Zip ?? "").toLowerCase().replace(/\s/g, "");
+    const zipField = String(o.Zip ?? "")
+      .toLowerCase()
+      .replace(/\s/g, "");
     const hay = `${city} ${a1} ${a2} ${zipField}`;
     return tokens.every((t) => hay.includes(t));
   });
@@ -861,7 +947,9 @@ async function handleDistributorLocationsInRadiusApi(
   }
 
   const url = new URL(request.url);
-  const rawLocation = normalizeSalesRepsZipParam(url.searchParams.get("zip") ?? "");
+  const rawLocation = normalizeSalesRepsZipParam(
+    url.searchParams.get("zip") ?? "",
+  );
   if (!rawLocation) {
     return jsonResponse(
       { locations: [], error: "Enter a U.S. ZIP code." },
@@ -888,7 +976,10 @@ async function handleDistributorLocationsInRadiusApi(
     }
     const geo = await geocodeUsLocationQuery(rawLocation, geoKey);
     if (!geo.ok) {
-      return jsonResponse({ locations: [], error: geo.error }, { status: 400, origin });
+      return jsonResponse(
+        { locations: [], error: geo.error },
+        { status: 400, origin },
+      );
     }
     zip = geo.zip;
     searchCenter = { lat: geo.lat, lng: geo.lng };
@@ -1110,11 +1201,15 @@ async function handleMapsBrowserKeyApi(
     return new Response(null, { status: 204, headers });
   }
   if (request.method !== "GET") {
-    return jsonResponse({ key: "", error: "Method Not Allowed" }, { status: 405, origin });
+    return jsonResponse(
+      { key: "", error: "Method Not Allowed" },
+      { status: 405, origin },
+    );
   }
   const key =
-    (env as Env & { GOOGLE_MAPS_BROWSER_KEY?: string }).GOOGLE_MAPS_BROWSER_KEY?.trim() ??
-    "";
+    (
+      env as Env & { GOOGLE_MAPS_BROWSER_KEY?: string }
+    ).GOOGLE_MAPS_BROWSER_KEY?.trim() ?? "";
   return jsonResponse({ key }, { origin });
 }
 

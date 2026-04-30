@@ -26,6 +26,7 @@ export default defineConfig({
         "/api/sales-reps": wranglerDev,
         "/api/cross-ref-find": wranglerDev,
         "/api/cross-ref-filters": wranglerDev,
+        "/api/contact-graphql": wranglerDev,
       },
     },
   },

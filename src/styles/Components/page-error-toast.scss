@@ -20,18 +20,41 @@
   box-shadow: 0 px-to-rem(12) px-to-rem(40) rgba($dark, 0.12);
   color: $dark;
 
+  &--success {
+    border-color: rgba($success, 0.45);
+  }
+
   &[hidden] {
     display: none;
   }
 
   &__icon {
     flex-shrink: 0;
-    display: flex;
+    position: relative;
+    width: px-to-rem(22);
+    height: px-to-rem(22);
     margin-top: px-to-rem(2);
+  }
 
-    svg {
-      display: block;
+  &__icon-svg {
+    position: absolute;
+    inset: 0;
+    display: block;
+
+    &--success {
+      opacity: 0;
+      pointer-events: none;
     }
+  }
+
+  &--success &__icon-svg--error {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &--success &__icon-svg--success {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   &__main {
