@@ -11,6 +11,10 @@ import {
 const NETWORK_ERROR_TOAST =
   "Network error. Check your connection and try again.";
 
+const CONTACT_FORM_GRAPHQL_URL =
+  (import.meta.env.PUBLIC_GRAPHQL_URL as string | undefined)?.trim() ||
+  "https://api.waterwayplastics.com/graphql";
+
 type SubmitPayload = {
   success?: boolean | null;
   status?: string | null;
@@ -154,7 +158,7 @@ async function init(): Promise<void> {
 
     submitBtn.disabled = true;
     try {
-      const res = await fetch("/graphql", {
+      const res = await fetch(CONTACT_FORM_GRAPHQL_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
