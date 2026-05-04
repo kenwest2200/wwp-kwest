@@ -1,17 +1,25 @@
 ---
 interface Props {
   title: string;
-  intro: string;
+  intro?: string;
+  introIsHtml?: boolean;
 }
 
-const { title, intro } = Astro.props;
+const { title, intro, introIsHtml = false } = Astro.props;
 ---
 
 <section class="section-hero">
   <div class="container section-hero__container">
     <div class="section-hero__content">
       <h1 class="section-hero__title">{title}</h1>
-      <p class="section-hero__description">{intro}</p>
+      {
+        intro &&
+          (introIsHtml ? (
+            <p class="section-hero__description" set:html={intro} />
+          ) : (
+            <p class="section-hero__description">{intro}</p>
+          ))
+      }
     </div>
   </div>
 </section>

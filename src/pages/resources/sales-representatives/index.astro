@@ -8,13 +8,15 @@ import PageErrorToast from "../../../components/PageErrorToast.astro";
 export const prerender = true;
 
 const pageTitle = "Sales representatives";
-const heroTitle = "Find your sales representative by ZIP code";
+const heroTitle = "Find Sales Representatives";
+const breadcrumbCurrentLabel = heroTitle;
 const heroIntro =
-  "Enter your U.S. ZIP code to see the sales representatives assigned to your territory.";
+  "Waterway sales representatives are available across multiple regions.  Use the map below to find your local contact for product information and support.";
 const breadcrumbs = [
   { label: "Home", href: "/" },
-  { label: "Resources", href: "/resources" },
-  { label: pageTitle },
+  { label: "Support", href: "/support" },
+  { label: "Help", href: "/help" },
+  { label: breadcrumbCurrentLabel },
 ];
 ---
 
@@ -63,7 +65,7 @@ const breadcrumbs = [
                   inputmode="numeric"
                   maxlength="10"
                   placeholder="e.g. 33304"
-                  aria-describedby="sr-zip-hint"
+                  aria-describedby="sr-zip-hint sr-search-inline-error"
                   autocomplete="postal-code"
                 />
                 <button
@@ -73,6 +75,13 @@ const breadcrumbs = [
                   Search
                 </button>
               </div>
+              <p
+                id="sr-search-inline-error"
+                class="sr-page__search-inline-error"
+                hidden
+                role="alert"
+              >
+              </p>
             </div>
           </div>
         </form>

@@ -20,7 +20,9 @@ const graphqlConfigured = Boolean(getGraphQLClient());
 const introDefault =
   "Product support resources, manuals, and reference information from Waterway Plastics.";
 
-async function loadPage(): Promise<ResourcesSingleLayoutPageData["page"] | null> {
+async function loadPage(): Promise<
+  ResourcesSingleLayoutPageData["page"] | null
+> {
   if (!graphqlConfigured) return null;
   const uris = [
     PRODUCT_SUPPORT_PAGE_URI,
@@ -49,11 +51,7 @@ const hasList = items.length > 0;
 const hasContent = hasSidebar || hasList;
 ---
 
-<Layout
-  headerType="white"
-  pageTitle={pageTitle}
-  description={introDefault}
->
+<Layout headerType="white" pageTitle={pageTitle} description={introDefault}>
   <main class="rsl-page" data-page-header-offset>
     <SectionHero title={pageTitle} intro={introDefault} />
 
@@ -70,8 +68,9 @@ const hasContent = hasSidebar || hasList;
         {
           graphqlConfigured && !hasContent && (
             <p class="rsl-page__notice">
-              No resources were returned for <code>{PRODUCT_SUPPORT_PAGE_URI}</code>.
-              Check the page in WordPress and ACF / GraphQL field names.
+              No resources were returned for{" "}
+              <code>{PRODUCT_SUPPORT_PAGE_URI}</code>. Check the page in
+              WordPress and ACF / GraphQL field names.
             </p>
           )
         }
@@ -83,42 +82,38 @@ const hasContent = hasSidebar || hasList;
                 !hasSidebar && "rsl-page__layout--main-only",
               ]}
             >
-              {
-                hasSidebar && (
-                  <aside class="rsl-page__sidebar" aria-label="Section overview">
-                    <div
-                      class="rsl-page__sidebar-html product-page__optional-html"
-                      set:html={sidebarHtml}
-                    />
-                  </aside>
-                )
-              }
+              {hasSidebar && (
+                <aside class="rsl-page__sidebar" aria-label="Section overview">
+                  <div
+                    class="rsl-page__sidebar-html product-page__optional-html"
+                    set:html={sidebarHtml}
+                  />
+                </aside>
+              )}
               <div class="rsl-page__main">
-                {
-                  hasList ? (
-                    <ul class="rsl-page__list">
-                      {items.map((it) => (
-                        <li class="rsl-page__item">
-                          <article class="rsl-page__article">
-                            <h2 class="rsl-page__item-title">{it.name}</h2>
-                            {it.characteristicsHtml ? (
-                              <div
-                                class="rsl-page__item-body product-page__optional-html"
-                                set:html={it.characteristicsHtml}
-                              />
-                            ) : (
-                              <p class="rsl-page__item-empty">No details.</p>
-                            )}
-                          </article>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p class="rsl-page__empty-main">
-                      No resource entries in this section yet.
-                    </p>
-                  )
-                }
+                {hasList ? (
+                  <ul class="rsl-page__list">
+                    {items.map((it) => (
+                      <li class="rsl-page__item">
+                        <article class="rsl-page__article">
+                          <h2 class="rsl-page__item-title">{it.name}</h2>
+                          {it.characteristicsHtml ? (
+                            <div
+                              class="rsl-page__item-body product-page__optional-html"
+                              set:html={it.characteristicsHtml}
+                            />
+                          ) : (
+                            <p class="rsl-page__item-empty">No details.</p>
+                          )}
+                        </article>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p class="rsl-page__empty-main">
+                    No resource entries in this section yet.
+                  </p>
+                )}
               </div>
             </div>
           )

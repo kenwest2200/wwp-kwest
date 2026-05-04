@@ -16,8 +16,7 @@ export const prerender = true;
 
 const graphqlConfigured = Boolean(getGraphQLClient());
 
-const introDefault =
-  "Step-by-step instructional videos for Waterway products and installations.";
+const introDefault = `Browse step-by-step instructional videos for Waterway products. <br /> Learn how to install, maintain, and troubleshoot components with clear, practical guidance.`;
 
 async function loadPage(): Promise<InstructionalVideosPageData["page"] | null> {
   if (!graphqlConfigured) return null;
@@ -53,7 +52,7 @@ const breadcrumbs = [
 
 <Layout headerType="white">
   <main class="iv-page" data-page-header-offset>
-    <SectionHero title={pageTitle} intro={introDefault} />
+    <SectionHero title={pageTitle} intro={introDefault} introIsHtml />
 
     <div class="iv-page__breadcrumb-wrap">
       <Breadcrumbs items={breadcrumbs} />

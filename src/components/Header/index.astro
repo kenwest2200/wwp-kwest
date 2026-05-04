@@ -199,6 +199,9 @@ function isMenuItemActive(href: string, pathname: string): boolean {
   const isHelpPath = p === "/help" || p.startsWith("/help/");
   const isProductInfoPath =
     p === "/product/information" || p.startsWith("/product/information/");
+  const isSalesRepsPath =
+    p === "/resources/sales-representatives" ||
+    p.startsWith("/resources/sales-representatives/");
   const isCompanyMappedPath =
     p === "/about-us" ||
     p.startsWith("/about-us/") ||
@@ -210,7 +213,8 @@ function isMenuItemActive(href: string, pathname: string): boolean {
     p.startsWith("/resources/employment-opportunities/");
   const isForHomeownersMappedPath =
     p === "/distributor-locator" || p.startsWith("/distributor-locator/");
-  const isSupportMappedPath = isRecallPath || isHelpPath || isProductInfoPath;
+  const isSupportMappedPath =
+    isRecallPath || isHelpPath || isProductInfoPath || isSalesRepsPath;
   if (!h || h === "#") return false;
   if (h === "/") return p === "/";
   if (

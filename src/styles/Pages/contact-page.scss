@@ -1,6 +1,7 @@
 @use "../variables" as *;
 @use "../functions" as *;
 @use "../breakpoints" as *;
+@use "../Elements/form-field-validation" as field;
 
 .contact-page {
   padding-top: var(--page-header-offset, #{px-to-rem(112)});
@@ -193,13 +194,13 @@
       color: $dark-medium;
     }
 
-    &:focus {
+    &:focus:not(.is-invalid) {
       outline: 1px solid $dark-teal;
       border-color: $dark-teal;
     }
 
     &.is-invalid {
-      border-color: $error;
+      @include field.form-control-invalid-ring(1px);
     }
   }
 
@@ -209,10 +210,7 @@
   }
 
   &__field-error {
-    margin: 0;
-    font-size: px-to-rem(13);
-    line-height: px-to-rem(20);
-    color: $error;
+    @include field.form-field-error-text;
   }
 
   &__actions {

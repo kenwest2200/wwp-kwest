@@ -1,0 +1,23 @@
+@use "../variables" as *;
+@use "../functions" as *;
+
+/// Inline / under-field validation copy (shared across forms).
+@mixin form-field-error-text {
+  margin: px-to-rem(4) 0 0;
+  font-size: px-to-rem(12);
+  line-height: px-to-rem(16);
+  letter-spacing: 0.02em;
+  font-weight: 400;
+  color: $error;
+}
+
+/// Visible ring for invalid `border: none` inputs, textareas, or custom triggers.
+@mixin form-control-invalid-ring($width: 2px) {
+  box-shadow: 0 0 0 #{$width} $error;
+
+  &:focus,
+  &:focus-visible {
+    outline: 1px solid $error;
+    outline-offset: 1px;
+  }
+}

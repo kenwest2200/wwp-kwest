@@ -1,5 +1,6 @@
 @use "../../variables" as *;
 @use "../../functions" as *;
+@use "../../Elements/form-field-validation" as field;
 
 .custom-select {
   position: relative;
@@ -7,7 +8,7 @@
   width: 100%;
 
   &.is-invalid &__trigger {
-    box-shadow: 0 0 0 1px $error;
+    @include field.form-control-invalid-ring(1px);
   }
 
   &--open &__chevron {

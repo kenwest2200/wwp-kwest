@@ -1931,14 +1931,17 @@ function readStoredCatalogViewMode(): CatalogViewMode {
 
 function setCatalogViewMode(mode: CatalogViewMode, persist: boolean) {
   if (!productsEl) return;
-  productsEl.classList.toggle("product-filters__list--rows", mode === "rows");
+  /** Rows layout toggle is hidden below `md` in SCSS — never apply `--rows` there. */
+  const showRows = mode === "rows" && isCatalogTabletUp();
+  productsEl.classList.toggle("product-filters__list--rows", showRows);
   const gridBtn = document.getElementById("product-filters-view-grid");
   const rowsBtn = document.getElementById("product-filters-view-rows");
+  const ariaMode: CatalogViewMode = showRows ? "rows" : "grid";
   if (gridBtn) {
-    gridBtn.setAttribute("aria-pressed", String(mode === "grid"));
+    gridBtn.setAttribute("aria-pressed", String(ariaMode === "grid"));
   }
   if (rowsBtn) {
-    rowsBtn.setAttribute("aria-pressed", String(mode === "rows"));
+    rowsBtn.setAttribute("aria-pressed", String(ariaMode === "rows"));
   }
   if (persist) {
     try {
@@ -2353,6 +2356,7 @@ async function init() {
     mqCatalogDesktop.addEventListener("change", () => {
       if (!mqCatalogDesktop.matches) closeOverflowModal();
       scrollProductListAfterFetch = false;
+      setCatalogViewMode(readStoredCatalogViewMode(), false);
       void fetchProducts();
     });
 

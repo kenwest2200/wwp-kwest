@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-04T10:36:07.219Z",
+  "generatedAt": "2026-05-04T14:20:18.471Z",
   "attributesByCategory": {
     "bath": [],
     "pool": [
@@ -7223,11 +7223,11 @@
       "attributeSlugs": []
     },
     {
-      "title": "Information",
+      "title": "Ordering & Policies",
       "slug": "information",
       "databaseId": 32386,
       "date": "2020-01-27T12:36:56",
-      "modified": "2026-04-24T13:51:16",
+      "modified": "2026-05-04T13:32:13",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/4f70f4ebb35c91c464db15c8cfaad0dbfafe32a7.jpg",
       "imageAlt": null,
       "imageWidth": 1000,

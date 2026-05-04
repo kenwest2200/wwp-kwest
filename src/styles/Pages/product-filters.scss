@@ -2003,9 +2003,12 @@ $product-filters-check-svg: "%3Csvg xmlns='http://www.w3.org/2000/svg' width='9'
   gap: px-to-rem(24);
   margin: 0;
   padding: 0 px-to-rem(20);
+  padding-right: var(--section-right, var(--s-padding-x));
 
   @include media-breakpoint-up(md) {
     padding: 0;
+    padding-right: var(--section-right, var(--s-padding-x));
+
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: px-to-rem(32) px-to-rem(24);
   }
@@ -2038,7 +2041,7 @@ $product-filters-check-svg: "%3Csvg xmlns='http://www.w3.org/2000/svg' width='9'
     margin: 0;
 
     img {
-      width: px-to-rem(180);
+      width: 100%;
       height: px-to-rem(180);
     }
   }

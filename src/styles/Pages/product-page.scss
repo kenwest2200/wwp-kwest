@@ -645,10 +645,15 @@
     font-size: px-to-rem(14);
     line-height: px-to-rem(24);
     color: $dark-medium;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
 
     table {
       box-sizing: border-box;
-      width: 100% !important;
+      width: max-content !important;
+      min-width: 100%;
       border-collapse: separate !important;
       border-spacing: 0;
       margin: 0;
@@ -720,6 +725,7 @@
       position: relative;
       padding-right: px-to-rem(40);
       vertical-align: top;
+      white-space: nowrap;
     }
 
     .product-page__spec-sort-btns {
@@ -872,7 +878,7 @@
 
   &__gallery-mini-img {
     display: block;
-    width: auto;
+    width: 100%;
     height: auto;
     max-width: max-content;
     box-sizing: border-box;

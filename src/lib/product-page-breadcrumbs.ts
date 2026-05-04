@@ -8,6 +8,23 @@ export type ProductBreadcrumbLink = {
   href: string;
 };
 
+/** Aligns catalog breadcrumb copy with `/resources/technical-bulletins/` (“Technical guide”). */
+function productCategoryBreadcrumbDisplayLabel(
+  slug: string,
+  nameFromWp: string,
+): string {
+  const slugKey = slug.trim().toLowerCase();
+  if (slugKey === "tech-info") return "Technical guide";
+  const name = nameFromWp.trim();
+  if (
+    name.toLowerCase() === "tech. info" ||
+    name.toLowerCase() === "tech info"
+  ) {
+    return "Technical guide";
+  }
+  return name || slug.replace(/-/g, " ");
+}
+
 function isUncategorizedSlug(slug: string): boolean {
   const s = slug.toLowerCase();
   return s === "uncategorized" || s === "uncategorised" || s === "bez-rubriki";
@@ -42,7 +59,10 @@ export function buildProductBreadcrumbLinks(
 
   const root = best[0]!;
   const rootSlug = root.slug?.trim() ?? "";
-  const rootName = root.name?.trim() || rootSlug.replace(/-/g, " ");
+  const rootName = productCategoryBreadcrumbDisplayLabel(
+    rootSlug,
+    root.name?.trim() ?? "",
+  );
   if (!rootSlug) return [];
 
   const out: ProductBreadcrumbLink[] = [
@@ -55,7 +75,10 @@ export function buildProductBreadcrumbLinks(
   if (best.length >= 2) {
     const sub = best[1]!;
     const subSlug = sub.slug?.trim() ?? "";
-    const subName = sub.name?.trim() || subSlug.replace(/-/g, " ");
+    const subName = productCategoryBreadcrumbDisplayLabel(
+      subSlug,
+      sub.name?.trim() ?? "",
+    );
     if (subSlug) {
       out.push({
         label: subName,

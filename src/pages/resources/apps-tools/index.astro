@@ -18,7 +18,7 @@ export const prerender = true;
 const graphqlConfigured = Boolean(getGraphQLClient());
 
 const introDefault =
-  "Explore Waterway mobile apps and practical digital tools for setup, calculations, and product support.";
+  "Discover a range of Waterway apps and tools that help you estimate pool volume, find compatible products, and manage your pool system with confidence.";
 
 async function loadPage(): Promise<AppsToolsPageData["page"] | null> {
   if (!graphqlConfigured) return null;

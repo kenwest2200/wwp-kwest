@@ -279,12 +279,56 @@ function renderResults(
   }
 }
 
-function setError(el: HTMLElement, msg: string): void {
+/** Client + worker validation for “nothing to search” — inline under form, not toast. */
+function isCrossRefFieldValidationError(message: string): boolean {
+  const m = message.trim().replace(/\u2019/g, "'").replace(/\u2018/g, "'");
+  return (
+    m === "Set at least one filter before searching." ||
+    m === "At least one filter is required for /find."
+  );
+}
+
+function clearCrossRefMessages(
+  toastEl: HTMLElement,
+  inlineEl: HTMLElement | null,
+  formEl: HTMLFormElement,
+): void {
+  hidePageErrorToast(toastEl);
+  if (inlineEl) {
+    inlineEl.textContent = "";
+    inlineEl.hidden = true;
+    inlineEl.setAttribute("hidden", "");
+  }
+  formEl.classList.remove("cross-ref-page__form--inline-error");
+}
+
+function setCrossRefMessage(
+  toastEl: HTMLElement,
+  inlineEl: HTMLElement | null,
+  formEl: HTMLFormElement,
+  msg: string,
+): void {
   if (!msg.trim()) {
-    hidePageErrorToast(el);
+    clearCrossRefMessages(toastEl, inlineEl, formEl);
     return;
   }
-  showPageErrorToast(el, msg);
+  if (isCrossRefFieldValidationError(msg)) {
+    hidePageErrorToast(toastEl);
+    if (inlineEl) {
+      inlineEl.textContent = msg;
+      inlineEl.hidden = false;
+      inlineEl.removeAttribute("hidden");
+    }
+    formEl.classList.add("cross-ref-page__form--inline-error");
+    return;
+  }
+  if (inlineEl) {
+    inlineEl.textContent = "";
+    inlineEl.hidden = true;
+    inlineEl.setAttribute("hidden", "");
+  }
+  formEl.classList.remove("cross-ref-page__form--inline-error");
+  showPageErrorToast(toastEl, msg);
 }
 
 function buildFindQuery(values: ReferenceValues): URLSearchParams {
@@ -414,6 +458,7 @@ export function initProductCrossReferencePage(): void {
   const motorSuggest = document.getElementById("cross-ref-motor-suggest");
   const hpInput = document.getElementById("cross-ref-hp");
   const hpSuggest = document.getElementById("cross-ref-hp-suggest");
+  const inlineErrorEl = document.getElementById("cross-ref-form-inline-error");
 
   if (
     !(form instanceof HTMLFormElement) ||
@@ -437,6 +482,10 @@ export function initProductCrossReferencePage(): void {
   }
 
   installPageErrorToast(errorEl);
+
+  form.addEventListener("input", () => {
+    clearCrossRefMessages(errorEl, inlineErrorEl, form);
+  });
 
   let currentLists: FilterLists = {
     brands: [],
@@ -516,7 +565,12 @@ export function initProductCrossReferencePage(): void {
     if (refreshTimer !== null) window.clearTimeout(refreshTimer);
     refreshTimer = window.setTimeout(() => {
       refreshFilters().catch((e) =>
-        setError(errorEl, e instanceof Error ? e.message : String(e)),
+        setCrossRefMessage(
+          errorEl,
+          inlineErrorEl,
+          form,
+          e instanceof Error ? e.message : String(e),
+        ),
       );
     }, 180);
   };
@@ -609,16 +663,26 @@ export function initProductCrossReferencePage(): void {
   );
 
   refreshFilters().catch((e) =>
-    setError(errorEl, e instanceof Error ? e.message : String(e)),
+    setCrossRefMessage(
+      errorEl,
+      inlineErrorEl,
+      form,
+      e instanceof Error ? e.message : String(e),
+    ),
   );
 
   clearBtn?.addEventListener("click", () => {
     lastPickedBrand = "";
     lastPickedModel = "";
     form.reset();
-    setError(errorEl, "");
+    clearCrossRefMessages(errorEl, inlineErrorEl, form);
     refreshFilters().catch((e) =>
-      setError(errorEl, e instanceof Error ? e.message : String(e)),
+      setCrossRefMessage(
+        errorEl,
+        inlineErrorEl,
+        form,
+        e instanceof Error ? e.message : String(e),
+      ),
     );
   });
 
@@ -630,12 +694,12 @@ export function initProductCrossReferencePage(): void {
     switchToResults(false);
     listEl.replaceChildren();
     countEl.textContent = "";
-    setError(errorEl, "");
+    clearCrossRefMessages(errorEl, inlineErrorEl, form);
   });
 
   form.addEventListener("submit", async (ev) => {
     ev.preventDefault();
-    setError(errorEl, "");
+    clearCrossRefMessages(errorEl, inlineErrorEl, form);
 
     const values: ReferenceValues = {
       brand: text(brandInput.value),
@@ -646,7 +710,12 @@ export function initProductCrossReferencePage(): void {
     };
     const hasAny = Object.values(values).some(Boolean);
     if (!hasAny) {
-      setError(errorEl, "Set at least one filter before searching.");
+      setCrossRefMessage(
+        errorEl,
+        inlineErrorEl,
+        form,
+        "Set at least one filter before searching.",
+      );
       return;
     }
 
@@ -658,7 +727,12 @@ export function initProductCrossReferencePage(): void {
       const error =
         asObject(payload) && "error" in payload ? text(payload.error) : "";
       if (!res.ok || error) {
-        setError(errorEl, error || "Could not load cross reference results.");
+        setCrossRefMessage(
+          errorEl,
+          inlineErrorEl,
+          form,
+          error || "Could not load cross reference results.",
+        );
         return;
       }
 
@@ -666,8 +740,14 @@ export function initProductCrossReferencePage(): void {
       fillReference(values);
       renderResults(listEl, countEl, normalized.items, normalized.count);
       switchToResults(true);
+      clearCrossRefMessages(errorEl, inlineErrorEl, form);
     } catch (e) {
-      setError(errorEl, e instanceof Error ? e.message : String(e));
+      setCrossRefMessage(
+        errorEl,
+        inlineErrorEl,
+        form,
+        e instanceof Error ? e.message : String(e),
+      );
     } finally {
       if (submitBtn instanceof HTMLButtonElement) submitBtn.disabled = false;
     }

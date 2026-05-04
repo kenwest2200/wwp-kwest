@@ -1,10 +1,12 @@
 @use "../variables" as *;
 @use "../functions" as *;
 @use "../breakpoints" as *;
+@use "../Elements/form-field-validation" as field;
 
 .cross-ref-page {
   padding-top: var(--page-header-offset, #{px-to-rem(112)});
   padding-bottom: px-to-rem(100);
+  background: $light-gray-2;
 
   &__breadcrumb-wrap {
     max-width: px-to-rem(992);
@@ -57,6 +59,19 @@
     padding: px-to-rem(24) px-to-rem(24) px-to-rem(32) px-to-rem(24);
   }
 
+  &__form-inline-error {
+    margin: px-to-rem(8) 0 0;
+    @include field.form-field-error-text;
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  &__form--inline-error &__field input {
+    @include field.form-control-invalid-ring(1px);
+  }
+
   &__grid {
     display: grid;
     gap: px-to-rem(24);
@@ -90,7 +105,7 @@
     & .cross-ref-page__custom-select-trigger {
       width: 100%;
       min-height: px-to-rem(48);
-      border: 1px solid rgba($dark, 0.1);
+      border: none;
       border-radius: px-to-rem(4);
       background: $light-gray;
       color: $dark;

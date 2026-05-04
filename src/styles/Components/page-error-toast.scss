@@ -15,9 +15,9 @@
   padding: px-to-rem(18) px-to-rem(20);
   box-sizing: border-box;
   border-radius: px-to-rem(10);
-  border: 1px solid rgba($error, 0.35);
+  border: 1px solid rgba(178, 74, 74, 0.6);
   background: $white;
-  box-shadow: 0 px-to-rem(12) px-to-rem(40) rgba($dark, 0.12);
+  box-shadow: 0px 4px 24px 0px rgba(13, 39, 37, 0.12);
   color: $dark;
 
   &--success {

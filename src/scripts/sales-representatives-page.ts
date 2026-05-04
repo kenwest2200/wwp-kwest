@@ -19,6 +19,20 @@ type SalesRepsApiResponse = {
   error?: string;
 };
 
+/** Under ZIP field; network / upstream / config errors use toast instead. */
+function isSalesRepsFieldValidationError(message: string): boolean {
+  const m = message
+    .trim()
+    .replace(/\u2019/g, "'")
+    .replace(/\u2018/g, "'");
+  return (
+    m === "Please enter a ZIP code." ||
+    m === "ZIP code is required." ||
+    m === "Enter a valid U.S. ZIP code (5 digits, optionally ZIP+4)." ||
+    m === "Enter a valid U.S. ZIP code (5 digits or ZIP+4)."
+  );
+}
+
 const COL_SPAN = 3;
 
 let cachedReps: SalesRepRow[] = [];
@@ -30,17 +44,36 @@ function telHref(phone: string): string {
   return `tel:${digits}`;
 }
 
-function setMessage(
-  el: HTMLElement | null,
-  text: string,
-  visible: boolean,
+function clearSalesRepsFieldError(
+  zipInput: HTMLInputElement,
+  inlineEl: HTMLElement | null,
+  inputWrap: HTMLElement | null,
 ): void {
-  if (!el) return;
-  if (!visible) {
-    hidePageErrorToast(el);
-    return;
+  if (inlineEl) {
+    inlineEl.textContent = "";
+    inlineEl.hidden = true;
+    inlineEl.setAttribute("hidden", "");
   }
-  showPageErrorToast(el, text);
+  zipInput.removeAttribute("aria-invalid");
+  inputWrap?.classList.remove("is-invalid");
+}
+
+function showSalesRepsFieldError(
+  zipInput: HTMLInputElement,
+  inlineEl: HTMLElement | null,
+  inputWrap: HTMLElement | null,
+  text: string,
+): void {
+  if (!inlineEl) return;
+  inlineEl.textContent = text;
+  inlineEl.hidden = false;
+  inlineEl.removeAttribute("hidden");
+  zipInput.setAttribute("aria-invalid", "true");
+  inputWrap?.classList.add("is-invalid");
+}
+
+function showSalesRepsToast(host: HTMLElement | null, text: string): void {
+  showPageErrorToast(host, text);
 }
 
 function compareByName(a: SalesRepRow, b: SalesRepRow, dir: SortDir): number {
@@ -197,32 +230,47 @@ export function initSalesRepresentativesPage(): void {
     "sr-table-body",
   ) as HTMLTableSectionElement | null;
   const msgEl = document.getElementById("sr-message");
+  const inlineErrorEl = document.getElementById("sr-search-inline-error");
   const submitBtn = form?.querySelector<HTMLButtonElement>(
     'button[type="submit"]',
   );
 
   if (!form || !zipInput || !tbody) return;
 
+  const inputWrap = zipInput.closest<HTMLElement>(".sr-page__input-wrap");
+
   installPageErrorToast(msgEl);
 
   initialPlaceholderRow(tbody);
   bindNameSortHandlers(tbody);
 
+  zipInput.addEventListener("input", () => {
+    hidePageErrorToast(msgEl);
+    clearSalesRepsFieldError(zipInput, inlineErrorEl, inputWrap);
+  });
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const zip = zipInput.value.trim().replace(/\s+/g, "");
-    setMessage(msgEl, "", false);
+    hidePageErrorToast(msgEl);
+    clearSalesRepsFieldError(zipInput, inlineErrorEl, inputWrap);
 
     if (!zip) {
-      setMessage(msgEl, "Please enter a ZIP code.", true);
+      showSalesRepsFieldError(
+        zipInput,
+        inlineErrorEl,
+        inputWrap,
+        "Please enter a ZIP code.",
+      );
       return;
     }
 
     if (!/^\d{5}(-\d{4})?$/.test(zip)) {
-      setMessage(
-        msgEl,
+      showSalesRepsFieldError(
+        zipInput,
+        inlineErrorEl,
+        inputWrap,
         "Enter a valid U.S. ZIP code (5 digits, optionally ZIP+4).",
-        true,
       );
       return;
     }
@@ -245,7 +293,11 @@ export function initSalesRepresentativesPage(): void {
 
       if (!res.ok || data.error) {
         const err = data.error ?? "Could not load representatives.";
-        setMessage(msgEl, err, true);
+        if (isSalesRepsFieldValidationError(err)) {
+          showSalesRepsFieldError(zipInput, inlineErrorEl, inputWrap, err);
+        } else {
+          showSalesRepsToast(msgEl, err);
+        }
         initialPlaceholderRow(tbody);
         return;
       }
@@ -258,8 +310,12 @@ export function initSalesRepresentativesPage(): void {
         email: r.email ?? null,
       }));
       renderRows(tbody, cachedReps);
+      clearSalesRepsFieldError(zipInput, inlineErrorEl, inputWrap);
     } catch (err) {
-      setMessage(msgEl, err instanceof Error ? err.message : String(err), true);
+      showSalesRepsToast(
+        msgEl,
+        err instanceof Error ? err.message : String(err),
+      );
       initialPlaceholderRow(tbody);
     } finally {
       if (submitBtn) submitBtn.disabled = false;

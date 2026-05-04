@@ -1,6 +1,7 @@
 @use "../variables" as *;
 @use "../functions" as *;
 @use "../breakpoints" as *;
+@use "../Elements/form-field-validation" as field;
 
 .sr-page {
   padding-top: var(--page-header-offset, #{px-to-rem(112)});
@@ -61,6 +62,9 @@
     gap: px-to-rem(32);
     max-width: px-to-rem(660);
 
+    &.is-invalid &__input {
+      @include field.form-control-invalid-ring(1px);
+    }
   }
 
   &__input-icon {
@@ -101,6 +105,16 @@
     font-size: px-to-rem(13);
     line-height: px-to-rem(20);
     color: $dark-medium;
+  }
+
+  &__search-inline-error {
+    margin: px-to-rem(8) 0 0;
+    max-width: px-to-rem(660);
+    @include field.form-field-error-text;
+
+    &[hidden] {
+      display: none;
+    }
   }
 
   &__submit {
@@ -171,6 +185,7 @@
       position: relative;
       padding-right: px-to-rem(48);
       vertical-align: middle;
+      white-space: nowrap;
     }
 
     tbody td {

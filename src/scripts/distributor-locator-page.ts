@@ -41,6 +41,28 @@ type ApiResponse = {
   searchCenter?: { lat: number; lng: number };
 };
 
+/** Worker `geocodeUsLocationQuery` ZIP / query errors — show inline under the field, not as toast. */
+function distributorLocationsZipUserErrorVariant(
+  message: string,
+): "error-inline" | "error-toast" {
+  const m = message
+    .trim()
+    .replace(/\u2019/g, "'")
+    .replace(/\u2018/g, "'");
+  if (
+    m ===
+      "That didn't resolve to a U.S. ZIP. Enter a valid 5-digit ZIP code." ||
+    m ===
+      "Could not match that to a U.S. ZIP. Enter a valid 5-digit ZIP code." ||
+    m === "No match for that ZIP. Check the 5-digit code and try again." ||
+    m ===
+      "That search is too broad. Enter a U.S. ZIP code (5 digits or ZIP+4)."
+  ) {
+    return "error-inline";
+  }
+  return "error-toast";
+}
+
 type GeocodeZipResponse = {
   lat: number | null;
   lng: number | null;
@@ -450,6 +472,19 @@ async function init(): Promise<void> {
   let mapState: MapState | null = null;
   let mapReady = false;
   let userLocMarker: google.maps.Marker | L.CircleMarker | null = null;
+  /** Blocks duplicate ZIP/API searches until the current run finishes. */
+  let locatorSearchInFlight = false;
+
+  function setLocatorSearchUiLocked(locked: boolean): void {
+    if (!root) return;
+    root
+      .querySelector<HTMLButtonElement>("[data-dl-search-submit]")
+      ?.toggleAttribute("disabled", locked);
+    root
+      .querySelector<HTMLButtonElement>("[data-dl-geolocate]")
+      ?.toggleAttribute("disabled", locked);
+    dlForm.toggleAttribute("aria-busy", locked);
+  }
 
   function resetMapDom(): void {
     dlMapEl.replaceChildren();
@@ -812,9 +847,10 @@ async function init(): Promise<void> {
     }
   }
 
-  async function runSearch(opts?: {
-    userLatLng?: { lat: number; lng: number };
-  }): Promise<void> {
+  async function runSearch(
+    opts?: { userLatLng?: { lat: number; lng: number } },
+    callOpts?: { externalLock?: boolean },
+  ): Promise<void> {
     const query = dlZipInput.value.trim().replace(/\s+/g, " ");
     setMessage("", false);
 
@@ -829,6 +865,13 @@ async function init(): Promise<void> {
         "error-inline",
       );
       return;
+    }
+
+    const externalLock = callOpts?.externalLock === true;
+    if (!externalLock) {
+      if (locatorSearchInFlight) return;
+      locatorSearchInFlight = true;
+      setLocatorSearchUiLocked(true);
     }
 
     const distance = readRadiusMiles(dlForm);
@@ -855,7 +898,12 @@ async function init(): Promise<void> {
       const data = (await res.json()) as ApiResponse;
 
       if (!res.ok || data.error) {
-        setMessage(data.error ?? "Could not load locations.", true, "error-toast");
+        const errText = data.error ?? "Could not load locations.";
+        setMessage(
+          errText,
+          true,
+          distributorLocationsZipUserErrorVariant(errText),
+        );
         return;
       }
 
@@ -971,6 +1019,11 @@ async function init(): Promise<void> {
         true,
         "error-toast",
       );
+    } finally {
+      if (!externalLock) {
+        locatorSearchInFlight = false;
+        setLocatorSearchUiLocked(false);
+      }
     }
   }
 
@@ -997,6 +1050,7 @@ async function init(): Promise<void> {
   const geoBtn = root.querySelector<HTMLButtonElement>("[data-dl-geolocate]");
   geoBtn?.addEventListener("click", () => {
     void (async () => {
+      if (locatorSearchInFlight) return;
       if (!navigator.geolocation) {
         setMessage(
           "Geolocation is not supported in this browser.",
@@ -1005,6 +1059,8 @@ async function init(): Promise<void> {
         );
         return;
       }
+      locatorSearchInFlight = true;
+      setLocatorSearchUiLocked(true);
       setMessage("Finding your location…", true, "loading");
       try {
         const pos = await new Promise<GeolocationPosition>(
@@ -1028,7 +1084,10 @@ async function init(): Promise<void> {
           return;
         }
         dlZipInput.value = z;
-        await runSearch({ userLatLng: { lat, lng } });
+        await runSearch(
+          { userLatLng: { lat, lng } },
+          { externalLock: true },
+        );
       } catch (e) {
         const denied =
           e instanceof GeolocationPositionError &&
@@ -1040,6 +1099,9 @@ async function init(): Promise<void> {
           true,
           "error-toast",
         );
+      } finally {
+        locatorSearchInFlight = false;
+        setLocatorSearchUiLocked(false);
       }
     })();
   });
@@ -1053,6 +1115,7 @@ async function init(): Promise<void> {
 
   dlZipInput.addEventListener("keydown", (e) => {
     if (e.key !== "Enter") return;
+    if (locatorSearchInFlight) return;
     e.preventDefault();
     void runSearch();
   });
@@ -1060,11 +1123,13 @@ async function init(): Promise<void> {
   dlForm
     .querySelector<HTMLButtonElement>("[data-dl-search-submit]")
     ?.addEventListener("click", () => {
+      if (locatorSearchInFlight) return;
       void runSearch();
     });
 
   dlForm.addEventListener("submit", (e) => {
     e.preventDefault();
+    if (locatorSearchInFlight) return;
     void runSearch();
   });
 

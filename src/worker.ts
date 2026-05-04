@@ -911,6 +911,44 @@ function filterDistributorLocationsByAddressQuery(
   });
 }
 
+type GeocodeZipJson = {
+  results?: Array<{
+    geometry?: { location?: { lat: number; lng: number } };
+  }>;
+  status?: string;
+};
+
+async function geocodeUsZip5ToLatLng(
+  zip5: string,
+  key: string,
+): Promise<{ lat: number; lng: number } | null> {
+  const digits = zip5.replace(/\D/g, "").slice(0, 5);
+  if (digits.length !== 5) return null;
+  const gUrl =
+    "https://maps.googleapis.com/maps/api/geocode/json?" +
+    new URLSearchParams({
+      components: `country:US|postal_code:${digits}`,
+      key,
+    }).toString();
+  try {
+    const res = await fetch(gUrl);
+    const data = (await res.json()) as GeocodeZipJson;
+    const loc = data.results?.[0]?.geometry?.location;
+    if (
+      !loc ||
+      typeof loc.lat !== "number" ||
+      typeof loc.lng !== "number" ||
+      !Number.isFinite(loc.lat) ||
+      !Number.isFinite(loc.lng)
+    ) {
+      return null;
+    }
+    return { lat: loc.lat, lng: loc.lng };
+  } catch {
+    return null;
+  }
+}
+
 function readDistributorLocationsRoot(env: Env): string {
   const custom = (env as Env & { DISTRIBUTOR_LOCATOR_LOCATIONS_ROOT?: string })
     .DISTRIBUTOR_LOCATOR_LOCATIONS_ROOT;
@@ -919,17 +957,23 @@ function readDistributorLocationsRoot(env: Env): string {
 }
 
 /**
- * GET /api/distributor-locations — proxies ERP `…/in-radius` (bearer same as sales reps).
+ * GET /api/distributor-locations — proxies ERP `…/in-radius` (Waterway Operations API).
  *
- * Upstream contract:
- * - **Zip** (required): U.S. ZIP for the radius center. If the value is not a valid ZIP and
- *   `GOOGLE_GEOCODING_KEY` is set, it is geocoded to a 5-digit ZIP (locator copy is ZIP-first).
- *   Upstream always receives a real `zip`.
- * - **Country** (optional, default `US`): ISO 3166-1 alpha-2.
- * - **Distance** (optional, default `20`).
- * - **Unit** (optional, default `mi`): `m` | `km` | `mi` | `ft`.
- * - **BusinessType** (optional, default `All`): `Pool` | `Spa` | `All` only.
- * - Upstream requires `Authorization: Bearer <access_token>` (added below).
+ * **Upstream documented behaviour** (`in-radius`):
+ * - Returns customer locations within the defined radius around a **Zip** (required). Empty or
+ *   missing zip → **400**. No matches in the area → **empty JSON array** `[]`.
+ * - `Authorization: Bearer …` (access token) required; otherwise **401**.
+ * - **Country** — optional, default `US` (ISO 3166-1 alpha-2).
+ * - **Distance** — optional, default `20`.
+ * - **Unit** — optional, default `mi`; values: `m`, `km`, `mi`, `ft`.
+ * - **BusinessType** — optional, default `All`; values: `Pool`, `Spa`, `All`.
+ * - Response: JSON array of objects with fields such as `CustomerName`, `LocationName`,
+ *   `Address1`, `Address2`, `Country`, `State`, `City`, `Zip`, `Phone`, `Fax`, `Email`,
+ *   `Latitude`, `Longitude` (decimal degrees).
+ *
+ * **This worker** forwards those query params (after normalising zip) and adds the bearer.
+ * For non–ZIP-shaped search text, it may geocode to a 5-digit zip when `GOOGLE_GEOCODING_KEY`
+ * is set, and may attach `searchCenter` for the locator map when geocoding was used.
  */
 async function handleDistributorLocationsInRadiusApi(
   request: Request,
@@ -1105,13 +1149,6 @@ async function handleDistributorLocationsInRadiusApi(
   }
 }
 
-type GeocodeZipJson = {
-  results?: Array<{
-    geometry?: { location?: { lat: number; lng: number } };
-  }>;
-  status?: string;
-};
-
 async function handleGeocodeZipApi(
   request: Request,
   env: Env,
@@ -1152,26 +1189,12 @@ async function handleGeocodeZipApi(
   }
 
   const zip5 = zip.replace(/\D/g, "").slice(0, 5);
-  const gUrl =
-    "https://maps.googleapis.com/maps/api/geocode/json?" +
-    new URLSearchParams({
-      components: `country:US|postal_code:${zip5}`,
-      key,
-    }).toString();
 
   try {
-    const res = await fetch(gUrl);
-    const data = (await res.json()) as GeocodeZipJson;
-    const loc = data.results?.[0]?.geometry?.location;
-    if (
-      !loc ||
-      typeof loc.lat !== "number" ||
-      typeof loc.lng !== "number" ||
-      !Number.isFinite(loc.lat) ||
-      !Number.isFinite(loc.lng)
-    ) {
+    const loc = await geocodeUsZip5ToLatLng(zip5, key);
+    if (!loc) {
       return jsonResponse(
-        { lat: null, lng: null, status: data.status ?? "UNKNOWN" },
+        { lat: null, lng: null, status: "ZERO_RESULTS" },
         { origin },
       );
     }
