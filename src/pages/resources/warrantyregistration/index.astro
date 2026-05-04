@@ -1,0 +1,151 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import PageHeaderOffset from "../../../components/PageHeaderOffset.astro";
+import SectionHero from "../../../components/SectionHero/SectionHero.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs.astro";
+import AdressIcon from "../../../components/icons/adressIconSecond.astro";
+import FaxIcon from "../../../components/icons/faxIcon.astro";
+import MailIcon from "../../../components/icons/mailIcon.astro";
+import PhoneIcon from "../../../components/icons/phoneIcon.astro";
+import { getGraphQLClient, requestGraphql } from "../../../lib/graphql";
+import {
+  WARRANTY_PAGE_QUERY,
+  WARRANTY_PAGE_URI,
+  normalizeWarrantyContacts,
+  type WarrantyPageData,
+} from "../../../lib/queries/resources-warranty-page";
+
+export const prerender = true;
+
+const graphqlConfigured = Boolean(getGraphQLClient());
+
+const introDefault =
+  "Register your Waterway product, review warranty information, and get support when you need it.";
+
+async function loadPage(): Promise<WarrantyPageData["page"] | null> {
+  if (!graphqlConfigured) return null;
+  try {
+    const data = await requestGraphql<WarrantyPageData>(WARRANTY_PAGE_QUERY, {
+      id: WARRANTY_PAGE_URI,
+    });
+    if (data.page?.title) return data.page;
+  } catch {
+    /* ignore */
+  }
+  return null;
+}
+
+const pageNode = await loadPage();
+const pageTitle = pageNode?.title?.trim() || "Warranty";
+const contentHtml = (pageNode?.content ?? "").trim();
+const contactGroups = normalizeWarrantyContacts(pageNode);
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Resources", href: "/resources" },
+  { label: pageTitle },
+];
+---
+
+<Layout headerType="white" pageTitle={pageTitle} description={introDefault}>
+  <main class="warranty-page" data-page-header-offset>
+    <SectionHero title={pageTitle} intro={introDefault} />
+    <div class="warranty-page__breadcrumb-wrap">
+      <Breadcrumbs items={breadcrumbs} />
+    </div>
+
+    <div class="warranty-page__main">
+      <div class="warranty-page__main-inner">
+        {
+          !graphqlConfigured && (
+            <p class="warranty-page__notice">
+              GraphQL is not configured. Set <code>PUBLIC_GRAPHQL_URL</code> in{" "}
+              <code>.env</code>.
+            </p>
+          )
+        }
+        {
+          graphqlConfigured && !pageNode && (
+            <p class="warranty-page__notice">
+              Page not loaded for <code>{WARRANTY_PAGE_URI}</code>.
+            </p>
+          )
+        }
+        {
+          contentHtml ? (
+            <div
+              class="warranty-page__content warranty-page__optional-html"
+              set:html={contentHtml}
+            />
+          ) : null
+        }
+        {
+          contactGroups.length > 0 ? (
+            <div class="warranty-page__contacts">
+              {contactGroups.map((group) => (
+                <div class="warranty-page__group">
+                  {group.title ? (
+                    <h2 class="warranty-page__group-title">{group.title}</h2>
+                  ) : null}
+                  <div class="warranty-page__group-content">
+                    {group.subtitleHtml ? (
+                      <p
+                        class="warranty-page__group-subtitle warranty-page__optional-html"
+                        set:html={group.subtitleHtml}
+                      />
+                    ) : null}
+                    {group.contacts.length > 0 ? (
+                      <ul class="warranty-page__contact-list">
+                        {group.contacts.map((row) => (
+                          <li class="warranty-page__contact">
+                            {row.iconKey === "address" ? (
+                              <div
+                                class="warranty-page__contact-icon-wrap warranty-page__contact-icon-wrap--svg"
+                                aria-hidden="true"
+                              >
+                                <AdressIcon class="warranty-page__contact-svg" />
+                              </div>
+                            ) : row.iconKey === "phone" ? (
+                              <div
+                                class="warranty-page__contact-icon-wrap warranty-page__contact-icon-wrap--svg"
+                                aria-hidden="true"
+                              >
+                                <PhoneIcon class="warranty-page__contact-svg" />
+                              </div>
+                            ) : row.iconKey === "email" ? (
+                              <div
+                                class="warranty-page__contact-icon-wrap warranty-page__contact-icon-wrap--svg"
+                                aria-hidden="true"
+                              >
+                                <MailIcon class="warranty-page__contact-svg" />
+                              </div>
+                            ) : row.iconKey === "fax" ? (
+                              <div
+                                class="warranty-page__contact-icon-wrap warranty-page__contact-icon-wrap--svg"
+                                aria-hidden="true"
+                              >
+                                <FaxIcon class="warranty-page__contact-svg" />
+                              </div>
+                            ) : null}
+                            {row.textHtml ? (
+                              <div
+                                class="warranty-page__contact-text warranty-page__optional-html"
+                                set:html={row.textHtml}
+                              />
+                            ) : null}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : null
+        }
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<PageHeaderOffset />

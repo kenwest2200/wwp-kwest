@@ -1,0 +1,128 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PageHeaderOffset from "../../components/PageHeaderOffset.astro";
+import SectionHero from "../../components/SectionHero/SectionHero.astro";
+import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs.astro";
+import { getGraphQLClient, requestGraphql } from "../../lib/graphql";
+import {
+  ABOUT_US_PAGE_QUERY,
+  ABOUT_US_PAGE_URI,
+  prepareAboutUsPage,
+  type AboutUsPageData,
+} from "../../lib/queries/about-us-page";
+
+export const prerender = true;
+
+const graphqlConfigured = Boolean(getGraphQLClient());
+
+const introDefault =
+  "For over 50 years, Waterway Plastics has helped homeowners and professionals build reliable pool and spa systems with confidence.";
+
+async function loadPage(): Promise<AboutUsPageData["page"] | null> {
+  if (!graphqlConfigured) return null;
+  const uris = [ABOUT_US_PAGE_URI, ABOUT_US_PAGE_URI.replace(/\/$/, "")];
+  for (const id of uris) {
+    try {
+      const data = await requestGraphql<AboutUsPageData>(ABOUT_US_PAGE_QUERY, {
+        id,
+      });
+      if (data.page?.title) return data.page;
+    } catch {
+      /* try next */
+    }
+  }
+  return null;
+}
+
+const pageNode = await loadPage();
+const pageTitle = pageNode?.title?.trim() || "About us";
+const { stats, contentHtml } = prepareAboutUsPage(pageNode);
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Company", href: "/company" },
+  { label: pageTitle },
+];
+---
+
+<Layout headerType="white" pageTitle={pageTitle} description={introDefault}>
+  <main class="about-us-page" data-page-header-offset>
+    <SectionHero title={pageTitle} intro={introDefault} />
+    <div class="about-us-page__breadcrumb-wrap">
+      <Breadcrumbs items={breadcrumbs} />
+    </div>
+
+    <div class="about-us-page__main">
+      {
+        !graphqlConfigured && (
+          <p class="about-us-page__notice">
+            GraphQL is not configured. Set <code>PUBLIC_GRAPHQL_URL</code> in{" "}
+            <code>.env</code>.
+          </p>
+        )
+      }
+      {
+        graphqlConfigured && !pageNode && (
+          <p class="about-us-page__notice">
+            Page not loaded for <code>{ABOUT_US_PAGE_URI}</code>.
+          </p>
+        )
+      }
+
+      {
+        stats && (
+          <section class="about-us-page__stats" aria-label="Company statistics">
+            <div class="about-us-page__stat">
+              {stats.years != null ? (
+                <p class="about-us-page__stat-number">{stats.years}</p>
+              ) : null}
+              {stats.yearsInIndustryHtml ? (
+                <div
+                  class="about-us-page__stat-text about-us-page__optional-html"
+                  set:html={stats.yearsInIndustryHtml}
+                />
+              ) : null}
+            </div>
+            <div class="about-us-page__stat">
+              {stats.productionAreaNumber ? (
+                <p class="about-us-page__stat-number">
+                  {stats.productionAreaNumber}
+                </p>
+              ) : null}
+              {stats.productionAreaTextHtml ? (
+                <div
+                  class="about-us-page__stat-text about-us-page__optional-html"
+                  set:html={stats.productionAreaTextHtml}
+                />
+              ) : null}
+            </div>
+            <div class="about-us-page__stat">
+              {stats.productCategoriesNumber ? (
+                <p class="about-us-page__stat-number">
+                  {stats.productCategoriesNumber}
+                </p>
+              ) : null}
+              {stats.productCategoriesTextHtml ? (
+                <div
+                  class="about-us-page__stat-text about-us-page__optional-html"
+                  set:html={stats.productCategoriesTextHtml}
+                />
+              ) : null}
+            </div>
+          </section>
+        )
+      }
+
+      {
+        contentHtml ? (
+          <div
+            class="about-us-page__content about-us-page__optional-html"
+            set:html={contentHtml}
+          />
+        ) : null
+      }
+    </div>
+  </main>
+</Layout>
+
+<PageHeaderOffset />

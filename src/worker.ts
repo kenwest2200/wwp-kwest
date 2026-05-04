@@ -245,6 +245,10 @@ async function handleContactGraphqlApi(
   const pass = env.GRAPHQL_BASIC_PASSWORD || "apiwaterway";
   const auth = btoa(`${user}:${pass}`);
 
+  const userAgent =
+    request.headers.get("User-Agent")?.trim() ||
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36";
+
   let body: string;
   try {
     body = await request.text();
@@ -261,6 +265,7 @@ async function handleContactGraphqlApi(
       headers: {
         "Content-Type": "application/json",
         Authorization: `Basic ${auth}`,
+        "User-Agent": userAgent,
       },
       body,
     });

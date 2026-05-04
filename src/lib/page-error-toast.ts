@@ -3,6 +3,21 @@ export const PAGE_ERROR_TOAST_TITLE = "Error";
 
 export const PAGE_SUCCESS_TOAST_TITLE = "Success";
 
+const PAGE_TOAST_AUTO_HIDE_MS = 5000;
+
+const autoHideTimers = new WeakMap<
+  HTMLElement,
+  ReturnType<typeof setTimeout>
+>();
+
+function clearPageToastAutoHide(host: HTMLElement): void {
+  const id = autoHideTimers.get(host);
+  if (id !== undefined) {
+    clearTimeout(id);
+    autoHideTimers.delete(host);
+  }
+}
+
 /** Fallback when no specific message is passed (English). */
 export const PAGE_ERROR_TOAST_UNKNOWN = "An error occurred.";
 
@@ -41,6 +56,12 @@ export function showPageToast(
   }
   host.hidden = false;
   host.removeAttribute("hidden");
+
+  clearPageToastAutoHide(host);
+  const timerId = globalThis.setTimeout(() => {
+    hidePageErrorToast(host);
+  }, PAGE_TOAST_AUTO_HIDE_MS);
+  autoHideTimers.set(host, timerId);
 }
 
 export function showPageErrorToast(
@@ -52,6 +73,7 @@ export function showPageErrorToast(
 
 export function hidePageErrorToast(host: HTMLElement | null): void {
   if (!host) return;
+  clearPageToastAutoHide(host);
   host.classList.remove("page-error-toast--success");
   host.hidden = true;
   host.setAttribute("hidden", "");
