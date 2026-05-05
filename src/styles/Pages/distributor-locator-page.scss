@@ -528,11 +528,15 @@
   }
 
   &__locator-list-wrap {
-    min-height: px-to-rem(320);
-    max-height: px-to-rem(720);
     width: 100%;
-    overflow-y: auto;
     padding-right: px-to-rem(4);
+
+    @include media-breakpoint-up(lg) {
+      min-height: px-to-rem(320);
+      max-height: px-to-rem(720);
+      width: 100%;
+      overflow-y: auto;
+    }
   }
 
   &__locator-results {

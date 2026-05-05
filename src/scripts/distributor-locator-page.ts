@@ -793,11 +793,13 @@ async function init(): Promise<void> {
     const foot = document.createElement("div");
     foot.className = "dl-page__result-card-foot";
     const biz = businessTypeValue(dlBusinessSel);
-    foot.appendChild(document.createTextNode(`${biz} `));
-    const footSep = document.createElement("span");
-    footSep.textContent = "•";
-    foot.appendChild(footSep);
-    foot.appendChild(document.createTextNode(" "));
+    if (biz !== "All") {
+      foot.appendChild(document.createTextNode(`${biz} `));
+      const footSep = document.createElement("span");
+      footSep.textContent = "•";
+      foot.appendChild(footSep);
+      foot.appendChild(document.createTextNode(" "));
+    }
     if (loc.phone) {
       const a = document.createElement("a");
       a.href = telHref(loc.phone);
