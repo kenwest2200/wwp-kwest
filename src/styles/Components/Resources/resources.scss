@@ -61,9 +61,11 @@
       font-size: px-to-rem(12);
       font-weight: 600;
       line-height: px-to-rem(16);
+      letter-spacing: 0.08em;
       color: $dark-teal;
       text-decoration: none;
       text-transform: uppercase;
+      transition: color 0.3s ease;
 
       svg {
         width: px-to-rem(16);
@@ -73,6 +75,7 @@
 
       &:hover {
         color: $medium-teal;
+        transition: color 0.3s ease;
       }
     }
   }

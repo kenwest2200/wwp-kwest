@@ -22,6 +22,7 @@
 
   &__item {
     margin: 0;
+    min-width: 0;
     padding: px-to-rem(24);
     border-radius: px-to-rem(8);
     border: 1px solid $border-color;
@@ -67,6 +68,19 @@
       letter-spacing: 0.02em;
       color: $dark;
       text-align: center;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      flex-shrink: 0;
+      box-sizing: border-box;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      line-clamp: 1;
+      overflow-wrap: break-word;
+      word-break: normal;
     }
 
     &-image {
@@ -180,5 +194,30 @@
         max-width: px-to-rem(268);
       }
     }
+  }
+}
+
+.featured__item-title-tooltip {
+  position: fixed;
+  z-index: 10050;
+  left: 0;
+  top: 0;
+  max-width: min(px-to-rem(320), calc(100vw - 16px));
+  margin: 0;
+  padding: px-to-rem(24);
+  box-sizing: border-box;
+  font-family: $font-sans;
+  font-size: px-to-rem(14);
+  line-height: px-to-rem(24);
+  border-radius: px-to-rem(10);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: $dark;
+  background: $white;
+  box-shadow: 0 px-to-rem(4) px-to-rem(12) px-to-rem(4) rgba(1, 23, 48, 0.06);
+  pointer-events: none;
+
+  &[hidden] {
+    display: none !important;
   }
 }

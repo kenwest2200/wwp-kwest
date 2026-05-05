@@ -28,18 +28,107 @@
         background-color: $white;
         color: $dark-teal;
         border: 1px solid $white;
+        transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+
+        svg {
+            path {
+                color: $dark-teal;
+                transition: stroke 0.3s ease;
+            }
+        }
+
+        &:hover {
+
+            svg {
+                path {
+                    stroke: $white;
+                    transition: stroke 0.3s ease;
+                }
+            }
+
+            color: $white;
+            background: $medium-teal;
+            border-color: $medium-teal;
+            transition: color 0.3s ease,
+            background 0.3s ease,
+            border-color 0.3s ease;
+        }
+
+        &:active {
+            color: $white;
+        }
     }
 
     &--primary-dark {
         background-color: $dark-teal;
         color: $white;
         border: 1px solid $dark-teal;
+
+        transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+
+        svg {
+            path {
+                color: $dark-teal;
+                transition: stroke 0.3s ease;
+            }
+        }
+
+        &:hover {
+
+            svg {
+                path {
+                    stroke: $white;
+                    transition: stroke 0.3s ease;
+                }
+            }
+
+            color: $white;
+            background: $medium-teal;
+            border-color: $medium-teal;
+            transition: color 0.3s ease,
+            background 0.3s ease,
+            border-color 0.3s ease;
+        }
+
+        &:active {
+            color: $white;
+        }
     }
 
     &--secondary {
         background-color: transparent;
         color: $white;
-        border: 1px solid $white
+        border: 1px solid $white;
+        transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+
+        svg {
+            path {
+                stroke: $white;
+                transition: stroke 0.3s ease;
+            }
+        }
+
+        &:hover {
+
+            svg {
+                path {
+                    stroke: $white;
+                    transition: stroke 0.3s ease;
+                }
+            }
+
+            color: $white;
+            background: $medium-teal;
+            border-color: $medium-teal;
+            transition: color 0.3s ease,
+            background 0.3s ease,
+            border-color 0.3s ease;
+        }
+
+        &:active {
+            color: $white;
+        }
+
     }
 
     &--single-outline {

@@ -68,7 +68,11 @@ const rootNavSectionEl = document.querySelector<HTMLElement>(
   ".product-filters-root-nav",
 );
 const headerEl = document.querySelector<HTMLElement>(".header");
-const introSectionEl = document.querySelector<HTMLElement>(".product-filters-intro");
+const headerWasWhiteInitially =
+  headerEl?.classList.contains("header--white") === true;
+const isProductFiltersCatalogPage = Boolean(
+  document.querySelector("main.product-filters-page"),
+);
 const catalogSectionTitleEl = document.querySelector<HTMLElement>(
   ".product-filters-catalog__section-title",
 );
@@ -454,14 +458,19 @@ function syncRootNavAndHeaderState() {
     selectedSub.size > 0 ||
     selectedAttrs.size > 0 ||
     searchQuery.trim().length > 0;
-  if (rootNavSectionEl) rootNavSectionEl.hidden = hasActiveFilter;
-  if (introSectionEl) {
-    introSectionEl.classList.toggle(
-      "product-filters-intro--with-root-nav",
-      Boolean(rootNavSectionEl) && !hasActiveFilter,
-    );
+  document
+    .querySelector<HTMLElement>(".product-filters-page")
+    ?.classList.toggle("is-catalog-filter-active", hasActiveFilter);
+  if (isProductFiltersCatalogPage) {
+    document.body.classList.toggle("is-products", !hasActiveFilter);
   }
-  if (headerEl) headerEl.classList.toggle("header--white", hasActiveFilter);
+  if (rootNavSectionEl) rootNavSectionEl.hidden = hasActiveFilter;
+  if (headerEl) {
+    const headerWhite = isProductFiltersCatalogPage
+      ? hasActiveFilter
+      : headerWasWhiteInitially || hasActiveFilter;
+    headerEl.classList.toggle("header--white", headerWhite);
+  }
   if (catalogSectionTitleEl) catalogSectionTitleEl.hidden = hasActiveFilter;
   if (catalogBreadcrumbsEl) catalogBreadcrumbsEl.hidden = !hasActiveFilter;
   if (!hasActiveFilter) return;
@@ -478,7 +487,8 @@ function syncRootNavAndHeaderState() {
     catalogBreadcrumbCategoryItemEl.hidden = false;
     return;
   }
-  if (catalogBreadcrumbCategoryItemEl) catalogBreadcrumbCategoryItemEl.hidden = true;
+  if (catalogBreadcrumbCategoryItemEl)
+    catalogBreadcrumbCategoryItemEl.hidden = true;
 }
 
 function applyStateFromUrl() {
@@ -530,6 +540,7 @@ function applyStateFromUrl() {
     currentOffset = 0;
   }
   syncRootNavAndHeaderState();
+  syncIntroTitle();
 }
 
 function syncUrlState() {
@@ -2118,6 +2129,7 @@ function setupMobileFiltersDrawer() {
 }
 
 async function init() {
+  const catalogEl = document.getElementById("product-filters-catalog");
   try {
     setupMobileFiltersDrawer();
     setCatalogViewMode(readStoredCatalogViewMode(), false);
@@ -2393,6 +2405,14 @@ async function init() {
     await fetchProducts();
   } catch (e) {
     setError(e instanceof Error ? e.message : String(e));
+  } finally {
+    if (catalogEl) {
+      catalogEl.classList.remove("product-filters-catalog--awaiting-init");
+      catalogEl.removeAttribute("aria-busy");
+      requestAnimationFrame(() => {
+        catalogEl.classList.add("product-filters-catalog--is-visible");
+      });
+    }
   }
 }
 

@@ -119,7 +119,7 @@
       color: $dark;
 
       &:hover {
-        color: $light-teal;
+        color: $dark-teal;
       }
 
       &.is-active {
@@ -234,9 +234,30 @@
       transition: color 0.3s ease;
 
       &:hover {
-        color: $light-teal;
+        color: $blue;
         transition: color 0.3s ease;
+
+        &.header__top-link--facebook {
+          svg {
+            path {
+              fill: $blue;
+            }
+
+            rect {
+              stroke: $blue;
+            }
+          }
+        }
+
+        &.header__top-link--instagram {
+          svg {
+            path {
+              stroke: $blue;
+            }
+          }
+        }
       }
+
     }
 
 
@@ -358,7 +379,7 @@
       color: $white !important;
 
       &::after {
-        background: $white;
+        background: $white-90;
       }
     }
   }
@@ -1318,7 +1339,6 @@
   }
 }
 
-/* Home / products: same scroll as elsewhere; transparent chrome until scroll */
 body.is-home .header.header--white:not(.is-scrolling),
 body.is-products .header.header--white:not(.is-scrolling) {
   .header__top {
@@ -1374,14 +1394,14 @@ body.is-products .header.header--white:not(.is-scrolling) {
     color: $white-90;
 
     &:hover {
-      color: $light-teal;
+      color: $blue;
     }
 
     &.is-active {
       color: $white !important;
 
       &::after {
-        background: $white;
+        background: $white-90;
       }
     }
   }
@@ -1405,6 +1425,52 @@ body.is-products .header.header--white:not(.is-scrolling) {
 
       &::placeholder {
         color: $white;
+      }
+    }
+  }
+}
+
+body.is-home .header.header--white:not(.is-scrolling),
+body.is-products .header.header--white:not(.is-scrolling) {
+  .header__top-link {
+    &.header__top-link--facebook {
+      svg {
+        path {
+          transition: fill 0.3s ease;
+        }
+      }
+    }
+
+    &.header__top-link--instagram {
+      svg {
+        path {
+          transition: stroke 0.3s ease;
+        }
+      }
+    }
+
+    &:hover {
+      color: $blue;
+
+      &.header__top-link--facebook {
+        svg {
+          path {
+            fill: $blue;
+          }
+
+          rect {
+            stroke: $blue;
+          }
+        }
+      }
+
+      &.header__top-link--instagram {
+        svg {
+          path {
+            stroke: $blue;
+            transition: stroke 0.3s ease;
+          }
+        }
       }
     }
   }

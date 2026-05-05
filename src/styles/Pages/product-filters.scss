@@ -1,6 +1,5 @@
 @use "../variables" as *;
 
-
 .product-filters-catalog__section-title {
   padding: px-to-rem(40) 0;
 
@@ -59,12 +58,9 @@
 }
 
 .product-filters-intro {
+  position: relative;
   background: linear-gradient(180deg, #007d8a 0%, #00aec7 100%);
   padding: px-to-rem(200) 0 px-to-rem(80);
-
-  &--with-root-nav {
-    padding-bottom: px-to-rem(132);
-  }
 
   &__inner {
     max-width: px-to-rem(1360);
@@ -109,9 +105,18 @@
   }
 }
 
+.product-filters-page:has(.product-filters-root-nav) .product-filters-intro {
+  padding-bottom: px-to-rem(132);
+}
+
+.product-filters-page.is-catalog-filter-active .product-filters-intro {
+  padding-bottom: px-to-rem(80);
+}
+
 .product-filters-root-nav {
   padding-bottom: 2.5rem;
   padding-top: px-to-rem(24);
+  position: relative;
   z-index: 2;
 
   &__inner {
@@ -215,14 +220,79 @@
 
 }
 
+@keyframes product-filters-catalog-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .product-filters-catalog {
+  position: relative;
   padding-bottom: px-to-rem(0);
+
+  &__body {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.45s ease;
+  }
+
+  &--is-visible &__body {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &--is-visible &__body {
+      transition: none;
+    }
+  }
+
+  &--awaiting-init {
+    min-height: min(70vh, px-to-rem(520));
+
+    .product-filters-catalog__boot-overlay {
+      display: flex;
+    }
+  }
+
+  &__boot-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: px-to-rem(20);
+    padding: px-to-rem(32);
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(3px);
+  }
+
+  &__boot-spinner {
+    width: px-to-rem(40);
+    height: px-to-rem(40);
+    flex-shrink: 0;
+    border: px-to-rem(3) solid rgba($dark-teal, 0.1);
+    border-top-color: rgba($dark-teal, 0.55);
+    border-radius: 50%;
+    animation: product-filters-catalog-loader-spin 0.65s linear infinite;
+  }
+
+  &__boot-label {
+    font-size: px-to-rem(14);
+    line-height: px-to-rem(20);
+    letter-spacing: 0.02em;
+    font-weight: 500;
+    color: $dark-medium-2;
+    text-align: center;
+  }
 
   &__inner {
     max-width: px-to-rem(1376);
     margin: 0 auto;
     padding-left: 0;
-    // padding-right: var(--section-right, var(--s-padding-x));
     padding-right: 0;
   }
 

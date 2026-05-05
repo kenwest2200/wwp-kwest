@@ -10,9 +10,11 @@ import ProductFiltersOverflowModal from "./ProductFiltersOverflowModal.astro";
 
 <section
   id="product-filters-catalog"
-  class="product-filters-catalog"
+  class="product-filters-catalog product-filters-catalog--awaiting-init"
   aria-label="Filters and product list"
+  aria-busy="true"
 >
+  <div class="product-filters-catalog__body">
   <SectionTitle
     title="Explore our products"
     className="product-filters-catalog__section-title"
@@ -529,4 +531,12 @@ import ProductFiltersOverflowModal from "./ProductFiltersOverflowModal.astro";
     </div>
   </div>
   <ProductFiltersOverflowModal />
+  </div>
+  <div
+    class="product-filters-catalog__boot-overlay"
+    aria-hidden="true"
+  >
+    <div class="product-filters-catalog__boot-spinner" role="presentation"></div>
+    <span class="product-filters-catalog__boot-label">Loading catalog…</span>
+  </div>
 </section>

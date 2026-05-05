@@ -2,23 +2,15 @@
 interface Props {
   title?: string;
   description?: string;
-  hasRootNav?: boolean;
 }
 
 const {
   title = "Catalog",
   description = "Explore Waterway components for pool, spa, and bath systems — including pumps, jets, lighting, air systems, controls, and plumbing solutions.",
-  hasRootNav = true,
 } = Astro.props;
 ---
 
-<section
-  class:list={[
-    "product-filters-intro",
-    hasRootNav && "product-filters-intro--with-root-nav",
-  ]}
-  aria-labelledby="product-filters-intro-title"
->
+<section class="product-filters-intro" aria-labelledby="product-filters-intro-title">
   <div class="product-filters-intro__inner">
     <h1 id="product-filters-intro-title" class="product-filters-intro__title">
       {title}

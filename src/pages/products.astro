@@ -75,6 +75,40 @@ function buildRootNavBlocks(): ProductFiltersRootNavBlock[] {
 }
 
 const rootNavBlocks = buildRootNavBlocks();
+
+type CatalogBootRoot = {
+  slug: string;
+  name: string;
+  description: string | null;
+};
+let catalogBootRoots: CatalogBootRoot[] = [];
+if (fs.existsSync(dataPath)) {
+  try {
+    const raw = JSON.parse(fs.readFileSync(dataPath, "utf-8")) as {
+      rootCategories?: {
+        slug: string;
+        name?: string;
+        description?: string | null;
+      }[];
+    };
+    catalogBootRoots = (raw.rootCategories ?? []).map((r) => ({
+      slug: r.slug,
+      name: (r.name ?? "").trim() || r.slug,
+      description:
+        typeof r.description === "string" && r.description.trim()
+          ? r.description.trim()
+          : null,
+    }));
+  } catch {
+    catalogBootRoots = [];
+  }
+}
+
+const catalogBootRootsJson = JSON.stringify(catalogBootRoots).replace(
+  /</g,
+  "\\u003c",
+);
+
 let resourcesData: ProductsResourcesData | null = null;
 if (getGraphQLClient()) {
   try {
@@ -87,9 +121,126 @@ if (getGraphQLClient()) {
 }
 ---
 
-<Layout headerType="white" bodyClass="is-products">
+<Layout bodyClass="is-products">
   <main class="product-filters-page">
-    <ProductFiltersIntro hasRootNav={rootNavBlocks.length > 0} />
+    <script is:inline>
+      (function () {
+        try {
+          var main =
+            document.currentScript && document.currentScript.parentElement;
+          if (!main || !main.classList.contains("product-filters-page")) return;
+          var p = new URLSearchParams(location.search || "");
+          function listParam(name) {
+            var raw = p.get(name);
+            if (raw == null || raw === "") return [];
+            return raw
+              .split(",")
+              .map(function (s) {
+                return s.trim();
+              })
+              .filter(Boolean);
+          }
+          var hasFilters =
+            listParam("category").length > 0 ||
+            listParam("sub").length > 0 ||
+            listParam("attr").length > 0 ||
+            (p.get("q") || "").trim() !== "";
+          if (hasFilters) {
+            main.classList.add("is-catalog-filter-active");
+            document.body.classList.remove("is-products");
+            var hdr = document.querySelector(".header");
+            if (hdr) hdr.classList.add("header--white");
+          }
+
+          var rawCat = p.get("category");
+          if (!rawCat) return;
+          var slugs = rawCat
+            .split(",")
+            .map(function (s) {
+              return s.trim();
+            })
+            .filter(Boolean);
+          if (slugs.length === 1) main.classList.add("is-catalog-boot-pending");
+        } catch (e) {}
+      })();
+    </script>
+    <script
+      type="application/json"
+      id="product-filters-catalog-boot-roots"
+      set:html={catalogBootRootsJson}
+    />
+    <style is:inline>
+      .product-filters-page.is-catalog-boot-pending
+        .product-filters-intro__inner {
+        visibility: hidden;
+      }
+      .product-filters-page.is-catalog-boot-pending
+        .product-filters-intro::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 2.25rem;
+        width: 2rem;
+        height: 2rem;
+        margin-left: -1rem;
+        border: 0.2rem solid rgba(15, 23, 42, 0.12);
+        border-top-color: rgba(15, 23, 42, 0.55);
+        border-radius: 50%;
+        animation: product-filters-catalog-boot-spin 0.65s linear infinite;
+      }
+      @keyframes product-filters-catalog-boot-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .product-filters-page.is-catalog-filter-active .product-filters-root-nav,
+      .product-filters-page.is-catalog-filter-active
+        .product-filters-catalog__section-title {
+        display: none !important;
+      }
+    </style>
+    <ProductFiltersIntro />
+    <script is:inline>
+      (function () {
+        var main = document.querySelector(".product-filters-page");
+        if (!main) return;
+        var done = function () {
+          main.classList.remove("is-catalog-boot-pending");
+        };
+        try {
+          var raw = new URLSearchParams(location.search || "").get("category");
+          var slugs = raw
+            ? raw
+                .split(",")
+                .map(function (s) {
+                  return s.trim();
+                })
+                .filter(Boolean)
+            : [];
+          if (slugs.length !== 1) return done();
+          var slug = slugs[0];
+          var dataEl = document.getElementById(
+            "product-filters-catalog-boot-roots",
+          );
+          if (!dataEl) return done();
+          var roots = JSON.parse(dataEl.textContent || "[]");
+          var hit = null;
+          for (var i = 0; i < roots.length; i++) {
+            if (roots[i] && roots[i].slug === slug) {
+              hit = roots[i];
+              break;
+            }
+          }
+          if (!hit) return done();
+          var h = document.getElementById("product-filters-intro-title");
+          var d = document.getElementById("product-filters-intro-description");
+          if (h && hit.name) h.textContent = hit.name;
+          if (d && hit.description) d.textContent = hit.description;
+          if (hit.name) document.title = hit.name + " | Waterway Plastics";
+        } catch (e) {}
+        done();
+      })();
+    </script>
     <ProductFiltersRootNav blocks={rootNavBlocks} />
     <ProductFiltersPanel />
     <ProductFiltersResources data={resourcesData} />

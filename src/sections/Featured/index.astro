@@ -62,38 +62,6 @@ const items = mapFromHomepageProducts(products);
 const sectionHeading = sectionTitle?.trim()
   ? decodeHtmlEntities(sectionTitle.trim())
   : "Featured Products";
-
-// const mockFeaturedItems: FeaturedCard[] = [
-//   {
-//     categoryLabel: "Spa Skimmers and Filters",
-//     title: "100 sq. ft. Roadster Skim Filter",
-//     imageUrl: img1,
-//     imageAlt: "Pool pump",
-//     href: "#",
-//   },
-//   {
-//     categoryLabel: "Spa Skimmers and Filters",
-//     title: "Cartridge filter system",
-//     imageUrl: img2,
-//     imageAlt: "Filter system",
-//     href: "#",
-//   },
-//   {
-//     categoryLabel: "Pool - Ells, Tees, & Wyes",
-//     title: "45° and 90° Pool Ells",
-//     imageUrl: img3,
-//     imageAlt: "Spa jets",
-//     href: "#",
-//   },
-//   {
-//     categoryLabel: "Lighting",
-//     title: "Spa Light Accessories",
-//     imageUrl: img4,
-//     imageAlt: "Spa jets",
-//     href: "#",
-//   },
-// ];
-// const items = itemsFromApi.length > 0 ? itemsFromApi : mockFeaturedItems;
 ---
 
 <section class="featured" aria-labelledby="featured-heading">
@@ -102,7 +70,7 @@ const sectionHeading = sectionTitle?.trim()
     <ul class="featured__grid">
       {
         items.map((item) => (
-          <li class="featured__item">
+          <li class="featured__item" data-full-title={item.title}>
             <p class="featured__item-label">{item.categoryLabel}</p>
 
             {item.imageUrl ? (
@@ -131,3 +99,7 @@ const sectionHeading = sectionTitle?.trim()
     </ul>
   </div>
 </section>
+
+<script>
+  import "../../scripts/featured-section.ts";
+</script>

@@ -122,9 +122,14 @@ const displayColumns = [...apiColumns, ...footerStaticTailColumns];
                   >
                     <a
                       href={link.href}
-                      class="footer__column-link"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      class={`footer__column-link${
+                        "icon" in link && typeof link.icon === "string"
+                          ? ` footer__column-link--${link.icon}`
+                          : ""
+                      }`}
+                      {...("icon" in link && link.icon
+                        ? { target: "_blank", rel: "noopener noreferrer" }
+                        : {})}
                       aria-label={
                         "icon" in link && typeof link.icon === "string"
                           ? link.icon

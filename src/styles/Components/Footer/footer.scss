@@ -99,6 +99,68 @@
 
                 & .footer__column-link {
                     padding: 0;
+
+                    &.footer__column-link--facebook {
+                        svg {
+                            rect {
+                                transition: stroke 0.3s ease;
+                            }
+
+                            path {
+                                transition: fill 0.3s ease;
+                            }
+                        }
+                    }
+
+                    &.footer__column-link--instagram {
+                        svg {
+                            path {
+                                transition: stroke 0.3s ease;
+                            }
+                        }
+                    }
+
+                    &.footer__column-link--youtube {
+                        svg {
+                            path {
+                                transition: stroke 0.3s ease;
+                            }
+                        }
+                    }
+
+                    &:hover {
+                        &.footer__column-link--facebook {
+                            svg {
+                                rect {
+                                    stroke: $blue;
+                                    transition: stroke 0.3s ease;
+                                }
+
+                                path {
+                                    fill: $blue;
+                                    transition: fill 0.3s ease;
+                                }
+                            }
+                        }
+
+                        &.footer__column-link--instagram {
+                            svg {
+                                path {
+                                    stroke: $blue;
+                                    transition: stroke 0.3s ease;
+                                }
+                            }
+                        }
+
+                        &.footer__column-link--youtube {
+                            svg {
+                                path {
+                                    stroke: $blue;
+                                    transition: stroke 0.3s ease;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -125,11 +187,13 @@
             padding: px-to-rem(8) 0;
             transition: color 0.3s ease;
 
-
-
             &:hover {
-                color: $light-teal;
+                color: $blue;
                 transition: color 0.3s ease;
+            }
+
+            &:active {
+                color: $blue;
             }
         }
 

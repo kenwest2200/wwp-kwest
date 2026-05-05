@@ -14,8 +14,7 @@ import {
 } from "../lib/queries/layout-footer";
 
 export interface Props {
-  headerType?: "white";
-  /** e.g. `is-home` — body class for page-specific header styling */
+  headerType?: string;
   bodyClass?: string;
   pageTitle?: string;
   description?: string;
@@ -103,6 +102,22 @@ if (getGraphQLClient()) {
   </head>
   <body class:list={bodyClass ? [bodyClass] : []}>
     <Header data={headerData} headerType={headerType} />
+    <script is:inline>
+      (function () {
+        try {
+          var topEl = document.querySelector("[data-header-top]");
+          var containerEl = document.querySelector(".js-header-container");
+          var sum = 0;
+          if (topEl) sum += Math.round(topEl.getBoundingClientRect().height);
+          if (containerEl)
+            sum += Math.round(containerEl.getBoundingClientRect().height);
+          document.documentElement.style.setProperty(
+            "--page-header-offset",
+            (sum > 0 ? sum : 112) + "px",
+          );
+        } catch (e) {}
+      })();
+    </script>
     <slot />
     <Footer data={footerData} />
   </body>

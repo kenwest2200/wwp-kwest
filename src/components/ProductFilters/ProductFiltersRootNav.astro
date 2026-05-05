@@ -11,7 +11,10 @@ const { blocks } = Astro.props;
 
 {
   blocks.length > 0 ? (
-    <section class="product-filters-root-nav" aria-label="Quick links by category">
+    <section
+      class="product-filters-root-nav"
+      aria-label="Quick links by category"
+    >
       <div class="product-filters-root-nav__inner">
         <div class="product-filters-root-nav__grid">
           {blocks.map((block) => (
@@ -23,7 +26,10 @@ const { blocks } = Astro.props;
                 <ul class="product-filters-root-nav__list">
                   {block.subLinks.map((link) => (
                     <li>
-                      <a class="product-filters-root-nav__link" href={link.href}>
+                      <a
+                        class="product-filters-root-nav__link"
+                        href={link.href}
+                      >
                         {link.name}
                       </a>
                     </li>

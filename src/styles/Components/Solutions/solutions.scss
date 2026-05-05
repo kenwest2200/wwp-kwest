@@ -36,6 +36,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
 
     &-title {
       margin: 0;
@@ -78,17 +79,21 @@
       height: px-to-rem(83);
       object-fit: contain;
     }
+
+    &:hover {
+      background: $white;
+      box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.12);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
   }
 
   &__button {
     margin-top: px-to-rem(8);
-    // background-color: $dark-teal;
-    // color: $white;
     align-items: center;
     gap: px-to-rem(12);
     border-radius: px-to-rem(4);
-    // font-size: px-to-rem(14);
-    padding: px-to-rem(12) px-to-rem(32);
+    font-weight: 700;
+    padding: px-to-rem(15) px-to-rem(31);
   }
 
   @include media-breakpoint-up(sm) {
