@@ -822,6 +822,12 @@
     letter-spacing: 0.03em;
     color: $dark;
     text-decoration: none;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: $medium-teal;
+      transition: color 0.3s ease;
+    }
 
     &--flat {
       font-weight: 600;
@@ -1173,7 +1179,7 @@
     }
   }
 
-  @include media-breakpoint-down(lg) {
+  @include media-breakpoint-down(lgg) {
     &__nav {
       display: none;
     }
