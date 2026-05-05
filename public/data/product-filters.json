@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-04T14:20:18.471Z",
+  "generatedAt": "2026-05-05T06:40:32.901Z",
   "attributesByCategory": {
     "bath": [],
     "pool": [
@@ -54,15 +54,15 @@
         ]
       },
       {
-        "name": "Body",
-        "slug": "body",
+        "name": "Body Type",
+        "slug": "body-type",
         "values": [
           {
-            "label": "type-90-body",
+            "label": "90° Body",
             "slug": "body-type-90-body"
           },
           {
-            "label": "type-stright",
+            "label": "Stright",
             "slug": "body-type-stright"
           }
         ]
@@ -72,73 +72,73 @@
         "slug": "color",
         "values": [
           {
-            "label": "beige",
+            "label": "Beige",
             "slug": "color-beige"
           },
           {
-            "label": "black",
+            "label": "Black",
             "slug": "color-black"
           },
           {
-            "label": "clear",
+            "label": "Clear",
             "slug": "color-clear"
           },
           {
-            "label": "dark-gray",
+            "label": "Dark Gray",
             "slug": "color-dark-gray"
           },
           {
-            "label": "gray",
+            "label": "Gray",
             "slug": "color-gray"
           },
           {
-            "label": "white",
+            "label": "White",
             "slug": "color-white"
           }
         ]
       },
       {
-        "name": "Filter",
-        "slug": "filter",
+        "name": "Filter Type",
+        "slug": "filter-type",
         "values": [
           {
-            "label": "type-d-e",
+            "label": "D.E.",
             "slug": "filter-type-d-e"
           },
           {
-            "label": "type-sand",
+            "label": "Sand",
             "slug": "filter-type-sand"
           }
         ]
       },
       {
-        "name": "Filtration",
-        "slug": "filtration",
+        "name": "Filtration Area",
+        "slug": "filtration-area",
         "values": [
           {
-            "label": "area-1-4-sq-ft",
+            "label": "1.4 sq. ft.",
             "slug": "filtration-area-1-4-sq-ft"
           },
           {
-            "label": "area-2-0-sq-ft",
+            "label": "2.0 sq. ft.",
             "slug": "filtration-area-2-0-sq-ft"
           },
           {
-            "label": "area-2-6-sq-ft",
+            "label": "2.6 sq. ft.",
             "slug": "filtration-area-2-6-sq-ft"
           },
           {
-            "label": "area-3-5-sq-ft",
+            "label": "3.5 sq. ft.",
             "slug": "filtration-area-3-5-sq-ft"
           }
         ]
       },
       {
-        "name": "Gpm",
+        "name": "GPM",
         "slug": "gpm",
         "values": [
           {
-            "label": "175.90",
+            "label": "175 & 90",
             "slug": "gpm-175-90"
           },
           {
@@ -160,7 +160,7 @@
         ]
       },
       {
-        "name": "Hp",
+        "name": "HP",
         "slug": "hp",
         "values": [
           {
@@ -178,91 +178,115 @@
         ]
       },
       {
-        "name": "Internal",
-        "slug": "internal",
+        "name": "Internal Type",
+        "slug": "internal-type",
         "values": [
           {
-            "label": "type-directional",
+            "label": "Directional",
             "slug": "internal-type-directional"
           }
         ]
       },
       {
-        "name": "Jet",
-        "slug": "jet",
+        "name": "Jet Seat",
+        "slug": "jet-seat",
         "values": [
           {
-            "label": "seat-1",
+            "label": "1",
             "slug": "jet-seat-1"
           },
           {
-            "label": "seat-2",
+            "label": "2",
             "slug": "jet-seat-2"
           },
           {
-            "label": "seat-3",
+            "label": "3",
             "slug": "jet-seat-3"
-          },
+          }
+        ]
+      },
+      {
+        "name": "Jet Size",
+        "slug": "jet-size",
+        "values": [
           {
-            "label": "size-poly-jets",
+            "label": "Poly Jets",
             "slug": "jet-size-poly-jets"
-          },
+          }
+        ]
+      },
+      {
+        "name": "Jet Style",
+        "slug": "jet-style",
+        "values": [
           {
-            "label": "style-scalloped",
+            "label": "Scalloped",
             "slug": "jet-style-scalloped"
           },
           {
-            "label": "style-smooth",
+            "label": "Smooth",
             "slug": "jet-style-smooth"
-          },
+          }
+        ]
+      },
+      {
+        "name": "Jet Type",
+        "slug": "jet-type",
+        "values": [
           {
-            "label": "type-6-spoke",
+            "label": "6- Spoke",
             "slug": "jet-type-6-spoke"
           }
         ]
       },
       {
-        "name": "Kit",
-        "slug": "kit",
+        "name": "Kit Size",
+        "slug": "kit-size",
         "values": [
           {
-            "label": "size-7",
+            "label": "7\"",
             "slug": "kit-size-7"
           },
           {
-            "label": "size-9",
+            "label": "9\"",
             "slug": "kit-size-9"
           }
         ]
       },
       {
-        "name": "Pool",
-        "slug": "pool",
+        "name": "Pool Turnover (6hr-8hr-10hr)",
+        "slug": "pool-turnover-6hr-8hr-10hr",
         "values": [
           {
-            "label": "turnover-6hr-8hr-10hr-12600-16800-21000",
+            "label": "12,600 – 16,800 – 21,000",
             "slug": "pool-turnover-6hr-8hr-10hr-12600-16800-21000"
           },
           {
-            "label": "turnover-6hr-8hr-10hr-16200-21600-27000",
+            "label": "16,200 – 21,600 – 27,000",
             "slug": "pool-turnover-6hr-8hr-10hr-16200-21600-27000"
           },
           {
-            "label": "turnover-6hr-8hr-10hr-19800-26400-33000",
+            "label": "19,800 – 26,400 – 33,000",
             "slug": "pool-turnover-6hr-8hr-10hr-19800-26400-33000"
           },
           {
-            "label": "turnover-6hr-8hr-10hr-25200-33600-42000",
+            "label": "25,200 – 33,600 – 42,000",
             "slug": "pool-turnover-6hr-8hr-10hr-25200-33600-42000"
-          },
+          }
+        ]
+      },
+      {
+        "name": "Pool Type",
+        "slug": "pool-type",
+        "values": [
           {
-            "label": "type-above-ground",
+            "label": "Above Ground",
             "slug": "pool-type-above-ground"
           }
         ]
       },
       {
-        "name": "Psi",
+        "name": "PSI",
         "slug": "psi",
         "values": [
           {
@@ -284,7 +308,7 @@
         "slug": "pump",
         "values": [
           {
-            "label": "hi-flo-ii",
+            "label": "HI-Flo II",
             "slug": "pump-hi-flo-ii"
           }
         ]
@@ -294,11 +318,11 @@
         "slug": "shape",
         "values": [
           {
-            "label": "round",
+            "label": "Round",
             "slug": "shape-round"
           },
           {
-            "label": "square",
+            "label": "Square",
             "slug": "shape-square"
           }
         ]
@@ -308,11 +332,11 @@
         "slug": "socket",
         "values": [
           {
-            "label": "1.2",
+            "label": "1/2\"",
             "slug": "socket-1-2"
           },
           {
-            "label": "2",
+            "label": "2\"",
             "slug": "socket-2"
           }
         ]
@@ -322,55 +346,55 @@
         "slug": "speed",
         "values": [
           {
-            "label": "1-speed",
+            "label": "1 Speed",
             "slug": "speed-1-speed"
           }
         ]
       },
       {
-        "name": "Sq",
-        "slug": "sq",
+        "name": "Sq. Ft.",
+        "slug": "sq-ft",
         "values": [
           {
-            "label": "ft-100",
+            "label": "100",
             "slug": "sq-ft-100"
           },
           {
-            "label": "ft-125",
+            "label": "125",
             "slug": "sq-ft-125"
           },
           {
-            "label": "ft-150",
+            "label": "150",
             "slug": "sq-ft-150"
           },
           {
-            "label": "ft-75",
+            "label": "75",
             "slug": "sq-ft-75"
           },
           {
-            "label": "ft-200",
+            "label": "200",
             "slug": "sq-ft-200"
           }
         ]
       },
       {
-        "name": "Tank",
-        "slug": "tank",
+        "name": "Tank size",
+        "slug": "tank-size",
         "values": [
           {
-            "label": "size-16",
+            "label": "16\"",
             "slug": "tank-size-16"
           },
           {
-            "label": "size-19",
+            "label": "19\"",
             "slug": "tank-size-19"
           },
           {
-            "label": "size-22",
+            "label": "22\"",
             "slug": "tank-size-22"
           },
           {
-            "label": "size-26",
+            "label": "26\"",
             "slug": "tank-size-26"
           }
         ]
@@ -388,29 +412,29 @@
         ]
       },
       {
-        "name": "Barb",
-        "slug": "barb",
+        "name": "Barb Type",
+        "slug": "barb-type",
         "values": [
           {
-            "label": "type-ribbed",
+            "label": "Ribbed",
             "slug": "barb-type-ribbed"
           },
           {
-            "label": "type-smooth",
+            "label": "Smooth",
             "slug": "barb-type-smooth"
           }
         ]
       },
       {
-        "name": "Body",
-        "slug": "body",
+        "name": "Body Style",
+        "slug": "body-style",
         "values": [
           {
-            "label": "style-extra-short",
+            "label": "Extra Short",
             "slug": "body-style-extra-short"
           },
           {
-            "label": "style-short",
+            "label": "Short",
             "slug": "body-style-short"
           }
         ]
@@ -420,63 +444,63 @@
         "slug": "color",
         "values": [
           {
-            "label": "abs-black",
+            "label": "ABS Black",
             "slug": "color-abs-black"
           },
           {
-            "label": "bark",
+            "label": "Bark",
             "slug": "color-bark"
           },
           {
-            "label": "black",
+            "label": "Black",
             "slug": "color-black"
           },
           {
-            "label": "black-clear",
+            "label": "Black/Clear",
             "slug": "color-black-clear"
           },
           {
-            "label": "charcoal",
+            "label": "Charcoal",
             "slug": "color-charcoal"
           },
           {
-            "label": "clear",
+            "label": "Clear",
             "slug": "color-clear"
           },
           {
-            "label": "coastal-gray",
+            "label": "Coastal Gray",
             "slug": "color-coastal-gray"
           },
           {
-            "label": "dsg",
+            "label": "DSG",
             "slug": "color-dsg"
           },
           {
-            "label": "dsg-clear",
+            "label": "DSG/Clear",
             "slug": "color-dsg-clear"
           },
           {
-            "label": "dsg-silver",
+            "label": "DSG/Silver",
             "slug": "color-dsg-silver"
           },
           {
-            "label": "dsg-titanium",
+            "label": "DSG/Titanium",
             "slug": "color-dsg-titanium"
           },
           {
-            "label": "graphite",
+            "label": "Graphite",
             "slug": "color-graphite"
           },
           {
-            "label": "gray",
+            "label": "Gray",
             "slug": "color-gray"
           },
           {
-            "label": "mocha",
+            "label": "Mocha",
             "slug": "color-mocha"
           },
           {
-            "label": "white",
+            "label": "White",
             "slug": "color-white"
           }
         ]
@@ -486,11 +510,11 @@
         "slug": "degree",
         "values": [
           {
-            "label": "45",
+            "label": "45°",
             "slug": "degree-45"
           },
           {
-            "label": "90",
+            "label": "90°",
             "slug": "degree-90"
           }
         ]
@@ -500,21 +524,21 @@
         "slug": "ell",
         "values": [
           {
-            "label": "90",
+            "label": "90°",
             "slug": "ell-90"
           }
         ]
       },
       {
-        "name": "Handle",
-        "slug": "handle",
+        "name": "Handle Style",
+        "slug": "handle-style",
         "values": [
           {
-            "label": "style-6-spoke",
+            "label": "6-Spoke",
             "slug": "handle-style-6-spoke"
           },
           {
-            "label": "style-s-shaped",
+            "label": "S Shaped",
             "slug": "handle-style-s-shaped"
           }
         ]
@@ -524,7 +548,7 @@
         "slug": "hertz",
         "values": [
           {
-            "label": "50.60",
+            "label": "50/60",
             "slug": "hertz-50-60"
           },
           {
@@ -534,17 +558,17 @@
         ]
       },
       {
-        "name": "Jet",
-        "slug": "jet",
+        "name": "Jet Type",
+        "slug": "jet-type",
         "values": [
           {
-            "label": "type-massage",
+            "label": "Massage",
             "slug": "jet-type-massage"
           }
         ]
       },
       {
-        "name": "Kw",
+        "name": "KW",
         "slug": "kw",
         "values": [
           {
@@ -562,11 +586,11 @@
         "slug": "material",
         "values": [
           {
-            "label": "stainless-steel",
+            "label": "Stainless Steel",
             "slug": "material-stainless-steel"
           },
           {
-            "label": "standard",
+            "label": "Standard",
             "slug": "material-standard"
           }
         ]
@@ -598,79 +622,79 @@
         "slug": "size",
         "values": [
           {
-            "label": "1.1.2",
+            "label": "1 1/2\"",
             "slug": "size-1-1-2"
           },
           {
-            "label": "1",
+            "label": "1\"",
             "slug": "size-1"
           },
           {
-            "label": "1.2",
+            "label": "1/2\"",
             "slug": "size-1-2"
           },
           {
-            "label": "11",
+            "label": "11\"",
             "slug": "size-11"
           },
           {
-            "label": "13",
+            "label": "13\"",
             "slug": "size-13"
           },
           {
-            "label": "14",
+            "label": "14\"",
             "slug": "size-14"
           },
           {
-            "label": "16",
+            "label": "16\"",
             "slug": "size-16"
           },
           {
-            "label": "18",
+            "label": "18\"",
             "slug": "size-18"
           },
           {
-            "label": "2.1.2",
+            "label": "2 1/2\"",
             "slug": "size-2-1-2"
           },
           {
-            "label": "2",
+            "label": "2\"",
             "slug": "size-2"
           },
           {
-            "label": "20",
+            "label": "20\"",
             "slug": "size-20"
           },
           {
-            "label": "3-5-sq-in",
+            "label": "3.5 Sq in",
             "slug": "size-3-5-sq-in"
           },
           {
-            "label": "3-5-x-6-25",
+            "label": "3.5\" x 6.25\"",
             "slug": "size-3-5-x-6-25"
           },
           {
-            "label": "3.4",
+            "label": "3/4\"",
             "slug": "size-3-4"
           },
           {
-            "label": "3.8",
+            "label": "3/8\"",
             "slug": "size-3-8"
           },
           {
-            "label": "33",
+            "label": "33\"",
             "slug": "size-33"
           },
           {
-            "label": "4.3.4",
+            "label": "4 3/4\"",
             "slug": "size-4-3-4"
           },
           {
-            "label": "5",
+            "label": "5\"",
             "slug": "size-5"
           },
           {
-            "label": "6",
+            "label": "6\"",
             "slug": "size-6"
           }
         ]
@@ -680,35 +704,35 @@
         "slug": "socket",
         "values": [
           {
-            "label": "1.1.2",
+            "label": "1 1/2\"",
             "slug": "socket-1-1-2"
           },
           {
-            "label": "1.1.4",
+            "label": "1 1/4\"",
             "slug": "socket-1-1-4"
           },
           {
-            "label": "1",
+            "label": "1\"",
             "slug": "socket-1"
           },
           {
-            "label": "1.2",
+            "label": "1/2\"",
             "slug": "socket-1-2"
           },
           {
-            "label": "2.1.2",
+            "label": "2 1/2\"",
             "slug": "socket-2-1-2"
           },
           {
-            "label": "2",
+            "label": "2\"",
             "slug": "socket-2"
           },
           {
-            "label": "3",
+            "label": "3\"",
             "slug": "socket-3"
           },
           {
-            "label": "3.4",
+            "label": "3/4\"",
             "slug": "socket-3-4"
           }
         ]
@@ -718,43 +742,43 @@
         "slug": "spigot",
         "values": [
           {
-            "label": "1.1.2",
+            "label": "1 1/2\"",
             "slug": "spigot-1-1-2"
           },
           {
-            "label": "1.1.4",
+            "label": "1 1/4\"",
             "slug": "spigot-1-1-4"
           },
           {
-            "label": "1",
+            "label": "1\"",
             "slug": "spigot-1"
           },
           {
-            "label": "1.2",
+            "label": "1/2\"",
             "slug": "spigot-1-2"
           },
           {
-            "label": "2.1.2",
+            "label": "2 1/2\"",
             "slug": "spigot-2-1-2"
           },
           {
-            "label": "2",
+            "label": "2\"",
             "slug": "spigot-2"
           },
           {
-            "label": "3",
+            "label": "3\"",
             "slug": "spigot-3"
           },
           {
-            "label": "3.4.2",
+            "label": "3/4",
             "slug": "spigot-3-4-2"
           },
           {
-            "label": "3.4",
+            "label": "3/4\"",
             "slug": "spigot-3-4"
           },
           {
-            "label": "3.8",
+            "label": "3/8\"",
             "slug": "spigot-3-8"
           }
         ]
@@ -764,15 +788,15 @@
         "slug": "type",
         "values": [
           {
-            "label": "ell",
+            "label": "Ell",
             "slug": "type-ell"
           },
           {
-            "label": "street-ell",
+            "label": "Street Ell",
             "slug": "type-street-ell"
           },
           {
-            "label": "valve",
+            "label": "Valve",
             "slug": "type-valve"
           }
         ]
@@ -782,7 +806,7 @@
         "slug": "volatge",
         "values": [
           {
-            "label": "230v-12v",
+            "label": "230v/12v",
             "slug": "volatge-230v-12v"
           }
         ]
@@ -792,7 +816,7 @@
         "slug": "voltage",
         "values": [
           {
-            "label": "110v-12v",
+            "label": "110v/12v",
             "slug": "voltage-110v-12v"
           }
         ]
@@ -802,7 +826,7 @@
         "slug": "volts",
         "values": [
           {
-            "label": "115v-230v",
+            "label": "115v/230v",
             "slug": "volts-115v-230v"
           }
         ]
@@ -812,11 +836,11 @@
         "slug": "wye",
         "values": [
           {
-            "label": "120",
+            "label": "120°",
             "slug": "wye-120"
           },
           {
-            "label": "22.1.2",
+            "label": "22 1/2°",
             "slug": "wye-22-1-2"
           }
         ]
@@ -834,43 +858,43 @@
     "hose-tubing-pool": [],
     "pool-filters-in-ground-above-ground": [
       {
-        "name": "Filter",
-        "slug": "filter",
+        "name": "Filter Type",
+        "slug": "filter-type",
         "values": [
           {
-            "label": "type-d-e",
+            "label": "D.E.",
             "slug": "filter-type-d-e"
           },
           {
-            "label": "type-sand",
+            "label": "Sand",
             "slug": "filter-type-sand"
           }
         ]
       },
       {
-        "name": "Filtration",
-        "slug": "filtration",
+        "name": "Filtration Area",
+        "slug": "filtration-area",
         "values": [
           {
-            "label": "area-1-4-sq-ft",
+            "label": "1.4 sq. ft.",
             "slug": "filtration-area-1-4-sq-ft"
           },
           {
-            "label": "area-2-0-sq-ft",
+            "label": "2.0 sq. ft.",
             "slug": "filtration-area-2-0-sq-ft"
           },
           {
-            "label": "area-2-6-sq-ft",
+            "label": "2.6 sq. ft.",
             "slug": "filtration-area-2-6-sq-ft"
           },
           {
-            "label": "area-3-5-sq-ft",
+            "label": "3.5 sq. ft.",
             "slug": "filtration-area-3-5-sq-ft"
           }
         ]
       },
       {
-        "name": "Gpm",
+        "name": "GPM",
         "slug": "gpm",
         "values": [
           {
@@ -892,7 +916,7 @@
         ]
       },
       {
-        "name": "Hp",
+        "name": "HP",
         "slug": "hp",
         "values": [
           {
@@ -906,27 +930,33 @@
         ]
       },
       {
-        "name": "Pool",
-        "slug": "pool",
+        "name": "Pool Turnover (6hr-8hr-10hr)",
+        "slug": "pool-turnover-6hr-8hr-10hr",
         "values": [
           {
-            "label": "turnover-6hr-8hr-10hr-12600-16800-21000",
+            "label": "12,600 – 16,800 – 21,000",
             "slug": "pool-turnover-6hr-8hr-10hr-12600-16800-21000"
           },
           {
-            "label": "turnover-6hr-8hr-10hr-16200-21600-27000",
+            "label": "16,200 – 21,600 – 27,000",
             "slug": "pool-turnover-6hr-8hr-10hr-16200-21600-27000"
           },
           {
-            "label": "turnover-6hr-8hr-10hr-19800-26400-33000",
+            "label": "19,800 – 26,400 – 33,000",
             "slug": "pool-turnover-6hr-8hr-10hr-19800-26400-33000"
           },
           {
-            "label": "turnover-6hr-8hr-10hr-25200-33600-42000",
+            "label": "25,200 – 33,600 – 42,000",
             "slug": "pool-turnover-6hr-8hr-10hr-25200-33600-42000"
-          },
+          }
+        ]
+      },
+      {
+        "name": "Pool Type",
+        "slug": "pool-type",
+        "values": [
           {
-            "label": "type-above-ground",
+            "label": "Above Ground",
             "slug": "pool-type-above-ground"
           }
         ]
@@ -936,7 +966,7 @@
         "slug": "pump",
         "values": [
           {
-            "label": "hi-flo-ii",
+            "label": "HI-Flo II",
             "slug": "pump-hi-flo-ii"
           }
         ]
@@ -946,55 +976,55 @@
         "slug": "speed",
         "values": [
           {
-            "label": "1-speed",
+            "label": "1 Speed",
             "slug": "speed-1-speed"
           }
         ]
       },
       {
-        "name": "Sq",
-        "slug": "sq",
+        "name": "Sq. Ft.",
+        "slug": "sq-ft",
         "values": [
           {
-            "label": "ft-100",
+            "label": "100",
             "slug": "sq-ft-100"
           },
           {
-            "label": "ft-125",
+            "label": "125",
             "slug": "sq-ft-125"
           },
           {
-            "label": "ft-150",
+            "label": "150",
             "slug": "sq-ft-150"
           },
           {
-            "label": "ft-75",
+            "label": "75",
             "slug": "sq-ft-75"
           },
           {
-            "label": "ft-200",
+            "label": "200",
             "slug": "sq-ft-200"
           }
         ]
       },
       {
-        "name": "Tank",
-        "slug": "tank",
+        "name": "Tank size",
+        "slug": "tank-size",
         "values": [
           {
-            "label": "size-16",
+            "label": "16\"",
             "slug": "tank-size-16"
           },
           {
-            "label": "size-19",
+            "label": "19\"",
             "slug": "tank-size-19"
           },
           {
-            "label": "size-22",
+            "label": "22\"",
             "slug": "tank-size-22"
           },
           {
-            "label": "size-26",
+            "label": "26\"",
             "slug": "tank-size-26"
           }
         ]
@@ -1057,7 +1087,7 @@
         ]
       },
       {
-        "name": "Hp",
+        "name": "HP",
         "slug": "hp",
         "values": [
           {
@@ -1075,7 +1105,7 @@
         ]
       },
       {
-        "name": "Psi",
+        "name": "PSI",
         "slug": "psi",
         "values": [
           {
@@ -1099,27 +1129,27 @@
         "slug": "color",
         "values": [
           {
-            "label": "beige",
+            "label": "Beige",
             "slug": "color-beige"
           },
           {
-            "label": "black",
+            "label": "Black",
             "slug": "color-black"
           },
           {
-            "label": "clear",
+            "label": "Clear",
             "slug": "color-clear"
           },
           {
-            "label": "dark-gray",
+            "label": "Dark Gray",
             "slug": "color-dark-gray"
           },
           {
-            "label": "gray",
+            "label": "Gray",
             "slug": "color-gray"
           },
           {
-            "label": "white",
+            "label": "White",
             "slug": "color-white"
           }
         ]
@@ -1129,11 +1159,11 @@
         "slug": "shape",
         "values": [
           {
-            "label": "round",
+            "label": "Round",
             "slug": "shape-round"
           },
           {
-            "label": "square",
+            "label": "Square",
             "slug": "shape-square"
           }
         ]
@@ -1144,15 +1174,15 @@
     "pool-ells-tees-wyes": [],
     "gunite-jets": [
       {
-        "name": "Body",
-        "slug": "body",
+        "name": "Body Type",
+        "slug": "body-type",
         "values": [
           {
-            "label": "type-90-body",
+            "label": "90° Body",
             "slug": "body-type-90-body"
           },
           {
-            "label": "type-stright",
+            "label": "Stright",
             "slug": "body-type-stright"
           }
         ]
@@ -1162,83 +1192,101 @@
         "slug": "color",
         "values": [
           {
-            "label": "black",
+            "label": "Black",
             "slug": "color-black"
           },
           {
-            "label": "gray",
+            "label": "Gray",
             "slug": "color-gray"
           },
           {
-            "label": "white",
+            "label": "White",
             "slug": "color-white"
           }
         ]
       },
       {
-        "name": "Gpm",
+        "name": "GPM",
         "slug": "gpm",
         "values": [
           {
-            "label": "175.90",
+            "label": "175 & 90",
             "slug": "gpm-175-90"
           }
         ]
       },
       {
-        "name": "Internal",
-        "slug": "internal",
+        "name": "Internal Type",
+        "slug": "internal-type",
         "values": [
           {
-            "label": "type-directional",
+            "label": "Directional",
             "slug": "internal-type-directional"
           }
         ]
       },
       {
-        "name": "Jet",
-        "slug": "jet",
+        "name": "Jet Seat",
+        "slug": "jet-seat",
         "values": [
           {
-            "label": "seat-1",
+            "label": "1",
             "slug": "jet-seat-1"
           },
           {
-            "label": "seat-2",
+            "label": "2",
             "slug": "jet-seat-2"
           },
           {
-            "label": "seat-3",
+            "label": "3",
             "slug": "jet-seat-3"
-          },
+          }
+        ]
+      },
+      {
+        "name": "Jet Size",
+        "slug": "jet-size",
+        "values": [
           {
-            "label": "size-poly-jets",
+            "label": "Poly Jets",
             "slug": "jet-size-poly-jets"
-          },
+          }
+        ]
+      },
+      {
+        "name": "Jet Style",
+        "slug": "jet-style",
+        "values": [
           {
-            "label": "style-scalloped",
+            "label": "Scalloped",
             "slug": "jet-style-scalloped"
           },
           {
-            "label": "style-smooth",
+            "label": "Smooth",
             "slug": "jet-style-smooth"
-          },
+          }
+        ]
+      },
+      {
+        "name": "Jet Type",
+        "slug": "jet-type",
+        "values": [
           {
-            "label": "type-6-spoke",
+            "label": "6- Spoke",
             "slug": "jet-type-6-spoke"
           }
         ]
       },
       {
-        "name": "Kit",
-        "slug": "kit",
+        "name": "Kit Size",
+        "slug": "kit-size",
         "values": [
           {
-            "label": "size-7",
+            "label": "7\"",
             "slug": "kit-size-7"
           },
           {
-            "label": "size-9",
+            "label": "9\"",
             "slug": "kit-size-9"
           }
         ]
@@ -1248,11 +1296,11 @@
         "slug": "socket",
         "values": [
           {
-            "label": "1.2",
+            "label": "1/2\"",
             "slug": "socket-1-2"
           },
           {
-            "label": "2",
+            "label": "2\"",
             "slug": "socket-2"
           }
         ]
@@ -1267,17 +1315,17 @@
         "slug": "color",
         "values": [
           {
-            "label": "dsg",
+            "label": "DSG",
             "slug": "color-dsg"
           }
         ]
       },
       {
-        "name": "Jet",
-        "slug": "jet",
+        "name": "Jet Type",
+        "slug": "jet-type",
         "values": [
           {
-            "label": "type-massage",
+            "label": "Massage",
             "slug": "jet-type-massage"
           }
         ]
@@ -1287,11 +1335,11 @@
         "slug": "size",
         "values": [
           {
-            "label": "5",
+            "label": "5\"",
             "slug": "size-5"
           },
           {
-            "label": "6",
+            "label": "6\"",
             "slug": "size-6"
           }
         ]
@@ -1301,15 +1349,15 @@
     "spa-drains-suctions": [],
     "spa-manifolds": [
       {
-        "name": "Barb",
-        "slug": "barb",
+        "name": "Barb Type",
+        "slug": "barb-type",
         "values": [
           {
-            "label": "type-ribbed",
+            "label": "Ribbed",
             "slug": "barb-type-ribbed"
           },
           {
-            "label": "type-smooth",
+            "label": "Smooth",
             "slug": "barb-type-smooth"
           }
         ]
@@ -1319,11 +1367,11 @@
         "slug": "color",
         "values": [
           {
-            "label": "black",
+            "label": "Black",
             "slug": "color-black"
           },
           {
-            "label": "white",
+            "label": "White",
             "slug": "color-white"
           }
         ]
@@ -1333,7 +1381,7 @@
         "slug": "ell",
         "values": [
           {
-            "label": "90",
+            "label": "90°",
             "slug": "ell-90"
           }
         ]
@@ -1365,15 +1413,15 @@
         "slug": "size",
         "values": [
           {
-            "label": "1",
+            "label": "1\"",
             "slug": "size-1"
           },
           {
-            "label": "3.4",
+            "label": "3/4\"",
             "slug": "size-3-4"
           },
           {
-            "label": "3.8",
+            "label": "3/8\"",
             "slug": "size-3-8"
           }
         ]
@@ -1383,19 +1431,19 @@
         "slug": "socket",
         "values": [
           {
-            "label": "1.1.2",
+            "label": "1 1/2\"",
             "slug": "socket-1-1-2"
           },
           {
-            "label": "1",
+            "label": "1\"",
             "slug": "socket-1"
           },
           {
-            "label": "1.2",
+            "label": "1/2\"",
             "slug": "socket-1-2"
           },
           {
-            "label": "2",
+            "label": "2\"",
             "slug": "socket-2"
           }
         ]
@@ -1405,19 +1453,19 @@
         "slug": "spigot",
         "values": [
           {
-            "label": "1.1.2",
+            "label": "1 1/2\"",
             "slug": "spigot-1-1-2"
           },
           {
-            "label": "1",
+            "label": "1\"",
             "slug": "spigot-1"
           },
           {
-            "label": "2",
+            "label": "2\"",
             "slug": "spigot-2"
           },
           {
-            "label": "3.4.2",
+            "label": "3/4",
             "slug": "spigot-3-4-2"
           }
         ]
@@ -1427,7 +1475,7 @@
         "slug": "wye",
         "values": [
           {
-            "label": "120",
+            "label": "120°",
             "slug": "wye-120"
           }
         ]
@@ -1440,23 +1488,23 @@
         "slug": "size",
         "values": [
           {
-            "label": "1.1.2",
+            "label": "1 1/2\"",
             "slug": "size-1-1-2"
           },
           {
-            "label": "1",
+            "label": "1\"",
             "slug": "size-1"
           },
           {
-            "label": "1.2",
+            "label": "1/2\"",
             "slug": "size-1-2"
           },
           {
-            "label": "2.1.2",
+            "label": "2 1/2\"",
             "slug": "size-2-1-2"
           },
           {
-            "label": "2",
+            "label": "2\"",
             "slug": "size-2"
           }
         ]
@@ -1466,7 +1514,7 @@
         "slug": "type",
         "values": [
           {
-            "label": "valve",
+            "label": "Valve",
             "slug": "type-valve"
           }
         ]
@@ -1474,15 +1522,15 @@
     ],
     "air-controls": [
       {
-        "name": "Body",
-        "slug": "body",
+        "name": "Body Style",
+        "slug": "body-style",
         "values": [
           {
-            "label": "style-extra-short",
+            "label": "Extra Short",
             "slug": "body-style-extra-short"
           },
           {
-            "label": "style-short",
+            "label": "Short",
             "slug": "body-style-short"
           }
         ]
@@ -1492,41 +1540,41 @@
         "slug": "color",
         "values": [
           {
-            "label": "black-clear",
+            "label": "Black/Clear",
             "slug": "color-black-clear"
           },
           {
-            "label": "dsg",
+            "label": "DSG",
             "slug": "color-dsg"
           },
           {
-            "label": "dsg-clear",
+            "label": "DSG/Clear",
             "slug": "color-dsg-clear"
           },
           {
-            "label": "dsg-silver",
+            "label": "DSG/Silver",
             "slug": "color-dsg-silver"
           },
           {
-            "label": "dsg-titanium",
+            "label": "DSG/Titanium",
             "slug": "color-dsg-titanium"
           },
           {
-            "label": "gray",
+            "label": "Gray",
             "slug": "color-gray"
           }
         ]
       },
       {
-        "name": "Handle",
-        "slug": "handle",
+        "name": "Handle Style",
+        "slug": "handle-style",
         "values": [
           {
-            "label": "style-6-spoke",
+            "label": "6-Spoke",
             "slug": "handle-style-6-spoke"
           },
           {
-            "label": "style-s-shaped",
+            "label": "S Shaped",
             "slug": "handle-style-s-shaped"
           }
         ]
@@ -1536,11 +1584,11 @@
         "slug": "material",
         "values": [
           {
-            "label": "stainless-steel",
+            "label": "Stainless Steel",
             "slug": "material-stainless-steel"
           },
           {
-            "label": "standard",
+            "label": "Standard",
             "slug": "material-standard"
           }
         ]
@@ -1550,7 +1598,7 @@
         "slug": "size",
         "values": [
           {
-            "label": "2",
+            "label": "2\"",
             "slug": "size-2"
           }
         ]
@@ -1560,11 +1608,11 @@
         "slug": "socket",
         "values": [
           {
-            "label": "1",
+            "label": "1\"",
             "slug": "socket-1"
           },
           {
-            "label": "1.2",
+            "label": "1/2\"",
             "slug": "socket-1-2"
           }
         ]
@@ -1589,7 +1637,7 @@
         "slug": "hertz",
         "values": [
           {
-            "label": "50.60",
+            "label": "50/60",
             "slug": "hertz-50-60"
           },
           {
@@ -1603,7 +1651,7 @@
         "slug": "volatge",
         "values": [
           {
-            "label": "230v-12v",
+            "label": "230v/12v",
             "slug": "volatge-230v-12v"
           }
         ]
@@ -1613,7 +1661,7 @@
         "slug": "voltage",
         "values": [
           {
-            "label": "110v-12v",
+            "label": "110v/12v",
             "slug": "voltage-110v-12v"
           }
         ]
@@ -1626,15 +1674,15 @@
         "slug": "color",
         "values": [
           {
-            "label": "black",
+            "label": "Black",
             "slug": "color-black"
           },
           {
-            "label": "clear",
+            "label": "Clear",
             "slug": "color-clear"
           },
           {
-            "label": "white",
+            "label": "White",
             "slug": "color-white"
           }
         ]
@@ -1644,19 +1692,19 @@
         "slug": "size",
         "values": [
           {
-            "label": "1.1.2",
+            "label": "1 1/2\"",
             "slug": "size-1-1-2"
           },
           {
-            "label": "1",
+            "label": "1\"",
             "slug": "size-1"
           },
           {
-            "label": "2.1.2",
+            "label": "2 1/2\"",
             "slug": "size-2-1-2"
           },
           {
-            "label": "2",
+            "label": "2\"",
             "slug": "size-2"
           }
         ]
@@ -1666,19 +1714,19 @@
         "slug": "socket",
         "values": [
           {
-            "label": "1.1.2",
+            "label": "1 1/2\"",
             "slug": "socket-1-1-2"
           },
           {
-            "label": "1",
+            "label": "1\"",
             "slug": "socket-1"
           },
           {
-            "label": "2.1.2",
+            "label": "2 1/2\"",
             "slug": "socket-2-1-2"
           },
           {
-            "label": "2",
+            "label": "2\"",
             "slug": "socket-2"
           }
         ]
@@ -1688,7 +1736,7 @@
         "slug": "spigot",
         "values": [
           {
-            "label": "2",
+            "label": "2\"",
             "slug": "spigot-2"
           }
         ]
@@ -1700,11 +1748,11 @@
         "slug": "degree",
         "values": [
           {
-            "label": "45",
+            "label": "45°",
             "slug": "degree-45"
           },
           {
-            "label": "90",
+            "label": "90°",
             "slug": "degree-90"
           }
         ]
@@ -1714,35 +1762,35 @@
         "slug": "socket",
         "values": [
           {
-            "label": "1.1.2",
+            "label": "1 1/2\"",
             "slug": "socket-1-1-2"
           },
           {
-            "label": "1.1.4",
+            "label": "1 1/4\"",
             "slug": "socket-1-1-4"
           },
           {
-            "label": "1",
+            "label": "1\"",
             "slug": "socket-1"
           },
           {
-            "label": "1.2",
+            "label": "1/2\"",
             "slug": "socket-1-2"
           },
           {
-            "label": "2.1.2",
+            "label": "2 1/2\"",
             "slug": "socket-2-1-2"
           },
           {
-            "label": "2",
+            "label": "2\"",
             "slug": "socket-2"
           },
           {
-            "label": "3",
+            "label": "3\"",
             "slug": "socket-3"
           },
           {
-            "label": "3.4",
+            "label": "3/4\"",
             "slug": "socket-3-4"
           }
         ]
@@ -1752,19 +1800,19 @@
         "slug": "spigot",
         "values": [
           {
-            "label": "1.1.2",
+            "label": "1 1/2\"",
             "slug": "spigot-1-1-2"
           },
           {
-            "label": "2.1.2",
+            "label": "2 1/2\"",
             "slug": "spigot-2-1-2"
           },
           {
-            "label": "2",
+            "label": "2\"",
             "slug": "spigot-2"
           },
           {
-            "label": "3",
+            "label": "3\"",
             "slug": "spigot-3"
           }
         ]
@@ -1774,11 +1822,11 @@
         "slug": "type",
         "values": [
           {
-            "label": "ell",
+            "label": "Ell",
             "slug": "type-ell"
           },
           {
-            "label": "street-ell",
+            "label": "Street Ell",
             "slug": "type-street-ell"
           }
         ]
@@ -1788,11 +1836,11 @@
         "slug": "wye",
         "values": [
           {
-            "label": "120",
+            "label": "120°",
             "slug": "wye-120"
           },
           {
-            "label": "22.1.2",
+            "label": "22 1/2°",
             "slug": "wye-22-1-2"
           }
         ]
@@ -1804,43 +1852,43 @@
         "slug": "color",
         "values": [
           {
-            "label": "abs-black",
+            "label": "ABS Black",
             "slug": "color-abs-black"
           },
           {
-            "label": "bark",
+            "label": "Bark",
             "slug": "color-bark"
           },
           {
-            "label": "black",
+            "label": "Black",
             "slug": "color-black"
           },
           {
-            "label": "charcoal",
+            "label": "Charcoal",
             "slug": "color-charcoal"
           },
           {
-            "label": "clear",
+            "label": "Clear",
             "slug": "color-clear"
           },
           {
-            "label": "coastal-gray",
+            "label": "Coastal Gray",
             "slug": "color-coastal-gray"
           },
           {
-            "label": "dsg",
+            "label": "DSG",
             "slug": "color-dsg"
           },
           {
-            "label": "graphite",
+            "label": "Graphite",
             "slug": "color-graphite"
           },
           {
-            "label": "gray",
+            "label": "Gray",
             "slug": "color-gray"
           },
           {
-            "label": "mocha",
+            "label": "Mocha",
             "slug": "color-mocha"
           }
         ]
@@ -1850,13 +1898,13 @@
         "slug": "ell",
         "values": [
           {
-            "label": "90",
+            "label": "90°",
             "slug": "ell-90"
           }
         ]
       },
       {
-        "name": "Kw",
+        "name": "KW",
         "slug": "kw",
         "values": [
           {
@@ -1874,55 +1922,55 @@
         "slug": "size",
         "values": [
           {
-            "label": "1",
+            "label": "1\"",
             "slug": "size-1"
           },
           {
-            "label": "1.2",
+            "label": "1/2\"",
             "slug": "size-1-2"
           },
           {
-            "label": "11",
+            "label": "11\"",
             "slug": "size-11"
           },
           {
-            "label": "13",
+            "label": "13\"",
             "slug": "size-13"
           },
           {
-            "label": "14",
+            "label": "14\"",
             "slug": "size-14"
           },
           {
-            "label": "16",
+            "label": "16\"",
             "slug": "size-16"
           },
           {
-            "label": "18",
+            "label": "18\"",
             "slug": "size-18"
           },
           {
-            "label": "20",
+            "label": "20\"",
             "slug": "size-20"
           },
           {
-            "label": "3-5-sq-in",
+            "label": "3.5 Sq in",
             "slug": "size-3-5-sq-in"
           },
           {
-            "label": "3-5-x-6-25",
+            "label": "3.5\" x 6.25\"",
             "slug": "size-3-5-x-6-25"
           },
           {
-            "label": "3.4",
+            "label": "3/4\"",
             "slug": "size-3-4"
           },
           {
-            "label": "33",
+            "label": "33\"",
             "slug": "size-33"
           },
           {
-            "label": "4.3.4",
+            "label": "4 3/4\"",
             "slug": "size-4-3-4"
           }
         ]
@@ -1932,11 +1980,11 @@
         "slug": "socket",
         "values": [
           {
-            "label": "1.1.2",
+            "label": "1 1/2\"",
             "slug": "socket-1-1-2"
           },
           {
-            "label": "2",
+            "label": "2\"",
             "slug": "socket-2"
           }
         ]
@@ -1946,31 +1994,31 @@
         "slug": "spigot",
         "values": [
           {
-            "label": "1.1.2",
+            "label": "1 1/2\"",
             "slug": "spigot-1-1-2"
           },
           {
-            "label": "1.1.4",
+            "label": "1 1/4\"",
             "slug": "spigot-1-1-4"
           },
           {
-            "label": "1",
+            "label": "1\"",
             "slug": "spigot-1"
           },
           {
-            "label": "1.2",
+            "label": "1/2\"",
             "slug": "spigot-1-2"
           },
           {
-            "label": "2",
+            "label": "2\"",
             "slug": "spigot-2"
           },
           {
-            "label": "3.4",
+            "label": "3/4\"",
             "slug": "spigot-3-4"
           },
           {
-            "label": "3.8",
+            "label": "3/8\"",
             "slug": "spigot-3-8"
           }
         ]
@@ -1980,7 +2028,7 @@
         "slug": "volts",
         "values": [
           {
-            "label": "115v-230v",
+            "label": "115v/230v",
             "slug": "volts-115v-230v"
           }
         ]

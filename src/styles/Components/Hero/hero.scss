@@ -88,21 +88,26 @@
 
     &__button {
         align-items: center;
-        gap: px-to-rem(12);
+        gap: px-to-rem(10);
         max-width: px-to-rem(210) !important;
         padding-top: px-to-rem(15);
         padding-bottom: px-to-rem(15);
+        justify-content: flex-start;
+        padding-left: px-to-rem(32);
+        padding-right: px-to-rem(24);
         line-height: px-to-rem(24);
         width: 100%;
-        transition: color 0.3s ease;
+        transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease;
 
         &:hover {
-            color: $medium-teal;
-            transition: color 0.3s ease;
+            color: $white;
+            background: $medium-teal;
+            border-color: $medium-teal;
+            transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease;
         }
 
         &:active {
-            color: $medium-teal;
+            color: $white;
         }
 
         svg {

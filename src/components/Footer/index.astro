@@ -57,10 +57,11 @@ const footerStaticTailColumns = [
   },
 ];
 
+const copyrightYear = new Date().getFullYear();
+
 const mockFooterData = {
   address: "2200 East Sturgis Road Oxnard, California 93030",
-  copyright:
-    "Copyright © 2007–2026 Waterway Plastics, Inc. All rights reserved.",
+  copyright: `Copyright © 2007–${copyrightYear} Waterway Plastics, Inc. All rights reserved.`,
   buttons: [
     {
       label: "Call us 805-981-0262",
