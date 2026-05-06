@@ -57,31 +57,19 @@
 
   &__input-wrap {
     position: relative;
-    display: flex;
-    align-items: center;
-    gap: px-to-rem(32);
-    max-width: px-to-rem(660);
+    width: 100%;
+    max-width: px-to-rem(420);
 
-    &.is-invalid &__input {
+    &.is-invalid .sr-page__input {
       @include field.form-control-invalid-ring(1px);
     }
-  }
-
-  &__input-icon {
-    position: absolute;
-    left: px-to-rem(14);
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    color: $dark-medium;
-    pointer-events: none;
   }
 
   &__input {
     box-sizing: border-box;
     width: 100%;
     min-height: px-to-rem(48);
-    padding: px-to-rem(12) px-to-rem(16) px-to-rem(12) px-to-rem(48);
+    padding: px-to-rem(12) px-to-rem(52) px-to-rem(12) px-to-rem(48);
     border: none;
     border-radius: px-to-rem(4);
     font: inherit;
@@ -117,15 +105,12 @@
     }
   }
 
-  &__submit {
-    flex: 0 0 auto;
-    min-height: px-to-rem(48);
-    padding-left: px-to-rem(28);
-    padding-right: px-to-rem(28);
-  }
-
   &__results {
     margin-top: px-to-rem(40);
+
+    &[hidden] {
+      display: none !important;
+    }
   }
 
   &__results-title {
@@ -135,6 +120,33 @@
     font-weight: 600;
     letter-spacing: 0.02em;
     color: $dark;
+  }
+
+  &__results-loader {
+    display: flex;
+    align-items: center;
+    gap: px-to-rem(10);
+    margin: 0 0 px-to-rem(20);
+    font-size: px-to-rem(16);
+    line-height: px-to-rem(24);
+    color: $dark-medium;
+
+    &[hidden] {
+      display: none !important;
+    }
+  }
+
+  &__results-loader-spinner {
+    width: px-to-rem(18);
+    height: px-to-rem(18);
+    border: 2px solid rgba($dark-teal, 0.18);
+    border-top-color: $dark-teal;
+    border-radius: 50%;
+    animation: sr-page-spinner 0.7s linear infinite;
+  }
+
+  &__results-loader-text {
+    letter-spacing: 0.02em;
   }
 
   $sr-table-border: #e2e8f0;
@@ -147,6 +159,10 @@
     border: 1px solid $gray-middle;
     border-radius: px-to-rem(8);
     background: $white;
+
+    &[hidden] {
+      display: none !important;
+    }
   }
 
   &__table {
@@ -304,5 +320,11 @@
     color: $dark-medium;
     font-weight: 400;
     background: $white;
+  }
+}
+
+@keyframes sr-page-spinner {
+  to {
+    transform: rotate(360deg);
   }
 }

@@ -464,9 +464,21 @@
   }
 
   &__result-empty {
-    padding: px-to-rem(18);
-    font-size: px-to-rem(14);
+    margin-bottom: px-to-rem(60);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    gap: px-to-rem(32);
+    font-size: px-to-rem(16);
+    line-height: px-to-rem(28);
+    letter-spacing: 0.02em;
     color: $dark-medium;
+
+    &[hidden] {
+      display: none !important;
+    }
   }
 }
 

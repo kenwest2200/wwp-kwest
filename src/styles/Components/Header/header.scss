@@ -579,11 +579,13 @@
       line-height: px-to-rem(20);
       color: $dark;
       text-decoration: none;
+      transition: color 0.3s ease;
 
       &:hover,
       &:focus-visible {
-        color: $light-teal;
+        color: $medium-teal;
         outline: none;
+        transition: color 0.3s ease;
       }
 
       &--all-results {

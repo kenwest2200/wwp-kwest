@@ -1887,11 +1887,28 @@ $product-filters-check-svg: "%3Csvg xmlns='http://www.w3.org/2000/svg' width='9'
 }
 
 .product-filters__empty {
-  margin: 0 0 0.75rem;
-  padding: 1.25rem 0;
-  font-size: 0.9375rem;
-  color: $dark-gray;
+  margin: 0 0 px-to-rem(60);
+  padding: px-to-rem(60) 0;
+  font-size: px-to-rem(16);
+  line-height: px-to-rem(28);
+  letter-spacing: 0.02em;
+  color: $dark-medium;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  span {
+    margin-bottom: px-to-rem(12);
+    margin-top: px-to-rem(32);
+    color: $dark-medium;
+    font-size: px-to-rem(20);
+    font-weight: 500;
+    line-height: px-to-rem(28);
+    letter-spacing: 0.02em;
+  }
+
 }
 
 .product-filters__pager-step-icon-wrapper {

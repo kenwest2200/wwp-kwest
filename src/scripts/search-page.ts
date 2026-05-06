@@ -169,6 +169,12 @@ function truncateText(s: string, max: number): string {
   return `${s.slice(0, max - 1).trimEnd()}…`;
 }
 
+function normalizeRelatedTermTitle(raw: string): string {
+  const decoded = decodeHtmlEntities(raw);
+  const noTags = decoded.replace(/<[^>]*>/g, " ");
+  return noTags.replace(/\s+/g, " ").trim();
+}
+
 function perRoots(): NodeListOf<HTMLElement> {
   return document.querySelectorAll<HTMLElement>("[data-search-per-root]");
 }
@@ -209,7 +215,7 @@ function resetListsFull(): void {
   mobileAccumulatedProducts = 0;
   if (listProductsEl) listProductsEl.innerHTML = "";
   if (listPagesEl) listPagesEl.innerHTML = "";
-  if (emptyGlobalEl) emptyGlobalEl.hidden = true;
+  setGlobalEmptyVisible(false);
   if (emptyProductsEl) emptyProductsEl.hidden = true;
   if (emptyPagesEl) emptyPagesEl.hidden = true;
   if (errorEl) {
@@ -243,6 +249,19 @@ function setSummary(text: string): void {
   }
 }
 
+function setGlobalEmptyVisible(visible: boolean): void {
+  if (!emptyGlobalEl) return;
+  if (visible) {
+    emptyGlobalEl.hidden = false;
+    emptyGlobalEl.removeAttribute("hidden");
+    emptyGlobalEl.style.display = "flex";
+    return;
+  }
+  emptyGlobalEl.hidden = true;
+  emptyGlobalEl.setAttribute("hidden", "");
+  emptyGlobalEl.style.removeProperty("display");
+}
+
 function setMainSearchLoading(visible: boolean): void {
   if (tabsLoaderEl) tabsLoaderEl.hidden = !visible;
   if (visible && tabsWrapEl) tabsWrapEl.setAttribute("hidden", "");
@@ -266,9 +285,10 @@ async function fetchRelatedAutocompleteItems(
     return raw
       .filter((x) => x?.title && x?.uri)
       .map((x) => ({
-        title: decodeHtmlEntities(String(x.title).trim()),
+        title: normalizeRelatedTermTitle(String(x.title)),
         uri: String(x.uri).trim(),
       }))
+      .filter((x) => x.title.length > 0)
       .filter((x) => x.title.toLowerCase() !== qLower)
       .slice(0, 8);
   } catch {
@@ -283,9 +303,7 @@ function clearRelatedSearchTerms(): void {
   summaryEl.hidden = true;
 }
 
-function showRelatedSearchTerms(
-  items: { title: string; uri: string }[],
-): void {
+function showRelatedSearchTerms(items: { title: string; uri: string }[]): void {
   const el = summaryEl;
   if (!el || !query || items.length === 0) return;
   el.replaceChildren();
@@ -461,10 +479,7 @@ function buildPaginationItems(
   return out;
 }
 
-function renderPaginationPagesHtml(
-  current: number,
-  pages: number,
-): string {
+function renderPaginationPagesHtml(current: number, pages: number): string {
   if (pages <= 0) return "";
   const items = buildPaginationItems(current, pages);
   return items
@@ -495,11 +510,7 @@ function syncToolbarRange(): void {
     ".search-js-pager-range-toolbar",
   );
   if (!el) return;
-  if (
-    tab === "products" &&
-    isNarrowSearchViewport() &&
-    total > 0
-  ) {
+  if (tab === "products" && isNarrowSearchViewport() && total > 0) {
     el.innerHTML = `<span class="product-filters__pager-range-of">${mobileAccumulatedProducts} of</span> ${total}`;
     return;
   }
@@ -644,20 +655,19 @@ function bindPagerNav() {
 function bindPerPageSelect() {
   for (const root of perRoots()) {
     root.addEventListener("click", (e) => e.stopPropagation());
-    root.querySelector("[data-search-per-trigger]")?.addEventListener(
-      "click",
-      (e) => {
+    root
+      .querySelector("[data-search-per-trigger]")
+      ?.addEventListener("click", (e) => {
         e.stopPropagation();
         const open = !root.classList.contains(
           "product-filters__custom-select--open",
         );
         closeAllPerMenus();
         setPerMenuOpenFor(root, open);
-      },
-    );
-    root.querySelector("[data-search-per-menu]")?.addEventListener(
-      "click",
-      (e) => {
+      });
+    root
+      .querySelector("[data-search-per-menu]")
+      ?.addEventListener("click", (e) => {
         const t = (e.target as HTMLElement).closest<HTMLButtonElement>(
           "[data-search-per-value]",
         );
@@ -669,8 +679,7 @@ function bindPerPageSelect() {
         currentPagePages = 1;
         closeAllPerMenus();
         void fetchAndRender(activeTab, { showLoader: true });
-      },
-    );
+      });
   }
 
   document.addEventListener("click", () => closeAllPerMenus());
@@ -689,19 +698,6 @@ function bindPagerPages() {
   });
 }
 
-async function fetchTabTotal(tab: SearchTab): Promise<number> {
-  if (!query) return 0;
-  const type = tab === "products" ? "product" : "page";
-  const res = await fetch(
-    `/api/search?q=${encodeURIComponent(query)}&type=${type}&limit=1&offset=0`,
-  );
-  const payload = (await res.json()) as SearchApiPayload;
-  if (!res.ok) {
-    throw new Error(payload.error || "Search request failed.");
-  }
-  return Number(payload.total ?? 0);
-}
-
 async function fetchAndRender(
   tab: SearchTab,
   opts?: { showLoader?: boolean; append?: boolean },
@@ -710,9 +706,7 @@ async function fetchAndRender(
 
   const showLoader = opts?.showLoader !== false;
   const append =
-    Boolean(opts?.append) &&
-    tab === "products" &&
-    isNarrowSearchViewport();
+    Boolean(opts?.append) && tab === "products" && isNarrowSearchViewport();
   const pageBeforeFetch = currentPageFor(tab);
   const type = tab === "products" ? "product" : "page";
 
@@ -758,7 +752,7 @@ async function fetchAndRender(
     }
 
     const hasAny = lastTotalProducts > 0 || lastTotalPages > 0;
-    if (emptyGlobalEl) emptyGlobalEl.hidden = hasAny;
+    setGlobalEmptyVisible(!hasAny);
 
     if (tab === "products" && listProductsEl) {
       for (const item of items) {
@@ -818,7 +812,8 @@ async function runSearch() {
 
   if (!query) {
     setSearchHeading("Search", null);
-    setSummary("Enter a query to search.");
+    setSummary("");
+    setGlobalEmptyVisible(true);
     tabsWrapEl?.setAttribute("hidden", "");
     setMainSearchLoading(false);
     closeAllPerMenus();
@@ -827,6 +822,7 @@ async function runSearch() {
   }
 
   setSearchHeading("Search results", `For "${decodeHtmlEntities(query)}"`);
+  setGlobalEmptyVisible(false);
   clearRelatedSearchTerms();
   setMainSearchLoading(true);
   syncPagerUi();
@@ -834,46 +830,43 @@ async function runSearch() {
   updatePerValueLabels();
 
   try {
-    const [prodTotal, pageTotal, relatedItems] = await Promise.all([
-      fetchTabTotal("products"),
-      fetchTabTotal("pages"),
+    const [relatedItems, productsOk, pagesOk] = await Promise.all([
       fetchRelatedAutocompleteItems(query),
+      fetchAndRender("products", { showLoader: false }),
+      fetchAndRender("pages", { showLoader: false }),
     ]);
-    lastTotalProducts = prodTotal;
-    lastTotalPages = pageTotal;
     syncPagerUi();
 
     const hasAny = lastTotalProducts > 0 || lastTotalPages > 0;
-    if (!hasAny) {
-      clearRelatedSearchTerms();
-    } else if (relatedItems.length > 0) {
+    if (hasAny && relatedItems.length > 0) {
       showRelatedSearchTerms(relatedItems);
     } else {
       clearRelatedSearchTerms();
     }
 
-    if (emptyGlobalEl) emptyGlobalEl.hidden = hasAny;
+    setGlobalEmptyVisible(!hasAny);
     if (!hasAny) {
+      tabsWrapEl?.setAttribute("hidden", "");
       setMainSearchLoading(false);
       return;
     }
 
-    let initialOk = false;
     if (lastTotalProducts === 0 && lastTotalPages > 0) {
       setActiveTab("pages");
-      initialOk = await fetchAndRender("pages", { showLoader: false });
     } else {
       setActiveTab("products");
-      initialOk = await fetchAndRender("products", { showLoader: false });
     }
 
     setMainSearchLoading(false);
-    if (initialOk) {
+    if (productsOk || pagesOk) {
       tabsWrapEl?.removeAttribute("hidden");
+    } else {
+      tabsWrapEl?.setAttribute("hidden", "");
     }
   } catch (e) {
     setMainSearchLoading(false);
     setSummary("");
+    setGlobalEmptyVisible(false);
     setError(e instanceof Error ? e.message : String(e));
     tabsWrapEl?.setAttribute("hidden", "");
   }

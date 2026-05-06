@@ -44,6 +44,24 @@ function telHref(phone: string): string {
   return `tel:${digits}`;
 }
 
+async function reverseGeocodeToZip(
+  lat: number,
+  lng: number,
+): Promise<string | null> {
+  try {
+    const res = await fetch(
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${encodeURIComponent(String(lat))}&longitude=${encodeURIComponent(String(lng))}&localityLanguage=en`,
+    );
+    if (!res.ok) return null;
+    const data = (await res.json()) as { postcode?: string };
+    const raw = (data.postcode ?? "").trim();
+    const digits = raw.replace(/\D/g, "").slice(0, 5);
+    return digits.length === 5 ? digits : null;
+  } catch {
+    return null;
+  }
+}
+
 function clearSalesRepsFieldError(
   zipInput: HTMLInputElement,
   inlineEl: HTMLElement | null,
@@ -172,17 +190,15 @@ function renderRows(tbody: HTMLElement, reps: SalesRepRow[]): void {
   syncSortHeaderUi();
 }
 
-function initialPlaceholderRow(tbody: HTMLElement): void {
+function renderStatusRow(tbody: HTMLElement, text: string): void {
   tbody.replaceChildren();
   const tr = document.createElement("tr");
   tr.className = "sr-page__row-empty";
   const td = document.createElement("td");
   td.colSpan = COL_SPAN;
-  td.textContent = "Enter a ZIP code and select Search to see representatives.";
+  td.textContent = text;
   tr.appendChild(td);
   tbody.appendChild(tr);
-  cachedReps = [];
-  syncSortHeaderUi();
 }
 
 function bindNameSortHandlers(tbody: HTMLTableSectionElement): void {
@@ -231,17 +247,47 @@ export function initSalesRepresentativesPage(): void {
   ) as HTMLTableSectionElement | null;
   const msgEl = document.getElementById("sr-message");
   const inlineErrorEl = document.getElementById("sr-search-inline-error");
-  const submitBtn = form?.querySelector<HTMLButtonElement>(
-    'button[type="submit"]',
-  );
+  const resultsSection = document.getElementById("sr-results");
+  const resultsLoader = document.getElementById("sr-results-loader");
+  const tableWrap = document.getElementById("sr-table-wrap");
+  const submitBtn = form?.querySelector<HTMLButtonElement>("[data-sr-search-submit]");
+  const geolocateBtn = form?.querySelector<HTMLButtonElement>("[data-sr-geolocate]");
 
   if (!form || !zipInput || !tbody) return;
 
   const inputWrap = zipInput.closest<HTMLElement>(".sr-page__input-wrap");
+  let searchInFlight = false;
 
   installPageErrorToast(msgEl);
 
-  initialPlaceholderRow(tbody);
+  const setResultsVisible = (visible: boolean): void => {
+    if (!resultsSection) return;
+    resultsSection.hidden = !visible;
+    if (visible) resultsSection.removeAttribute("hidden");
+    else resultsSection.setAttribute("hidden", "");
+  };
+
+  const setResultsLoading = (loading: boolean): void => {
+    if (resultsLoader) {
+      resultsLoader.hidden = !loading;
+      if (loading) resultsLoader.removeAttribute("hidden");
+      else resultsLoader.setAttribute("hidden", "");
+    }
+    if (tableWrap) {
+      tableWrap.hidden = loading;
+      if (loading) tableWrap.setAttribute("hidden", "");
+      else tableWrap.removeAttribute("hidden");
+    }
+  };
+
+  const setRequestLocked = (locked: boolean): void => {
+    searchInFlight = locked;
+    submitBtn?.toggleAttribute("disabled", locked);
+    geolocateBtn?.toggleAttribute("disabled", locked);
+    form.toggleAttribute("aria-busy", locked);
+  };
+
+  setResultsVisible(false);
   bindNameSortHandlers(tbody);
 
   zipInput.addEventListener("input", () => {
@@ -249,12 +295,56 @@ export function initSalesRepresentativesPage(): void {
     clearSalesRepsFieldError(zipInput, inlineErrorEl, inputWrap);
   });
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const zip = zipInput.value.trim().replace(/\s+/g, "");
+  const performSearch = async (zip: string): Promise<void> => {
     hidePageErrorToast(msgEl);
     clearSalesRepsFieldError(zipInput, inlineErrorEl, inputWrap);
 
+    setResultsVisible(true);
+    setResultsLoading(true);
+    cachedReps = [];
+    syncSortHeaderUi();
+    tbody.replaceChildren();
+
+    try {
+      const res = await fetch(`/api/sales-reps?zip=${encodeURIComponent(zip)}`);
+      const data = (await res.json()) as SalesRepsApiResponse;
+
+      if (!res.ok || data.error) {
+        const err = data.error ?? "Could not load representatives.";
+        if (isSalesRepsFieldValidationError(err)) {
+          showSalesRepsFieldError(zipInput, inlineErrorEl, inputWrap, err);
+        } else {
+          showSalesRepsToast(msgEl, err);
+        }
+        renderStatusRow(tbody, "Could not load representatives.");
+        return;
+      }
+
+      const reps = Array.isArray(data.reps) ? data.reps : [];
+      sortDir = "asc";
+      cachedReps = reps.map((r) => ({
+        name: r.name ?? "",
+        phone: r.phone ?? "",
+        email: r.email ?? null,
+      }));
+      renderRows(tbody, cachedReps);
+      clearSalesRepsFieldError(zipInput, inlineErrorEl, inputWrap);
+    } catch (err) {
+      showSalesRepsToast(
+        msgEl,
+        err instanceof Error ? err.message : String(err),
+      );
+      renderStatusRow(tbody, "Could not load representatives.");
+    }
+    finally {
+      setResultsLoading(false);
+    }
+  };
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (searchInFlight) return;
+    const zip = zipInput.value.trim().replace(/\s+/g, "");
     if (!zip) {
       showSalesRepsFieldError(
         zipInput,
@@ -274,51 +364,55 @@ export function initSalesRepresentativesPage(): void {
       );
       return;
     }
-
-    if (submitBtn) submitBtn.disabled = true;
-    cachedReps = [];
-    syncSortHeaderUi();
-    tbody.replaceChildren();
-    const loadingTr = document.createElement("tr");
-    loadingTr.className = "sr-page__row-empty";
-    const loadingTd = document.createElement("td");
-    loadingTd.colSpan = COL_SPAN;
-    loadingTd.textContent = "Loading…";
-    loadingTr.appendChild(loadingTd);
-    tbody.appendChild(loadingTr);
-
+    setRequestLocked(true);
     try {
-      const res = await fetch(`/api/sales-reps?zip=${encodeURIComponent(zip)}`);
-      const data = (await res.json()) as SalesRepsApiResponse;
+      await performSearch(zip);
+    } finally {
+      setRequestLocked(false);
+    }
+  });
 
-      if (!res.ok || data.error) {
-        const err = data.error ?? "Could not load representatives.";
-        if (isSalesRepsFieldValidationError(err)) {
-          showSalesRepsFieldError(zipInput, inlineErrorEl, inputWrap, err);
-        } else {
-          showSalesRepsToast(msgEl, err);
-        }
-        initialPlaceholderRow(tbody);
+  geolocateBtn?.addEventListener("click", () => {
+    void (async () => {
+      if (searchInFlight) return;
+      if (!navigator.geolocation) {
+        showSalesRepsToast(msgEl, "Geolocation is not supported in this browser.");
         return;
       }
-
-      const reps = Array.isArray(data.reps) ? data.reps : [];
-      sortDir = "asc";
-      cachedReps = reps.map((r) => ({
-        name: r.name ?? "",
-        phone: r.phone ?? "",
-        email: r.email ?? null,
-      }));
-      renderRows(tbody, cachedReps);
-      clearSalesRepsFieldError(zipInput, inlineErrorEl, inputWrap);
-    } catch (err) {
-      showSalesRepsToast(
-        msgEl,
-        err instanceof Error ? err.message : String(err),
-      );
-      initialPlaceholderRow(tbody);
-    } finally {
-      if (submitBtn) submitBtn.disabled = false;
-    }
+      setRequestLocked(true);
+      try {
+        const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 20000,
+            maximumAge: 120000,
+          });
+        });
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        const zip = await reverseGeocodeToZip(lat, lng);
+        if (!zip) {
+          showSalesRepsToast(
+            msgEl,
+            "Could not determine a U.S. ZIP code from your location.",
+          );
+          return;
+        }
+        zipInput.value = zip;
+        await performSearch(zip);
+      } catch (err) {
+        const denied =
+          err instanceof GeolocationPositionError &&
+          err.code === err.PERMISSION_DENIED;
+        showSalesRepsToast(
+          msgEl,
+          denied
+            ? "Location access was denied. Allow location for this site in browser settings."
+            : "Could not get your location. Try entering a ZIP code.",
+        );
+      } finally {
+        setRequestLocked(false);
+      }
+    })();
   });
 }

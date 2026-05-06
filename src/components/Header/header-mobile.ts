@@ -142,6 +142,12 @@ function searchResultsPageHref(query: string): string {
   return `/search?q=${encodeURIComponent(q)}`;
 }
 
+function normalizeAutocompleteTitle(rawTitle: string): string {
+  const decoded = decodeHtmlEntities(rawTitle);
+  const noTags = decoded.replace(/<[^>]*>/g, " ");
+  return noTags.replace(/\s+/g, " ").trim();
+}
+
 function bindHeaderSearchAutocomplete(
   panel: HTMLElement,
   input: HTMLInputElement,
@@ -238,9 +244,10 @@ function bindHeaderSearchAutocomplete(
         const items = raw
           .filter((x) => x?.title && x?.uri)
           .map((x) => ({
-            title: decodeHtmlEntities(String(x.title).trim()),
+            title: normalizeAutocompleteTitle(String(x.title)),
             uri: String(x.uri).trim(),
-          }));
+          }))
+          .filter((x) => x.title.length > 0);
         showSuggest(items, qNow);
       } catch {
         if (seq !== requestSeq) return;

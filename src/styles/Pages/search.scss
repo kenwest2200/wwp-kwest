@@ -64,6 +64,12 @@
     line-height: px-to-rem(28);
     letter-spacing: 0.02em;
     text-decoration: underline;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: $medium-teal;
+      transition: color 0.3s ease;
+    }
 
 
     &:focus-visible {
@@ -208,11 +214,25 @@
   }
 
   &__empty {
-    margin-top: 1rem;
-    color: #5e6a6f;
+    margin-top: px-to-rem(60);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    gap: px-to-rem(32);
+    font-size: px-to-rem(16);
+    line-height: px-to-rem(28);
+    letter-spacing: 0.02em;
+    color: $dark-medium;
+
+    &[hidden] {
+      display: none !important;
+    }
 
     &--tab {
       margin-top: px-to-rem(12);
+      display: flex;
     }
   }
 

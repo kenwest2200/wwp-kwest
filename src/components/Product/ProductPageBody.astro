@@ -48,7 +48,7 @@ const {
 
 {
   product && (
-    <div class="product-page__body">
+    <div class="product-page__body product-page__wysiwyg">
       {optionalItems.map((item, idx) => (
         <ProductSingleTemplateBlock item={item} index={idx} />
       ))}
@@ -129,9 +129,7 @@ const {
                                 class="product-page__text-link"
                                 href={href}
                                 target={blank ? "_blank" : undefined}
-                                rel={
-                                  blank ? "noopener noreferrer" : undefined
-                                }
+                                rel={blank ? "noopener noreferrer" : undefined}
                               >
                                 {t}
                               </a>

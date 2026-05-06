@@ -41,22 +41,32 @@ const breadcrumbs = [
                 >Search Sale Reps by ZIP</label
               >
               <div class="sr-page__input-wrap">
-                <span class="sr-page__input-icon" aria-hidden="true">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.75"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                <button
+                  type="submit"
+                  class="dl-page__locator-search-icon-btn"
+                  aria-label="Search"
+                  data-sr-search-submit
+                >
+                  <span
+                    class="dl-page__locator-search-icon-btn-inner"
+                    aria-hidden="true"
                   >
-                    <circle cx="11" cy="11" r="7"></circle>
-                    <path d="M21 21l-4.3-4.3"></path>
-                  </svg>
-                </span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="11" cy="11" r="7"></circle>
+                      <path d="M21 21l-4.3-4.3"></path>
+                    </svg>
+                  </span>
+                </button>
                 <input
                   id="sr-zip-input"
                   name="zip"
@@ -69,10 +79,54 @@ const breadcrumbs = [
                   autocomplete="postal-code"
                 />
                 <button
-                  type="submit"
-                  class="btn btn--primary-dark sr-page__submit"
+                  type="button"
+                  class="dl-page__locator-geolocate"
+                  aria-label="Use your current location"
+                  data-sr-geolocate
                 >
-                  Search
+                  <span class="dl-page__locator-geolocate-tooltip"
+                    >Use your current location</span
+                  >
+                  <span class="dl-page__locator-geolocate-icon" aria-hidden="true">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        d="M2 12H5"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"></path>
+                      <path
+                        d="M19 12H22"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"></path>
+                      <path
+                        d="M12 2V5"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"></path>
+                      <path
+                        d="M12 19V22"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"></path>
+                      <path
+                        d="M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19Z"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"></path>
+                    </svg>
+                  </span>
                 </button>
               </div>
               <p
@@ -88,11 +142,20 @@ const breadcrumbs = [
 
         <PageErrorToast id="sr-message" />
 
-        <section class="sr-page__results" aria-labelledby="sr-results-heading">
+        <section
+          id="sr-results"
+          class="sr-page__results"
+          aria-labelledby="sr-results-heading"
+          hidden
+        >
           <h2 id="sr-results-heading" class="sr-page__results-title">
             Sales representatives
           </h2>
-          <div class="sr-page__table-wrap">
+          <div id="sr-results-loader" class="sr-page__results-loader" hidden>
+            <span class="sr-page__results-loader-spinner" aria-hidden="true"></span>
+            <span class="sr-page__results-loader-text">Loading...</span>
+          </div>
+          <div id="sr-table-wrap" class="sr-page__table-wrap">
             <table class="sr-page__table">
               <thead>
                 <tr>

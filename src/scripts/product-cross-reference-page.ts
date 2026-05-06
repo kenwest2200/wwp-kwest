@@ -215,6 +215,7 @@ function normalizeFindResults(
 function renderResults(
   listEl: HTMLElement,
   countEl: HTMLElement,
+  emptyEl: HTMLElement,
   results: CrossRefResult[],
   totalCount: number | null,
 ): void {
@@ -224,12 +225,10 @@ function renderResults(
   countEl.textContent = `Found ${countText} replacement${countText === 1 ? "" : "s"}`;
 
   if (visible === 0) {
-    const li = document.createElement("li");
-    li.className = "cross-ref-page__result-empty";
-    li.textContent = "No replacements found for selected filters.";
-    listEl.appendChild(li);
+    emptyEl.hidden = false;
     return;
   }
+  emptyEl.hidden = true;
 
   for (const item of results) {
     const li = document.createElement("li");
@@ -448,6 +447,7 @@ export function initProductCrossReferencePage(): void {
   const tryAgainBtn = document.getElementById("cross-ref-try-again");
   const listEl = document.getElementById("cross-ref-results-list");
   const countEl = document.getElementById("cross-ref-results-count");
+  const emptyEl = document.getElementById("cross-ref-results-empty");
   const brandInput = document.getElementById("cross-ref-brand");
   const brandSuggest = document.getElementById("cross-ref-brand-suggest");
   const modelInput = document.getElementById("cross-ref-model");
@@ -467,6 +467,7 @@ export function initProductCrossReferencePage(): void {
     !(errorEl instanceof HTMLElement) ||
     !(listEl instanceof HTMLElement) ||
     !(countEl instanceof HTMLElement) ||
+    !(emptyEl instanceof HTMLElement) ||
     !(brandInput instanceof HTMLInputElement) ||
     !(brandSuggest instanceof HTMLElement) ||
     !(modelInput instanceof HTMLInputElement) ||
@@ -694,6 +695,7 @@ export function initProductCrossReferencePage(): void {
     switchToResults(false);
     listEl.replaceChildren();
     countEl.textContent = "";
+    emptyEl.hidden = true;
     clearCrossRefMessages(errorEl, inlineErrorEl, form);
   });
 
@@ -738,7 +740,7 @@ export function initProductCrossReferencePage(): void {
 
       const normalized = normalizeFindResults(payload);
       fillReference(values);
-      renderResults(listEl, countEl, normalized.items, normalized.count);
+      renderResults(listEl, countEl, emptyEl, normalized.items, normalized.count);
       switchToResults(true);
       clearCrossRefMessages(errorEl, inlineErrorEl, form);
     } catch (e) {

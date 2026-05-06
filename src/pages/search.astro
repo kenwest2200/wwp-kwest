@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import PageHeaderOffset from "../components/PageHeaderOffset.astro";
 import ScrollToTopButton from "../components/ScrollToTopButton/ScrollToTopButton.astro";
 import ArrowPaginationIcon from "../components/icons/arrowPaginationIcon.astro";
+import EmptyStateSearch from "../components/icons/emptyStateSearch.astro";
 
 export const prerender = true;
 ---
@@ -24,9 +25,11 @@ export const prerender = true;
             class="search-results-page__title-query"
             hidden></span>
         </h1>
-        <p id="search-results-summary" class="search-results-page__summary">
-          Enter a query to search.
-        </p>
+        <p
+          id="search-results-summary"
+          class="search-results-page__summary"
+          hidden
+        ></p>
         <p id="search-results-error" class="search-results-page__error" hidden>
         </p>
         <div
@@ -161,7 +164,8 @@ export const prerender = true;
               <p
                 class="product-filters__pager-range search-js-pager-range-toolbar"
                 data-search-range-slot="toolbar"
-              ></p>
+              >
+              </p>
               <div class="product-filters__toolbar-pager-buttons">
                 <button
                   type="button"
@@ -227,7 +231,8 @@ export const prerender = true;
                 class="search-results-page__empty search-results-page__empty--tab"
                 hidden
               >
-                No products in these results.
+                <EmptyStateSearch />
+                We couldn’t find any results. <br /> Try changing your search criteria.
               </p>
             </div>
           </div>
@@ -264,7 +269,8 @@ export const prerender = true;
                 class="search-results-page__empty search-results-page__empty--tab"
                 hidden
               >
-                No pages in these results.
+                <EmptyStateSearch />
+                We couldn’t find any results. <br /> Try changing your search criteria.
               </p>
             </div>
           </div>
@@ -281,7 +287,8 @@ export const prerender = true;
               <p
                 class="product-filters__pager-range search-js-pager-range-footer"
                 data-search-range-slot="footer"
-              ></p>
+              >
+              </p>
               <div class="product-filters__pager-controls">
                 <button
                   type="button"
@@ -320,7 +327,8 @@ export const prerender = true;
           </div>
         </div>
         <p id="search-results-empty" class="search-results-page__empty" hidden>
-          No results found.
+          <EmptyStateSearch />
+          We couldn’t find any results. <br /> Try changing your search criteria.
         </p>
 
         <template id="search-page-hit-template">

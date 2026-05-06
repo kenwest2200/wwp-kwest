@@ -15,6 +15,57 @@
   color: $dark-medium;
   background: $white;
 
+  &__wysiwyg {
+    strong {
+      padding: 0;
+      margin-bottom: px-to-rem(16);
+      font-weight: 700;
+      color: $dark;
+      letter-spacing: 0.02em;
+      line-height: px-to-rem(28);
+      font-size: px-to-rem(16);
+    }
+
+    ul {
+      margin: 0;
+      padding-left: px-to-rem(22);
+    }
+
+    li {
+      margin-bottom: px-to-rem(8);
+      padding-left: px-to-rem(4);
+    }
+
+    li:last-child {
+      margin-bottom: 0;
+    }
+
+    h2 {
+      margin-bottom: px-to-rem(24);
+      font-size: px-to-rem(16);
+      font-weight: 500;
+      line-height: px-to-rem(24);
+      color: $dark;
+      letter-spacing: 0.02em;
+
+      @include media-breakpoint-up(lg) {
+        font-size: px-to-rem(20);
+        line-height: px-to-rem(28);
+      }
+
+    }
+
+    p {
+      padding: 0;
+      margin-bottom: px-to-rem(40);
+      font-weight: 400;
+      color: $dark;
+      letter-spacing: 0.02em;
+      line-height: px-to-rem(28);
+      font-size: px-to-rem(16);
+    }
+  }
+
   &__hero {
     display: flex;
     flex-wrap: wrap;

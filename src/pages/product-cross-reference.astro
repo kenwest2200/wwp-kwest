@@ -5,6 +5,7 @@ import SectionHero from "../components/SectionHero/SectionHero.astro";
 import Breadcrumbs from "../components/Breadcrumbs/Breadcrumbs.astro";
 import ScrollToTopButton from "../components/ScrollToTopButton/ScrollToTopButton.astro";
 import PageErrorToast from "../components/PageErrorToast.astro";
+import EmptyStateSearch from "../components/icons/emptyStateSearch.astro";
 
 export const prerender = true;
 
@@ -251,6 +252,10 @@ const breadcrumbs = [
           </p>
           <ul id="cross-ref-results-list" class="cross-ref-page__results-list">
           </ul>
+          <p id="cross-ref-results-empty" class="cross-ref-page__result-empty" hidden>
+            <EmptyStateSearch />
+            We couldn’t find any results. <br /> Try changing your search criteria.
+          </p>
 
           <div class="cross-ref-page__actions cross-ref-page__actions--results">
             <button
