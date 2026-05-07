@@ -230,7 +230,7 @@ const PRODUCT_PAGE_FIELDS = /* GraphQL */ `
             node {
               sourceUrl
               medium_large: sourceUrl(size: MEDIUM_LARGE)
-              large: sourceUrl(size: PRODUCT_THUMBNAIL)
+              large: sourceUrl(size: LARGE)
               altText
               title
               mediaDetails {

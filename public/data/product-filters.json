@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-07T13:43:19.227Z",
+  "generatedAt": "2026-05-07T15:06:26.158Z",
   "attributesByCategory": {
     "bath": [],
     "pool": [
@@ -7486,12 +7486,12 @@
       "slug": "information",
       "databaseId": 32386,
       "date": "2020-01-27T12:36:56",
-      "modified": "2026-05-04T13:32:13",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/4f70f4ebb35c91c464db15c8cfaad0dbfafe32a7.jpg",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/4f70f4ebb35c91c464db15c8cfaad0dbfafe32a7-300x157.jpg",
+      "modified": "2026-05-07T15:01:33",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/ecd291d72357c9c78db1098bccee8e7b690b7a91.jpg",
+      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/ecd291d72357c9c78db1098bccee8e7b690b7a91-300x175.jpg",
       "imageAlt": null,
-      "imageWidth": 1000,
-      "imageHeight": 523,
+      "imageWidth": 1920,
+      "imageHeight": 1118,
       "categorySlugs": [
         "general-info"
       ],

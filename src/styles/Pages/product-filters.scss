@@ -2000,9 +2000,25 @@ $product-filters-check-svg: "%3Csvg xmlns='http://www.w3.org/2000/svg' width='9'
   cursor: pointer;
   transition: color 0.2s ease, opacity 0.2s ease;
 
-  &:hover:not(:disabled) {
-    color: $medium-teal;
+  &-text {
+    transition: color 0.2s ease;
+
+    &:hover:not(:disabled) {
+      color: $medium-teal;
+      transition: color 0.2s ease;
+    }
   }
+
+  &-icon-wrapper {
+    transition: color 0.2s ease;
+
+    &:hover:not(:disabled) {
+      color: $medium-teal;
+      transition: color 0.2s ease;
+    }
+  }
+
+
 
   &:focus-visible {
     outline: 2px solid $dark-teal;
@@ -2058,7 +2074,6 @@ $product-filters-check-svg: "%3Csvg xmlns='http://www.w3.org/2000/svg' width='9'
 
   &:hover {
     color: $medium-teal;
-    background: rgba($medium-teal, 0.08);
   }
 
   &:focus-visible {
