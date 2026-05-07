@@ -1,0 +1,54 @@
+---
+export interface PictureSource {
+  srcset: string;
+  media?: string;
+  type?: string;
+  sizes?: string;
+}
+
+export interface PictureImg {
+  src: string;
+  srcset?: string;
+  sizes?: string;
+  width?: number;
+  height?: number;
+  loading?: "eager" | "lazy";
+  fetchpriority?: "high" | "low" | "auto";
+  decoding?: "async" | "auto" | "sync";
+  class?: string;
+}
+
+export interface Props {
+  alt: string;
+  sources?: PictureSource[];
+  img: PictureImg;
+  class?: string;
+}
+
+const { alt, sources = [], img, class: pictureClass } = Astro.props;
+---
+
+<picture class={pictureClass}>
+  {
+    sources.map((source) => (
+      <source
+        srcset={source.srcset}
+        media={source.media}
+        type={source.type}
+        sizes={source.sizes}
+      />
+    ))
+  }
+  <img
+    src={img.src}
+    srcset={img.srcset}
+    sizes={img.sizes}
+    alt={alt}
+    width={img.width}
+    height={img.height}
+    loading={img.loading}
+    fetchpriority={img.fetchpriority}
+    decoding={img.decoding}
+    class={img.class}
+  />
+</picture>

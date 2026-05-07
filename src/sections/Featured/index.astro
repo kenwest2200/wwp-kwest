@@ -1,16 +1,16 @@
 ---
-import type { ImageMetadata } from "astro";
 import SectionTitle from "../../components/SectionTitle/index.astro";
+import Picture from "../../components/Picture/Picture.astro";
 import { decodeHtmlEntities } from "../../lib/decode-html-entities";
 import {
   getFeaturedProductsSection,
   type HomeFeaturedData,
   type HomepageFeaturedProduct,
 } from "../../lib/queries/home-featured";
-// import img1 from "../../assets/images/f1.png";
-// import img2 from "../../assets/images/f2.png";
-// import img3 from "../../assets/images/f3.png";
-// import img4 from "../../assets/images/f4.png";
+import {
+  pictureFromWpMediaNode,
+  type ResponsivePictureData,
+} from "../../lib/picture-wp-media";
 
 interface Props {
   data: HomeFeaturedData | null;
@@ -21,8 +21,7 @@ const { data } = Astro.props;
 type FeaturedCard = {
   categoryLabel: string;
   title: string;
-  imageUrl: string | ImageMetadata;
-  imageAlt: string;
+  picture: ResponsivePictureData | null;
   href: string;
 };
 
@@ -47,11 +46,21 @@ function mapFromHomepageProducts(
       const title = decodeHtmlEntities((p.title ?? "").trim());
       const categoryRaw = p.productCategory?.trim();
       const categoryLabel = decodeHtmlEntities(categoryRaw || "Product");
+      const mediaNode =
+        p.image || p.imageThumbnails?.thumb || p.imageThumbnails?.medium
+          ? {
+              sourceUrl: p.image ?? null,
+              thumb: p.imageThumbnails?.thumb ?? null,
+              medium: p.imageThumbnails?.medium ?? null,
+              large: p.imageThumbnails?.large ?? null,
+              altText: title,
+            }
+          : null;
+
       return {
         categoryLabel,
         title,
-        imageUrl: p.image?.trim() ?? "",
-        imageAlt: title,
+        picture: pictureFromWpMediaNode(mediaNode, title),
         href: productHref(p.productUrl),
       };
     });
@@ -73,17 +82,17 @@ const sectionHeading = sectionTitle?.trim()
           <li class="featured__item" data-full-title={item.title}>
             <p class="featured__item-label">{item.categoryLabel}</p>
 
-            {item.imageUrl ? (
-              <img
-                src={
-                  typeof item.imageUrl === "string"
-                    ? item.imageUrl
-                    : item.imageUrl.src
-                }
-                alt={item.imageAlt}
-                class="featured__item-image"
-                loading="lazy"
-                decoding="async"
+            {item.picture ? (
+              <Picture
+                class="featured__item-picture"
+                alt={item.picture.alt}
+                sources={item.picture.sources}
+                img={{
+                  ...item.picture.img,
+                  class: "featured__item-image",
+                  loading: "lazy",
+                  decoding: "async",
+                }}
               />
             ) : null}
             <h3 class="featured__item-title">{item.title}</h3>

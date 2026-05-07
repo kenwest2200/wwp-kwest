@@ -1,4 +1,5 @@
 /** Help page (WordPress URI: /help/) */
+import type { WpResponsiveMediaNode } from "../picture-wp-media";
 
 export const HELP_PAGE_URI = "/help/";
 
@@ -25,6 +26,8 @@ export const HELP_PAGE_QUERY = /* GraphQL */ `
             image {
               node {
                 sourceUrl
+                medium: sourceUrl(size: MEDIUM)
+                medium_large: sourceUrl(size: MEDIUM_LARGE)
                 altText
                 mediaDetails {
                   width
@@ -59,14 +62,7 @@ export type HelpSupportGroup = {
   blocks?: HelpSupportBlockRow | HelpSupportBlockRow[] | null;
 };
 
-export type HelpCenterImageNode = {
-  sourceUrl?: string | null;
-  altText?: string | null;
-  mediaDetails?: {
-    width?: number | null;
-    height?: number | null;
-  } | null;
-};
+export type HelpCenterImageNode = WpResponsiveMediaNode;
 
 export type HelpCenterBlockRow = {
   title?: string | null;
@@ -111,6 +107,7 @@ export type HelpSupportBlock = {
 export type HelpCenterBlock = {
   title: string;
   descriptionHtml: string;
+  imageNode: HelpCenterImageNode | null;
   imageUrl: string;
   imageAlt: string;
   imageWidth: number | null;
@@ -194,6 +191,7 @@ export function normalizeHelpCenterBlocks(
     out.push({
       title: title || "Help center",
       descriptionHtml,
+      imageNode,
       imageUrl,
       imageAlt,
       imageWidth,

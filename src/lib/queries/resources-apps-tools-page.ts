@@ -1,4 +1,5 @@
 import { decodeHtmlEntities } from "../decode-html-entities";
+import type { WpResponsiveMediaNode } from "../picture-wp-media";
 
 export const APPS_TOOLS_PAGE_URI = "/resources/apps-tools/";
 
@@ -14,6 +15,8 @@ export const APPS_TOOLS_PAGE_QUERY = /* GraphQL */ `
             image {
               node {
                 sourceUrl
+                medium: sourceUrl(size: MEDIUM)
+                medium_large: sourceUrl(size: MEDIUM_LARGE)
                 altText
                 mediaDetails {
                   width
@@ -33,6 +36,8 @@ export const APPS_TOOLS_PAGE_QUERY = /* GraphQL */ `
             image {
               node {
                 sourceUrl
+                medium: sourceUrl(size: MEDIUM)
+                medium_large: sourceUrl(size: MEDIUM_LARGE)
                 altText
                 mediaDetails {
                   width
@@ -52,14 +57,7 @@ export const APPS_TOOLS_PAGE_QUERY = /* GraphQL */ `
   }
 `;
 
-type MediaNode = {
-  sourceUrl?: string | null;
-  altText?: string | null;
-  mediaDetails?: {
-    width?: number | null;
-    height?: number | null;
-  } | null;
-};
+type MediaNode = WpResponsiveMediaNode;
 
 type AppsToolsAppRaw = {
   title?: string | number | boolean | null;
@@ -101,6 +99,7 @@ export type AppsToolsPageData = {
 
 export type AppsToolsApp = {
   title: string;
+  imageNode: WpResponsiveMediaNode | null;
   imageUrl: string;
   imageAlt: string;
   imageWidth?: number;
@@ -112,6 +111,7 @@ export type AppsToolsApp = {
 export type AppsToolsTool = {
   title: string;
   descriptionHtml: string;
+  imageNode: WpResponsiveMediaNode | null;
   imageUrl: string;
   imageAlt: string;
   imageWidth?: number;
@@ -148,6 +148,30 @@ function stripOuterPTags(html: string): string {
   return t;
 }
 
+function normalizeMediaNode(
+  node: MediaNode | null | undefined,
+  fallbackAlt: string,
+): WpResponsiveMediaNode | null {
+  if (!node || typeof node !== "object") return null;
+  const sourceUrl = asTrimmedString(node.sourceUrl);
+  const medium = asTrimmedString(node.medium);
+  const mediumLarge = asTrimmedString(node.medium_large);
+  const altText = decodeHtmlEntities(asTrimmedString(node.altText) || fallbackAlt);
+  const width = Number(node.mediaDetails?.width);
+  const height = Number(node.mediaDetails?.height);
+  if (!sourceUrl && !medium && !mediumLarge) return null;
+  return {
+    sourceUrl: sourceUrl || null,
+    medium: medium || null,
+    medium_large: mediumLarge || null,
+    altText,
+    mediaDetails: {
+      width: Number.isFinite(width) && width > 0 ? width : null,
+      height: Number.isFinite(height) && height > 0 ? height : null,
+    },
+  };
+}
+
 function readFirstObject<T>(value: T | T[] | null | undefined): T | null {
   const arr = asArray(value);
   for (const item of arr) {
@@ -168,8 +192,11 @@ export function normalizeAppsToolsPage(
     if (!row || typeof row !== "object") continue;
     const title = decodeHtmlEntities(asTrimmedString(row.title));
     const node = row.image?.node;
-    const imageUrl = asTrimmedString(node?.sourceUrl);
-    const imageAlt = decodeHtmlEntities(asTrimmedString(node?.altText) || title);
+    const imageNode = normalizeMediaNode(node, title || "App");
+    const imageUrl = asTrimmedString(imageNode?.sourceUrl);
+    const imageAlt = decodeHtmlEntities(
+      asTrimmedString(imageNode?.altText) || title,
+    );
     const w = node?.mediaDetails?.width;
     const h = node?.mediaDetails?.height;
     const appStoreLink = asTrimmedString(row.app_store_link);
@@ -177,6 +204,7 @@ export function normalizeAppsToolsPage(
     if (!title && !appStoreLink && !googlePlayLink && !imageUrl) continue;
     apps.push({
       title: title || "App",
+      imageNode,
       imageUrl,
       imageAlt,
       imageWidth: typeof w === "number" && w > 0 ? w : undefined,
@@ -194,8 +222,11 @@ export function normalizeAppsToolsPage(
       decodeHtmlEntities(asTrimmedString(row.description)),
     );
     const node = row.image?.node;
-    const imageUrl = asTrimmedString(node?.sourceUrl);
-    const imageAlt = decodeHtmlEntities(asTrimmedString(node?.altText) || title);
+    const imageNode = normalizeMediaNode(node, title || "Tool");
+    const imageUrl = asTrimmedString(imageNode?.sourceUrl);
+    const imageAlt = decodeHtmlEntities(
+      asTrimmedString(imageNode?.altText) || title,
+    );
     const w = node?.mediaDetails?.width;
     const h = node?.mediaDetails?.height;
     const linkUrl = asTrimmedString(row.link?.url);
@@ -209,6 +240,7 @@ export function normalizeAppsToolsPage(
     tools.push({
       title: title || "Tool",
       descriptionHtml,
+      imageNode,
       imageUrl,
       imageAlt,
       imageWidth: typeof w === "number" && w > 0 ? w : undefined,

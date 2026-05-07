@@ -1,14 +1,9 @@
 /**
  * Home hero intro block from WPGraphQL page `uri: "/homepage-api"` (ACF Template_HomepageAPI).
  */
-export type HomepageMediaNode = {
-  sourceUrl?: string | null;
-  altText?: string | null;
-  mediaDetails?: {
-    width?: number | null;
-    height?: number | null;
-  } | null;
-};
+import type { WpResponsiveMediaNode } from "../picture-wp-media";
+
+export type HomepageMediaNode = WpResponsiveMediaNode;
 
 export type HomepageMediaField = {
   node?: HomepageMediaNode | null;
@@ -62,6 +57,7 @@ export const HOME_HERO_QUERY = /* GraphQL */ `
                   image1 {
                     node {
                       sourceUrl
+                      medium_large: sourceUrl(size: MEDIUM_LARGE)
                       altText
                       mediaDetails {
                         width
@@ -72,6 +68,7 @@ export const HOME_HERO_QUERY = /* GraphQL */ `
                   image2 {
                     node {
                       sourceUrl
+                      medium_large: sourceUrl(size: MEDIUM_LARGE)
                       altText
                       mediaDetails {
                         width
@@ -82,6 +79,7 @@ export const HOME_HERO_QUERY = /* GraphQL */ `
                   image3 {
                     node {
                       sourceUrl
+                      medium_large: sourceUrl(size: MEDIUM_LARGE)
                       altText
                       mediaDetails {
                         width

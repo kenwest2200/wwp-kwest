@@ -1,4 +1,5 @@
 /** Instructional videos (WordPress URI: /resources/instructional-videos/) */
+import type { WpResponsiveMediaNode } from "../picture-wp-media";
 
 export const INSTRUCTIONAL_VIDEOS_PAGE_URI = "/resources/instructional-videos/";
 
@@ -12,7 +13,13 @@ export const INSTRUCTIONAL_VIDEOS_PAGE_QUERY = /* GraphQL */ `
           instructionalVideoImage {
             node {
               sourceUrl
+              medium: sourceUrl(size: MEDIUM)
+              medium_large: sourceUrl(size: MEDIUM_LARGE)
               altText
+              mediaDetails {
+                width
+                height
+              }
             }
           }
           instructionalVideoLink
@@ -23,10 +30,7 @@ export const INSTRUCTIONAL_VIDEOS_PAGE_QUERY = /* GraphQL */ `
   }
 `;
 
-export type InstructionalVideoImageNode = {
-  sourceUrl?: string | null;
-  altText?: string | null;
-};
+export type InstructionalVideoImageNode = WpResponsiveMediaNode;
 
 export type InstructionalVideoRow = {
   instructionalVideoTitle?: string | null;
@@ -51,6 +55,7 @@ export type InstructionalVideosPageData = {
 export type InstructionalVideoCard = {
   title: string;
   link: string;
+  imageNode: InstructionalVideoImageNode | null;
   imageUrl: string | null;
   imageAlt: string;
   textOnHover: string;
@@ -80,6 +85,7 @@ export function normalizeInstructionalVideos(
     out.push({
       title: title || link || "Video",
       link: link || "#",
+      imageNode: node ?? null,
       imageUrl,
       imageAlt,
       textOnHover,

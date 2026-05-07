@@ -1,12 +1,15 @@
 ---
 import { plainCmsFieldAsHtmlIfMarkup } from "../../lib/decode-html-entities";
+import Picture from "../Picture/Picture.astro";
 import {
   normalizeProductListContent,
   parseSingleTemplateOptionalCharact,
   singleTemplateOptionalShowsGallery,
   wpPreferredThumbSrc,
+  type GalleryMediaNode,
   type SingleTemplateOptionalItem,
 } from "../../lib/queries/product-detail";
+import { pictureMinWidthMedia } from "../../lib/picture-breakpoints";
 
 interface Props {
   item: SingleTemplateOptionalItem;
@@ -87,6 +90,40 @@ const hasAnything =
   (showTable && hasTableContent) ||
   (showProductList && hasProductListContent) ||
   (showFeatures && hasFeaturesContent);
+
+function firstUrl(...candidates: Array<string | null | undefined>): string | null {
+  for (const c of candidates) {
+    const trimmed = typeof c === "string" ? c.trim() : "";
+    if (trimmed) return trimmed;
+  }
+  return null;
+}
+
+function pictureSourcesFromGalleryNode(node: GalleryMediaNode): {
+  media: string;
+  srcset: string;
+}[] {
+  const base = firstUrl(node.sourceUrl);
+  if (!base) return [];
+  const candidates: Array<{ media: string; url: string | null }> = [
+    { media: pictureMinWidthMedia.lg, url: firstUrl(node.medium_large, node.medium) },
+    { media: pictureMinWidthMedia.md, url: firstUrl(node.medium, node.medium_large) },
+  ];
+  const seen = new Set<string>([base]);
+  return candidates
+    .map(({ media, url }) => {
+      if (!url || seen.has(url)) return null;
+      seen.add(url);
+      return { media, srcset: url };
+    })
+    .filter((x): x is { media: string; srcset: string } => Boolean(x));
+}
+
+const mainGalleryNode = galleryNodes[0] ?? null;
+const mainGalleryImgSrc = mainGalleryNode?.sourceUrl?.trim() ?? "";
+const mainGallerySources = mainGalleryNode
+  ? pictureSourcesFromGalleryNode(mainGalleryNode)
+  : [];
 ---
 
 {
@@ -127,12 +164,15 @@ const hasAnything =
         >
           <div class="product-page__gallery-frame product-page__gallery-frame--slider">
             <figure class="product-page__gallery-main-figure">
-              <img
-                class="product-page__gallery-main-img"
-                src={galleryNodes[0]?.sourceUrl ?? ""}
-                alt={galleryNodes[0]?.altText?.trim() ?? ""}
-                loading="eager"
-                decoding="async"
+              <Picture
+                alt={mainGalleryNode?.altText?.trim() ?? ""}
+                sources={mainGallerySources}
+                img={{
+                  src: mainGalleryImgSrc,
+                  class: "product-page__gallery-main-img",
+                  loading: "eager",
+                  decoding: "async",
+                }}
               />
               <figcaption
                 class="product-page__image-caption"
@@ -167,12 +207,23 @@ const hasAnything =
                     aria-label={`Image ${i + 1} of ${galleryNodes.length}`}
                     aria-pressed={i === 0}
                   >
-                    <img
-                      src={wpPreferredThumbSrc(g)}
-                      alt=""
-                      loading={i === 0 ? "eager" : "lazy"}
-                      decoding="async"
-                    />
+                    {
+                      (() => {
+                        const thumbSrc = wpPreferredThumbSrc(g);
+                        const thumbSources = pictureSourcesFromGalleryNode(g);
+                        return (
+                          <Picture
+                            alt=""
+                            sources={thumbSources}
+                            img={{
+                              src: thumbSrc,
+                              loading: i === 0 ? "eager" : "lazy",
+                              decoding: "async",
+                            }}
+                          />
+                        );
+                      })()
+                    }
                   </button>
                 ) : null,
               )}

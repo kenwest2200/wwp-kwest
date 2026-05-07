@@ -1,8 +1,10 @@
 ---
 import ProductPageBody from "./ProductPageBody.astro";
 import Breadcrumbs from "../Breadcrumbs/Breadcrumbs.astro";
+import Picture from "../Picture/Picture.astro";
 import type { ProductPageData } from "../../lib/queries/product-detail";
 import type { ProductPageView } from "../../lib/product-page-view";
+import { pictureFromWpMediaNode } from "../../lib/picture-wp-media";
 
 interface Props {
   graphqlConfigured: boolean;
@@ -13,6 +15,7 @@ interface Props {
 
 const { graphqlConfigured, slug, product, view } = Astro.props;
 const { title, mainImg } = view;
+const mainPicture = pictureFromWpMediaNode(mainImg, title || "Product image");
 const breadcrumbs = [
   { label: "Home", href: "/" },
   { label: "Support", href: "/support" },
@@ -24,21 +27,20 @@ const breadcrumbs = [
   <div class="product-page__content">
     <div class="product-page__hero">
       <h1 class="product-page__title">{title}</h1>
-      {
-        mainImg?.sourceUrl && (
-          <div class="product-page__hero-main-image">
-            <img
-              class="product-page__main-product-image"
-              src={mainImg.sourceUrl}
-              alt={mainImg.altText ?? ""}
-              width={mainImg.mediaDetails?.width ?? undefined}
-              height={mainImg.mediaDetails?.height ?? undefined}
-              loading="eager"
-              decoding="async"
-            />
-          </div>
-        )
-      }
+      {mainPicture ? (
+        <div class="product-page__hero-main-image">
+          <Picture
+            alt={mainPicture.alt}
+            sources={mainPicture.sources}
+            img={{
+              ...mainPicture.img,
+              class: "product-page__main-product-image",
+              loading: "eager",
+              decoding: "async",
+            }}
+          />
+        </div>
+      ) : null}
     </div>
     <div class="product-page__breadcrumb-wrap">
       <Breadcrumbs items={breadcrumbs} />

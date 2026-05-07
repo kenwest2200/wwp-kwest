@@ -4,6 +4,8 @@ import type {
   HomepageApiSectionsIntroSectionLayout,
 } from "../../lib/queries/home-hero";
 import IconArrowRight from "../../components/icons/IconArrowRight.astro";
+import Picture from "../../components/Picture/Picture.astro";
+import { pictureFromWpMediaNode } from "../../lib/picture-wp-media";
 // Mock assets (fallback) — kept for local preview if GraphQL is empty
 // import img1 from "../../assets/images/1.png";
 // import img2 from "../../assets/images/2.png";
@@ -29,22 +31,10 @@ const intro = sections.find(isIntroSection) ?? null;
 const title = intro?.title ?? null;
 const description = intro?.description ?? null;
 
-const graphQlImages: {
-  url: string;
-  alt: string;
-  width: number | undefined;
-  height: number | undefined;
-}[] = [intro?.image1?.node, intro?.image2?.node, intro?.image3?.node]
-  .map((n) =>
-    n?.sourceUrl
-      ? {
-          url: n.sourceUrl,
-          alt: n.altText ?? title ?? "Hero image",
-          width: n.mediaDetails?.width ?? undefined,
-          height: n.mediaDetails?.height ?? undefined,
-        }
-      : null,
-  )
+const fallbackImageAlt = title ?? "Hero image";
+
+const heroPictures = [intro?.image1?.node, intro?.image2?.node, intro?.image3?.node]
+  .map((n) => pictureFromWpMediaNode(n, fallbackImageAlt))
   .filter((x): x is NonNullable<typeof x> => x !== null);
 
 const buttonLink = intro?.buttonLink ?? null;
@@ -93,20 +83,21 @@ const fallbackDescription =
         ) : null
       }
     </div>
-
     {
-      graphQlImages.length > 0 && (
+      heroPictures.length > 0 && (
         <div class="hero__image-container">
-          {graphQlImages.map((image, index) => (
-            <img
-              class={`hero__image hero__image--${index}`}
-              src={image.url}
-              alt={image.alt}
-              width={image.width}
-              height={image.height}
-              loading={index === 0 ? "eager" : "lazy"}
-              fetchpriority={index === 0 ? "high" : "low"}
-              decoding="async"
+          {heroPictures.map((pic, index) => (
+            <Picture
+              class="hero__picture"
+              alt={pic.alt}
+              sources={pic.sources}
+              img={{
+                ...pic.img,
+                loading: index === 0 ? "eager" : "lazy",
+                fetchpriority: index === 0 ? "high" : "low",
+                decoding: "async",
+                class: `hero__image hero__image--${index}`,
+              }}
             />
           ))}
         </div>

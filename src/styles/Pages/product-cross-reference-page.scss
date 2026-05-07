@@ -16,7 +16,7 @@
   }
 
   &__body {
-    padding-top: px-to-rem(100);
+    padding-top: px-to-rem(60);
   }
 
   &__body-inner {
@@ -26,8 +26,13 @@
     padding-right: var(--section-right, var(--s-padding-x));
   }
 
+  &__form-section {
+    scroll-margin-top: var(--page-header-offset, #{px-to-rem(112)});
+  }
+
   &__title {
     margin-bottom: px-to-rem(52);
+    margin-top: 0;
     text-align: center;
     color: $dark;
     font-size: px-to-rem(36);
@@ -68,7 +73,9 @@
     }
   }
 
-  &__form--inline-error &__field input {
+  &__form--inline-error &__field input,
+  &__form--inline-error &__field select,
+  &__form--inline-error &__field .cross-ref-page__custom-select-trigger {
     @include field.form-control-invalid-ring(1px);
   }
 
@@ -164,23 +171,53 @@
 
   &__custom-select {
     position: relative;
-
-    &--open {
-      .cross-ref-page__custom-select-trigger {
-        border-color: rgba($dark-teal, 0.35);
-      }
-    }
+    min-width: px-to-rem(168);
   }
 
   &__custom-select-trigger {
-    appearance: none;
-    background: $light-gray;
+    width: 100%;
+    min-height: px-to-rem(48);
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
+    background: $light-gray;
+    gap: px-to-rem(10);
+    padding: 0 px-to-rem(14);
+    border: none;
+    border-radius: px-to-rem(4);
+    text-align: left;
     cursor: pointer;
     color: $dark;
-    padding-right: px-to-rem(40);
+    font: inherit;
+    transition: border-color 0.15s ease;
+
+    &:focus-visible {
+      outline: 2px solid $dark-teal;
+      outline-offset: 2px;
+    }
+  }
+
+  &__custom-select-value {
+    font: inherit;
+    font-size: px-to-rem(14);
+    font-weight: 400;
+    color: $dark;
+    letter-spacing: 0.02em;
+    line-height: px-to-rem(20);
+    flex: 1;
+
+    &.is-placeholder {
+      color: $dark-gray;
+    }
+  }
+
+  &__custom-select-chevron {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: $dark-gray;
+    transition: transform 0.15s ease;
   }
 
   &__custom-select-menu {
@@ -191,12 +228,16 @@
     margin: 0;
     padding: px-to-rem(6);
     list-style: none;
-    border: 1px solid rgba($dark, 0.12);
     border-radius: px-to-rem(4);
-    background: $white;
-    max-height: px-to-rem(240);
+    background: $light-gray;
+    box-shadow: 0 px-to-rem(8) px-to-rem(24) rgba(13, 39, 37, 0.08);
+    max-height: px-to-rem(220);
     overflow: auto;
     z-index: 40;
+
+    &[hidden] {
+      display: none;
+    }
   }
 
   &__custom-select-option {
@@ -212,8 +253,21 @@
     cursor: pointer;
 
     &:hover {
-      background: $light-gray;
+      color: $dark-teal;
     }
+
+    &[aria-selected="true"] {
+      background: $white;
+      font-weight: 600;
+    }
+  }
+
+  &__custom-select.custom-select--open &__custom-select-trigger {
+    border-color: $dark-teal;
+  }
+
+  &__custom-select.custom-select--open &__custom-select-chevron {
+    transform: rotate(180deg);
   }
 
   &__suggest-list {
@@ -312,12 +366,25 @@
   }
 
   &__btn-outline {
-    border: 1px solid $light-teal;
+    border: 1px solid $dark-teal;
     background: $white;
-    color: $light-teal;
+    color: $dark-teal;
     min-width: px-to-rem(175);
     gap: px-to-rem(12);
+    transition: color 0.3s ease, border-color 0.3s ease;
 
+    &:hover,
+    &:active {
+      border-color: $medium-teal;
+      color: $medium-teal;
+      transition: color 0.3s ease, border-color 0.3s ease;
+    }
+
+    &:disabled {
+      border-color: $dark-gray;
+      color: $dark-gray;
+      cursor: not-allowed;
+    }
   }
 
   &__btn-solid {
@@ -325,7 +392,20 @@
     background: $dark-teal;
     color: $white;
     min-width: px-to-rem(180);
+    transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
 
+    &:hover,
+    &:active {
+      border-color: $medium-teal;
+      background: $medium-teal;
+      transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+    }
+
+    &:disabled {
+      border-color: $dark-gray;
+      background: $dark-gray;
+      cursor: not-allowed;
+    }
   }
 
   &__results {
@@ -410,11 +490,17 @@
 
   &__result-link {
     display: flex;
-    gap: px-to-rem(48);
+    gap: px-to-rem(10);
     align-items: center;
+    flex-direction: column;
     padding: px-to-rem(24) px-to-rem(32);
     color: inherit;
     text-decoration: none;
+
+    @include media-breakpoint-up(md) {
+      flex-direction: row;
+      gap: px-to-rem(48);
+    }
   }
 
   &__result-thumb {
@@ -436,10 +522,15 @@
   &__result-title {
     margin: 0 0 px-to-rem(12);
     color: $dark;
-    font-size: px-to-rem(24);
+    font-size: px-to-rem(16);
     line-height: px-to-rem(32);
     font-weight: 600;
     letter-spacing: 0.03em;
+
+    @include media-breakpoint-up(md) {
+      font-size: px-to-rem(24);
+
+    }
   }
 
   &__result-meta {

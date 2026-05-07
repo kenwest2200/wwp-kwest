@@ -68,7 +68,7 @@
 
         svg {
             path {
-                color: $dark-teal;
+                color: $white;
                 transition: stroke 0.3s ease;
             }
         }
@@ -92,6 +92,15 @@
 
         &:active {
             color: $white;
+        }
+
+        &:disabled {
+            svg {
+                path {
+                    stroke: $white;
+                    transition: stroke 0.3s ease;
+                }
+            }
         }
     }
 

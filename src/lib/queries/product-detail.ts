@@ -1,5 +1,7 @@
 export type ProductPageMediaNode = {
   sourceUrl?: string | null;
+  medium_large?: string | null;
+  large?: string | null;
   altText?: string | null;
   /** Media library title (WP attachment title), shown as caption when needed */
   title?: string | null;
@@ -87,6 +89,8 @@ export function wpPreferredThumbSrc(
 export type GalleryMediaNode = {
   databaseId?: number | null;
   sourceUrl?: string | null;
+  medium?: string | null;
+  medium_large?: string | null;
   altText?: string | null;
   title?: string | null;
   mediaDetails?: {
@@ -225,6 +229,8 @@ const PRODUCT_PAGE_FIELDS = /* GraphQL */ `
           productImagesMain {
             node {
               sourceUrl
+              medium_large: sourceUrl(size: MEDIUM_LARGE)
+              large: sourceUrl(size: PRODUCT_THUMBNAIL)
               altText
               title
               mediaDetails {
@@ -270,6 +276,8 @@ const PRODUCT_PAGE_FIELDS = /* GraphQL */ `
               nodes {
                 databaseId
                 sourceUrl
+                medium: sourceUrl(size: MEDIUM)
+                medium_large: sourceUrl(size: MEDIUM_LARGE)
                 altText
                 title
                 mediaDetails {

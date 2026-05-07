@@ -7,6 +7,11 @@ export type HomepageFeaturedProduct = {
   title?: string | null;
   productCategory?: string | null;
   image?: string | null;
+  imageThumbnails?: {
+    thumb?: string | null;
+    medium?: string | null;
+    large?: string | null;
+  } | null;
   productUrl?: string | null;
 };
 
@@ -76,6 +81,11 @@ export const HOME_FEATURED_QUERY = /* GraphQL */ `
                     title
                     productCategory
                     image
+                    imageThumbnails {
+                      thumb
+                      medium
+                      large
+                    }
                     productUrl
                   }
                 }

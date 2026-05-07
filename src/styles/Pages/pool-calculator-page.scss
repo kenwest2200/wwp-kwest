@@ -643,10 +643,12 @@
     font: inherit;
     font-size: px-to-rem(14);
     letter-spacing: 0.03em;
+    transition: color 0.3s ease, border-color 0.3s ease;
 
     &:hover {
-      border-color: $dark-teal;
-      color: $dark-teal;
+      border-color: $medium-teal;
+      color: $medium-teal;
+      transition: color 0.3s ease, border-color 0.3s ease;
     }
 
 

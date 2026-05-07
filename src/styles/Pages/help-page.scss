@@ -167,6 +167,10 @@
     max-width: px-to-rem(160);
     max-height: px-to-rem(160);
     overflow: hidden;
+
+    picture {
+      display: contents
+    }
   }
 
   &__center-image {

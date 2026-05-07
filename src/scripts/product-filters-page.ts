@@ -130,6 +130,7 @@ type Product = {
   date?: string | null;
   modified?: string | null;
   imageUrl?: string | null;
+  imageMedium?: string | null;
   imageAlt?: string | null;
   imageWidth?: number | null;
   imageHeight?: number | null;
@@ -1389,10 +1390,50 @@ function getProductSubcategoryLabel(p: Product): string {
   return "Product";
 }
 
+function firstNonEmptyImageUrl(
+  ...candidates: Array<string | null | undefined>
+): string | null {
+  for (const candidate of candidates) {
+    const value = candidate?.trim();
+    if (value) return value;
+  }
+  return null;
+}
+
+function buildProductCardPictureSourcesHtml(p: Product, imgSrc: string): string {
+  const tiers: Array<{ media: string; url: string | null }> = [
+    {
+      media: "(min-width: 1024px)",
+      url: firstNonEmptyImageUrl(p.imageMedium, p.imageUrl),
+    },
+    {
+      media: "(min-width: 768px)",
+      url: firstNonEmptyImageUrl(p.imageMedium, p.imageUrl),
+    },
+    {
+      media: "(min-width: 375px)",
+      url: firstNonEmptyImageUrl(p.imageMedium, p.imageUrl),
+    },
+  ];
+
+  const seen = new Set<string>([imgSrc]);
+  return tiers
+    .map((tier) => {
+      const url = tier.url?.trim();
+      if (!url || seen.has(url)) return "";
+      seen.add(url);
+      return `<source media="${escapeHtmlAttr(tier.media)}" srcset="${escapeHtmlAttr(url)}" />`;
+    })
+    .join("");
+}
+
 function renderProductCard(p: Product): string {
   const href = `/product/${p.slug}/`;
   const subLabel = getProductSubcategoryLabel(p);
-  const rawImg = p.imageUrl?.trim();
+  const rawImg = firstNonEmptyImageUrl(
+    p.imageMedium,
+    p.imageUrl,
+  );
   const imgSrc = rawImg ? escapeHtml(rawImg) : PRODUCT_IMAGE_PLACEHOLDER;
   const altSource =
     p.imageAlt && p.imageAlt.trim() ? p.imageAlt.trim() : p.title;
@@ -1404,12 +1445,16 @@ function renderProductCard(p: Product): string {
       ? p.imageHeight
       : 176;
   const onErrorAttr = ` onerror="this.onerror=null;this.src='${PRODUCT_IMAGE_PLACEHOLDER}'"`;
+  const pictureSources = rawImg ? buildProductCardPictureSourcesHtml(p, rawImg) : "";
 
   return `<li class="product-filters__product-card" data-full-title="${escapeHtmlAttr(decodeHtmlEntities(p.title))}">
   <a class="product-filters__product-link" href="${escapeHtml(href)}">
     <span class="product-filters__product-label">${safeDisplayText(subLabel)}</span>
     <span class="product-filters__product-thumb">
-      <img src="${imgSrc}" alt="${imgAlt}" width="${imgW}" height="${imgH}" loading="lazy" decoding="async"${rawImg ? onErrorAttr : ""} />
+      <picture>
+        ${pictureSources}
+        <img src="${imgSrc}" alt="${imgAlt}" width="${imgW}" height="${imgH}" loading="lazy" decoding="async"${rawImg ? onErrorAttr : ""} />
+      </picture>
     </span>
     <h3 class="product-filters__product-title">${safeDisplayText(p.title)}</h3>
     <span class="product-filters__product-cta btn btn--single-outline">View details</span>
@@ -2154,6 +2199,7 @@ async function init() {
         date?: string | null;
         modified?: string | null;
         imageUrl?: string | null;
+        imageMedium?: string | null;
         imageAlt?: string | null;
         imageWidth?: number | null;
         imageHeight?: number | null;
@@ -2202,6 +2248,7 @@ async function init() {
       date: item.date ?? null,
       modified: item.modified ?? null,
       imageUrl: item.imageUrl ?? null,
+      imageMedium: item.imageMedium ?? null,
       imageAlt: item.imageAlt ?? null,
       imageWidth: typeof item.imageWidth === "number" ? item.imageWidth : null,
       imageHeight:

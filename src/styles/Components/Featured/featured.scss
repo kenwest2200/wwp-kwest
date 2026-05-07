@@ -83,6 +83,10 @@
       word-break: normal;
     }
 
+    &-picture {
+      display: contents;
+    }
+
     &-image {
       width: 100%;
       max-width: px-to-rem(302);

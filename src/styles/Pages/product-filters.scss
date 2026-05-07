@@ -1909,6 +1909,10 @@ $product-filters-check-svg: "%3Csvg xmlns='http://www.w3.org/2000/svg' width='9'
     letter-spacing: 0.02em;
   }
 
+  &[hidden] {
+    display: none;
+  }
+
 }
 
 .product-filters__pager-step-icon-wrapper {

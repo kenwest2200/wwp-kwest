@@ -77,6 +77,10 @@
     background: $light-gray;
     overflow: hidden;
     border-radius: px-to-rem(8);
+
+    picture {
+      display: contents
+    }
   }
 
   &__card-media-overlay {

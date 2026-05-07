@@ -3,9 +3,11 @@ import Layout from "../../../layouts/Layout.astro";
 import PageHeaderOffset from "../../../components/PageHeaderOffset.astro";
 import SectionHero from "../../../components/SectionHero/SectionHero.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs.astro";
+import Picture from "../../../components/Picture/Picture.astro";
 import { getGraphQLClient, requestGraphql } from "../../../lib/graphql";
 import IconApple from "../../../assets/images/buttonAppStore.png";
 import IconGooglePlay from "../../../assets/images/buttonGooglePlay.png";
+import { pictureFromWpMediaNode } from "../../../lib/picture-wp-media";
 import {
   APPS_TOOLS_PAGE_QUERY,
   APPS_TOOLS_PAGE_URI,
@@ -42,7 +44,15 @@ async function loadPage(): Promise<AppsToolsPageData["page"] | null> {
 const pageNode = await loadPage();
 const pageTitle = pageNode?.title?.trim() || "Apps & tools";
 const pageData = normalizeAppsToolsPage(pageNode);
-const hasContent = pageData.apps.length > 0 || pageData.tools.length > 0;
+const apps = pageData.apps.map((app) => ({
+  ...app,
+  picture: pictureFromWpMediaNode(app.imageNode, app.title || "App"),
+}));
+const tools = pageData.tools.map((tool) => ({
+  ...tool,
+  picture: pictureFromWpMediaNode(tool.imageNode, tool.title || "Tool"),
+}));
+const hasContent = apps.length > 0 || tools.length > 0;
 const breadcrumbs = [
   { label: "Home", href: "/" },
   { label: "Resources", href: "/resources" },
@@ -78,7 +88,7 @@ const breadcrumbs = [
         }
 
         {
-          pageData.apps.length > 0 && (
+          apps.length > 0 && (
             <div
               class="apps-tools-page__group"
               aria-labelledby="apps-tools-apps"
@@ -87,18 +97,19 @@ const breadcrumbs = [
                 {pageData.appsGroupTitle || "Apps"}
               </h2>
               <div class="apps-tools-page__apps-grid">
-                {pageData.apps.map((app) => (
+                {apps.map((app) => (
                   <article class="apps-tools-page__app-card">
-                    {app.imageUrl ? (
+                    {app.picture ? (
                       <div class="apps-tools-page__app-image-wrap">
-                        <img
-                          class="apps-tools-page__app-image"
-                          src={app.imageUrl}
-                          alt={app.imageAlt}
-                          width={app.imageWidth}
-                          height={app.imageHeight}
-                          loading="lazy"
-                          decoding="async"
+                        <Picture
+                          alt={app.picture.alt}
+                          sources={app.picture.sources}
+                          img={{
+                            ...app.picture.img,
+                            class: "apps-tools-page__app-image",
+                            loading: "lazy",
+                            decoding: "async",
+                          }}
                         />
                       </div>
                     ) : null}
@@ -111,7 +122,16 @@ const breadcrumbs = [
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <img src={IconApple.src} alt="App Store" />
+                          <Picture
+                            alt="App Store"
+                            img={{
+                              src: IconApple.src,
+                              width: IconApple.width,
+                              height: IconApple.height,
+                              loading: "lazy",
+                              decoding: "async",
+                            }}
+                          />
                           <span class="visually-hidden">App Store</span>
                         </a>
                       ) : null}
@@ -122,7 +142,16 @@ const breadcrumbs = [
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <img src={IconGooglePlay.src} alt="Google Play" />
+                          <Picture
+                            alt="Google Play"
+                            img={{
+                              src: IconGooglePlay.src,
+                              width: IconGooglePlay.width,
+                              height: IconGooglePlay.height,
+                              loading: "lazy",
+                              decoding: "async",
+                            }}
+                          />
                           <span class="visually-hidden">Google Play</span>
                         </a>
                       ) : null}
@@ -135,7 +164,7 @@ const breadcrumbs = [
         }
 
         {
-          pageData.tools.length > 0 && (
+          tools.length > 0 && (
             <div
               class="apps-tools-page__group"
               aria-labelledby="apps-tools-tools"
@@ -144,7 +173,7 @@ const breadcrumbs = [
                 {pageData.toolsGroupTitle || "Tools"}
               </h2>
               <div class="apps-tools-page__tools-grid">
-                {pageData.tools.map((tool) => (
+                {tools.map((tool) => (
                   <a
                     class="apps-tools-page__tool-card"
                     href={tool.linkUrl}
@@ -155,16 +184,17 @@ const breadcrumbs = [
                         : undefined
                     }
                   >
-                    {tool.imageUrl ? (
+                    {tool.picture ? (
                       <div class="apps-tools-page__tool-image-wrap">
-                        <img
-                          class="apps-tools-page__tool-image"
-                          src={tool.imageUrl}
-                          alt={tool.imageAlt}
-                          width={tool.imageWidth}
-                          height={tool.imageHeight}
-                          loading="lazy"
-                          decoding="async"
+                        <Picture
+                          alt={tool.picture.alt}
+                          sources={tool.picture.sources}
+                          img={{
+                            ...tool.picture.img,
+                            class: "apps-tools-page__tool-image",
+                            loading: "lazy",
+                            decoding: "async",
+                          }}
                         />
                       </div>
                     ) : null}

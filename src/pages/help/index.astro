@@ -4,10 +4,12 @@ import PageHeaderOffset from "../../components/PageHeaderOffset.astro";
 import SectionHero from "../../components/SectionHero/SectionHero.astro";
 import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs.astro";
 import ScrollToTopButton from "../../components/ScrollToTopButton/ScrollToTopButton.astro";
+import Picture from "../../components/Picture/Picture.astro";
 import IconContactPhone from "../../components/icons/IconContactPhone.astro";
 import IconContactFax from "../../components/icons/IconContactFax.astro";
 import IconContactEmail from "../../components/icons/IconContactEmail.astro";
 import { getGraphQLClient, requestGraphql } from "../../lib/graphql";
+import { pictureFromWpMediaNode } from "../../lib/picture-wp-media";
 import {
   HELP_PAGE_QUERY,
   HELP_PAGE_URI,
@@ -44,7 +46,10 @@ const centerGroup = pageNode?.helpSettings?.helpCenterGroup ?? null;
 const supportTitle = supportGroup?.title?.trim() || "Support";
 const centerTitle = centerGroup?.title?.trim() || "Help Center";
 const supportBlocks = normalizeHelpSupportBlocks(supportGroup);
-const centerBlocks = normalizeHelpCenterBlocks(centerGroup);
+const centerBlocks = normalizeHelpCenterBlocks(centerGroup).map((block) => ({
+  ...block,
+  picture: pictureFromWpMediaNode(block.imageNode, block.imageAlt || block.title),
+}));
 const hasContent = supportBlocks.length > 0 || centerBlocks.length > 0;
 const breadcrumbs = [
   { label: "Home", href: "/" },
@@ -165,19 +170,20 @@ function contactIconType(iconRaw: string): ContactIconType {
               <div class="help-page__center-grid">
                 {centerBlocks.map((block) => (
                   <article class="help-page__center-card">
-                    {block.imageUrl && (
+                    {block.picture ? (
                       <div class="help-page__center-image-wrap">
-                        <img
-                          class="help-page__center-image"
-                          src={block.imageUrl}
-                          alt={block.imageAlt || block.title}
-                          width={block.imageWidth ?? undefined}
-                          height={block.imageHeight ?? undefined}
-                          loading="lazy"
-                          decoding="async"
+                        <Picture
+                          alt={block.picture.alt}
+                          sources={block.picture.sources}
+                          img={{
+                            ...block.picture.img,
+                            class: "help-page__center-image",
+                            loading: "lazy",
+                            decoding: "async",
+                          }}
                         />
                       </div>
-                    )}
+                    ) : null}
                     <div class="help-page__center-body">
                       <h3 class="help-page__card-title">{block.title}</h3>
                       {block.descriptionHtml ? (

@@ -42,53 +42,133 @@ const breadcrumbs = [
 
           <form id="cross-ref-form" class="cross-ref-page__form" novalidate>
             <div class="cross-ref-page__grid cross-ref-page__grid--top">
-              <div
-                class="cross-ref-page__field cross-ref-page__field--autocomplete"
-              >
-                <span class="cross-ref-page__label"
-                  >Brand <span
+              <div class="cross-ref-page__field">
+                <span class="cross-ref-page__label">Brand</span>
+                <div
+                  class="cross-ref-page__custom-select"
+                  data-custom-select-root
+                  data-custom-select-placeholder="Choose a brand"
+                >
+                  <button
+                    type="button"
+                    class="cross-ref-page__custom-select-trigger"
+                    id="cross-ref-brand-trigger"
+                    aria-label="Brand"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                    aria-controls="cross-ref-brand-menu"
+                    data-custom-select-trigger
+                  >
+                    <span
+                      class="cross-ref-page__custom-select-value is-placeholder"
+                      data-custom-select-value
+                    >
+                      Choose a brand
+                    </span>
+                    <span
+                      class="cross-ref-page__custom-select-chevron"
+                      aria-hidden="true"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="10"
+                        height="6"
+                        viewBox="0 0 10 6"
+                        fill="none"
+                      >
+                        <path
+                          d="M0.75 0.75L4.75 4.75L8.75 0.75"
+                          stroke="#9C9C9C"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"></path>
+                      </svg>
+                    </span>
+                  </button>
+                  <ul
+                    id="cross-ref-brand-menu"
+                    class="cross-ref-page__custom-select-menu"
+                    role="listbox"
+                    aria-labelledby="cross-ref-brand-trigger"
+                    hidden
+                    data-custom-select-menu
+                  >
+                  </ul>
+                  <select
+                    id="cross-ref-brand"
+                    class="visually-hidden"
+                    name="brand"
+                    tabindex="-1"
                     aria-hidden="true"
-                    class="cross-ref-page__label-required">*</span
-                  ></span
-                >
-                <input
-                  id="cross-ref-brand"
-                  name="brand"
-                  type="text"
-                  placeholder="Choose a brand"
-                  autocomplete="off"
-                />
-                <ul
-                  id="cross-ref-brand-suggest"
-                  class="cross-ref-page__suggest-list"
-                  role="listbox"
-                  hidden
-                >
-                </ul>
+                    data-custom-select-native
+                  >
+                    <option value="" selected>Choose a brand</option>
+                  </select>
+                </div>
               </div>
-              <div
-                class="cross-ref-page__field cross-ref-page__field--autocomplete"
-              >
-                <span class="cross-ref-page__label"
-                  >Model <span
+              <div class="cross-ref-page__field">
+                <span class="cross-ref-page__label">Model</span>
+                <div
+                  class="cross-ref-page__custom-select"
+                  data-custom-select-root
+                  data-custom-select-placeholder="Choose a model"
+                >
+                  <button
+                    type="button"
+                    class="cross-ref-page__custom-select-trigger"
+                    id="cross-ref-model-trigger"
+                    aria-label="Model"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                    aria-controls="cross-ref-model-menu"
+                    data-custom-select-trigger
+                  >
+                    <span
+                      class="cross-ref-page__custom-select-value is-placeholder"
+                      data-custom-select-value
+                    >
+                      Choose a model
+                    </span>
+                    <span
+                      class="cross-ref-page__custom-select-chevron"
+                      aria-hidden="true"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="10"
+                        height="6"
+                        viewBox="0 0 10 6"
+                        fill="none"
+                      >
+                        <path
+                          d="M0.75 0.75L4.75 4.75L8.75 0.75"
+                          stroke="#9C9C9C"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"></path>
+                      </svg>
+                    </span>
+                  </button>
+                  <ul
+                    id="cross-ref-model-menu"
+                    class="cross-ref-page__custom-select-menu"
+                    role="listbox"
+                    aria-labelledby="cross-ref-model-trigger"
+                    hidden
+                    data-custom-select-menu
+                  >
+                  </ul>
+                  <select
+                    id="cross-ref-model"
+                    class="visually-hidden"
+                    name="model"
+                    tabindex="-1"
                     aria-hidden="true"
-                    class="cross-ref-page__label-required">*</span
-                  ></span
-                >
-                <input
-                  id="cross-ref-model"
-                  name="model"
-                  type="text"
-                  placeholder="Choose a model"
-                  autocomplete="off"
-                />
-                <ul
-                  id="cross-ref-model-suggest"
-                  class="cross-ref-page__suggest-list"
-                  role="listbox"
-                  hidden
-                >
-                </ul>
+                    data-custom-select-native
+                  >
+                    <option value="" selected>Choose a model</option>
+                  </select>
+                </div>
               </div>
             </div>
 

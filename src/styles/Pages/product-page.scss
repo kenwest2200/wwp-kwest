@@ -436,6 +436,10 @@
       height: 100%;
       min-height: 0;
       gap: px-to-rem(8);
+
+      picture {
+        display: contents
+      }
     }
 
     .product-page__gallery-main-img {
@@ -464,6 +468,12 @@
         &.is-fading-out {
           opacity: 1;
         }
+      }
+    }
+
+    .product-page__gallery-thumb {
+      picture {
+        display: contents
       }
     }
 

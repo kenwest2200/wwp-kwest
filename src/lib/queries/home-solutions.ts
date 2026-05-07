@@ -1,11 +1,10 @@
+import type { WpResponsiveMediaNode } from "../picture-wp-media";
+
 export type SolutionPostNode = {
   title?: string | null;
   uri?: string | null;
   featuredImage?: {
-    node?: {
-      sourceUrl?: string | null;
-      altText?: string | null;
-    } | null;
+    node?: WpResponsiveMediaNode | null;
   } | null;
 };
 
@@ -25,6 +24,10 @@ export const HOME_SOLUTIONS_QUERY = /* GraphQL */ `
           node {
             sourceUrl
             altText
+            thumb: sourceUrl(size: THUMBNAIL)
+            medium: sourceUrl(size: MEDIUM)
+            medium_large: sourceUrl(size: MEDIUM_LARGE)
+            large: sourceUrl(size: LARGE)
           }
         }
       }

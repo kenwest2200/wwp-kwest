@@ -6,7 +6,12 @@ import { GraphQLClient } from "graphql-request";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, "..");
-const outputPath = path.join(projectRoot, "public", "data", "product-filters.json");
+const outputPath = path.join(
+  projectRoot,
+  "public",
+  "data",
+  "product-filters.json",
+);
 const envPath = path.join(projectRoot, ".env");
 
 function parseEnvFile(content) {
@@ -17,7 +22,10 @@ function parseEnvFile(content) {
     const idx = line.indexOf("=");
     if (idx <= 0) continue;
     const key = line.slice(0, idx).trim();
-    const value = line.slice(idx + 1).trim().replace(/^['"]|['"]$/g, "");
+    const value = line
+      .slice(idx + 1)
+      .trim()
+      .replace(/^['"]|['"]$/g, "");
     result[key] = value;
   }
   return result;
@@ -148,6 +156,7 @@ const PRODUCT_CATALOG_IMAGE_SELECTION = `
             productImagesMain {
               node {
                 sourceUrl
+                medium: sourceUrl(size: MEDIUM)
                 altText
                 mediaDetails {
                   width
@@ -376,9 +385,11 @@ async function generateFromGraphql(env) {
     const node =
       item?.productSettings?.productImagesGroup?.productImagesMain?.node ??
       null;
+    const pickUrl = (value) =>
+      typeof value === "string" && value.trim() ? value.trim() : null;
     const rawUrl = node?.sourceUrl;
-    const imageUrl =
-      typeof rawUrl === "string" && rawUrl.trim() ? rawUrl.trim() : null;
+    const imageUrl = pickUrl(rawUrl);
+    const imageMedium = pickUrl(node?.medium);
     const altRaw = node?.altText;
     const imageAlt =
       typeof altRaw === "string" && altRaw.trim()
@@ -388,14 +399,25 @@ async function generateFromGraphql(env) {
     const h = Number(node?.mediaDetails?.height);
     const imageWidth = Number.isFinite(w) && w > 0 ? w : null;
     const imageHeight = Number.isFinite(h) && h > 0 ? h : null;
-    return { imageUrl, imageAlt, imageWidth, imageHeight };
+    return {
+      imageUrl,
+      imageMedium,
+      imageAlt,
+      imageWidth,
+      imageHeight,
+    };
   }
 
   const products = productsNodes
     .filter((item) => item?.title && item?.slug)
     .map((item) => {
-      const { imageUrl, imageAlt, imageWidth, imageHeight } =
-        mainCatalogImageFromProduct(item);
+      const {
+        imageUrl,
+        imageMedium,
+        imageAlt,
+        imageWidth,
+        imageHeight,
+      } = mainCatalogImageFromProduct(item);
       return {
         title: decodeHtmlEntities(item.title),
         slug: item.slug,
@@ -411,6 +433,7 @@ async function generateFromGraphql(env) {
         date: typeof item.date === "string" ? item.date : null,
         modified: typeof item.modified === "string" ? item.modified : null,
         imageUrl,
+        imageMedium,
         imageAlt,
         imageWidth,
         imageHeight,

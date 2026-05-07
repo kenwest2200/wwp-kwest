@@ -3,6 +3,10 @@ import {
   installPageErrorToast,
   showPageErrorToast,
 } from "../lib/page-error-toast";
+import {
+  initFormCustomSelects,
+  syncCustomSelectFromNative,
+} from "./custom-select";
 
 type CrossRefFiltersResponse = Record<string, unknown>;
 type CrossRefFindResponse = Record<string, unknown> | unknown[];
@@ -282,6 +286,7 @@ function renderResults(
 function isCrossRefFieldValidationError(message: string): boolean {
   const m = message.trim().replace(/\u2019/g, "'").replace(/\u2018/g, "'");
   return (
+    m === "Please fill in at least one field before searching." ||
     m === "Set at least one filter before searching." ||
     m === "At least one filter is required for /find."
   );
@@ -350,6 +355,56 @@ function fillReference(values: ReferenceValues): void {
   set("cross-ref-ref-part", values.part_number);
   set("cross-ref-ref-motor", values.motor_number);
   set("cross-ref-ref-hp", values.hp);
+}
+
+function syncSelectOptions(
+  selectEl: HTMLSelectElement,
+  options: string[],
+  placeholder: string,
+): void {
+  const currentValue = text(selectEl.value);
+  const uniqueOptions = uniqueStrings(options);
+  const nextValue = uniqueOptions.includes(currentValue) ? currentValue : "";
+
+  selectEl.replaceChildren();
+
+  const placeholderOption = document.createElement("option");
+  placeholderOption.value = "";
+  placeholderOption.textContent = placeholder;
+  selectEl.appendChild(placeholderOption);
+
+  for (const option of uniqueOptions) {
+    const optionEl = document.createElement("option");
+    optionEl.value = option;
+    optionEl.textContent = option;
+    selectEl.appendChild(optionEl);
+  }
+
+  const selectRoot = selectEl.closest<HTMLElement>("[data-custom-select-root]");
+  const menuEl =
+    selectRoot?.querySelector<HTMLElement>("[data-custom-select-menu]") ?? null;
+  if (menuEl) {
+    menuEl.replaceChildren();
+    for (const option of uniqueOptions) {
+      const li = document.createElement("li");
+      li.setAttribute("role", "presentation");
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "cross-ref-page__custom-select-option";
+      btn.setAttribute("role", "option");
+      btn.setAttribute("data-custom-select-option", "");
+      btn.setAttribute("data-value", option);
+      btn.setAttribute("aria-selected", "false");
+      btn.textContent = option;
+      li.appendChild(btn);
+      menuEl.appendChild(li);
+    }
+  }
+
+  selectEl.value = nextValue;
+  if (selectRoot) {
+    syncCustomSelectFromNative(selectRoot);
+  }
 }
 
 function wireAutocomplete(control: AutocompleteControl): () => void {
@@ -449,9 +504,7 @@ export function initProductCrossReferencePage(): void {
   const countEl = document.getElementById("cross-ref-results-count");
   const emptyEl = document.getElementById("cross-ref-results-empty");
   const brandInput = document.getElementById("cross-ref-brand");
-  const brandSuggest = document.getElementById("cross-ref-brand-suggest");
   const modelInput = document.getElementById("cross-ref-model");
-  const modelSuggest = document.getElementById("cross-ref-model-suggest");
   const partInput = document.getElementById("cross-ref-part-number");
   const partSuggest = document.getElementById("cross-ref-part-suggest");
   const motorInput = document.getElementById("cross-ref-motor-number");
@@ -468,10 +521,8 @@ export function initProductCrossReferencePage(): void {
     !(listEl instanceof HTMLElement) ||
     !(countEl instanceof HTMLElement) ||
     !(emptyEl instanceof HTMLElement) ||
-    !(brandInput instanceof HTMLInputElement) ||
-    !(brandSuggest instanceof HTMLElement) ||
-    !(modelInput instanceof HTMLInputElement) ||
-    !(modelSuggest instanceof HTMLElement) ||
+    !(brandInput instanceof HTMLSelectElement) ||
+    !(modelInput instanceof HTMLSelectElement) ||
     !(partInput instanceof HTMLInputElement) ||
     !(partSuggest instanceof HTMLElement) ||
     !(motorInput instanceof HTMLInputElement) ||
@@ -483,10 +534,13 @@ export function initProductCrossReferencePage(): void {
   }
 
   installPageErrorToast(errorEl);
+  initFormCustomSelects(form);
 
-  form.addEventListener("input", () => {
+  const clearMessagesOnEdit = () => {
     clearCrossRefMessages(errorEl, inlineErrorEl, form);
-  });
+  };
+  form.addEventListener("input", clearMessagesOnEdit);
+  form.addEventListener("change", clearMessagesOnEdit);
 
   let currentLists: FilterLists = {
     brands: [],
@@ -501,7 +555,7 @@ export function initProductCrossReferencePage(): void {
   /** All models for the current brand (request without `model` so the list is not narrowed to one row). */
   let allModels: string[] = [];
 
-  /** Last value chosen from the suggest list (not free-typing). */
+  /** Last selected values in required dropdowns. */
   let lastPickedBrand = "";
   let lastPickedModel = "";
 
@@ -520,6 +574,16 @@ export function initProductCrossReferencePage(): void {
     resultsSection.hidden = !on;
   };
 
+  const scrollCrossRefToFormTop = (): void => {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    requestAnimationFrame(() => {
+      formSection.scrollIntoView({
+        behavior: reduceMotion ? "auto" : "smooth",
+        block: "start",
+      });
+    });
+  };
+
   const refreshFilters = async (): Promise<void> => {
     filtersInflight++;
     rerenderOpenSuggests();
@@ -532,6 +596,8 @@ export function initProductCrossReferencePage(): void {
         currentLists = only;
         allBrands = only.brands;
         allModels = only.models;
+        syncSelectOptions(brandInput, allBrands, "Choose a brand");
+        syncSelectOptions(modelInput, allModels, "Choose a model");
         return;
       }
 
@@ -543,6 +609,8 @@ export function initProductCrossReferencePage(): void {
         currentLists = byBrand;
         allBrands = emptyLists.brands;
         allModels = byBrand.models;
+        syncSelectOptions(brandInput, allBrands, "Choose a brand");
+        syncSelectOptions(modelInput, allModels, "Choose a model");
         return;
       }
 
@@ -554,6 +622,8 @@ export function initProductCrossReferencePage(): void {
       currentLists = narrow;
       allBrands = emptyLists.brands;
       allModels = modelsWide.models;
+      syncSelectOptions(brandInput, allBrands, "Choose a brand");
+      syncSelectOptions(modelInput, allModels, "Choose a model");
     } finally {
       filtersInflight = Math.max(0, filtersInflight - 1);
       filtersReady = true;
@@ -576,9 +646,11 @@ export function initProductCrossReferencePage(): void {
     }, 180);
   };
 
-  brandInput.addEventListener("input", () => {
-    if (!text(brandInput.value)) {
-      lastPickedBrand = "";
+  brandInput.addEventListener("change", () => {
+    const value = text(brandInput.value);
+    const changed = value !== lastPickedBrand;
+    lastPickedBrand = value;
+    if (changed) {
       lastPickedModel = "";
       modelInput.value = "";
       partInput.value = "";
@@ -587,56 +659,18 @@ export function initProductCrossReferencePage(): void {
     }
     scheduleRefresh();
   });
-  modelInput.addEventListener("input", () => {
-    if (!text(modelInput.value)) {
-      lastPickedModel = "";
+
+  modelInput.addEventListener("change", () => {
+    const value = text(modelInput.value);
+    const changed = value !== lastPickedModel;
+    lastPickedModel = value;
+    if (changed) {
       partInput.value = "";
       motorInput.value = "";
       hpInput.value = "";
     }
     scheduleRefresh();
   });
-  brandInput.addEventListener("change", scheduleRefresh);
-  modelInput.addEventListener("change", scheduleRefresh);
-
-  suggestRerenderIfOpen.push(
-    wireAutocomplete({
-      input: brandInput,
-      list: brandSuggest,
-      getOptions: () => (allBrands.length ? allBrands : currentLists.brands),
-      isLoading: isFiltersLoading,
-      onPick: (value) => {
-        const changed = value !== lastPickedBrand;
-        lastPickedBrand = value;
-        if (changed) {
-          lastPickedModel = "";
-          modelInput.value = "";
-          partInput.value = "";
-          motorInput.value = "";
-          hpInput.value = "";
-        }
-        scheduleRefresh();
-      },
-    }),
-  );
-  suggestRerenderIfOpen.push(
-    wireAutocomplete({
-      input: modelInput,
-      list: modelSuggest,
-      getOptions: () => (allModels.length ? allModels : currentLists.models),
-      isLoading: isFiltersLoading,
-      onPick: (value) => {
-        const changed = value !== lastPickedModel;
-        lastPickedModel = value;
-        if (changed) {
-          partInput.value = "";
-          motorInput.value = "";
-          hpInput.value = "";
-        }
-        scheduleRefresh();
-      },
-    }),
-  );
 
   suggestRerenderIfOpen.push(
     wireAutocomplete({
@@ -697,6 +731,7 @@ export function initProductCrossReferencePage(): void {
     countEl.textContent = "";
     emptyEl.hidden = true;
     clearCrossRefMessages(errorEl, inlineErrorEl, form);
+    scrollCrossRefToFormTop();
   });
 
   form.addEventListener("submit", async (ev) => {
@@ -716,7 +751,7 @@ export function initProductCrossReferencePage(): void {
         errorEl,
         inlineErrorEl,
         form,
-        "Set at least one filter before searching.",
+        "Please fill in at least one field before searching.",
       );
       return;
     }
