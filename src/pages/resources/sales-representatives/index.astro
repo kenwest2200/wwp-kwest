@@ -72,7 +72,6 @@ const breadcrumbs = [
                   name="zip"
                   type="text"
                   class="sr-page__input"
-                  inputmode="numeric"
                   maxlength="10"
                   placeholder="e.g. 33304"
                   aria-describedby="sr-zip-hint sr-search-inline-error"
@@ -87,7 +86,10 @@ const breadcrumbs = [
                   <span class="dl-page__locator-geolocate-tooltip"
                     >Use your current location</span
                   >
-                  <span class="dl-page__locator-geolocate-icon" aria-hidden="true">
+                  <span
+                    class="dl-page__locator-geolocate-icon"
+                    aria-hidden="true"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -152,7 +154,8 @@ const breadcrumbs = [
             Sales representatives
           </h2>
           <div id="sr-results-loader" class="sr-page__results-loader" hidden>
-            <span class="sr-page__results-loader-spinner" aria-hidden="true"></span>
+            <span class="sr-page__results-loader-spinner" aria-hidden="true"
+            ></span>
             <span class="sr-page__results-loader-text">Loading...</span>
           </div>
           <div id="sr-table-wrap" class="sr-page__table-wrap">
