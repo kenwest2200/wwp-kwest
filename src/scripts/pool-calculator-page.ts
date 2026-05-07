@@ -64,8 +64,7 @@ function syncStepper(): void {
     if (!item) continue;
     const isCurrent = seg <= 3 && i === seg;
     const isDone =
-      (i < seg && !skipFirstTwo) ||
-      (seg === 4 && !(skipFirstTwo && i < 3));
+      (i < seg && !skipFirstTwo) || (seg === 4 && !(skipFirstTwo && i < 3));
     item.classList.toggle("pool-calc__stepper-item--current", isCurrent);
     item.classList.toggle("pool-calc__stepper-item--done", isDone);
     item.classList.toggle(
@@ -259,11 +258,7 @@ async function loadCategoryProductsIfNeeded(
     );
     const json = (await res.json()) as ProductCategoryProductsApiResponse;
     if (!res.ok || json.error) {
-      setPanelMessage(
-        panel,
-        json.error ?? "Could not load products.",
-        "error",
-      );
+      setPanelMessage(panel, json.error ?? "Could not load products.", "error");
       return;
     }
     const items = (json.items ?? []).filter((x) => x.title && x.uri);
@@ -274,11 +269,7 @@ async function loadCategoryProductsIfNeeded(
     }
     panel.dataset.partsLoaded = PARTS_LOADED;
   } catch (e) {
-    setPanelMessage(
-      panel,
-      e instanceof Error ? e.message : String(e),
-      "error",
-    );
+    setPanelMessage(panel, e instanceof Error ? e.message : String(e), "error");
   } finally {
     panel.dataset.partsLoading = "";
   }
@@ -321,14 +312,14 @@ function renderDimensionForm(): void {
         <label class="pool-calc__dim-field">
           <div class="pool-calc__dim-control pool-calc__dim-control--ft">
             <span class="pool-calc__dim-sublabel">Feet</span>
-            <input type="text" inputmode="numeric" autocomplete="off" class="pool-calc__dim-ft" maxlength="${MAX_FT_DIGITS}" aria-label="${escapeHtml(f.label)} feet" />
+            <input type="text" autocomplete="off" class="pool-calc__dim-ft" maxlength="${MAX_FT_DIGITS}" aria-label="${escapeHtml(f.label)} feet" />
             <span class="pool-calc__dim-unit">ft</span>
           </div>
         </label>
         <label class="pool-calc__dim-field">
           <div class="pool-calc__dim-control pool-calc__dim-control--in">
             <span class="pool-calc__dim-sublabel">Inches</span>
-            <input type="text" inputmode="numeric" autocomplete="off" class="pool-calc__dim-in" maxlength="${MAX_IN_DIGITS}" aria-label="${escapeHtml(f.label)} inches" />
+            <input type="text"  autocomplete="off" class="pool-calc__dim-in" maxlength="${MAX_IN_DIGITS}" aria-label="${escapeHtml(f.label)} inches" />
             <span class="pool-calc__dim-unit">in</span>
           </div>
         </label>
@@ -473,21 +464,27 @@ function bindPoolTurnoverCustomSelect(): void {
   const root = turnoverRoot();
   if (!root) return;
   root.addEventListener("click", (e) => e.stopPropagation());
-  root.querySelector("[data-pool-turnover-trigger]")?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const open = !root.classList.contains("product-filters__custom-select--open");
-    setTurnoverMenuOpen(open);
-  });
-  root.querySelector("[data-pool-turnover-menu]")?.addEventListener("click", (e) => {
-    const t = (e.target as HTMLElement).closest<HTMLButtonElement>(
-      "[data-pool-turnover-value]",
-    );
-    if (!t) return;
-    const v = Number(t.dataset.poolTurnoverValue);
-    if (!Number.isFinite(v) || v < 1 || v > 6) return;
-    setTurnoversValue(v);
-    setTurnoverMenuOpen(false);
-  });
+  root
+    .querySelector("[data-pool-turnover-trigger]")
+    ?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const open = !root.classList.contains(
+        "product-filters__custom-select--open",
+      );
+      setTurnoverMenuOpen(open);
+    });
+  root
+    .querySelector("[data-pool-turnover-menu]")
+    ?.addEventListener("click", (e) => {
+      const t = (e.target as HTMLElement).closest<HTMLButtonElement>(
+        "[data-pool-turnover-value]",
+      );
+      if (!t) return;
+      const v = Number(t.dataset.poolTurnoverValue);
+      if (!Number.isFinite(v) || v < 1 || v > 6) return;
+      setTurnoversValue(v);
+      setTurnoverMenuOpen(false);
+    });
   document.addEventListener("click", () => setTurnoverMenuOpen(false));
 }
 
@@ -517,8 +514,7 @@ function syncChrome(): void {
 
   if (nextTop) {
     const showNext =
-      currentStep === 1 ||
-      (currentStep === 2 && flowMode === "dimensions");
+      currentStep === 1 || (currentStep === 2 && flowMode === "dimensions");
     nextTop.hidden = !showNext;
     if (currentStep === 1) {
       nextTop.disabled = flowMode === "dimensions" && !selectedShape;

@@ -440,8 +440,14 @@ function submenuLabelByHref(label: string, href: string): string {
         >
           <form action="/search" method="get">
             <div class="header__search-field">
-              <label class="header__search-label">
-                <IconSearch class="header__search-icon" />
+              <div class="header__search-label">
+                <button
+                  type="submit"
+                  class="header__search-icon-btn"
+                  aria-label="Search"
+                >
+                  <IconSearch class="header__search-icon" />
+                </button>
                 <input
                   class="header__search-input"
                   type="search"
@@ -453,7 +459,7 @@ function submenuLabelByHref(label: string, href: string): string {
                   aria-controls="header-search-suggest"
                   data-header-search-input
                 />
-              </label>
+              </div>
               <div
                 id="header-search-suggest"
                 class="header__search-suggest"

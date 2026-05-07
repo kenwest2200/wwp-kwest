@@ -1,0 +1,94 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import PageHeaderOffset from "../../../components/PageHeaderOffset.astro";
+import SectionHero from "../../../components/SectionHero/SectionHero.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs.astro";
+import { getGraphQLClient, requestGraphql } from "../../../lib/graphql";
+
+export const prerender = true;
+
+const PAGE_URI = "/resources/employment-opportunities/";
+const graphqlConfigured = Boolean(getGraphQLClient());
+const EMPLOYMENT_OPPORTUNITIES_PAGE_QUERY = /* GraphQL */ `
+  query EmploymentOpportunitiesPage($id: ID!) {
+    page(id: $id, idType: URI) {
+      title
+      content
+    }
+  }
+`;
+
+type EmploymentOpportunitiesPageData = {
+  page?: {
+    title?: string | null;
+    content?: string | null;
+  } | null;
+};
+
+async function loadPage(): Promise<
+  EmploymentOpportunitiesPageData["page"] | null
+> {
+  if (!graphqlConfigured) return null;
+  const uris = [PAGE_URI, PAGE_URI.replace(/\/$/, "")];
+  for (const id of uris) {
+    try {
+      const data = await requestGraphql<EmploymentOpportunitiesPageData>(
+        EMPLOYMENT_OPPORTUNITIES_PAGE_QUERY,
+        { id },
+      );
+      if (data.page) return data.page;
+    } catch {
+      /* try next */
+    }
+  }
+  return null;
+}
+
+const pageNode = await loadPage();
+const pageTitle = pageNode?.title?.trim() || "Employment Opportunities";
+const pageContentHtml = pageNode?.content?.trim() || "";
+const intro =
+  "Join the Waterway team and help build products that keep pools and spas performing at their best.";
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Company", href: "/company" },
+  { label: pageTitle },
+];
+---
+
+<Layout headerType="white" pageTitle={pageTitle} description={intro}>
+  <main class="employment-page" data-page-header-offset>
+    <SectionHero title={pageTitle} intro={intro} />
+    <div class="employment-page__breadcrumb-wrap">
+      <Breadcrumbs items={breadcrumbs} />
+    </div>
+    <div class="employment-page__main">
+      {
+        !graphqlConfigured && (
+          <p class="employment-page__notice">
+            GraphQL is not configured. Set <code>PUBLIC_GRAPHQL_URL</code> in{" "}
+            <code>.env</code> to load this page.
+          </p>
+        )
+      }
+      {
+        graphqlConfigured && !pageContentHtml && (
+          <p class="employment-page__notice">
+            No content was returned for <code>{PAGE_URI}</code>. Check this page
+            in WordPress.
+          </p>
+        )
+      }
+      {
+        pageContentHtml && (
+          <div
+            class="employment-page__content product-page__optional-html"
+            set:html={pageContentHtml}
+          />
+        )
+      }
+    </div>
+  </main>
+</Layout>
+
+<PageHeaderOffset />

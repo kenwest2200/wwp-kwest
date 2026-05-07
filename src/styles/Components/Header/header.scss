@@ -606,11 +606,33 @@
     }
 
     &-icon {
+      display: block;
+      width: px-to-rem(24);
+      height: px-to-rem(24);
+    }
+
+    &-icon-btn {
       position: absolute;
       left: px-to-rem(8);
       top: 50%;
       transform: translateY(-50%);
-      pointer-events: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: px-to-rem(24);
+      height: px-to-rem(24);
+      margin: 0;
+      padding: 0;
+      border: none;
+      border-radius: px-to-rem(4);
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+
+      &:focus-visible {
+        outline: 2px solid $dark-teal;
+        outline-offset: 2px;
+      }
     }
 
     &-input {
@@ -1276,38 +1298,77 @@
     }
   }
 
-  @include media-breakpoint-down(sm) {
-    &__search {
-      flex: 0 0 auto;
+  &__search {
+    flex: 0 0 auto;
+    max-width: none;
+
+    &-toggle {
+      display: inline-flex;
+    }
+
+    &-panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 650;
+      width: 100%;
       max-width: none;
+      height: var(--header-search-panel-height,
+        var(--header-top-height, var(--header-offset, #{px-to-rem(112)})));
+      min-height: var(--header-search-panel-height,
+        var(--header-top-height, var(--header-offset, #{px-to-rem(112)})));
+      padding: px-to-rem(16);
+      display: flex;
+      align-items: center;
+      gap: px-to-rem(12);
+      background: $white;
+      box-sizing: border-box;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(#{px-to-rem(-12)});
+      transition:
+        opacity 0.28s ease,
+        transform 0.28s ease,
+        visibility 0s linear 0.28s;
+      pointer-events: none;
+    }
 
-      &-toggle {
-        display: inline-flex;
+    &-panel form {
+      width: 100%;
+    }
+
+    &--open &-panel {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      transition-delay: 0s;
+      pointer-events: auto;
+    }
+
+    &-label {
+      width: 100%;
+    }
+
+    &-icon-btn {
+      left: px-to-rem(16);
+
+      path {
+        fill: $dark-medium;
       }
+    }
 
-      &-panel {
-        position: absolute;
-        top: px-to-rem(40);
-        right: 0;
-        width: max-content;
-        z-index: 60;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(#{px-to-rem(-8)});
-        transition:
-          opacity 0.28s ease,
-          transform 0.28s ease,
-          visibility 0s linear 0.28s;
-        pointer-events: none;
-        box-sizing: border-box;
-      }
+    &-input {
+      width: 100%;
+      min-width: 0;
+      min-height: px-to-rem(48);
+      background: $light-gray;
+      color: $dark-medium;
+      border-radius: px-to-rem(4);
+      padding: px-to-rem(12) px-to-rem(12) px-to-rem(12) px-to-rem(44);
 
-      &--open &-panel {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-        transition-delay: 0s;
-        pointer-events: auto;
+      &::placeholder {
+        color: $dark-medium;
       }
     }
   }
@@ -1321,6 +1382,12 @@
       &-panel {
         position: static;
         width: auto;
+        max-width: none;
+        height: auto;
+        min-height: 0;
+        padding: 0;
+        gap: 0;
+        background: transparent;
         opacity: 1;
         visibility: visible;
         transform: none;
@@ -1328,6 +1395,33 @@
         transition: none;
         margin-left: auto;
       }
+
+      &-panel form {
+        width: auto;
+      }
+
+      &-label {
+        width: auto;
+      }
+
+      &-icon-btn {
+        left: px-to-rem(8);
+      }
+
+      &-input {
+        width: auto;
+        min-width: px-to-rem(198);
+        min-height: px-to-rem(40);
+        background-color: $white-20;
+        color: $white;
+        border-radius: px-to-rem(4);
+        padding: px-to-rem(10) px-to-rem(10) px-to-rem(9) px-to-rem(44);
+
+        &::placeholder {
+          color: $white;
+        }
+      }
+
     }
   }
 
@@ -1417,16 +1511,41 @@ body.is-products .header.header--white:not(.is-scrolling) {
 
     &-icon {
       path {
-        fill: $white;
+        fill: $dark-medium;
       }
     }
 
     &-input {
-      background-color: $white-20;
-      color: $white;
+      background-color: $light-gray;
+      color: $dark-medium;
+      max-width: px-to-rem(600);
 
       &::placeholder {
+        color: $dark-medium;
+      }
+    }
+
+    @include media-breakpoint-up(md) {
+      &-toggle-icon {
+        path {
+          fill: $white;
+        }
+      }
+
+      &-icon {
+        path {
+          fill: $white;
+        }
+      }
+
+      &-input {
+        background-color: $white-20;
         color: $white;
+        max-width: unset;
+
+        &::placeholder {
+          color: $white;
+        }
       }
     }
   }

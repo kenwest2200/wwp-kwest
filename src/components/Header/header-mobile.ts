@@ -302,6 +302,17 @@ export function initHeaderSearch(): void {
     bindHeaderSearchAutocomplete(panel, input);
   }
 
+  const syncSearchPanelMetrics = () => {
+    if (!(panel instanceof HTMLElement)) return;
+    panel.style.setProperty(
+      "--header-search-panel-height",
+      `${sumHeaderTopHeightsPx()}px`,
+    );
+  };
+  syncSearchPanelMetrics();
+  window.addEventListener("resize", syncSearchPanelMetrics, { passive: true });
+  window.addEventListener("scroll", syncSearchPanelMetrics, { passive: true });
+
   if (!(root instanceof HTMLElement) || !(toggle instanceof HTMLElement)) {
     return;
   }
@@ -309,6 +320,7 @@ export function initHeaderSearch(): void {
   const mq = window.matchMedia(SEARCH_MQ);
 
   const setOpen = (open: boolean) => {
+    if (open) syncSearchPanelMetrics();
     root.classList.toggle("header__search--open", open);
     toggle.setAttribute("aria-expanded", open ? "true" : "false");
     if (open && input) {
