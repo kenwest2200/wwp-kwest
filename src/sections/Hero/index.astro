@@ -6,10 +6,6 @@ import type {
 import IconArrowRight from "../../components/icons/IconArrowRight.astro";
 import Picture from "../../components/Picture/Picture.astro";
 import { pictureFromWpMediaNode } from "../../lib/picture-wp-media";
-// Mock assets (fallback) — kept for local preview if GraphQL is empty
-// import img1 from "../../assets/images/1.png";
-// import img2 from "../../assets/images/2.png";
-// import img3 from "../../assets/images/3.png";
 
 interface Props {
   data: HomeHeroData | null;
@@ -33,12 +29,20 @@ const description = intro?.description ?? null;
 
 const fallbackImageAlt = title ?? "Hero image";
 
-const heroPictures = [intro?.image1?.node, intro?.image2?.node, intro?.image3?.node]
+const heroPictures = [
+  intro?.image1?.node,
+  intro?.image2?.node,
+  intro?.image3?.node,
+]
   .map((n) => pictureFromWpMediaNode(n, fallbackImageAlt))
   .filter((x): x is NonNullable<typeof x> => x !== null);
 
 const buttonLink = intro?.buttonLink ?? null;
-const ctaHref = buttonLink?.url?.trim() || "#";
+const rawCtaHref = buttonLink?.url?.trim() || "#";
+const ctaHref =
+  rawCtaHref === "/products" || rawCtaHref === "/products/"
+    ? "/products/?catalog=root"
+    : rawCtaHref;
 const ctaLabel = buttonLink?.title?.trim() || "Browse catalog";
 const ctaTarget = buttonLink?.target?.trim();
 const ctaRel = ctaTarget === "_blank" ? "noopener noreferrer" : undefined;
@@ -46,12 +50,6 @@ const ctaRel = ctaTarget === "_blank" ? "noopener noreferrer" : undefined;
 const fallbackTitle = "Engineered for Pool, Spa & Bath";
 const fallbackDescription =
   "Cross-compatible components designed in USA for distributors, installers, and inspectors.";
-
-// const mockImages = [
-//   { url: img1, title: "Image 1" },
-//   { url: img2, title: "Image 2" },
-//   { url: img3, title: "Image 3" },
-// ];
 ---
 
 <section class="hero" data-page-header-offset>

@@ -77,6 +77,17 @@ const mockFooterData = {
 const columnNodes = data?.footerColumns?.nodes ?? [];
 const apiColumns = footerColumnsFromMenuNodes(columnNodes);
 const displayColumns = [...apiColumns, ...footerStaticTailColumns];
+
+function footerLinkLabelByHref(label: string, href: string): string {
+  const hrefTrimmed = (href ?? "").trim().toLowerCase();
+  if (
+    hrefTrimmed.includes("/resources/recall/") ||
+    hrefTrimmed.endsWith("/resources/recall")
+  ) {
+    return "Recall";
+  }
+  return label;
+}
 ---
 
 <footer class="footer">
@@ -162,7 +173,9 @@ const displayColumns = [...apiColumns, ...footerStaticTailColumns];
                         link.icon === "youtube" ? (
                         <YoutubeIcon class="footer__column-icon" />
                       ) : null}
-                      {"label" in link && link.label ? link.label : null}
+                      {"label" in link && link.label
+                        ? footerLinkLabelByHref(link.label, link.href)
+                        : null}
                     </a>
                   </li>
                 ))}

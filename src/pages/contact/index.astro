@@ -24,7 +24,7 @@ export const prerender = true;
 const graphqlConfigured = Boolean(getGraphQLClient());
 
 const introDefault =
-  "For immediate assistance, call +1 805-981-0262 or text +1 805-981-0262. Our team is ready to help!";
+  "For immediate assistance, call <span style='display: inline-block;'>+1 805-981-0262</span> or text <span style='display: inline-block;'>+1 805-981-0262</span>. Our team is ready to help!";
 
 async function loadPage(): Promise<ContactPageData["page"] | null> {
   if (!graphqlConfigured) return null;
@@ -86,7 +86,7 @@ const locationOptions = [
 
 <Layout headerType="white" pageTitle={pageTitle} description={introDefault}>
   <main class="contact-page" data-contact-page data-page-header-offset>
-    <SectionHero title={pageTitle} intro={introDefault} />
+    <SectionHero title={pageTitle} intro={introDefault} introIsHtml={true} />
 
     <div class="contact-page__breadcrumb-wrap">
       <Breadcrumbs items={breadcrumbs} />

@@ -20,7 +20,10 @@ const { items, class: className } = Astro.props as Props;
           const isLast = idx === items.length - 1;
           const href = item.href?.trim();
           return (
-            <li class="breadcrumbs__item" aria-current={isLast ? "page" : undefined}>
+            <li
+              class="breadcrumbs__item"
+              aria-current={isLast ? "page" : undefined}
+            >
               {idx > 0 && (
                 <span class="breadcrumbs__separator" aria-hidden="true">
                   <svg
@@ -35,7 +38,8 @@ const { items, class: className } = Astro.props as Props;
                       stroke="#9C9C9C"
                       stroke-width="1.5"
                       stroke-linecap="round"
-                      stroke-linejoin="round"></path>
+                      stroke-linejoin="round"
+                    />
                   </svg>
                 </span>
               )}

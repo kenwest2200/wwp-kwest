@@ -130,6 +130,7 @@ if (getGraphQLClient()) {
             document.currentScript && document.currentScript.parentElement;
           if (!main || !main.classList.contains("product-filters-page")) return;
           var p = new URLSearchParams(location.search || "");
+          var hasCatalogRootParam = p.get("catalog") === "root";
           function listParam(name) {
             var raw = p.get(name);
             if (raw == null || raw === "") return [];
@@ -144,7 +145,8 @@ if (getGraphQLClient()) {
             listParam("category").length > 0 ||
             listParam("sub").length > 0 ||
             listParam("attr").length > 0 ||
-            (p.get("q") || "").trim() !== "";
+            (p.get("q") || "").trim() !== "" ||
+            !hasCatalogRootParam;
           if (hasFilters) {
             main.classList.add("is-catalog-filter-active");
             document.body.classList.remove("is-products");

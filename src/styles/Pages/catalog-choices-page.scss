@@ -135,8 +135,20 @@
     color: $dark;
     font-size: px-to-rem(20);
     line-height: px-to-rem(28);
-    font-weight: 500;
-    letter-spacing: 0.02em;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+
+
+
+    @include media-breakpoint-up(md) {
+      font-size: px-to-rem(36);
+      line-height: px-to-rem(48);
+      margin-bottom: px-to-rem(60);
+
+      &-brochures {
+        margin-bottom: px-to-rem(40);
+      }
+    }
   }
 
   &__card {

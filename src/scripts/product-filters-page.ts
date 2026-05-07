@@ -15,9 +15,6 @@ const activeFiltersEl = document.getElementById(
 const activeFiltersRowEl = document.getElementById(
   "product-filters-active-filters-row",
 );
-const activeFiltersToggleEl = document.getElementById(
-  "product-filters-active-filters-toggle",
-);
 function queryPagerButtons(ids: readonly string[]): HTMLButtonElement[] {
   return ids
     .map((id) => document.getElementById(id))
@@ -101,6 +98,8 @@ const filtersPanelEl = document.getElementById("product-filters-filters-panel");
 const DRAWER_OPEN_CLASS = "product-filters-catalog--drawer-open";
 
 const CATALOG_VIEW_STORAGE_KEY = "product-filters-catalog-view";
+const PRODUCTS_ROOT_DEFAULT_PARAM_KEY = "catalog";
+const PRODUCTS_ROOT_DEFAULT_PARAM_VALUE = "root";
 type CatalogViewMode = "grid" | "rows";
 
 const selectedRoot = new Set<string>();
@@ -201,6 +200,8 @@ let rootCategoriesExtraExpanded = false;
 const ROOT_CATEGORIES_VISIBLE_LIMIT = 10;
 const ATTR_VALUES_VISIBLE_LIMIT = 5;
 const ACTIVE_FILTER_CHIPS_VISIBLE = 5;
+const ACTIVE_FILTERS_SELECTED_LABEL_HTML =
+  '<span class="product-filters__active-filters-selected-label">Selected:</span>';
 let activeFilterChipsExpanded = false;
 const expandedAttrAccordionSlugs = new Set<string>();
 
@@ -454,11 +455,16 @@ function getEffectiveSelectedRootSlugs(): string[] {
 }
 
 function syncRootNavAndHeaderState() {
+  const hasCatalogRootParam =
+    new URLSearchParams(window.location.search).get(
+      PRODUCTS_ROOT_DEFAULT_PARAM_KEY,
+    ) === PRODUCTS_ROOT_DEFAULT_PARAM_VALUE;
   const hasActiveFilter =
     selectedRoot.size > 0 ||
     selectedSub.size > 0 ||
     selectedAttrs.size > 0 ||
-    searchQuery.trim().length > 0;
+    searchQuery.trim().length > 0 ||
+    !hasCatalogRootParam;
   document
     .querySelector<HTMLElement>(".product-filters-page")
     ?.classList.toggle("is-catalog-filter-active", hasActiveFilter);
@@ -572,6 +578,19 @@ function syncUrlState() {
 
   if (page > 1) params.set("page", String(page));
   else params.delete("page");
+
+  const hasCatalogStateParams =
+    roots.length > 0 ||
+    sub.length > 0 ||
+    attr.length > 0 ||
+    qTrim.length > 0 ||
+    pageSize !== 24 ||
+    sortMode !== "updated" ||
+    page > 1;
+
+  if (hasCatalogStateParams) {
+    params.delete(PRODUCTS_ROOT_DEFAULT_PARAM_KEY);
+  }
 
   const qs = params.toString();
   const url = qs
@@ -1400,7 +1419,10 @@ function firstNonEmptyImageUrl(
   return null;
 }
 
-function buildProductCardPictureSourcesHtml(p: Product, imgSrc: string): string {
+function buildProductCardPictureSourcesHtml(
+  p: Product,
+  imgSrc: string,
+): string {
   const tiers: Array<{ media: string; url: string | null }> = [
     {
       media: "(min-width: 1024px)",
@@ -1430,10 +1452,7 @@ function buildProductCardPictureSourcesHtml(p: Product, imgSrc: string): string 
 function renderProductCard(p: Product): string {
   const href = `/product/${p.slug}/`;
   const subLabel = getProductSubcategoryLabel(p);
-  const rawImg = firstNonEmptyImageUrl(
-    p.imageMedium,
-    p.imageUrl,
-  );
+  const rawImg = firstNonEmptyImageUrl(p.imageMedium, p.imageUrl);
   const imgSrc = rawImg ? escapeHtml(rawImg) : PRODUCT_IMAGE_PLACEHOLDER;
   const altSource =
     p.imageAlt && p.imageAlt.trim() ? p.imageAlt.trim() : p.title;
@@ -1445,7 +1464,9 @@ function renderProductCard(p: Product): string {
       ? p.imageHeight
       : 176;
   const onErrorAttr = ` onerror="this.onerror=null;this.src='${PRODUCT_IMAGE_PLACEHOLDER}'"`;
-  const pictureSources = rawImg ? buildProductCardPictureSourcesHtml(p, rawImg) : "";
+  const pictureSources = rawImg
+    ? buildProductCardPictureSourcesHtml(p, rawImg)
+    : "";
 
   return `<li class="product-filters__product-card" data-full-title="${escapeHtmlAttr(decodeHtmlEntities(p.title))}">
   <a class="product-filters__product-link" href="${escapeHtml(href)}">
@@ -1815,29 +1836,85 @@ function handleFilterCheckboxChange(e: Event) {
 
 function buildActiveFilterChips(): ActiveFilterChip[] {
   const out: ActiveFilterChip[] = [];
+  const seenIndex = new Map<string, number>();
+  const pushUniqueChip = (chip: ActiveFilterChip) => {
+    let key = "";
+    if (chip.kind === "root") {
+      key = `root:${chip.rootSlug ?? chip.label.toLowerCase()}`;
+    } else if (chip.kind === "subgroup") {
+      const normalizedLabel = chip.label
+        .trim()
+        .replace(/\s+/g, " ")
+        .toLowerCase();
+      key = `subgroup:${normalizedLabel}`;
+    } else if (chip.kind === "attr") {
+      key = `attr:${chip.attrSlug ?? chip.label.toLowerCase()}`;
+    } else {
+      key = `search:${chip.label.toLowerCase()}`;
+    }
+    const existingIndex = seenIndex.get(key);
+    if (existingIndex != null) {
+      if (chip.kind === "subgroup" && chip.memberSlugs?.length) {
+        const existing = out[existingIndex];
+        if (existing?.kind === "subgroup") {
+          const mergedMembers = new Set<string>([
+            ...(existing.memberSlugs ?? []),
+            ...chip.memberSlugs,
+          ]);
+          existing.memberSlugs = [...mergedMembers].sort((a, b) =>
+            a.localeCompare(b, undefined, { sensitivity: "base" }),
+          );
+        }
+      }
+      return;
+    }
+    seenIndex.set(key, out.length);
+    out.push(chip);
+  };
   const sortedRoots = [...selectedRoot].sort((a, b) =>
     a.localeCompare(b, undefined, { sensitivity: "base" }),
   );
   for (const slug of sortedRoots) {
     const label =
       categorySlugToLabel.get(slug)?.trim() || slug.replace(/-/g, " ");
-    out.push({ kind: "root", label, rootSlug: slug });
+    pushUniqueChip({ kind: "root", label, rootSlug: slug });
   }
 
   const key = getMergedDataKey();
   const groups = mergedSubcategoryGroupsBySelection.get(key) ?? [];
   const coveredSubs = new Set<string>();
 
+  const subgroupByLabel = new Map<
+    string,
+    { label: string; members: Set<string> }
+  >();
   for (const g of groups) {
-    const memberSlugs = (g.subcategories ?? [])
-      .map((s) => s.slug)
-      .filter(Boolean);
+    const memberSlugs = [
+      ...new Set((g.subcategories ?? []).map((s) => s.slug).filter(Boolean)),
+    ];
     if (memberSlugs.length === 0) continue;
     if (!memberSlugs.every((s) => selectedSub.has(s))) continue;
-    for (const s of memberSlugs) coveredSubs.add(s);
     const label =
       (g.groupName ?? "").trim() || memberSlugs[0].replace(/-/g, " ");
-    out.push({ kind: "subgroup", label, memberSlugs: [...memberSlugs] });
+    const labelKey = label.toLowerCase();
+    const bucket = subgroupByLabel.get(labelKey) ?? {
+      label,
+      members: new Set<string>(),
+    };
+    for (const s of memberSlugs) {
+      bucket.members.add(s);
+      coveredSubs.add(s);
+    }
+    subgroupByLabel.set(labelKey, bucket);
+  }
+  const subgroupEntries = [...subgroupByLabel.entries()].sort((a, b) =>
+    a[0].localeCompare(b[0], undefined, { sensitivity: "base" }),
+  );
+  for (const [, group] of subgroupEntries) {
+    const memberSlugs = [...group.members].sort((a, b) =>
+      a.localeCompare(b, undefined, { sensitivity: "base" }),
+    );
+    pushUniqueChip({ kind: "subgroup", label: group.label, memberSlugs });
   }
 
   const leftover = [...selectedSub]
@@ -1846,7 +1923,7 @@ function buildActiveFilterChips(): ActiveFilterChip[] {
   for (const slug of leftover) {
     const label =
       categorySlugToLabel.get(slug)?.trim() || slug.replace(/-/g, " ");
-    out.push({ kind: "subgroup", label, memberSlugs: [slug] });
+    pushUniqueChip({ kind: "subgroup", label, memberSlugs: [slug] });
   }
 
   const sortedAttrs = [...selectedAttrs].sort((a, b) =>
@@ -1857,7 +1934,7 @@ function buildActiveFilterChips(): ActiveFilterChip[] {
       attrValueSlugToLabel.get(slug)?.trim() ||
       fallbackLabelFromValueSlug(slug);
     const attrGroupName = attrValueSlugToAttrName.get(slug)?.trim() ?? "";
-    out.push({
+    pushUniqueChip({
       kind: "attr",
       label,
       attrSlug: slug,
@@ -1867,7 +1944,7 @@ function buildActiveFilterChips(): ActiveFilterChip[] {
 
   const q = searchQuery.trim();
   if (q) {
-    out.push({ kind: "search", label: `Search: ${q}` });
+    pushUniqueChip({ kind: "search", label: `Search: ${q}` });
   }
   return out;
 }
@@ -1911,33 +1988,32 @@ function renderActiveFilterChips() {
     activeFiltersRowEl.classList.remove(
       "product-filters__active-filters-row--collapsed",
     );
-    if (activeFiltersToggleEl) activeFiltersToggleEl.hidden = true;
     return;
   }
   activeFiltersEl.hidden = false;
-  const collapsed =
-    chips.length > ACTIVE_FILTER_CHIPS_VISIBLE && !activeFilterChipsExpanded;
+  const showToggle = chips.length > ACTIVE_FILTER_CHIPS_VISIBLE;
+  const collapsed = showToggle && !activeFilterChipsExpanded;
   activeFiltersRowEl.classList.toggle(
     "product-filters__active-filters-row--collapsed",
     collapsed,
   );
-  activeFiltersRowEl.innerHTML = chips
+  const hiddenChipsCount = Math.max(
+    0,
+    chips.length - ACTIVE_FILTER_CHIPS_VISIBLE,
+  );
+  const toggleHtml = showToggle
+    ? `<span class="product-filters__active-filters-toggle product-filters__active-filters-toggle--inline">
+      <button type="button" id="product-filters-active-filters-show" class="product-filters__link-btn product-filters__active-filters-toggle-btn"${activeFilterChipsExpanded ? " hidden" : ""}>
+        Show all${hiddenChipsCount > 0 ? ` (${hiddenChipsCount})` : ""}
+      </button>
+      <button type="button" id="product-filters-active-filters-hide" class="product-filters__link-btn product-filters__active-filters-toggle-btn"${activeFilterChipsExpanded ? "" : " hidden"}>
+        Show less
+      </button>
+    </span>`
+    : "";
+  activeFiltersRowEl.innerHTML = `${ACTIVE_FILTERS_SELECTED_LABEL_HTML}${chips
     .map((c) => renderActiveFilterChipButton(c))
-    .join("");
-  if (activeFiltersToggleEl) {
-    const showToggle = chips.length > ACTIVE_FILTER_CHIPS_VISIBLE;
-    activeFiltersToggleEl.hidden = !showToggle;
-    const showBtn = document.getElementById(
-      "product-filters-active-filters-show",
-    );
-    const hideBtn = document.getElementById(
-      "product-filters-active-filters-hide",
-    );
-    if (showBtn && hideBtn) {
-      showBtn.hidden = !showToggle || activeFilterChipsExpanded;
-      hideBtn.hidden = !showToggle || !activeFilterChipsExpanded;
-    }
-  }
+    .join("")}${toggleHtml}`;
 }
 
 function applyActiveFilterRemoval(button: HTMLButtonElement) {
@@ -2205,11 +2281,6 @@ async function init() {
         imageHeight?: number | null;
       }[];
     };
-    console.log("[product-filters] GET /data/product-filters.json response", {
-      status: res.status,
-      ok: res.ok,
-      body: data,
-    });
 
     if (!rootEl || !subEl || !attrsEl) {
       console.error("[product-filters] Static data load failed", {

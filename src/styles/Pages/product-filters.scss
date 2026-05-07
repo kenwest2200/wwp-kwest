@@ -1077,9 +1077,9 @@
   padding: px-to-rem(12) px-to-rem(0) px-to-rem(12) px-to-rem(40);
   font-size: px-to-rem(12);
   line-height: px-to-rem(16);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   width: 100%;
-  font-weight: 600;
+  font-weight: 400;
   color: $dark-teal;
   text-transform: uppercase;
   text-decoration: none;
@@ -1666,6 +1666,14 @@ $product-filters-check-svg: "%3Csvg xmlns='http://www.w3.org/2000/svg' width='9'
       }
     }
   }
+
+  &:hover {
+    svg {
+      path {
+        stroke: $medium-teal;
+      }
+    }
+  }
 }
 
 .product-filters__meta {
@@ -1721,14 +1729,11 @@ $product-filters-check-svg: "%3Csvg xmlns='http://www.w3.org/2000/svg' width='9'
   align-items: center;
   gap: px-to-rem(12);
   min-width: 0;
-
-  @include media-breakpoint-up(md) {
-    flex-wrap: wrap;
-  }
 }
 
 .product-filters__active-filters-selected-label {
-  display: none;
+  display: inline-flex;
+  align-items: center;
   margin: 0;
   flex-shrink: 0;
   font-size: px-to-rem(16);
@@ -1736,10 +1741,6 @@ $product-filters-check-svg: "%3Csvg xmlns='http://www.w3.org/2000/svg' width='9'
   letter-spacing: 0.02em;
   font-weight: 400;
   color: $dark-medium;
-
-  @include media-breakpoint-up(md) {
-    display: inline;
-  }
 }
 
 .product-filters__active-filters-row {
@@ -1872,18 +1873,26 @@ $product-filters-check-svg: "%3Csvg xmlns='http://www.w3.org/2000/svg' width='9'
 
 .product-filters__active-filters-toggle {
   display: none;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 0.5rem;
-  margin-top: px-to-rem(8);
+  margin-top: 0;
+  flex-shrink: 0;
 
   @include media-breakpoint-up(md) {
     display: flex;
   }
 }
 
+.product-filters__active-filters-toggle--inline {
+  margin-left: px-to-rem(24);
+}
+
 .product-filters__active-filters-toggle-btn {
-  padding: 0.25rem 0;
+  width: auto;
+  padding: px-to-rem(4) 0;
+  padding-left: 0;
+  text-wrap: nowrap;
 }
 
 .product-filters__empty {
@@ -1992,7 +2001,7 @@ $product-filters-check-svg: "%3Csvg xmlns='http://www.w3.org/2000/svg' width='9'
   transition: color 0.2s ease, opacity 0.2s ease;
 
   &:hover:not(:disabled) {
-    color: $dark-medium;
+    color: $medium-teal;
   }
 
   &:focus-visible {

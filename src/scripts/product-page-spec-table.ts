@@ -63,7 +63,7 @@ function initSpecTable(table: HTMLTableElement) {
   if (!headerRow || !tbody) return;
 
   const dataRows = getDataRows(table, headerRow);
-  if (dataRows.length === 0) return;
+  const canSort = dataRows.length > 1;
 
   const headerCells = [...headerRow.cells] as HTMLTableCellElement[];
   if (headerCells.length === 0) return;
@@ -100,6 +100,17 @@ function initSpecTable(table: HTMLTableElement) {
     btnDesc.setAttribute("title", "Sort by descending");
     btnDesc.innerHTML = svgChevronDown;
 
+    if (!canSort) {
+      btnAsc.disabled = true;
+      btnDesc.disabled = true;
+      btnAsc.classList.add("is-disabled");
+      btnDesc.classList.add("is-disabled");
+      btnAsc.setAttribute("aria-disabled", "true");
+      btnDesc.setAttribute("aria-disabled", "true");
+      btnAsc.setAttribute("title", "Not enough rows to sort");
+      btnDesc.setAttribute("title", "Not enough rows to sort");
+    }
+
     group.appendChild(btnAsc);
     group.appendChild(btnDesc);
     cell.appendChild(group);
@@ -108,6 +119,7 @@ function initSpecTable(table: HTMLTableElement) {
     cell.setAttribute("aria-sort", "none");
 
     const applySort = (nextDir: "asc" | "desc") => {
+      if (!canSort) return;
       headerCells.forEach((c, i) => {
         c.removeAttribute("data-sort-dir");
         c.classList.remove("is-sorted-asc", "is-sorted-desc");
@@ -151,17 +163,19 @@ function initSpecTable(table: HTMLTableElement) {
       applySort(dir);
     };
 
-    btnAsc.addEventListener("click", (e) => {
-      e.stopPropagation();
-      applySort("asc");
-    });
-    btnAsc.addEventListener("keydown", (e) => onKeyActivate(e, "asc"));
+    if (canSort) {
+      btnAsc.addEventListener("click", (e) => {
+        e.stopPropagation();
+        applySort("asc");
+      });
+      btnAsc.addEventListener("keydown", (e) => onKeyActivate(e, "asc"));
 
-    btnDesc.addEventListener("click", (e) => {
-      e.stopPropagation();
-      applySort("desc");
-    });
-    btnDesc.addEventListener("keydown", (e) => onKeyActivate(e, "desc"));
+      btnDesc.addEventListener("click", (e) => {
+        e.stopPropagation();
+        applySort("desc");
+      });
+      btnDesc.addEventListener("keydown", (e) => onKeyActivate(e, "desc"));
+    }
   });
 }
 

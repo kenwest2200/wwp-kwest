@@ -108,65 +108,70 @@ const breadcrumbs = [
         >
           {
             data.catalogs.length > 0 && (
-              <div class="catalog-choices-page__catalogs">
-                {data.catalogs.map((item) => (
-                  <article class="catalog-choices-page__card">
-                    <div class="catalog-choices-page__card-icon-wrap">
-                      <img
-                        src={DownloadPdfIcon.src}
-                        alt="PDF document"
-                        width={80}
-                        height={85}
-                        loading="lazy"
-                        class="catalog-choices-page__card-icon"
-                        decoding="async"
-                      />
-                    </div>
-                    <div class="catalog-choices-page__card-content">
-                      {item.title && (
-                        <h2
-                          class="catalog-choices-page__card-title catalog-choices-page__card-title--truncate"
-                          title={item.title}
-                        >
-                          {item.title}
-                        </h2>
-                      )}
-                      {item.descriptionHtml && (
-                        <div
-                          class="catalog-choices-page__card-description"
-                          set:html={item.descriptionHtml}
+              <>
+                <h2 class="catalog-choices-page__brochures-title">
+                  Digital catalogs
+                </h2>
+                <div class="catalog-choices-page__catalogs">
+                  {data.catalogs.map((item) => (
+                    <article class="catalog-choices-page__card">
+                      <div class="catalog-choices-page__card-icon-wrap">
+                        <img
+                          src={DownloadPdfIcon.src}
+                          alt="PDF document"
+                          width={80}
+                          height={85}
+                          loading="lazy"
+                          class="catalog-choices-page__card-icon"
+                          decoding="async"
                         />
-                      )}
-                      {item.linkUrl && (
-                        <a
-                          class="catalog-choices-page__link btn btn--primary-dark"
-                          href={item.linkUrl}
-                          target={item.linkTarget || "_self"}
-                          rel={
-                            item.linkTarget === "_blank"
-                              ? "noopener noreferrer"
-                              : undefined
-                          }
-                        >
-                          <DownloadIcon />
-                          {item.linkTitle || item.linkUrl}
-                        </a>
-                      )}
-                    </div>
-                  </article>
-                ))}
-              </div>
+                      </div>
+                      <div class="catalog-choices-page__card-content">
+                        {item.title && (
+                          <h2
+                            class="catalog-choices-page__card-title catalog-choices-page__card-title--truncate"
+                            title={item.title}
+                          >
+                            {item.title}
+                          </h2>
+                        )}
+                        {item.descriptionHtml && (
+                          <div
+                            class="catalog-choices-page__card-description"
+                            set:html={item.descriptionHtml}
+                          />
+                        )}
+                        {item.linkUrl && (
+                          <a
+                            class="catalog-choices-page__link btn btn--primary-dark"
+                            href={item.linkUrl}
+                            target={item.linkTarget || "_self"}
+                            rel={
+                              item.linkTarget === "_blank"
+                                ? "noopener noreferrer"
+                                : undefined
+                            }
+                          >
+                            <DownloadIcon />
+                            {item.linkTitle || item.linkUrl}
+                          </a>
+                        )}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </>
             )
           }
 
           {
             data.brochures.length > 0 && (
-              <section
+              <div
                 class="catalog-choices-page__brochures"
                 data-brochure-scope="all"
               >
                 {data.brochuresTitle && (
-                  <h2 class="catalog-choices-page__brochures-title">
+                  <h2 class="catalog-choices-page__brochures-title catalog-choices-page__brochures-title-brochures">
                     {data.brochuresTitle}
                   </h2>
                 )}
@@ -204,9 +209,7 @@ const breadcrumbs = [
                         decoding="async"
                       />
                       {item.title && (
-                        <h3
-                          class="catalog-choices-page__card-title catalog-choices-page__card-title--truncate"
-                        >
+                        <h3 class="catalog-choices-page__card-title catalog-choices-page__card-title--truncate">
                           {item.title}
                         </h3>
                       )}
@@ -235,7 +238,7 @@ const breadcrumbs = [
                 >
                   No brochures found.
                 </p>
-              </section>
+              </div>
             )
           }
         </section>
@@ -317,6 +320,7 @@ const breadcrumbs = [
                 data-brochure-scope="brochures"
               >
                 <div class="catalog-choices-page__brochure-search-wrap">
+                  <SearchIcon class="catalog-choices-page__brochure-search-icon" />
                   <input
                     type="search"
                     class="catalog-choices-page__brochure-search"
@@ -325,11 +329,7 @@ const breadcrumbs = [
                     data-brochure-search
                   />
                 </div>
-                {data.brochuresTitle && (
-                  <h2 class="catalog-choices-page__brochures-title">
-                    {data.brochuresTitle}
-                  </h2>
-                )}
+
                 <div
                   class="catalog-choices-page__brochures-list"
                   data-brochure-list
@@ -354,9 +354,7 @@ const breadcrumbs = [
                         decoding="async"
                       />
                       {item.title && (
-                        <h3
-                          class="catalog-choices-page__card-title catalog-choices-page__card-title--truncate"
-                        >
+                        <h3 class="catalog-choices-page__card-title catalog-choices-page__card-title--truncate">
                           {item.title}
                         </h3>
                       )}
@@ -462,7 +460,8 @@ const breadcrumbs = [
       let x = clientX + pad;
       let y = clientY + pad;
       if (x + rect.width > vw - 8) x = Math.max(8, clientX - rect.width - pad);
-      if (y + rect.height > vh - 8) y = Math.max(8, clientY - rect.height - pad);
+      if (y + rect.height > vh - 8)
+        y = Math.max(8, clientY - rect.height - pad);
       el.style.left = `${x}px`;
       el.style.top = `${y}px`;
     };
@@ -522,7 +521,8 @@ const breadcrumbs = [
       scope.addEventListener(
         "mousemove",
         (e) => {
-          if (!brochureTitleTooltipActiveCard || brochureTitleTooltipEl?.hidden) return;
+          if (!brochureTitleTooltipActiveCard || brochureTitleTooltipEl?.hidden)
+            return;
           const card = (e.target as HTMLElement).closest<HTMLElement>(
             "[data-brochure-item]",
           );
@@ -547,12 +547,15 @@ const breadcrumbs = [
       );
     }
 
-    window.addEventListener("scroll", hideBrochureTitleTooltip, { passive: true });
+    window.addEventListener("scroll", hideBrochureTitleTooltip, {
+      passive: true,
+    });
     let resizeHideTooltipTimer: number | null = null;
     window.addEventListener(
       "resize",
       () => {
-        if (resizeHideTooltipTimer != null) window.clearTimeout(resizeHideTooltipTimer);
+        if (resizeHideTooltipTimer != null)
+          window.clearTimeout(resizeHideTooltipTimer);
         resizeHideTooltipTimer = window.setTimeout(() => {
           resizeHideTooltipTimer = null;
           hideBrochureTitleTooltip();

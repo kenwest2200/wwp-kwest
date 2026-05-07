@@ -129,6 +129,13 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: $dark-teal;
+    transition: color 0.2s ease;
+
+    &:hover,
+    &:active {
+      color: $medium-teal;
+      transition: color 0.2s ease;
+    }
 
     svg {
       flex-shrink: 0;

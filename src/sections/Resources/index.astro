@@ -95,6 +95,12 @@ const mockResourceItems: ResourceCard[] = [
 
 const apiItems = mapFromApi(data?.posts?.nodes ?? []);
 const items = apiItems.length > 0 ? apiItems : mockResourceItems;
+
+function withProductsRootDefaultParam(href: string): string {
+  return href === "/products" || href === "/products/"
+    ? "/products/?catalog=root"
+    : href;
+}
 ---
 
 <section class="resources" aria-labelledby="resources-heading">
@@ -119,7 +125,10 @@ const items = apiItems.length > 0 ? apiItems : mockResourceItems;
             ) : null}
             <h3 class="resources__item-title">{item.title}</h3>
             <p class="resources__item-description">{item.description}</p>
-            <a href={item.href} class="resources__item-link">
+            <a
+              href={withProductsRootDefaultParam(item.href)}
+              class="resources__item-link"
+            >
               Browse <IconArrowRight />
             </a>
           </li>

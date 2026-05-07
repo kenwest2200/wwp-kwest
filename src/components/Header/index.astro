@@ -30,6 +30,8 @@ const headerTypeClass = headerType ? `header--${headerType}` : null;
 const items = menuNodesFromHeaderData(data);
 const topBarFlat = topBarNodesFromHeaderData(data);
 const currentPathname = Astro.url.pathname;
+const PRODUCTS_ROOT_DEFAULT_PARAM_KEY = "catalog";
+const PRODUCTS_ROOT_DEFAULT_PARAM_VALUE = "root";
 
 type MenuLink = { label: string; href: string };
 type FlatMenuNode = {
@@ -58,6 +60,10 @@ function normalizeMenuHref(pathRaw: string, urlRaw: string): string {
   } catch {
     return "#";
   }
+}
+
+function productsRootHref(): string {
+  return `/products/?${PRODUCTS_ROOT_DEFAULT_PARAM_KEY}=${PRODUCTS_ROOT_DEFAULT_PARAM_VALUE}`;
 }
 
 function inferParentHrefFromChildren(children: HeaderMenuNode[]): string {
@@ -108,7 +114,7 @@ function buildHeaderMenuTree(flatNodes: FlatMenuNode[]): HeaderMenuNode[] {
     if (item.children.length > 0) {
       const slug = slugFromLabel(item.label);
       if (slug) {
-        item.href = `/${slug}`;
+        item.href = slug === "products" ? productsRootHref() : `/${slug}`;
       } else if (item.href === "#") {
         item.href = inferParentHrefFromChildren(item.children);
       }
@@ -237,6 +243,17 @@ function isMenuItemActive(href: string, pathname: string): boolean {
   if (h === "/resources" && (isSupportMappedPath || isCompanyMappedPath))
     return false;
   return p === h || p.startsWith(`${h}/`);
+}
+
+function submenuLabelByHref(label: string, href: string): string {
+  const normalizedHref = normalizePathname(href);
+  if (
+    href.includes("/resources/recall/") ||
+    normalizedHref === "/resources/recall"
+  ) {
+    return "Recall";
+  }
+  return label;
 }
 ---
 
@@ -370,7 +387,7 @@ function isMenuItemActive(href: string, pathname: string): boolean {
                                     class="header__submenu-link"
                                     href={sub.href}
                                   >
-                                    {sub.label}
+                                    {submenuLabelByHref(sub.label, sub.href)}
                                   </a>
                                 </li>
                               ))}
@@ -391,7 +408,7 @@ function isMenuItemActive(href: string, pathname: string): boolean {
                           {item.children.map((link) => (
                             <li class="header__submenu-item">
                               <a class="header__submenu-link" href={link.href}>
-                                {link.label}
+                                {submenuLabelByHref(link.label, link.href)}
                               </a>
                             </li>
                           ))}

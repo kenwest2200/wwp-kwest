@@ -8,6 +8,8 @@ export type ProductBreadcrumbLink = {
   href: string;
 };
 
+const TECHNICAL_BULLETINS_PATH = "/resources/technical-bulletins/";
+
 /** Aligns catalog breadcrumb copy with `/resources/technical-bulletins/` (“Technical guide”). */
 function productCategoryBreadcrumbDisplayLabel(
   slug: string,
@@ -68,7 +70,10 @@ export function buildProductBreadcrumbLinks(
   const out: ProductBreadcrumbLink[] = [
     {
       label: rootName,
-      href: `/products?category=${encodeURIComponent(rootSlug)}`,
+      href:
+        rootSlug.toLowerCase() === "tech-info"
+          ? TECHNICAL_BULLETINS_PATH
+          : `/products?category=${encodeURIComponent(rootSlug)}`,
     },
   ];
 

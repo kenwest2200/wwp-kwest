@@ -813,10 +813,6 @@
       cursor: pointer;
       transition: background 0.15s ease;
 
-      &:hover {
-        background: $light-gray;
-        border-radius: px-to-rem(2);
-      }
 
       &:focus-visible {
         outline: 1px solid $medium-teal;
@@ -825,6 +821,17 @@
       }
 
       &.is-active {}
+
+      &:disabled {
+        cursor: not-allowed;
+        pointer-events: none;
+
+        svg {
+          path {
+            stroke: $dark-gray;
+          }
+        }
+      }
     }
 
     .product-page__spec-sort-svg {

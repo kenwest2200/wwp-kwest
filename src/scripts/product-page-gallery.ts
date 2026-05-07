@@ -29,6 +29,10 @@ function initProductGallery(root: HTMLElement) {
   const mainImg = root.querySelector<HTMLImageElement>(
     ".product-page__gallery-main-img",
   );
+  const mainPicture = mainImg?.closest("picture") ?? null;
+  const mainSources = mainPicture
+    ? [...mainPicture.querySelectorAll<HTMLSourceElement>("source")]
+    : [];
   const thumbs = [
     ...root.querySelectorAll<HTMLButtonElement>(".product-page__gallery-thumb"),
   ];
@@ -98,8 +102,21 @@ function initProductGallery(root: HTMLElement) {
     const btn = thumbs[i];
     if (!btn) return;
     const src = (btn.getAttribute("data-full-src") ?? "").trim();
+    const medium = (btn.getAttribute("data-full-medium") ?? "").trim();
+    const mediumLarge = (btn.getAttribute("data-full-medium-large") ?? "").trim();
     const alt = (btn.getAttribute("data-full-alt") ?? "").trim();
     const cap = (btn.getAttribute("data-full-title") ?? "").trim();
+    const mediaSourceFor = (mediaAttr: string | null): string =>
+      mediaAttr?.includes("1024")
+        ? mediumLarge || medium || src
+        : mediaAttr?.includes("768")
+          ? medium || mediumLarge || src
+          : src;
+    for (const sourceEl of mainSources) {
+      const nextSrcset = mediaSourceFor(sourceEl.getAttribute("media"));
+      if (!nextSrcset) continue;
+      sourceEl.srcset = nextSrcset;
+    }
     if (src) {
       mainImg.src = src;
       mainImg.alt = alt;

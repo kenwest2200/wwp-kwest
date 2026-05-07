@@ -37,7 +37,7 @@ const cards = normalizeRecallCards(pageNode);
 const breadcrumbs = [
   { label: "Home", href: "/" },
   { label: "Support", href: "/support" },
-  { label: pageTitle || "Recall" },
+  { label: "Recall" },
 ];
 
 const downloadPdfIconSrc =
@@ -74,16 +74,7 @@ const downloadPdfIconSrc =
             <div class="recall-page__grid recall-page__grid--download">
               {cards.map((card) => {
                 return (
-                  <a
-                    class="recall-page__card recall-page__card--download"
-                    href={card.linkUrl}
-                    target={card.linkTarget}
-                    rel={
-                      card.linkTarget === "_blank"
-                        ? "noopener noreferrer"
-                        : undefined
-                    }
-                  >
+                  <div class="recall-page__card recall-page__card--download">
                     <div class="recall-page__card-icon-wrap">
                       <img
                         class="recall-page__card-icon"
@@ -103,13 +94,22 @@ const downloadPdfIconSrc =
                           set:html={card.descriptionHtml}
                         />
                       ) : null}
-                      <span class="recall-page__card-action recall-page__card-action--download">
+                      <a
+                        href={card.linkUrl}
+                        target={card.linkTarget}
+                        rel={
+                          card.linkTarget === "_blank"
+                            ? "noopener noreferrer"
+                            : undefined
+                        }
+                        class="recall-page__card-action recall-page__card-action--download"
+                      >
                         <DownloadIcon />
 
                         {card.linkLabel || "Download"}
-                      </span>
+                      </a>
                     </div>
-                  </a>
+                  </div>
                 );
               })}
             </div>

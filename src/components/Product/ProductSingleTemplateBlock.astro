@@ -202,6 +202,8 @@ const mainGallerySources = mainGalleryNode
                       i === 0 && "is-active",
                     ]}
                     data-full-src={g.sourceUrl}
+                    data-full-medium={g.medium ?? ""}
+                    data-full-medium-large={g.medium_large ?? ""}
                     data-full-alt={g.altText ?? ""}
                     data-full-title={g.title?.trim() ?? ""}
                     aria-label={`Image ${i + 1} of ${galleryNodes.length}`}
@@ -267,12 +269,15 @@ const mainGallerySources = mainGalleryNode
           {galleryNodes.map((g) =>
             g?.sourceUrl ? (
               <figure class="product-page__gallery-mini-figure">
-                <img
-                  class="product-page__gallery-mini-img"
-                  src={g.sourceUrl}
+                <Picture
                   alt={g.altText?.trim() ?? ""}
-                  loading="lazy"
-                  decoding="async"
+                  sources={pictureSourcesFromGalleryNode(g)}
+                  img={{
+                    src: g.sourceUrl,
+                    class: "product-page__gallery-mini-img",
+                    loading: "lazy",
+                    decoding: "async",
+                  }}
                 />
                 {g.title?.trim() && (
                   <figcaption class="product-page__image-caption">
