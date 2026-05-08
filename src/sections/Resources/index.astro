@@ -70,7 +70,7 @@ const mockResourceItems: ResourceCard[] = [
   {
     title: "Downloads Center",
     description:
-      "Browse Waterway digital catalogs and brochures to explore products & specifications.",
+      "Browse Waterway digital <br/> catalogs and brochures to <br/> explore products & specifications.",
     href: "/resources/catalog-choices",
     imageUrl: img2,
     imageAlt: "Guides",
@@ -124,7 +124,10 @@ function withProductsRootDefaultParam(href: string): string {
               />
             ) : null}
             <h3 class="resources__item-title">{item.title}</h3>
-            <p class="resources__item-description">{item.description}</p>
+            <p
+              class="resources__item-description"
+              set:html={item.description}
+            />
             <a
               href={withProductsRootDefaultParam(item.href)}
               class="resources__item-link"

@@ -15,8 +15,8 @@ export const APPS_TOOLS_PAGE_QUERY = /* GraphQL */ `
             image {
               node {
                 sourceUrl
-                medium: sourceUrl(size: MEDIUM)
                 medium_large: sourceUrl(size: MEDIUM_LARGE)
+                large: sourceUrl(size: PRODUCT_THUMBNAIL)
                 altText
                 mediaDetails {
                   width
@@ -36,8 +36,7 @@ export const APPS_TOOLS_PAGE_QUERY = /* GraphQL */ `
             image {
               node {
                 sourceUrl
-                medium: sourceUrl(size: MEDIUM)
-                medium_large: sourceUrl(size: MEDIUM_LARGE)
+                large: sourceUrl(size: PRODUCT_THUMBNAIL)
                 altText
                 mediaDetails {
                   width
@@ -154,16 +153,22 @@ function normalizeMediaNode(
 ): WpResponsiveMediaNode | null {
   if (!node || typeof node !== "object") return null;
   const sourceUrl = asTrimmedString(node.sourceUrl);
+  const thumb = asTrimmedString(node.thumb);
   const medium = asTrimmedString(node.medium);
   const mediumLarge = asTrimmedString(node.medium_large);
-  const altText = decodeHtmlEntities(asTrimmedString(node.altText) || fallbackAlt);
+  const large = asTrimmedString(node.large);
+  const altText = decodeHtmlEntities(
+    asTrimmedString(node.altText) || fallbackAlt,
+  );
   const width = Number(node.mediaDetails?.width);
   const height = Number(node.mediaDetails?.height);
-  if (!sourceUrl && !medium && !mediumLarge) return null;
+  if (!sourceUrl && !thumb && !medium && !mediumLarge && !large) return null;
   return {
     sourceUrl: sourceUrl || null,
+    thumb: thumb || null,
     medium: medium || null,
     medium_large: mediumLarge || null,
+    large: large || null,
     altText,
     mediaDetails: {
       width: Number.isFinite(width) && width > 0 ? width : null,
@@ -193,7 +198,12 @@ export function normalizeAppsToolsPage(
     const title = decodeHtmlEntities(asTrimmedString(row.title));
     const node = row.image?.node;
     const imageNode = normalizeMediaNode(node, title || "App");
-    const imageUrl = asTrimmedString(imageNode?.sourceUrl);
+    const imageUrl =
+      asTrimmedString(imageNode?.sourceUrl) ||
+      asTrimmedString(imageNode?.thumb) ||
+      asTrimmedString(imageNode?.medium) ||
+      asTrimmedString(imageNode?.medium_large) ||
+      asTrimmedString(imageNode?.large);
     const imageAlt = decodeHtmlEntities(
       asTrimmedString(imageNode?.altText) || title,
     );
@@ -223,7 +233,12 @@ export function normalizeAppsToolsPage(
     );
     const node = row.image?.node;
     const imageNode = normalizeMediaNode(node, title || "Tool");
-    const imageUrl = asTrimmedString(imageNode?.sourceUrl);
+    const imageUrl =
+      asTrimmedString(imageNode?.sourceUrl) ||
+      asTrimmedString(imageNode?.thumb) ||
+      asTrimmedString(imageNode?.medium) ||
+      asTrimmedString(imageNode?.medium_large) ||
+      asTrimmedString(imageNode?.large);
     const imageAlt = decodeHtmlEntities(
       asTrimmedString(imageNode?.altText) || title,
     );

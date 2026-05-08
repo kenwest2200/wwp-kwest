@@ -8,6 +8,7 @@
     display: flex;
     flex-direction: column;
     gap: px-to-rem(60);
+
   }
 
 
@@ -123,12 +124,12 @@
 
   @include media-breakpoint-up(xl) {
     &__container {
-      max-width: px-to-rem(1192);
+      max-width: px-to-rem(1224);
     }
 
     &__grid {
       grid-template-columns: repeat(4, 1fr);
-      gap: px-to-rem(64);
+      gap: px-to-rem(61);
     }
 
     &__item {

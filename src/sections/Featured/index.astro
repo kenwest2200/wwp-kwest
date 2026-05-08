@@ -47,11 +47,16 @@ function mapFromHomepageProducts(
       const categoryRaw = p.productCategory?.trim();
       const categoryLabel = decodeHtmlEntities(categoryRaw || "Product");
       const mediaNode =
-        p.image || p.imageThumbnails?.thumb || p.imageThumbnails?.medium
+        p.image ||
+        p.imageThumbnails?.thumb ||
+        p.imageThumbnails?.medium ||
+        p.imageThumbnails?.medium_large ||
+        p.imageThumbnails?.large
           ? {
               sourceUrl: p.image ?? null,
               thumb: p.imageThumbnails?.thumb ?? null,
               medium: p.imageThumbnails?.medium ?? null,
+              medium_large: p.imageThumbnails?.medium_large ?? null,
               large: p.imageThumbnails?.large ?? null,
               altText: title,
             }

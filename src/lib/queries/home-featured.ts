@@ -10,6 +10,7 @@ export type HomepageFeaturedProduct = {
   imageThumbnails?: {
     thumb?: string | null;
     medium?: string | null;
+    medium_large?: string | null;
     large?: string | null;
   } | null;
   productUrl?: string | null;
@@ -82,8 +83,6 @@ export const HOME_FEATURED_QUERY = /* GraphQL */ `
                     productCategory
                     image
                     imageThumbnails {
-                      thumb
-                      medium
                       large
                     }
                     productUrl
