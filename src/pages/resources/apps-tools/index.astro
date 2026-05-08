@@ -174,16 +174,7 @@ const breadcrumbs = [
               </h2>
               <div class="apps-tools-page__tools-grid">
                 {tools.map((tool) => (
-                  <a
-                    class="apps-tools-page__tool-card"
-                    href={tool.linkUrl}
-                    target={tool.linkTarget}
-                    rel={
-                      tool.linkTarget === "_blank"
-                        ? "noopener noreferrer"
-                        : undefined
-                    }
-                  >
+                  <div class="apps-tools-page__tool-card">
                     {tool.picture ? (
                       <div class="apps-tools-page__tool-image-wrap">
                         <Picture
@@ -206,11 +197,20 @@ const breadcrumbs = [
                           set:html={tool.descriptionHtml}
                         />
                       ) : null}
-                      <span class="btn btn--primary-dark apps-tools-page__tool-action">
+                      <a
+                        href={tool.linkUrl}
+                        target={tool.linkTarget}
+                        rel={
+                          tool.linkTarget === "_blank"
+                            ? "noopener noreferrer"
+                            : undefined
+                        }
+                        class="btn btn--primary-dark apps-tools-page__tool-action"
+                      >
                         {tool.linkLabel}
-                      </span>
+                      </a>
                     </div>
-                  </a>
+                  </div>
                 ))}
               </div>
             </div>

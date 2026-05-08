@@ -1,6 +1,7 @@
 const GRID_SELECTOR = ".featured__grid";
 const CARD_SELECTOR = ".featured__item";
 const TITLE_SELECTOR = ".featured__item-title";
+const CARD_LINK_SELECTOR = ".featured__item-link";
 
 let tooltipEl: HTMLDivElement | null = null;
 let activeCard: HTMLElement | null = null;
@@ -46,6 +47,34 @@ function titleIsClamped(titleEl: HTMLElement): boolean {
   return titleEl.scrollHeight > titleEl.clientHeight + 1;
 }
 
+function isInteractiveTarget(target: Element | null): boolean {
+  if (!target) return false;
+  return Boolean(
+    target.closest(
+      'a, button, input, select, textarea, summary, label, [role="button"]',
+    ),
+  );
+}
+
+function setupFeaturedCardNavigation(): void {
+  const grid = document.querySelector<HTMLElement>(GRID_SELECTOR);
+  if (!grid) return;
+
+  grid.addEventListener("click", (e) => {
+    const target = e.target;
+    if (!(target instanceof Element)) return;
+    if (isInteractiveTarget(target)) return;
+
+    const card = target.closest<HTMLElement>(CARD_SELECTOR);
+    if (!card || !grid.contains(card)) return;
+
+    const link = card.querySelector<HTMLAnchorElement>(CARD_LINK_SELECTOR);
+    const href = link?.getAttribute("href")?.trim() ?? "";
+    if (!href || href === "#") return;
+    link?.click();
+  });
+}
+
 function setupFeaturedTitleTooltips(): void {
   const grid = document.querySelector<HTMLElement>(GRID_SELECTOR);
   if (!grid) return;
@@ -53,7 +82,9 @@ function setupFeaturedTitleTooltips(): void {
   grid.addEventListener(
     "mouseover",
     (e) => {
-      const card = (e.target as HTMLElement).closest<HTMLElement>(CARD_SELECTOR);
+      const card = (e.target as HTMLElement).closest<HTMLElement>(
+        CARD_SELECTOR,
+      );
       if (!card || !grid.contains(card)) return;
       const titleEl = card.querySelector<HTMLElement>(TITLE_SELECTOR);
       if (!titleEl || !titleIsClamped(titleEl)) {
@@ -75,7 +106,9 @@ function setupFeaturedTitleTooltips(): void {
     "mousemove",
     (e) => {
       if (!activeCard || tooltipEl?.hidden) return;
-      const card = (e.target as HTMLElement).closest<HTMLElement>(CARD_SELECTOR);
+      const card = (e.target as HTMLElement).closest<HTMLElement>(
+        CARD_SELECTOR,
+      );
       if (card !== activeCard) return;
       positionTooltip(e.clientX, e.clientY);
     },
@@ -85,7 +118,9 @@ function setupFeaturedTitleTooltips(): void {
   grid.addEventListener(
     "mouseout",
     (e) => {
-      const card = (e.target as HTMLElement).closest<HTMLElement>(CARD_SELECTOR);
+      const card = (e.target as HTMLElement).closest<HTMLElement>(
+        CARD_SELECTOR,
+      );
       if (!card || !grid.contains(card)) return;
       const related = e.relatedTarget as Node | null;
       if (related && card.contains(related)) return;
@@ -110,4 +145,5 @@ function setupFeaturedTitleTooltips(): void {
   );
 }
 
+setupFeaturedCardNavigation();
 setupFeaturedTitleTooltips();

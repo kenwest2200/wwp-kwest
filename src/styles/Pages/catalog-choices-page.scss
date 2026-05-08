@@ -100,6 +100,7 @@
       gap: 0;
       padding: px-to-rem(24);
 
+
       &[hidden] {
         display: none;
       }
@@ -122,7 +123,21 @@
       line-height: px-to-rem(24);
       letter-spacing: 0.03em;
       font-weight: 600;
-      text-decoration: none;
+      transition: color 0.3s ease, text-decoration 0.3s ease;
+
+      &:hover {
+        color: $medium-teal;
+        transition: color 0.3s ease, text-decoration 0.3s ease;
+      }
+
+      &:focus-visible {
+        outline: 2px solid $dark-teal;
+        outline-offset: 2px;
+      }
+
+      &:active {
+        color: $dark-teal;
+      }
     }
   }
 
@@ -257,6 +272,7 @@
     font-size: px-to-rem(14);
     line-height: px-to-rem(24);
     letter-spacing: 0.02em;
+
     &::-webkit-search-cancel-button {
       -webkit-appearance: none;
       appearance: none;
