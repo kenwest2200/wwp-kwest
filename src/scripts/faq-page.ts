@@ -4,6 +4,7 @@ import { readHeaderPageInsetPx } from "../lib/header-page-inset";
 import { subscribePageHeaderInset } from "../lib/page-header-offset";
 
 const SCROLL_GAP_PX = 16;
+const SEARCH_HIGHLIGHT_CLASS = "faq-page__search-highlight";
 
 function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -95,6 +96,64 @@ function scrollToFaqSection(target: HTMLElement, faqPage: HTMLElement): void {
   scrollToRevealBelowHeader(scrollRoot, target, offset, behavior);
 }
 
+function escapeRegExp(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function buildSearchRegex(query: string): RegExp | null {
+  const words = query
+    .split(/\s+/)
+    .map((w) => w.trim())
+    .filter(Boolean)
+    .map((w) => escapeRegExp(w));
+  if (words.length === 0) return null;
+  return new RegExp(`(${words.join("|")})`, "gi");
+}
+
+function highlightTextNodes(root: HTMLElement, regex: RegExp): void {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const textNodes: Text[] = [];
+  let node = walker.nextNode();
+  while (node) {
+    if (node instanceof Text) {
+      const parent = node.parentElement;
+      if (parent && !parent.closest(`.${SEARCH_HIGHLIGHT_CLASS}`)) {
+        textNodes.push(node);
+      }
+    }
+    node = walker.nextNode();
+  }
+
+  for (const textNode of textNodes) {
+    const text = textNode.nodeValue ?? "";
+    if (!text.trim() || !regex.test(text)) {
+      regex.lastIndex = 0;
+      continue;
+    }
+    regex.lastIndex = 0;
+    const frag = document.createDocumentFragment();
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+    while ((match = regex.exec(text)) !== null) {
+      const start = match.index;
+      const end = start + match[0].length;
+      if (start > lastIndex) {
+        frag.appendChild(document.createTextNode(text.slice(lastIndex, start)));
+      }
+      const mark = document.createElement("mark");
+      mark.className = SEARCH_HIGHLIGHT_CLASS;
+      mark.textContent = text.slice(start, end);
+      frag.appendChild(mark);
+      lastIndex = end;
+    }
+    if (lastIndex < text.length) {
+      frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+    }
+    textNode.replaceWith(frag);
+    regex.lastIndex = 0;
+  }
+}
+
 const faqPageHost = document.querySelector<HTMLElement>("[data-faq-page]");
 const faqRoot = document.querySelector<HTMLElement>("[data-faq-root]");
 
@@ -111,6 +170,9 @@ if (!faqPageHost) {
 
     const searchInput =
       faqRootInner.querySelector<HTMLInputElement>("[data-faq-search]");
+    const searchClearBtn = faqRootInner.querySelector<HTMLButtonElement>(
+      "[data-faq-search-clear]",
+    );
     const items = [
       ...faqRootInner.querySelectorAll<HTMLElement>("[data-faq-item]"),
     ];
@@ -122,6 +184,15 @@ if (!faqPageHost) {
         "[data-faq-nav-link]",
       ),
     ];
+    const highlightTargets = [
+      ...faqRootInner.querySelectorAll<HTMLElement>(
+        ".faq-page__question, .faq-page__answer",
+      ),
+    ];
+    const originalHtmlMap = new WeakMap<HTMLElement, string>();
+    for (const el of highlightTargets) {
+      originalHtmlMap.set(el, el.innerHTML);
+    }
 
     function syncFaqAccordionFilter(): void {
       for (const el of items) {
@@ -159,8 +230,21 @@ if (!faqPageHost) {
       }
     }
 
+    const applySearchHighlights = (query: string) => {
+      for (const el of highlightTargets) {
+        const original = originalHtmlMap.get(el);
+        if (typeof original === "string") el.innerHTML = original;
+      }
+      const regex = buildSearchRegex(query);
+      if (!regex) return;
+      for (const el of highlightTargets) {
+        highlightTextNodes(el, regex);
+      }
+    };
+
     const filter = () => {
-      const q = (searchInput?.value ?? "").trim().toLowerCase();
+      const qRaw = (searchInput?.value ?? "").trim();
+      const q = qRaw.toLowerCase();
       for (const el of items) {
         const hay = (el.textContent ?? "").toLowerCase();
         el.hidden = Boolean(q) && !hay.includes(q);
@@ -173,6 +257,12 @@ if (!faqPageHost) {
       }
       syncNavActive();
       syncFaqAccordionFilter();
+      applySearchHighlights(qRaw);
+    };
+
+    const syncSearchClearButton = () => {
+      if (!searchInput || !searchClearBtn) return;
+      searchClearBtn.hidden = searchInput.value.length === 0;
     };
 
     setupFaqAccordion();
@@ -216,7 +306,17 @@ if (!faqPageHost) {
       scrollToFaqSection(target, faqPage);
     }
 
-    searchInput?.addEventListener("input", filter);
+    searchInput?.addEventListener("input", () => {
+      syncSearchClearButton();
+      filter();
+    });
+    searchClearBtn?.addEventListener("click", () => {
+      if (!searchInput) return;
+      searchInput.value = "";
+      syncSearchClearButton();
+      filter();
+      searchInput.focus();
+    });
 
     window.addEventListener("hashchange", () => {
       scrollToHashFromLocation();
@@ -254,6 +354,7 @@ if (!faqPageHost) {
     });
 
     filter();
+    syncSearchClearButton();
 
     if (window.location.hash) {
       requestAnimationFrame(() => {

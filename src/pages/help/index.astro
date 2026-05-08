@@ -69,6 +69,18 @@ function asMailtoHref(value: string): string | null {
   return EMAIL_RE.test(raw) ? `mailto:${raw}` : null;
 }
 
+function asTelHref(value: string): string | null {
+  const raw = value.trim();
+  if (!raw) return null;
+  const source = raw.toLowerCase().startsWith("tel:")
+    ? raw.slice("tel:".length).trim()
+    : raw;
+  const normalized = source.replace(/[^\d+]/g, "");
+  const digitsOnly = normalized.replace(/\D/g, "");
+  if (digitsOnly.length < 7) return null;
+  return `tel:${normalized}`;
+}
+
 type ContactIconType = "phone" | "fax" | "email";
 
 function contactIconType(iconRaw: string): ContactIconType {
@@ -119,11 +131,15 @@ function contactIconType(iconRaw: string): ContactIconType {
                       <ul class="help-page__contacts">
                         {block.contacts.map((contact) => {
                           const mailto = asMailtoHref(contact.text);
+                          const iconType = contactIconType(contact.icon);
+                          const tel =
+                            iconType === "phone" && !mailto
+                              ? asTelHref(contact.text)
+                              : null;
                           const contactText = contact.text.replace(
                             /^mailto:/i,
                             "",
                           );
-                          const iconType = contactIconType(contact.icon);
                           return (
                             <li class="help-page__contact">
                               <span class="help-page__contact-icon">
@@ -141,6 +157,13 @@ function contactIconType(iconRaw: string): ContactIconType {
                                   href={mailto}
                                 >
                                   {contactText}
+                                </a>
+                              ) : tel ? (
+                                <a
+                                  class="help-page__contact-text help-page__contact-text--link"
+                                  href={tel}
+                                >
+                                  {contactText.replace(/^tel:/i, "")}
                                 </a>
                               ) : (
                                 <span class="help-page__contact-text">

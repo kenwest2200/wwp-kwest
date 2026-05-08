@@ -104,6 +104,9 @@
   &__row-text {
     flex: 1;
     min-width: 0;
+    max-width: px-to-rem(219);
+
+
 
     &--link {
       color: $dark-teal;
@@ -117,6 +120,10 @@
       }
     }
 
+    &--address {
+      color: $dark;
+      text-decoration: none;
+    }
 
   }
 

@@ -7,6 +7,10 @@ import AdressIcon from "../../../components/icons/adressIconSecond.astro";
 import FaxIcon from "../../../components/icons/faxIcon.astro";
 import MailIcon from "../../../components/icons/mailIcon.astro";
 import PhoneIcon from "../../../components/icons/phoneIcon.astro";
+import {
+  googleMapsHrefFromAddressHtml,
+  stripAnchorTags,
+} from "../../../lib/address-map-link";
 import { getGraphQLClient, requestGraphql } from "../../../lib/graphql";
 import {
   WARRANTY_PAGE_QUERY,
@@ -45,6 +49,36 @@ const breadcrumbs = [
   { label: "Resources", href: "/resources" },
   { label: pageTitle },
 ];
+
+function hasTelLink(html: string): boolean {
+  return /<a\b[^>]*\bhref\s*=\s*["']tel:/i.test(html.trim());
+}
+
+function telHrefFromHtml(html: string): string | null {
+  const trimmed = html.trim();
+  if (!trimmed) return null;
+
+  const fromAttr = trimmed.match(/href\s*=\s*["']tel:([^"']+)["']/i);
+  if (fromAttr?.[1]) {
+    try {
+      return decodeURIComponent(fromAttr[1].trim());
+    } catch {
+      return fromAttr[1].trim();
+    }
+  }
+
+  const stripped = trimmed
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  const m = stripped.match(/\+?\d[\d\s().-]{5,}\d/);
+  if (!m) return null;
+
+  const normalized = m[0].replace(/[^\d+]/g, "");
+  const digitsOnly = normalized.replace(/\D/g, "");
+  if (digitsOnly.length < 7) return null;
+  return normalized;
+}
 ---
 
 <Layout headerType="white" pageTitle={pageTitle} description={introDefault}>
@@ -96,45 +130,79 @@ const breadcrumbs = [
                     ) : null}
                     {group.contacts.length > 0 ? (
                       <ul class="warranty-page__contact-list">
-                        {group.contacts.map((row) => (
-                          <li class="warranty-page__contact">
-                            {row.iconKey === "address" ? (
-                              <div
-                                class="warranty-page__contact-icon-wrap warranty-page__contact-icon-wrap--svg"
-                                aria-hidden="true"
-                              >
-                                <AdressIcon class="warranty-page__contact-svg" />
-                              </div>
-                            ) : row.iconKey === "phone" ? (
-                              <div
-                                class="warranty-page__contact-icon-wrap warranty-page__contact-icon-wrap--svg"
-                                aria-hidden="true"
-                              >
-                                <PhoneIcon class="warranty-page__contact-svg" />
-                              </div>
-                            ) : row.iconKey === "email" ? (
-                              <div
-                                class="warranty-page__contact-icon-wrap warranty-page__contact-icon-wrap--svg"
-                                aria-hidden="true"
-                              >
-                                <MailIcon class="warranty-page__contact-svg" />
-                              </div>
-                            ) : row.iconKey === "fax" ? (
-                              <div
-                                class="warranty-page__contact-icon-wrap warranty-page__contact-icon-wrap--svg"
-                                aria-hidden="true"
-                              >
-                                <FaxIcon class="warranty-page__contact-svg" />
-                              </div>
-                            ) : null}
-                            {row.textHtml ? (
-                              <div
-                                class="warranty-page__contact-text warranty-page__optional-html"
-                                set:html={row.textHtml}
-                              />
-                            ) : null}
-                          </li>
-                        ))}
+                        {group.contacts.map((row) => {
+                          const addressHref =
+                            row.iconKey === "address"
+                              ? googleMapsHrefFromAddressHtml(row.textHtml)
+                              : null;
+                          const addressHtml =
+                            row.iconKey === "address"
+                              ? stripAnchorTags(row.textHtml)
+                              : row.textHtml;
+                          const phoneHref =
+                            row.iconKey === "phone" && !hasTelLink(row.textHtml)
+                              ? telHrefFromHtml(row.textHtml)
+                              : null;
+                          const phoneHtml =
+                            row.iconKey === "phone"
+                              ? stripAnchorTags(row.textHtml)
+                              : row.textHtml;
+                          return (
+                            <li class="warranty-page__contact">
+                              {row.iconKey === "address" ? (
+                                <div
+                                  class="warranty-page__contact-icon-wrap warranty-page__contact-icon-wrap--svg"
+                                  aria-hidden="true"
+                                >
+                                  <AdressIcon class="warranty-page__contact-svg" />
+                                </div>
+                              ) : row.iconKey === "phone" ? (
+                                <div
+                                  class="warranty-page__contact-icon-wrap warranty-page__contact-icon-wrap--svg"
+                                  aria-hidden="true"
+                                >
+                                  <PhoneIcon class="warranty-page__contact-svg" />
+                                </div>
+                              ) : row.iconKey === "email" ? (
+                                <div
+                                  class="warranty-page__contact-icon-wrap warranty-page__contact-icon-wrap--svg"
+                                  aria-hidden="true"
+                                >
+                                  <MailIcon class="warranty-page__contact-svg" />
+                                </div>
+                              ) : row.iconKey === "fax" ? (
+                                <div
+                                  class="warranty-page__contact-icon-wrap warranty-page__contact-icon-wrap--svg"
+                                  aria-hidden="true"
+                                >
+                                  <FaxIcon class="warranty-page__contact-svg" />
+                                </div>
+                              ) : null}
+                              {row.textHtml ? (
+                                addressHref ? (
+                                  <a
+                                    class="warranty-page__contact-text warranty-page__optional-html"
+                                    href={addressHref}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    set:html={addressHtml}
+                                  />
+                                ) : phoneHref ? (
+                                  <a
+                                    class="warranty-page__contact-text warranty-page__optional-html"
+                                    href={`tel:${phoneHref}`}
+                                    set:html={phoneHtml}
+                                  />
+                                ) : (
+                                  <div
+                                    class="warranty-page__contact-text warranty-page__optional-html"
+                                    set:html={row.textHtml}
+                                  />
+                                )
+                              ) : null}
+                            </li>
+                          );
+                        })}
                       </ul>
                     ) : null}
                   </div>

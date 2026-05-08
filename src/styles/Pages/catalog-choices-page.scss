@@ -252,15 +252,46 @@
     border: none;
     border-radius: px-to-rem(4);
     background: $light-gray;
-    padding: px-to-rem(12) px-to-rem(12) px-to-rem(12) px-to-rem(44);
+    padding: px-to-rem(12) px-to-rem(44) px-to-rem(12) px-to-rem(44);
     color: $dark-medium;
     font-size: px-to-rem(14);
     line-height: px-to-rem(24);
     letter-spacing: 0.02em;
+    &::-webkit-search-cancel-button {
+      -webkit-appearance: none;
+      appearance: none;
+    }
 
     &::placeholder {
       color: $dark-medium;
 
+    }
+  }
+
+  &__brochure-search-clear {
+    position: absolute;
+    right: px-to-rem(12);
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: px-to-rem(24);
+    height: px-to-rem(24);
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+
+    &[hidden] {
+      display: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $dark-teal;
+      outline-offset: 2px;
     }
   }
 

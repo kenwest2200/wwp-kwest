@@ -209,6 +209,7 @@ function isMenuItemActive(href: string, pathname: string): boolean {
   const isSalesRepsPath =
     p === "/resources/sales-representatives" ||
     p.startsWith("/resources/sales-representatives/");
+  const isFaqPath = p === "/resources/faq" || p.startsWith("/resources/faq/");
   const isCompanyMappedPath =
     p === "/about-us" ||
     p.startsWith("/about-us/") ||
@@ -221,7 +222,11 @@ function isMenuItemActive(href: string, pathname: string): boolean {
   const isForHomeownersMappedPath =
     p === "/distributor-locator" || p.startsWith("/distributor-locator/");
   const isSupportMappedPath =
-    isRecallPath || isHelpPath || isProductInfoPath || isSalesRepsPath;
+    isRecallPath ||
+    isHelpPath ||
+    isProductInfoPath ||
+    isSalesRepsPath ||
+    isFaqPath;
   if (!h || h === "#") return false;
   if (h === "/") return p === "/";
   if (
@@ -459,6 +464,35 @@ function submenuLabelByHref(label: string, href: string): string {
                   aria-controls="header-search-suggest"
                   data-header-search-input
                 />
+                <button
+                  type="button"
+                  class="header__search-clear"
+                  data-header-search-clear
+                  aria-label="Clear search"
+                  hidden
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M12 4L4 12"
+                      stroke="#9C9C9C"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"></path>
+                    <path
+                      d="M4 4L12 12"
+                      stroke="#9C9C9C"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"></path>
+                  </svg>
+                </button>
               </div>
               <div
                 id="header-search-suggest"

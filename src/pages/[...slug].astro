@@ -15,7 +15,7 @@ const { pageTitle, contentHtml } = Astro.props as WpGenericPagePathProps;
   <main class="wp-generic-page" data-wp-generic-page data-page-header-offset>
     <div class="wp-generic-page__inner">
       <h1 class="wp-generic-page__title">{pageTitle}</h1>
-      <div class="wp-generic-page__content" set:html={contentHtml} />
+      <div class="wp-generic-page__content wysiwyg" set:html={contentHtml} />
     </div>
   </main>
 </Layout>

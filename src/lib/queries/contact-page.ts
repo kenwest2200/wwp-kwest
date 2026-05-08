@@ -115,6 +115,10 @@ export function contactRowHasMailtoLink(html: string): boolean {
   return /<a\b[^>]*\bhref\s*=\s*["']mailto:/i.test(html.trim());
 }
 
+export function contactRowHasTelLink(html: string): boolean {
+  return /<a\b[^>]*\bhref\s*=\s*["']tel:/i.test(html.trim());
+}
+
 export function contactRowMailtoHref(html: string): string | null {
   const trimmed = html.trim();
   if (!trimmed) return null;
@@ -135,6 +139,32 @@ export function contactRowMailtoHref(html: string): string | null {
   const m = stripped.match(/[^\s<>'"()[\]]+@[^\s<>'"()[\]]+\.[^\s<>'"()[\]]+/);
   if (!m) return null;
   return m[0].replace(/^[,;:<(]+|[,;:)>.\]]+$/g, "") || null;
+}
+
+export function contactRowTelHref(html: string): string | null {
+  const trimmed = html.trim();
+  if (!trimmed) return null;
+
+  const fromAttr = trimmed.match(/href\s*=\s*["']tel:([^"']+)["']/i);
+  if (fromAttr?.[1]) {
+    try {
+      return decodeURIComponent(fromAttr[1].trim());
+    } catch {
+      return fromAttr[1].trim();
+    }
+  }
+
+  const stripped = trimmed
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  const m = stripped.match(/\+?\d[\d\s().-]{5,}\d/);
+  if (!m) return null;
+
+  const normalized = m[0].replace(/[^\d+]/g, "");
+  const digitsOnly = normalized.replace(/\D/g, "");
+  if (digitsOnly.length < 7) return null;
+  return normalized;
 }
 
 export function normalizeContactSupportCards(

@@ -9,12 +9,18 @@ import FaxIcon from "../../components/icons/faxIcon.astro";
 import MailIcon from "../../components/icons/mailIcon.astro";
 import CustomSelect from "../../components/CustomSelect/CustomSelect.astro";
 import PageErrorToast from "../../components/PageErrorToast.astro";
+import {
+  googleMapsHrefFromAddressHtml,
+  stripAnchorTags,
+} from "../../lib/address-map-link";
 import { getGraphQLClient, requestGraphql } from "../../lib/graphql";
 import {
   CONTACT_PAGE_QUERY,
   CONTACT_PAGE_URI,
   contactRowHasMailtoLink,
   contactRowMailtoHref,
+  contactRowHasTelLink,
+  contactRowTelHref,
   normalizeContactSupportCards,
   type ContactPageData,
 } from "../../lib/queries/contact-page";
@@ -119,10 +125,23 @@ const locationOptions = [
                       <h3 class="contact-page__card-title">{card.title}</h3>
                       <ul class="contact-page__card-list">
                         {card.rows.map((row) => {
+                          const addressHref =
+                            row.iconKind === "address"
+                              ? googleMapsHrefFromAddressHtml(row.text)
+                              : null;
+                          const addressHtml =
+                            row.iconKind === "address"
+                              ? stripAnchorTags(row.text)
+                              : row.text;
                           const mailHref =
                             row.iconKind === "email" &&
                             !contactRowHasMailtoLink(row.text)
                               ? contactRowMailtoHref(row.text)
+                              : null;
+                          const telHref =
+                            row.iconKind === "phone" &&
+                            !contactRowHasTelLink(row.text)
+                              ? contactRowTelHref(row.text)
                               : null;
                           return (
                             <li class="contact-page__row">
@@ -140,10 +159,24 @@ const locationOptions = [
                                   <MailIcon class="contact-page__row-icon-svg" />
                                 )}
                               </span>
-                              {mailHref ? (
+                              {addressHref ? (
+                                <a
+                                  class="contact-page__row-text contact-page__row-text--link contact-page__row-text--address"
+                                  href={addressHref}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  set:html={addressHtml}
+                                />
+                              ) : mailHref ? (
                                 <a
                                   class="contact-page__row-text contact-page__row-text--link"
-                                  href={`mailto:${encodeURIComponent(mailHref)}`}
+                                  href={`mailto:${mailHref}`}
+                                  set:html={row.text}
+                                />
+                              ) : telHref ? (
+                                <a
+                                  class="contact-page__row-text contact-page__row-text--link"
+                                  href={`tel:${telHref}`}
                                   set:html={row.text}
                                 />
                               ) : (

@@ -84,6 +84,7 @@ const breadcrumbs = [
                     class="dl-page__locator-input"
                     maxlength="200"
                     placeholder="ZIP"
+                    aria-describedby="dl-search-inline-error"
                     autocomplete="postal-code"
                     enterkeyhint="search"
                   />
@@ -141,6 +142,13 @@ const breadcrumbs = [
                       </svg>
                     </span>
                   </button>
+                  <p
+                    id="dl-search-inline-error"
+                    class="dl-page__search-inline-error"
+                    hidden
+                    role="alert"
+                  >
+                  </p>
                 </div>
 
                 <div

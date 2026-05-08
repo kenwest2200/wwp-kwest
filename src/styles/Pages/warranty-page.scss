@@ -157,6 +157,17 @@
     display: flex;
     align-items: center;
     gap: px-to-rem(16);
+
+    a {
+      color: $dark;
+      text-decoration: none;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: $medium-teal;
+        transition: color 0.3s ease;
+      }
+    }
   }
 
   &__contact-icon-wrap {
@@ -188,6 +199,7 @@
     letter-spacing: 0.02em;
     font-weight: 400;
     color: $dark;
+
 
     p:first-child {
       margin-top: 0;

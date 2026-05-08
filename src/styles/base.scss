@@ -34,6 +34,69 @@ body {
     width: 1px;
 }
 
+.wysiwyg {
+    strong {
+        padding: 0;
+        margin-bottom: px-to-rem(16);
+        font-weight: 700;
+        color: inherit;
+        letter-spacing: 0.02em;
+        line-height: px-to-rem(28);
+        font-size: px-to-rem(16);
+    }
+
+    a {
+        color: $dark-teal;
+        text-decoration: underline;
+        transition: color 0.3s ease;
+
+        &:hover {
+            color: $medium-teal;
+            transition: color 0.3s ease;
+        }
+    }
+
+    ul {
+        margin: 0;
+        list-style: disc;
+        padding-left: px-to-rem(22);
+    }
+
+    li {
+        margin-bottom: px-to-rem(8);
+        padding-left: px-to-rem(4);
+    }
+
+    li:last-child {
+        margin-bottom: 0;
+    }
+
+    h2 {
+        margin-bottom: px-to-rem(24);
+        font-size: px-to-rem(20);
+        font-weight: 500;
+        line-height: px-to-rem(24);
+        color: $dark;
+        letter-spacing: 0.02em;
+
+        @include media-breakpoint-up(lg) {
+            font-size: px-to-rem(24);
+            line-height: px-to-rem(28);
+        }
+
+    }
+
+    p {
+        padding: 0;
+        margin-bottom: px-to-rem(40);
+        font-weight: 400;
+        color: $dark;
+        letter-spacing: 0.02em;
+        line-height: px-to-rem(28);
+        font-size: px-to-rem(16);
+    }
+}
+
 blockquote {
     position: relative;
     border-radius: px-to-rem(8);

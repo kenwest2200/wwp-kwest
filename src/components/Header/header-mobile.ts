@@ -153,6 +153,7 @@ function bindHeaderSearchAutocomplete(
   input: HTMLInputElement,
 ): void {
   const box = panel.querySelector("#header-search-suggest");
+  const clearBtn = panel.querySelector<HTMLButtonElement>("[data-header-search-clear]");
   if (!(box instanceof HTMLElement)) return;
 
   let debounceTimer: ReturnType<typeof setTimeout> | null = null;
@@ -164,6 +165,11 @@ function bindHeaderSearchAutocomplete(
     box.innerHTML = "";
     input.setAttribute("aria-expanded", "false");
     input.removeAttribute("aria-activedescendant");
+  };
+
+  const syncClearButton = () => {
+    if (!clearBtn) return;
+    clearBtn.hidden = input.value.length === 0;
   };
 
   const showSuggest = (
@@ -256,9 +262,19 @@ function bindHeaderSearchAutocomplete(
     }, AUTOCOMPLETE_DEBOUNCE_MS);
   };
 
-  input.addEventListener("input", scheduleFetch);
+  input.addEventListener("input", () => {
+    syncClearButton();
+    scheduleFetch();
+  });
+  clearBtn?.addEventListener("click", () => {
+    input.value = "";
+    syncClearButton();
+    hideSuggest();
+    input.focus();
+  });
 
   input.addEventListener("focus", () => {
+    syncClearButton();
     if (
       input.value.trim().length >= AUTOCOMPLETE_MIN_CHARS &&
       box.childNodes.length > 0
@@ -288,6 +304,7 @@ function bindHeaderSearchAutocomplete(
       hideSuggest();
     }
   });
+  syncClearButton();
 }
 
 export function initHeaderSearch(): void {

@@ -221,6 +221,7 @@ button,
 [type="reset"],
 [type="submit"] {
   -webkit-appearance: button;
+  appearance: button;
 }
 
 /**
@@ -320,7 +321,8 @@ textarea {
  */
 
 [type="search"] {
-  -webkit-appearance: textfield;
+  -webkit-appearance: searchfield;
+  appearance: auto;
   /* 1 */
   outline-offset: -2px;
   /* 2 */
@@ -332,6 +334,10 @@ textarea {
 
 [type="search"]::-webkit-search-decoration {
   -webkit-appearance: none;
+}
+
+[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: searchfield-cancel-button;
 }
 
 /**

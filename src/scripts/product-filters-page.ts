@@ -44,6 +44,9 @@ const countEl = document.getElementById("product-filters-count");
 const searchInput = document.getElementById(
   "product-filters-search",
 ) as HTMLInputElement | null;
+const searchClearBtn = document.getElementById(
+  "product-filters-search-clear",
+) as HTMLButtonElement | null;
 const introTitleEl = document.getElementById(
   "product-filters-intro-title",
 ) as HTMLHeadingElement | null;
@@ -223,6 +226,9 @@ const overflowModalTitleEl = document.getElementById(
 const overflowModalSearchEl = document.getElementById(
   "product-filters-overflow-modal-search",
 ) as HTMLInputElement | null;
+const overflowModalSearchClearBtn = document.getElementById(
+  "product-filters-overflow-modal-search-clear",
+) as HTMLButtonElement | null;
 const overflowModalListEl = document.getElementById(
   "product-filters-overflow-modal-list",
 ) as HTMLDivElement | null;
@@ -270,7 +276,15 @@ function setupOverflowModal() {
     closeOverflowModal();
   });
   overflowModalSearchEl?.addEventListener("input", () => {
+    syncOverflowModalSearchClearButton();
     filterOverflowModalItems();
+  });
+  overflowModalSearchClearBtn?.addEventListener("click", () => {
+    if (!overflowModalSearchEl) return;
+    overflowModalSearchEl.value = "";
+    syncOverflowModalSearchClearButton();
+    filterOverflowModalItems();
+    overflowModalSearchEl.focus();
   });
 }
 
@@ -295,6 +309,7 @@ function closeOverflowModal() {
     }
     overflowModalRootEl.hidden = true;
     if (overflowModalSearchEl) overflowModalSearchEl.value = "";
+    syncOverflowModalSearchClearButton();
     if (overflowModalListEl) overflowModalListEl.innerHTML = "";
   }, 260);
 }
@@ -308,6 +323,11 @@ function filterOverflowModalItems() {
       const text = (item.dataset.searchText ?? "").toLowerCase();
       item.hidden = q.length > 0 && !text.includes(q);
     });
+}
+
+function syncOverflowModalSearchClearButton() {
+  if (!overflowModalSearchEl || !overflowModalSearchClearBtn) return;
+  overflowModalSearchClearBtn.hidden = overflowModalSearchEl.value.length === 0;
 }
 
 function openOverflowModal(
@@ -332,6 +352,7 @@ function openOverflowModal(
   overflowModalTitleEl.textContent = state.title;
   overflowModalListEl.innerHTML = state.itemsHtml;
   overflowModalSearchEl.value = prevQuery;
+  syncOverflowModalSearchClearButton();
   overflowModalRootEl.hidden = false;
   overflowModalRootEl.setAttribute("aria-hidden", "false");
   overflowModalRootEl.classList.add("product-filters__overflow-modal--open");
@@ -623,6 +644,11 @@ function syncFilterActionsRow() {
   const has = hasAnyFilterSelected();
   if (noFiltersLabelEl) noFiltersLabelEl.hidden = has;
   if (clearBtn instanceof HTMLButtonElement) clearBtn.hidden = !has;
+}
+
+function syncCatalogSearchClearButton() {
+  if (!searchInput || !searchClearBtn) return;
+  searchClearBtn.hidden = searchInput.value.length === 0;
 }
 
 function setLoading(on: boolean) {
@@ -1102,11 +1128,12 @@ function syncPager() {
     for (const b of pagerNextBtns) b.disabled = true;
     return;
   }
-  if (pagerRootEl) pagerRootEl.hidden = false;
-  if (toolbarPagerNavEl) toolbarPagerNavEl.hidden = false;
-
   const page = Math.floor(currentOffset / pageSize) + 1;
   const totalPages = Math.max(1, Math.ceil(currentTotal / pageSize));
+  const hasMorePages = totalPages > 1;
+  if (pagerRootEl) pagerRootEl.hidden = !hasMorePages;
+  if (toolbarPagerNavEl) toolbarPagerNavEl.hidden = !hasMorePages;
+
   const start = currentOffset + 1;
   const end = Math.min(currentOffset + pageSize, currentTotal);
 
@@ -1949,8 +1976,8 @@ function buildActiveFilterChips(): ActiveFilterChip[] {
   return out;
 }
 
-function renderActiveFilterChipButton(chip: ActiveFilterChip): string {
-  let extra = ` type="button" class="product-filters__active-chip" data-active-chip="1"`;
+function renderActiveFilterChip(chip: ActiveFilterChip): string {
+  let extra = ` class="product-filters__active-chip" data-active-chip="1"`;
   if (chip.kind === "root" && chip.rootSlug) {
     extra += ` data-filter-kind="root" data-root-slug="${escapeHtml(chip.rootSlug)}"`;
   } else if (chip.kind === "subgroup" && chip.memberSlugs?.length) {
@@ -1968,12 +1995,11 @@ function renderActiveFilterChipButton(chip: ActiveFilterChip): string {
     chip.kind === "attr" && chip.attrGroupName
       ? `${safeDisplayText(chip.attrGroupName)}: ${safeDisplayText(chip.label)}`
       : safeDisplayText(chip.label);
-  return `<button${extra}>
+  return `<div${extra}>
   ${attrTitle}
   <span class="product-filters__active-chip-label">${safeDisplayText(chip.label)}</span>
-  <span class="product-filters__active-chip-remove" aria-hidden="true">×</span>
-  <span class="visually-hidden">Remove ${removePhrase} filter</span>
-</button>`;
+  <button type="button" class="product-filters__active-chip-remove" data-active-chip-remove="1" aria-label="Remove ${removePhrase} filter">×</button>
+</div>`;
 }
 
 function renderActiveFilterChips() {
@@ -2001,6 +2027,10 @@ function renderActiveFilterChips() {
     0,
     chips.length - ACTIVE_FILTER_CHIPS_VISIBLE,
   );
+  const chipsToRender =
+    showToggle && !activeFilterChipsExpanded
+      ? chips.slice(0, ACTIVE_FILTER_CHIPS_VISIBLE)
+      : chips;
   const toggleHtml = showToggle
     ? `<span class="product-filters__active-filters-toggle product-filters__active-filters-toggle--inline">
       <button type="button" id="product-filters-active-filters-show" class="product-filters__link-btn product-filters__active-filters-toggle-btn"${activeFilterChipsExpanded ? " hidden" : ""}>
@@ -2011,21 +2041,21 @@ function renderActiveFilterChips() {
       </button>
     </span>`
     : "";
-  activeFiltersRowEl.innerHTML = `${ACTIVE_FILTERS_SELECTED_LABEL_HTML}${chips
-    .map((c) => renderActiveFilterChipButton(c))
+  activeFiltersRowEl.innerHTML = `${ACTIVE_FILTERS_SELECTED_LABEL_HTML}${chipsToRender
+    .map((c) => renderActiveFilterChip(c))
     .join("")}${toggleHtml}`;
 }
 
-function applyActiveFilterRemoval(button: HTMLButtonElement) {
-  const kind = button.dataset.filterKind;
-  if (kind === "root" && button.dataset.rootSlug) {
-    selectedRoot.delete(button.dataset.rootSlug);
-  } else if (kind === "subgroup" && button.dataset.memberSlugs) {
-    for (const s of parseMemberSlugsFromAttr(button.dataset.memberSlugs)) {
+function applyActiveFilterRemoval(chipEl: HTMLElement) {
+  const kind = chipEl.dataset.filterKind;
+  if (kind === "root" && chipEl.dataset.rootSlug) {
+    selectedRoot.delete(chipEl.dataset.rootSlug);
+  } else if (kind === "subgroup" && chipEl.dataset.memberSlugs) {
+    for (const s of parseMemberSlugsFromAttr(chipEl.dataset.memberSlugs)) {
       selectedSub.delete(s);
     }
-  } else if (kind === "attr" && button.dataset.attrSlug) {
-    selectedAttrs.delete(button.dataset.attrSlug);
+  } else if (kind === "attr" && chipEl.dataset.attrSlug) {
+    selectedAttrs.delete(chipEl.dataset.attrSlug);
   } else if (kind === "search") {
     searchQuery = "";
     if (searchInput) searchInput.value = "";
@@ -2042,6 +2072,7 @@ function clearAllFilters() {
   selectedAttrs.clear();
   searchQuery = "";
   if (searchInput) searchInput.value = "";
+  syncCatalogSearchClearButton();
   activeFilterChipsExpanded = false;
   pageSize = 24;
   sortMode = "updated";
@@ -2365,9 +2396,19 @@ async function init() {
     });
 
     searchInput?.addEventListener("input", () => {
+      syncCatalogSearchClearButton();
       searchQuery = searchInput?.value ?? "";
       currentOffset = 0;
       void fetchProducts();
+    });
+    searchClearBtn?.addEventListener("click", () => {
+      if (!searchInput) return;
+      searchInput.value = "";
+      syncCatalogSearchClearButton();
+      searchQuery = "";
+      currentOffset = 0;
+      void fetchProducts();
+      searchInput.focus();
     });
 
     perTrigger?.addEventListener("click", (e) => {
@@ -2513,13 +2554,16 @@ async function init() {
         renderActiveFilterChips();
         return;
       }
-      const chip = t.closest<HTMLButtonElement>("[data-active-chip]");
+      const removeBtn = t.closest<HTMLButtonElement>("[data-active-chip-remove]");
+      if (!removeBtn) return;
+      const chip = removeBtn.closest<HTMLElement>("[data-active-chip]");
       if (chip && activeFiltersRowEl?.contains(chip)) {
         e.preventDefault();
         applyActiveFilterRemoval(chip);
       }
     });
 
+    syncCatalogSearchClearButton();
     await fetchProducts();
   } catch (e) {
     setError(e instanceof Error ? e.message : String(e));

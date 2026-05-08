@@ -711,6 +711,28 @@
     overflow-y: visible;
     -webkit-overflow-scrolling: touch;
 
+    @include media-breakpoint-down(lg) {
+      overflow-x: scroll;
+      /* Keep horizontal scrollbar area visible on mobile/tablet when table overflows. */
+      scrollbar-gutter: stable;
+      scrollbar-width: thin;
+      scrollbar-color: rgba($dark-teal, 0.6) rgba($dark, 0.08);
+
+      &::-webkit-scrollbar {
+        height: px-to-rem(10);
+      }
+
+      &::-webkit-scrollbar-track {
+        background: rgba($dark, 0.08);
+        border-radius: px-to-rem(999);
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: rgba($dark-teal, 0.6);
+        border-radius: px-to-rem(999);
+      }
+    }
+
     table {
       box-sizing: border-box;
       width: max-content !important;

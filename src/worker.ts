@@ -574,6 +574,8 @@ const DEFAULT_SALES_REPS_API_ROOT =
 /** Base URL for `…/in-radius` (same host as ERP; optional env override). */
 const DEFAULT_DISTRIBUTOR_LOCATIONS_ROOT =
   "https://wwoperations.waterwayplastics.com/WaterwayAPI/locations";
+/** ERP `in-radius` responds with empty results when `distance >= 150` (mi). */
+const DISTRIBUTOR_LOCATOR_MAX_DISTANCE = 149;
 
 const DEFAULT_CROSS_REF_API_ROOT = "https://api.waterwayplastics.com";
 const CROSS_REF_FIND_PATH = "/wp-json/waterway-cross-ref/v1/find";
@@ -1044,7 +1046,10 @@ async function handleDistributorLocationsInRadiusApi(
   if (distRaw != null && distRaw !== "") {
     const n = Number(distRaw);
     if (Number.isFinite(n))
-      distance = Math.min(5000, Math.max(1, Math.floor(n)));
+      distance = Math.min(
+        DISTRIBUTOR_LOCATOR_MAX_DISTANCE,
+        Math.max(1, Math.floor(n)),
+      );
   }
   const unitRaw = (url.searchParams.get("unit") ?? "mi").toLowerCase();
   const unit = ["m", "km", "mi", "ft"].includes(unitRaw) ? unitRaw : "mi";

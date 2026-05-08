@@ -143,6 +143,17 @@
     max-width: px-to-rem(420);
   }
 
+  &__search-inline-error {
+    position: absolute;
+    margin: px-to-rem(8) 0 0;
+    max-width: px-to-rem(420);
+    @include field.form-field-error-text;
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
   &__locator-search-icon-btn {
     position: absolute;
     left: px-to-rem(6);
