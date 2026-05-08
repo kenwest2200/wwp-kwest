@@ -447,6 +447,9 @@ async function init(): Promise<void> {
 
   installPageErrorToast(errorToast);
 
+  const geoBtnEl = root.querySelector<HTMLButtonElement>("[data-dl-geolocate]");
+  const zipClearBtn = root.querySelector<HTMLButtonElement>("[data-dl-zip-clear]");
+
   const dlForm = form;
   const dlZipInput = zipInput;
   const dlList = list;
@@ -478,6 +481,12 @@ async function init(): Promise<void> {
   /** Blocks duplicate ZIP/API searches until the current run finishes. */
   let locatorSearchInFlight = false;
 
+  function syncDlZipAccessoryButtons(): void {
+    const has = dlZipInput.value.trim().length > 0;
+    if (geoBtnEl) geoBtnEl.hidden = has;
+    if (zipClearBtn) zipClearBtn.hidden = !has;
+  }
+
   function setLocatorSearchUiLocked(locked: boolean): void {
     if (!root) return;
     root
@@ -486,6 +495,7 @@ async function init(): Promise<void> {
     root
       .querySelector<HTMLButtonElement>("[data-dl-geolocate]")
       ?.toggleAttribute("disabled", locked);
+    zipClearBtn?.toggleAttribute("disabled", locked);
     dlForm.toggleAttribute("aria-busy", locked);
   }
 
@@ -1035,8 +1045,7 @@ async function init(): Promise<void> {
     onPick: () => runSearchIfZipReady(),
   });
 
-  const geoBtn = root.querySelector<HTMLButtonElement>("[data-dl-geolocate]");
-  geoBtn?.addEventListener("click", () => {
+  geoBtnEl?.addEventListener("click", () => {
     void (async () => {
       if (locatorSearchInFlight) return;
       if (!navigator.geolocation) {
@@ -1072,6 +1081,7 @@ async function init(): Promise<void> {
           return;
         }
         dlZipInput.value = z;
+        syncDlZipAccessoryButtons();
         await runSearch(
           { userLatLng: { lat, lng } },
           { externalLock: true },
@@ -1097,7 +1107,18 @@ async function init(): Promise<void> {
   dlZipInput.addEventListener("input", () => {
     clearZipInlineError();
     hidePageErrorToast(errorToast);
+    syncDlZipAccessoryButtons();
   });
+
+  zipClearBtn?.addEventListener("click", () => {
+    dlZipInput.value = "";
+    clearZipInlineError();
+    hidePageErrorToast(errorToast);
+    syncDlZipAccessoryButtons();
+    dlZipInput.focus();
+  });
+
+  syncDlZipAccessoryButtons();
 
   dlZipInput.addEventListener("keydown", (e) => {
     if (e.key !== "Enter") return;

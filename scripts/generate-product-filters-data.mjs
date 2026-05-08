@@ -168,9 +168,19 @@ const PRODUCT_CATALOG_IMAGE_SELECTION = `
         }
 `;
 
+const CATALOG_ROOT_CATEGORY_SLUGS = ["pool", "spa", "bath"];
+
 const PRODUCTS_QUERY = `
-  query ProductFiltersProducts($first: Int!, $after: String) {
-    products(first: $first, after: $after) {
+  query ProductFiltersProducts(
+    $first: Int!
+    $after: String
+    $rootCategorySlugs: [String!]
+  ) {
+    products(
+      first: $first
+      after: $after
+      where: { rootCategorySlugs: $rootCategorySlugs }
+    ) {
       nodes {
         title
         slug
@@ -198,8 +208,16 @@ ${PRODUCT_CATALOG_IMAGE_SELECTION}
 `;
 
 const PRODUCTS_NO_ATTRS_QUERY = `
-  query ProductFiltersProductsNoAttrs($first: Int!, $after: String) {
-    products(first: $first, after: $after) {
+  query ProductFiltersProductsNoAttrs(
+    $first: Int!
+    $after: String
+    $rootCategorySlugs: [String!]
+  ) {
+    products(
+      first: $first
+      after: $after
+      where: { rootCategorySlugs: $rootCategorySlugs }
+    ) {
       nodes {
         title
         slug
@@ -232,12 +250,14 @@ async function fetchAllProducts(client, withAttributes) {
     const data = await client.request(query, {
       first: pageSize,
       after,
+      rootCategorySlugs: CATALOG_ROOT_CATEGORY_SLUGS,
     });
     const block = data.products ?? {};
     const nodes = block.nodes ?? [];
     all.push(...nodes);
 
     hasNextPage = Boolean(block.pageInfo?.hasNextPage);
+    ы;
     after = block.pageInfo?.endCursor ?? null;
   }
 
@@ -411,13 +431,8 @@ async function generateFromGraphql(env) {
   const products = productsNodes
     .filter((item) => item?.title && item?.slug)
     .map((item) => {
-      const {
-        imageUrl,
-        imageMedium,
-        imageAlt,
-        imageWidth,
-        imageHeight,
-      } = mainCatalogImageFromProduct(item);
+      const { imageUrl, imageMedium, imageAlt, imageWidth, imageHeight } =
+        mainCatalogImageFromProduct(item);
       return {
         title: decodeHtmlEntities(item.title),
         slug: item.slug,

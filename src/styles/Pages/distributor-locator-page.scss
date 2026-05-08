@@ -253,6 +253,10 @@
       outline: 2px solid $dark-teal;
       outline-offset: 1px;
     }
+
+    &[hidden] {
+      display: none !important;
+    }
   }
 
   &__locator-geolocate-icon {
@@ -287,6 +291,39 @@
   &__locator-geolocate:hover &__locator-geolocate-tooltip,
   &__locator-geolocate:focus-visible &__locator-geolocate-tooltip {
     opacity: 1;
+  }
+
+  &__locator-input-clear {
+    position: absolute;
+    right: px-to-rem(6);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: px-to-rem(40);
+    height: px-to-rem(40);
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-radius: px-to-rem(4);
+    background: transparent;
+    color: $dark-medium;
+    cursor: pointer;
+    transition:
+      background 0.15s ease,
+      color 0.15s ease;
+
+
+    &:focus-visible {
+      outline: 2px solid $dark-teal;
+      outline-offset: 1px;
+    }
+
+    &[hidden] {
+      display: none !important;
+    }
   }
 
   &__locator-within {

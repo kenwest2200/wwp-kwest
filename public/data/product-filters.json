@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-08T11:10:48.436Z",
+  "generatedAt": "2026-05-08T12:15:10.327Z",
   "attributesByCategory": {
     "bath": [],
     "pool": [
@@ -4515,22 +4515,6 @@
       ]
     },
     {
-      "title": "Waterway Warranty",
-      "slug": "waterway-warranty",
-      "databaseId": 39232,
-      "date": "2023-06-30T21:17:40",
-      "modified": "2025-12-10T19:56:51",
-      "imageUrl": null,
-      "imageMedium": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "warranty"
-      ],
-      "attributeSlugs": []
-    },
-    {
       "title": "TruSeal Air Controls",
       "slug": "truseal-air-controls-top-access-controls-accessories",
       "databaseId": 38197,
@@ -4690,38 +4674,6 @@
       ]
     },
     {
-      "title": "Hole Saw Sizes",
-      "slug": "hole-saw-sizes",
-      "databaseId": 32304,
-      "date": "2023-06-01T12:36:55",
-      "modified": "2025-06-04T23:28:12",
-      "imageUrl": null,
-      "imageMedium": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "tech-info"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Blower Sizing",
-      "slug": "blower-sizing-2",
-      "databaseId": 32150,
-      "date": "2023-06-01T12:36:54",
-      "modified": "2023-12-26T14:00:09",
-      "imageUrl": null,
-      "imageMedium": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "tech-info"
-      ],
-      "attributeSlugs": []
-    },
-    {
       "title": "Spa Light Accessories",
       "slug": "5-jumbo-spa-lights-and-spa-light-accessories-2",
       "databaseId": 31957,
@@ -4742,22 +4694,6 @@
         "volatge-230v-12v",
         "voltage-110v-12v"
       ]
-    },
-    {
-      "title": "Color Guide",
-      "slug": "color-guide",
-      "databaseId": 31880,
-      "date": "2023-06-01T12:36:51",
-      "modified": "2023-06-01T21:56:33",
-      "imageUrl": null,
-      "imageMedium": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "tech-info"
-      ],
-      "attributeSlugs": []
     },
     {
       "title": "3/4″ Ribbed Barb Manifolds",
@@ -5204,20 +5140,6 @@
       "categorySlugs": [
         "spa-pumps-spa"
       ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Standard Return Fittings, SGMS Return Fittings & Weirs",
-      "slug": "standard-return-fittings-sgms-return-fittings-weirs",
-      "databaseId": 38423,
-      "date": "2023-05-30T18:43:09",
-      "modified": "2025-06-04T22:24:38",
-      "imageUrl": null,
-      "imageMedium": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [],
       "attributeSlugs": []
     },
     {
@@ -6293,22 +6215,6 @@
       "attributeSlugs": []
     },
     {
-      "title": "Shurflex Spa Hose & Tubing",
-      "slug": "hose-tubing-2",
-      "databaseId": 32325,
-      "date": "2023-05-22T12:36:55",
-      "modified": "2025-06-04T20:39:40",
-      "imageUrl": null,
-      "imageMedium": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "spa"
-      ],
-      "attributeSlugs": []
-    },
-    {
       "title": "Commercial Renegade Skimmers",
       "slug": "commercial-renegade-skimmers",
       "databaseId": 31881,
@@ -7029,22 +6935,6 @@
       "attributeSlugs": []
     },
     {
-      "title": "ClearWater Sand Filter Replacement Parts",
-      "slug": "clearwater-sand-filter",
-      "databaseId": 31848,
-      "date": "2023-05-03T12:36:51",
-      "modified": "2023-06-07T22:31:05",
-      "imageUrl": null,
-      "imageMedium": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "repl-parts"
-      ],
-      "attributeSlugs": []
-    },
-    {
       "title": "CSA Carefree Sand Systems",
       "slug": "carefree-sand-csa-systems",
       "databaseId": 31565,
@@ -7462,118 +7352,6 @@
       "imageHeight": null,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Jet Worksheet Fluid Dynamics",
-      "slug": "jet-worksheet-fluid-dynamics",
-      "databaseId": 32405,
-      "date": "2020-01-27T12:36:56",
-      "modified": "2020-01-27T12:36:56",
-      "imageUrl": null,
-      "imageMedium": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "tech-info"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Ordering & Policies",
-      "slug": "information",
-      "databaseId": 32386,
-      "date": "2020-01-27T12:36:56",
-      "modified": "2026-05-08T09:21:43",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/ecd291d72357c9c78db1098bccee8e7b690b7a91.jpg",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/ecd291d72357c9c78db1098bccee8e7b690b7a91-300x175.jpg",
-      "imageAlt": null,
-      "imageWidth": 1920,
-      "imageHeight": 1118,
-      "categorySlugs": [
-        "general-info"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Hydraulic System Design",
-      "slug": "hydraulic-system-design",
-      "databaseId": 32343,
-      "date": "2020-01-27T12:36:56",
-      "modified": "2020-01-27T12:36:56",
-      "imageUrl": null,
-      "imageMedium": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "tech-info"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Friction Loss in Fittings",
-      "slug": "friction-loss-in-fittings",
-      "databaseId": 32188,
-      "date": "2020-01-27T12:36:54",
-      "modified": "2020-01-27T12:36:54",
-      "imageUrl": null,
-      "imageMedium": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "tech-info"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Friction Flow Chart",
-      "slug": "friction-flow-chart",
-      "databaseId": 32185,
-      "date": "2020-01-27T12:36:54",
-      "modified": "2020-01-27T12:36:54",
-      "imageUrl": null,
-      "imageMedium": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "tech-info"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Fax Cover Sheet",
-      "slug": "fax-cover-sheet",
-      "databaseId": 32116,
-      "date": "2020-01-27T12:36:54",
-      "modified": "2020-01-27T12:36:54",
-      "imageUrl": null,
-      "imageMedium": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "tech-info"
-      ],
-      "attributeSlugs": []
-    },
-    {
-      "title": "Contact Us",
-      "slug": "contact-us",
-      "databaseId": 31905,
-      "date": "2020-01-27T12:36:52",
-      "modified": "2020-01-27T12:36:52",
-      "imageUrl": null,
-      "imageMedium": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
-      "categorySlugs": [
-        "general-info"
       ],
       "attributeSlugs": []
     },

@@ -311,6 +311,9 @@ export function initHeaderSearch(): void {
   const root = document.querySelector("[data-header-search]");
   const toggle = document.querySelector("[data-search-toggle]");
   const panel = document.getElementById("header-search-panel");
+  const closeMobileBtn = panel?.querySelector<HTMLButtonElement>(
+    "[data-search-close-mobile]",
+  );
   const input = panel?.querySelector<HTMLInputElement>(
     "[data-header-search-input]",
   );
@@ -350,18 +353,13 @@ export function initHeaderSearch(): void {
   toggle.addEventListener("click", (e) => {
     e.stopPropagation();
     if (mq.matches) return;
-    setOpen(!root.classList.contains("header__search--open"));
+    if (root.classList.contains("header__search--open")) return;
+    setOpen(true);
   });
 
-  document.addEventListener("click", (e) => {
-    if (mq.matches || !root.classList.contains("header__search--open")) return;
-    if (e.target instanceof Node && root.contains(e.target)) return;
-    close();
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key !== "Escape") return;
-    if (mq.matches || !root.classList.contains("header__search--open")) return;
+  closeMobileBtn?.addEventListener("click", () => {
+    if (mq.matches) return;
+    if (!root.classList.contains("header__search--open")) return;
     close();
     toggle.focus();
   });

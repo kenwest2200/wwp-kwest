@@ -991,7 +991,7 @@
     width: 100%;
     border: none;
     background: transparent;
-    padding: px-to-rem(12) px-to-rem(14) px-to-rem(12) px-to-rem(48);
+    padding: px-to-rem(10) px-to-rem(14) px-to-rem(9) px-to-rem(48);
     font-size: px-to-rem(14);
     letter-spacing: 0.02em;
     color: $white;
@@ -1375,6 +1375,30 @@
       pointer-events: none;
     }
 
+    &-mobile-close {
+      position: absolute;
+      top: px-to-rem(10);
+      right: px-to-rem(16);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: px-to-rem(32);
+      height: px-to-rem(32);
+      margin: 0;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: transparent;
+      color: $dark-medium;
+      cursor: pointer;
+      flex-shrink: 0;
+
+      &:focus-visible {
+        outline: 2px solid $dark-teal;
+        outline-offset: 2px;
+      }
+    }
+
     &-panel form {
       width: 100%;
     }
@@ -1393,10 +1417,6 @@
 
     &-icon-btn {
       left: px-to-rem(16);
-
-      path {
-        // fill: $dark-medium;
-      }
     }
 
 
@@ -1404,11 +1424,10 @@
     &-input {
       width: 100%;
       min-width: 0;
-      min-height: px-to-rem(48);
       background: $light-gray;
       color: $dark-medium;
       border-radius: px-to-rem(4);
-      padding: px-to-rem(12) px-to-rem(12) px-to-rem(12) px-to-rem(44);
+      padding: px-to-rem(10) px-to-rem(10) px-to-rem(9) px-to-rem(44);
 
       svg {
         path {
@@ -1450,6 +1469,10 @@
         width: auto;
       }
 
+      &-mobile-close {
+        display: none;
+      }
+
       &-label {
         width: auto;
       }
@@ -1484,6 +1507,23 @@
     }
   }
 }
+
+// .header__search-icon-btn,
+// .header__search-clear {
+//   svg {
+//     path {
+//       fill: $dark-medium;
+//     }
+//   }
+// }
+
+// body.is-products .header:not(.is-scrolling) .header__search-panel .header__search-clear {
+//   svg {
+//     path {
+//       stroke: $dark-medium;
+//     }
+//   }
+// }
 
 body.is-home .header.header--white:not(.is-scrolling),
 body.is-products .header.header--white:not(.is-scrolling) {
@@ -1567,6 +1607,16 @@ body.is-products .header.header--white:not(.is-scrolling) {
       }
     }
 
+    @include media-breakpoint-down(md) {
+      &-clear {
+        svg {
+          path {
+            stroke: $dark-medium;
+          }
+        }
+      }
+    }
+
     &-icon {
       path {
         fill: $dark-medium;
@@ -1576,7 +1626,6 @@ body.is-products .header.header--white:not(.is-scrolling) {
     &-input {
       background-color: $light-gray;
       color: $dark-medium;
-      max-width: px-to-rem(600);
 
       &::placeholder {
         color: $dark-medium;

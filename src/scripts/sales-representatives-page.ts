@@ -252,10 +252,18 @@ export function initSalesRepresentativesPage(): void {
   const tableWrap = document.getElementById("sr-table-wrap");
   const submitBtn = form?.querySelector<HTMLButtonElement>("[data-sr-search-submit]");
   const geolocateBtn = form?.querySelector<HTMLButtonElement>("[data-sr-geolocate]");
+  const zipClearBtn = form?.querySelector<HTMLButtonElement>("[data-sr-zip-clear]");
 
   if (!form || !zipInput || !tbody) return;
 
-  const inputWrap = zipInput.closest<HTMLElement>(".sr-page__input-wrap");
+  const zipField = zipInput;
+  const inputWrap = zipField.closest<HTMLElement>(".sr-page__input-wrap");
+
+  function syncSrZipAccessoryButtons(): void {
+    const has = zipField.value.trim().length > 0;
+    if (geolocateBtn) geolocateBtn.hidden = has;
+    if (zipClearBtn) zipClearBtn.hidden = !has;
+  }
   let searchInFlight = false;
 
   installPageErrorToast(msgEl);
@@ -284,20 +292,22 @@ export function initSalesRepresentativesPage(): void {
     searchInFlight = locked;
     submitBtn?.toggleAttribute("disabled", locked);
     geolocateBtn?.toggleAttribute("disabled", locked);
+    zipClearBtn?.toggleAttribute("disabled", locked);
     form.toggleAttribute("aria-busy", locked);
   };
 
   setResultsVisible(false);
   bindNameSortHandlers(tbody);
 
-  zipInput.addEventListener("input", () => {
+  zipField.addEventListener("input", () => {
     hidePageErrorToast(msgEl);
-    clearSalesRepsFieldError(zipInput, inlineErrorEl, inputWrap);
+    clearSalesRepsFieldError(zipField, inlineErrorEl, inputWrap);
+    syncSrZipAccessoryButtons();
   });
 
   const performSearch = async (zip: string): Promise<void> => {
     hidePageErrorToast(msgEl);
-    clearSalesRepsFieldError(zipInput, inlineErrorEl, inputWrap);
+    clearSalesRepsFieldError(zipField, inlineErrorEl, inputWrap);
 
     setResultsVisible(true);
     setResultsLoading(true);
@@ -312,7 +322,7 @@ export function initSalesRepresentativesPage(): void {
       if (!res.ok || data.error) {
         const err = data.error ?? "Could not load representatives.";
         if (isSalesRepsFieldValidationError(err)) {
-          showSalesRepsFieldError(zipInput, inlineErrorEl, inputWrap, err);
+          showSalesRepsFieldError(zipField, inlineErrorEl, inputWrap, err);
         } else {
           showSalesRepsToast(msgEl, err);
         }
@@ -328,7 +338,7 @@ export function initSalesRepresentativesPage(): void {
         email: r.email ?? null,
       }));
       renderRows(tbody, cachedReps);
-      clearSalesRepsFieldError(zipInput, inlineErrorEl, inputWrap);
+      clearSalesRepsFieldError(zipField, inlineErrorEl, inputWrap);
     } catch (err) {
       showSalesRepsToast(
         msgEl,
@@ -344,10 +354,10 @@ export function initSalesRepresentativesPage(): void {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (searchInFlight) return;
-    const zip = zipInput.value.trim().replace(/\s+/g, "");
+    const zip = zipField.value.trim().replace(/\s+/g, "");
     if (!zip) {
       showSalesRepsFieldError(
-        zipInput,
+        zipField,
         inlineErrorEl,
         inputWrap,
         "Please enter a ZIP code.",
@@ -357,7 +367,7 @@ export function initSalesRepresentativesPage(): void {
 
     if (!/^\d{5}(-\d{4})?$/.test(zip)) {
       showSalesRepsFieldError(
-        zipInput,
+        zipField,
         inlineErrorEl,
         inputWrap,
         "Enter a valid U.S. ZIP code (5 digits, optionally ZIP+4).",
@@ -398,7 +408,8 @@ export function initSalesRepresentativesPage(): void {
           );
           return;
         }
-        zipInput.value = zip;
+        zipField.value = zip;
+        syncSrZipAccessoryButtons();
         await performSearch(zip);
       } catch (err) {
         const denied =
@@ -415,4 +426,14 @@ export function initSalesRepresentativesPage(): void {
       }
     })();
   });
+
+  zipClearBtn?.addEventListener("click", () => {
+    zipField.value = "";
+    hidePageErrorToast(msgEl);
+    clearSalesRepsFieldError(zipField, inlineErrorEl, inputWrap);
+    syncSrZipAccessoryButtons();
+    zipField.focus();
+  });
+
+  syncSrZipAccessoryButtons();
 }
