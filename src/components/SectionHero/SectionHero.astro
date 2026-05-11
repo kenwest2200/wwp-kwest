@@ -3,12 +3,15 @@ interface Props {
   title: string;
   intro?: string;
   introIsHtml?: boolean;
+  customClass?: string;
 }
 
-const { title, intro, introIsHtml = false } = Astro.props;
+const { title, intro, introIsHtml = false, customClass = "" } = Astro.props;
 ---
 
-<section class="section-hero">
+<section
+  class={`section-hero ${customClass ? `section-hero--${customClass}` : ""}`}
+>
   <div class="container section-hero__container">
     <div class="section-hero__content">
       <h1 class="section-hero__title">{title}</h1>

@@ -42,4 +42,17 @@
         color: $white;
 
     }
+
+    &--news {
+        background: $light-gray;
+
+        & .section-hero__title {
+            color: $dark;
+        }
+
+        & .section-hero__description {
+            color: $dark;
+            max-width: px-to-rem(876);
+        }
+    }
 }

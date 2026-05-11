@@ -1,0 +1,107 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PageHeaderOffset from "../../components/PageHeaderOffset.astro";
+import SectionHero from "../../components/SectionHero/SectionHero.astro";
+import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs.astro";
+import ScrollToTopButton from "../../components/ScrollToTopButton/ScrollToTopButton.astro";
+import { fetchNewsInstagramPosts } from "../../lib/queries/news-instagram";
+
+export const prerender = true;
+
+const pageTitle = "News";
+const introDefault =
+  "Catch up on what’s new at Waterway — from product releases and events to industry news and helpful updates.";
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Company", href: "/company/" },
+  { label: pageTitle },
+];
+
+const posts = await fetchNewsInstagramPosts();
+const hasPosts = posts.length > 0;
+
+function formatPostTimestamp(iso: string): string {
+  try {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return iso;
+    return new Intl.DateTimeFormat("en-US", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    }).format(d);
+  } catch {
+    return iso;
+  }
+}
+---
+
+<Layout
+  headerType="white"
+  bodyClass="is-news"
+  pageTitle={pageTitle}
+  description={introDefault}
+>
+  <main class="news-page" data-page-header-offset data-news-page>
+    <SectionHero title={pageTitle} intro={introDefault} customClass="news" />
+    <div class="news-page__breadcrumb-wrap">
+      <Breadcrumbs items={breadcrumbs} />
+    </div>
+
+    <section class="news-page__body" aria-label="Instagram feed">
+      <div class="news-page__body-inner">
+        {
+          hasPosts ? (
+            <ul class="news-page__grid">
+              {posts.map((post) => (
+                <li class="news-page__card" data-news-card>
+                  <a
+                    class="news-page__card-link"
+                    href={post.permalink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <div class="news-page__card-media">
+                      <img
+                        class="news-page__card-img"
+                        src={post.mediaUrl}
+                        alt={post.caption?.trim() || "Instagram post"}
+                        width="640"
+                        height="640"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
+                    <div class="news-page__card-body">
+                      <p class="news-page__card-meta">
+                        {formatPostTimestamp(post.timestamp)}
+                      </p>
+                      {post.caption?.trim() ? (
+                        <p class="news-page__card-caption news-page__card-caption--truncate">
+                          {post.caption.trim()}
+                        </p>
+                      ) : (
+                        <p class="news-page__card-caption news-page__card-caption--truncate">
+                          View on Instagram
+                        </p>
+                      )}
+                    </div>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="news-page__empty">No Instagram posts to show right now.</p>
+          )
+        }
+      </div>
+    </section>
+
+    <ScrollToTopButton />
+  </main>
+</Layout>
+
+<PageHeaderOffset />
+
+<script>
+  import { initNewsPage } from "../../scripts/news-page.ts";
+  initNewsPage();
+</script>
