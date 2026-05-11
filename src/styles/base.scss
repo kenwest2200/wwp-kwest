@@ -3,32 +3,32 @@
 
 html,
 body {
-    margin: 0;
-    width: 100%;
+    // margin: 0;
+    // width: 100%;/
     height: 100%;
 
     font-size: 1rem;
     font-family: $font-sans;
-    overflow-x: hidden;
 }
 
 html {
-    min-height: 100%;
-    /* `overflow: hidden` on the root breaks `position: sticky` on descendants (e.g. header). */
-    overflow: hidden;
+    // height: 100%;
+    // overflow: hidden;
 
     &.is-sales-representatives,
     &.is-distributor-locator {
-        min-height: unset;
-        overflow: unset;
+        // min-height: unset;
+        // overflow: unset;
     }
 }
 
 
 body {
-    min-height: 100vh;
+    min-height: 100%;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
+
 }
 
 .visually-hidden {

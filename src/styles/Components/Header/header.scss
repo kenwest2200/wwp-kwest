@@ -13,7 +13,7 @@
 
 .header {
   $header: #{&};
-  position: sticky;
+  position: fixed;
   /* Default: `top: 0`. `header--white` at rest: shift by full stack (`--header-top-height`). */
   top: 0;
   min-height: px-to-rem(112);
@@ -30,12 +30,12 @@
   }
 
   &.header--white:not(.is-scrolling) {
-    top: calc(-1 * var(--header-top-height, 0px));
+    top: 0;
     transition: top 0.2s ease;
   }
 
   &.is-scrolling {
-    top: calc(-1 * var(--header-data-top-height, 0px));
+    top: calc(var(--header-data-top-height) * -1);
     transition: top 0.2s ease;
   }
 
@@ -133,6 +133,7 @@
     }
 
     .header__search {
+
       &-toggle-icon {
         path {
           fill: $dark-medium;
@@ -526,6 +527,7 @@
     display: flex;
     align-items: center;
     position: relative;
+    z-index: 49;
 
     &-toggle {
       display: none;
