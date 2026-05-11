@@ -74,6 +74,8 @@ const mockFooterData = {
   ],
 };
 
+const footerAddressMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mockFooterData.address)}`;
+
 const columnNodes = data?.footerColumns?.nodes ?? [];
 const apiColumns = footerColumnsFromMenuNodes(columnNodes);
 const displayColumns = [...apiColumns, ...footerStaticTailColumns];
@@ -97,7 +99,14 @@ function footerLinkLabelByHref(label: string, href: string): string {
         <a href="/">
           <FooterLogo class="footer__logo-icon" />
         </a>
-        <p class="footer__logo-text">{mockFooterData.address}</p>
+        <a
+          class="footer__logo-text"
+          href={footerAddressMapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {mockFooterData.address}
+        </a>
       </div>
       <div class="footer__buttons">
         <a

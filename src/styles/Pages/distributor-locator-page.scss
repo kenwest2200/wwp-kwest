@@ -268,20 +268,19 @@
 
   &__locator-geolocate-tooltip {
     position: absolute;
-    bottom: calc(100% + #{px-to-rem(8)});
-    left: 50%;
-    transform: translateX(-50%);
-    width: max-content;
-    max-width: min(#{px-to-rem(240)}, calc(100vw - #{px-to-rem(32)}));
-    padding: px-to-rem(8) px-to-rem(12);
+    bottom: -320%;
+    right: px-to-rem(-6);
+    width: px-to-rem(340);
+    padding: px-to-rem(24);
+    margin-top: px-to-rem(40);
     border-radius: px-to-rem(6);
-    background: $dark;
-    color: $white;
-    font-size: px-to-rem(12);
-    font-weight: 500;
-    line-height: px-to-rem(16);
-    text-align: center;
-    box-shadow: 0 4px 14px rgba($dark, 0.2);
+    background: $white;
+    color: $dark;
+    font-size: px-to-rem(14);
+    font-weight: 400;
+    line-height: px-to-rem(24);
+    text-align: left;
+    box-shadow: 0px px-to-rem(4) px-to-rem(12) px-to-rem(4) rgba(1, 23, 48, 0.06);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.15s ease;

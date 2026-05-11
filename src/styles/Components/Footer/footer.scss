@@ -25,6 +25,15 @@
             line-height: px-to-rem(20);
             color: $white;
             letter-spacing: 0.02em;
+            transition: color 0.3s ease;
+
+
+            &:hover {
+                color: $blue;
+                transition: color 0.3s ease;
+            }
+
+
         }
 
         &-block {

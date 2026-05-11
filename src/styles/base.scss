@@ -16,7 +16,14 @@ html {
     min-height: 100%;
     /* `overflow: hidden` on the root breaks `position: sticky` on descendants (e.g. header). */
     overflow: hidden;
+
+    &.is-sales-representatives,
+    &.is-distributor-locator {
+        min-height: unset;
+        overflow: unset;
+    }
 }
+
 
 body {
     min-height: 100vh;
