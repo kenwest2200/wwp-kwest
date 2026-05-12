@@ -102,6 +102,7 @@ body {
     }
 
     & .info-box {
+        margin-top: px-to-rem(8);
         border-radius: px-to-rem(8);
         background: $white;
         border: 1px solid $gray-middle;
