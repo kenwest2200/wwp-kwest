@@ -25,12 +25,28 @@ const dataPath = path.join(
 
 const MAX_SUB_LINKS_PER_CARD = 6;
 
+const DEFAULT_CATALOG_ROOT_CATEGORY_SLUGS = ["pool", "spa", "bath"] as const;
+
+function readCatalogRootSlugsFromJson(raw: {
+  catalogRootCategorySlugs?: unknown;
+}): string[] {
+  const v = raw.catalogRootCategorySlugs;
+  if (!Array.isArray(v) || v.length === 0) {
+    return [...DEFAULT_CATALOG_ROOT_CATEGORY_SLUGS];
+  }
+  const out = v
+    .filter((s): s is string => typeof s === "string" && s.trim().length > 0)
+    .map((s) => s.trim());
+  return out.length > 0 ? out : [...DEFAULT_CATALOG_ROOT_CATEGORY_SLUGS];
+}
+
 function buildRootNavBlocks(): ProductFiltersRootNavBlock[] {
   if (!fs.existsSync(dataPath)) {
     return [];
   }
   try {
     const raw = JSON.parse(fs.readFileSync(dataPath, "utf-8")) as {
+      catalogRootCategorySlugs?: string[];
       rootCategories?: { name: string; slug: string }[];
       mergedSubcategoryGroupsBySelection?: Record<
         string,
@@ -44,7 +60,13 @@ function buildRootNavBlocks(): ProductFiltersRootNavBlock[] {
       >;
     };
     const merged = raw.mergedSubcategoryGroupsBySelection ?? {};
-    const roots = (raw.rootCategories ?? []).slice(0, 3);
+    const catalogOrder = readCatalogRootSlugsFromJson(raw);
+    const rootsAll = raw.rootCategories ?? [];
+    const roots = catalogOrder
+      .map((slug) => rootsAll.find((r) => r.slug === slug))
+      .filter((r): r is NonNullable<(typeof rootsAll)[number]> =>
+        Boolean(r?.slug),
+      );
 
     return roots.map((root) => {
       const groups = merged[root.slug] ?? [];
@@ -85,20 +107,28 @@ let catalogBootRoots: CatalogBootRoot[] = [];
 if (fs.existsSync(dataPath)) {
   try {
     const raw = JSON.parse(fs.readFileSync(dataPath, "utf-8")) as {
+      catalogRootCategorySlugs?: string[];
       rootCategories?: {
         slug: string;
         name?: string;
         description?: string | null;
       }[];
     };
-    catalogBootRoots = (raw.rootCategories ?? []).map((r) => ({
-      slug: r.slug,
-      name: (r.name ?? "").trim() || r.slug,
-      description:
-        typeof r.description === "string" && r.description.trim()
-          ? r.description.trim()
-          : null,
-    }));
+    const order = readCatalogRootSlugsFromJson(raw);
+    const rootsAll = raw.rootCategories ?? [];
+    catalogBootRoots = order
+      .map((slug) => rootsAll.find((r) => r.slug === slug))
+      .filter((r): r is NonNullable<(typeof rootsAll)[number]> =>
+        Boolean(r?.slug),
+      )
+      .map((r) => ({
+        slug: r.slug,
+        name: (r.name ?? "").trim() || r.slug,
+        description:
+          typeof r.description === "string" && r.description.trim()
+            ? r.description.trim()
+            : null,
+      }));
   } catch {
     catalogBootRoots = [];
   }

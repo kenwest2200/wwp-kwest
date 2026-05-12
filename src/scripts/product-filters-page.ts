@@ -105,6 +105,8 @@ const PRODUCTS_ROOT_DEFAULT_PARAM_KEY = "catalog";
 const PRODUCTS_ROOT_DEFAULT_PARAM_VALUE = "root";
 type CatalogViewMode = "grid" | "rows";
 
+const DEFAULT_CATALOG_ROOT_CATEGORY_SLUGS = ["pool", "spa", "bath"] as const;
+
 const selectedRoot = new Set<string>();
 const selectedSub = new Set<string>();
 const selectedAttrs = new Set<string>();
@@ -1219,6 +1221,43 @@ function rebuildSearchLabelMaps() {
   }
 }
 
+function parseCatalogRootOrderFromJson(value: unknown): string[] {
+  if (!Array.isArray(value)) return [...DEFAULT_CATALOG_ROOT_CATEGORY_SLUGS];
+  const out = value
+    .filter((s): s is string => typeof s === "string" && s.trim().length > 0)
+    .map((s) => s.trim());
+  return out.length > 0 ? out : [...DEFAULT_CATALOG_ROOT_CATEGORY_SLUGS];
+}
+
+function buildCatalogCategorySlugSet(
+  merged: Map<string, MergedSubGroup[]>,
+  catalogRootSlugs: readonly string[],
+): Set<string> {
+  const catRoots = new Set(catalogRootSlugs);
+  const out = new Set<string>(catalogRootSlugs);
+  for (const [key, groups] of merged) {
+    const parts = key.split(",").filter(Boolean);
+    if (parts.length === 0) continue;
+    if (!parts.every((p) => catRoots.has(p))) continue;
+    for (const g of groups) {
+      for (const s of g.subcategories ?? []) {
+        if (s.slug) out.add(s.slug);
+      }
+    }
+  }
+  return out;
+}
+
+function productBelongsToCatalogScope(
+  categorySlugs: string[],
+  catalogSlugSet: Set<string>,
+): boolean {
+  for (const s of categorySlugs) {
+    if (catalogSlugSet.has(s)) return true;
+  }
+  return false;
+}
+
 function productSearchHaystack(p: Product): string {
   const parts: string[] = [p.title, p.slug];
   for (const c of p.categorySlugs ?? []) {
@@ -2289,6 +2328,7 @@ async function init() {
     const res = await fetch("/data/product-filters.json");
     const data = (await readJsonSafe(res)) as {
       generatedAt?: string;
+      catalogRootCategorySlugs?: string[];
       attributesByCategory?: Record<string, AttrByCategoryRow[]>;
       rootCategories?: {
         name: string;
@@ -2325,37 +2365,18 @@ async function init() {
       return;
     }
 
-    const roots = data.rootCategories ?? [];
-    rootCategoriesList = roots.map((r) => ({
-      name: r.name,
-      slug: r.slug,
-      description:
-        typeof r.description === "string" && r.description.trim()
-          ? r.description.trim()
-          : undefined,
-    }));
-    knownRootSlugs = roots.map((r) => r.slug);
+    const rootsAll = data.rootCategories ?? [];
+    const catalogRootOrder = parseCatalogRootOrderFromJson(
+      data.catalogRootCategorySlugs,
+    );
+
     attributesByCategoryMap.clear();
     for (const [slug, rows] of Object.entries(
       data.attributesByCategory ?? {},
     )) {
       attributesByCategoryMap.set(slug, Array.isArray(rows) ? rows : []);
     }
-    allProducts = (data.products ?? []).map((item) => ({
-      title: item.title,
-      slug: item.slug,
-      categorySlugs: item.categorySlugs ?? [],
-      attributeSlugs: item.attributeSlugs ?? [],
-      databaseId: item.databaseId ?? null,
-      date: item.date ?? null,
-      modified: item.modified ?? null,
-      imageUrl: item.imageUrl ?? null,
-      imageMedium: item.imageMedium ?? null,
-      imageAlt: item.imageAlt ?? null,
-      imageWidth: typeof item.imageWidth === "number" ? item.imageWidth : null,
-      imageHeight:
-        typeof item.imageHeight === "number" ? item.imageHeight : null,
-    }));
+
     mergedSubcategoryGroupsBySelection.clear();
     const mergedRaw = data.mergedSubcategoryGroupsBySelection ?? {};
     for (const [k, groups] of Object.entries(mergedRaw)) {
@@ -2366,9 +2387,9 @@ async function init() {
     }
     if (
       mergedSubcategoryGroupsBySelection.size === 0 &&
-      roots.some((r) => (r.subcategories?.length ?? 0) > 0)
+      rootsAll.some((r) => (r.subcategories?.length ?? 0) > 0)
     ) {
-      for (const r of roots) {
+      for (const r of rootsAll) {
         const subs = r.subcategories ?? [];
         if (subs.length === 0) continue;
         mergedSubcategoryGroupsBySelection.set(r.slug, [
@@ -2383,6 +2404,45 @@ async function init() {
         ]);
       }
     }
+
+    const catalogCategorySlugSet = buildCatalogCategorySlugSet(
+      mergedSubcategoryGroupsBySelection,
+      catalogRootOrder,
+    );
+
+    rootCategoriesList = catalogRootOrder
+      .map((slug) => rootsAll.find((r) => r.slug === slug))
+      .filter((r): r is NonNullable<(typeof rootsAll)[number]> =>
+        Boolean(r?.slug),
+      )
+      .map((r) => ({
+        name: r.name,
+        slug: r.slug,
+        description:
+          typeof r.description === "string" && r.description.trim()
+            ? r.description.trim()
+            : undefined,
+      }));
+    knownRootSlugs = rootCategoriesList.map((r) => r.slug);
+
+    const mappedProducts = (data.products ?? []).map((item) => ({
+      title: item.title,
+      slug: item.slug,
+      categorySlugs: item.categorySlugs ?? [],
+      attributeSlugs: item.attributeSlugs ?? [],
+      databaseId: item.databaseId ?? null,
+      date: item.date ?? null,
+      modified: item.modified ?? null,
+      imageUrl: item.imageUrl ?? null,
+      imageMedium: item.imageMedium ?? null,
+      imageAlt: item.imageAlt ?? null,
+      imageWidth: typeof item.imageWidth === "number" ? item.imageWidth : null,
+      imageHeight:
+        typeof item.imageHeight === "number" ? item.imageHeight : null,
+    }));
+    allProducts = mappedProducts.filter((p) =>
+      productBelongsToCatalogScope(p.categorySlugs, catalogCategorySlugSet),
+    );
     syncRootMapLegacyShim();
     rebuildSearchLabelMaps();
     applyStateFromUrl();
@@ -2554,7 +2614,9 @@ async function init() {
         renderActiveFilterChips();
         return;
       }
-      const removeBtn = t.closest<HTMLButtonElement>("[data-active-chip-remove]");
+      const removeBtn = t.closest<HTMLButtonElement>(
+        "[data-active-chip-remove]",
+      );
       if (!removeBtn) return;
       const chip = removeBtn.closest<HTMLElement>("[data-active-chip]");
       if (chip && activeFiltersRowEl?.contains(chip)) {

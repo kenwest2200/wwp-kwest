@@ -171,16 +171,8 @@ const PRODUCT_CATALOG_IMAGE_SELECTION = `
 const CATALOG_ROOT_CATEGORY_SLUGS = ["pool", "spa", "bath"];
 
 const PRODUCTS_QUERY = `
-  query ProductFiltersProducts(
-    $first: Int!
-    $after: String
-    $rootCategorySlugs: [String!]
-  ) {
-    products(
-      first: $first
-      after: $after
-      where: { rootCategorySlugs: $rootCategorySlugs }
-    ) {
+  query ProductFiltersProducts($first: Int!, $after: String) {
+    products(first: $first, after: $after) {
       nodes {
         title
         slug
@@ -208,16 +200,8 @@ ${PRODUCT_CATALOG_IMAGE_SELECTION}
 `;
 
 const PRODUCTS_NO_ATTRS_QUERY = `
-  query ProductFiltersProductsNoAttrs(
-    $first: Int!
-    $after: String
-    $rootCategorySlugs: [String!]
-  ) {
-    products(
-      first: $first
-      after: $after
-      where: { rootCategorySlugs: $rootCategorySlugs }
-    ) {
+  query ProductFiltersProductsNoAttrs($first: Int!, $after: String) {
+    products(first: $first, after: $after) {
       nodes {
         title
         slug
@@ -250,14 +234,12 @@ async function fetchAllProducts(client, withAttributes) {
     const data = await client.request(query, {
       first: pageSize,
       after,
-      rootCategorySlugs: CATALOG_ROOT_CATEGORY_SLUGS,
     });
     const block = data.products ?? {};
     const nodes = block.nodes ?? [];
     all.push(...nodes);
 
     hasNextPage = Boolean(block.pageInfo?.hasNextPage);
-    ы;
     after = block.pageInfo?.endCursor ?? null;
   }
 
@@ -463,6 +445,7 @@ async function generateFromGraphql(env) {
 
   const payload = {
     generatedAt: new Date().toISOString(),
+    catalogRootCategorySlugs: CATALOG_ROOT_CATEGORY_SLUGS,
     attributesByCategory,
     rootCategories,
     mergedSubcategoryGroupsBySelection,
