@@ -49,7 +49,7 @@ async function loadPage(): Promise<ContactPageData["page"] | null> {
 }
 
 const pageNode = await loadPage();
-const pageTitle = pageNode?.title?.trim() || "Contact";
+const pageTitle = pageNode?.title?.trim() || "Contact Us";
 const support = pageNode?.contactUsSettings?.contactUsSupportGroup ?? null;
 const supportTitle = (support?.title ?? "").trim();
 const cards = normalizeContactSupportCards(support);
