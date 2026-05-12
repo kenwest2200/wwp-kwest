@@ -230,8 +230,7 @@
       &::before {
         content: "";
         position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
+        top: px-to-rem(34);
         left: px-to-rem(24);
         width: px-to-rem(20);
         height: px-to-rem(20);
@@ -1024,6 +1023,7 @@
   &--information {
     max-width: unset;
     padding: var(--page-header-offset, #{px-to-rem(112)}) 0;
+    background: $light-gray-2;
 
     .product-page__hero {
       position: relative;
@@ -1100,14 +1100,18 @@
     }
 
     .product-page__wysiwyg {
-      strong {
-        padding: px-to-rem(4) 0;
-        margin-bottom: px-to-rem(16);
+
+      .info-box {
+        margin: 0 0 px-to-rem(40);
+      }
+
+      h2 {
+        font-size: px-to-rem(24);
+        line-height: px-to-rem(32);
         font-weight: 600;
         color: $dark;
         letter-spacing: 0.03em;
-        line-height: px-to-rem(32);
-        font-size: px-to-rem(24);
+        margin-bottom: px-to-rem(16);
       }
 
       p {

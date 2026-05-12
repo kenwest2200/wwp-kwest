@@ -72,9 +72,7 @@ const plSubtitle = item.singleTemplateOptionalProductListSubtitle?.trim();
 const plSubtitleAsHtml = plainCmsFieldAsHtmlIfMarkup(plSubtitle);
 const plRowLabel = item.singleTemplateOptionalProductListRowLabel?.trim();
 
-const hasDescriptionContent = Boolean(
-  descHtml || descPlainAsHtml || descPlain,
-);
+const hasDescriptionContent = Boolean(descHtml || descPlainAsHtml || descPlain);
 const hasFeaturesContent = Boolean(charactParsed);
 const hasGalleryContent = galleryNodes.length > 0;
 const isGallerySlider = showGallery && galleryNodes.length > 1;
@@ -91,7 +89,9 @@ const hasAnything =
   (showProductList && hasProductListContent) ||
   (showFeatures && hasFeaturesContent);
 
-function firstUrl(...candidates: Array<string | null | undefined>): string | null {
+function firstUrl(
+  ...candidates: Array<string | null | undefined>
+): string | null {
   for (const c of candidates) {
     const trimmed = typeof c === "string" ? c.trim() : "";
     if (trimmed) return trimmed;
@@ -106,8 +106,14 @@ function pictureSourcesFromGalleryNode(node: GalleryMediaNode): {
   const base = firstUrl(node.sourceUrl);
   if (!base) return [];
   const candidates: Array<{ media: string; url: string | null }> = [
-    { media: pictureMinWidthMedia.lg, url: firstUrl(node.medium_large, node.medium) },
-    { media: pictureMinWidthMedia.md, url: firstUrl(node.medium, node.medium_large) },
+    {
+      media: pictureMinWidthMedia.lg,
+      url: firstUrl(node.medium_large, node.medium),
+    },
+    {
+      media: pictureMinWidthMedia.md,
+      url: firstUrl(node.medium, node.medium_large),
+    },
   ];
   const seen = new Set<string>([base]);
   return candidates
@@ -129,7 +135,7 @@ const mainGallerySources = mainGalleryNode
 {
   hasAnything && (
     <div
-      class="product-page__optional-block"
+      class="product-page__optional-block wysiwyg"
       data-template-select={selectAttr}
       data-template-index={index}
     >
@@ -209,23 +215,21 @@ const mainGallerySources = mainGalleryNode
                     aria-label={`Image ${i + 1} of ${galleryNodes.length}`}
                     aria-pressed={i === 0}
                   >
-                    {
-                      (() => {
-                        const thumbSrc = wpPreferredThumbSrc(g);
-                        const thumbSources = pictureSourcesFromGalleryNode(g);
-                        return (
-                          <Picture
-                            alt=""
-                            sources={thumbSources}
-                            img={{
-                              src: thumbSrc,
-                              loading: i === 0 ? "eager" : "lazy",
-                              decoding: "async",
-                            }}
-                          />
-                        );
-                      })()
-                    }
+                    {(() => {
+                      const thumbSrc = wpPreferredThumbSrc(g);
+                      const thumbSources = pictureSourcesFromGalleryNode(g);
+                      return (
+                        <Picture
+                          alt=""
+                          sources={thumbSources}
+                          img={{
+                            src: thumbSrc,
+                            loading: i === 0 ? "eager" : "lazy",
+                            decoding: "async",
+                          }}
+                        />
+                      );
+                    })()}
                   </button>
                 ) : null,
               )}
