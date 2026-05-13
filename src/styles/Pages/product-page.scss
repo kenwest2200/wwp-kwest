@@ -237,15 +237,15 @@
 
     &--in-block {
       margin-top: 0;
-      font-size: px-to-rem(16);
-      line-height: px-to-rem(24);
+      font-size: px-to-rem(16) !important;
+      line-height: px-to-rem(24) !important;
       font-weight: 500;
       color: $dark;
       margin-bottom: px-to-rem(32);
 
       @include media-breakpoint-up(lg) {
-        font-size: px-to-rem(20);
-        line-height: px-to-rem(28);
+        font-size: px-to-rem(20) !important;
+        line-height: px-to-rem(28) !important;
 
       }
     }
