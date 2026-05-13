@@ -66,19 +66,52 @@ body {
         margin-bottom: 0;
     }
 
+    h1 {
+        font-size: px-to-rem(60);
+        font-weight: 600;
+        line-height: 120%;
+        color: $dark;
+        letter-spacing: 0.03em;
+    }
+
     h2 {
-        margin-bottom: px-to-rem(24);
+        font-size: px-to-rem(48);
+        font-weight: 500;
+        line-height: px-to-rem(64);
+        color: $dark;
+        letter-spacing: 0.03em;
+    }
+
+    h3 {
+        font-size: px-to-rem(36);
+        font-weight: 600;
+        line-height: px-to-rem(48);
+        color: $dark;
+        letter-spacing: 0.03em;
+    }
+
+    h4 {
+        font-size: px-to-rem(24);
+        font-weight: 600;
+        line-height: px-to-rem(32);
+        color: $dark;
+        letter-spacing: 0.03em;
+    }
+
+    h5 {
         font-size: px-to-rem(20);
+        font-weight: 500;
+        line-height: px-to-rem(28);
+        color: $dark;
+        letter-spacing: 0.03em;
+    }
+
+    h6 {
+        font-size: px-to-rem(16);
         font-weight: 500;
         line-height: px-to-rem(24);
         color: $dark;
-        letter-spacing: 0.02em;
-
-        @include media-breakpoint-up(lg) {
-            font-size: px-to-rem(24);
-            line-height: px-to-rem(28);
-        }
-
+        letter-spacing: 0.03em;
     }
 
     p {
@@ -158,6 +191,54 @@ body {
             margin-bottom: 0;
         }
     }
+}
+
+h1 {
+    font-size: px-to-rem(60);
+    font-weight: 600;
+    line-height: 120%;
+    color: $dark;
+    letter-spacing: 0.03em;
+}
+
+h2 {
+    font-size: px-to-rem(48);
+    font-weight: 500;
+    line-height: px-to-rem(64);
+    color: $dark;
+    letter-spacing: 0.03em;
+}
+
+h3 {
+    font-size: px-to-rem(36);
+    font-weight: 600;
+    line-height: px-to-rem(48);
+    color: $dark;
+    letter-spacing: 0.03em;
+}
+
+h4 {
+    font-size: px-to-rem(24);
+    font-weight: 600;
+    line-height: px-to-rem(32);
+    color: $dark;
+    letter-spacing: 0.03em;
+}
+
+h5 {
+    font-size: px-to-rem(20);
+    font-weight: 500;
+    line-height: px-to-rem(28);
+    color: $dark;
+    letter-spacing: 0.03em;
+}
+
+h6 {
+    font-size: px-to-rem(16);
+    font-weight: 500;
+    line-height: px-to-rem(24);
+    color: $dark;
+    letter-spacing: 0.03em;
 }
 
 blockquote {
