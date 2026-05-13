@@ -40,20 +40,6 @@
       margin-bottom: 0;
     }
 
-    h2 {
-      margin-bottom: px-to-rem(24);
-      font-size: px-to-rem(16);
-      font-weight: 500;
-      line-height: px-to-rem(24);
-      color: $dark;
-      letter-spacing: 0.02em;
-
-      @include media-breakpoint-up(lg) {
-        font-size: px-to-rem(20);
-        line-height: px-to-rem(28);
-      }
-
-    }
 
     p {
       padding: 0;
@@ -714,20 +700,6 @@
     }
   }
 
-  &__optional-block h2 {
-    margin-bottom: px-to-rem(24);
-    font-size: px-to-rem(16);
-    font-weight: 500;
-    line-height: px-to-rem(24);
-    color: $dark;
-    letter-spacing: 0.02em;
-
-    @include media-breakpoint-up(lg) {
-      font-size: px-to-rem(20);
-      line-height: px-to-rem(28);
-    }
-
-  }
 
   &__optional-charact-list {
     margin: 0;
@@ -1155,15 +1127,6 @@
 
       .info-box {
         margin: 0 0 px-to-rem(40);
-      }
-
-      h2 {
-        font-size: px-to-rem(24);
-        line-height: px-to-rem(32);
-        font-weight: 600;
-        color: $dark;
-        letter-spacing: 0.03em;
-        margin-bottom: px-to-rem(16);
       }
 
       p {
