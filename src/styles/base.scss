@@ -67,43 +67,69 @@ body {
     }
 
     h1 {
-        font-size: px-to-rem(60);
-        font-weight: 600;
-        line-height: 120%;
-        color: $dark;
-        letter-spacing: 0.03em;
-    }
-
-    h2 {
         font-size: px-to-rem(48);
-        font-weight: 500;
+        font-weight: 600;
         line-height: px-to-rem(64);
         color: $dark;
         letter-spacing: 0.03em;
+
+        @include media-breakpoint-up(md) {
+            font-size: px-to-rem(60);
+            line-height: 120%;
+
+        }
+    }
+
+    h2 {
+        font-size: px-to-rem(36);
+        line-height: px-to-rem(48);
+        font-weight: 500;
+        color: $dark;
+        letter-spacing: 0.03em;
+
+        @include media-breakpoint-up(md) {
+            font-size: px-to-rem(48);
+            line-height: px-to-rem(64);
+        }
     }
 
     h3 {
-        font-size: px-to-rem(36);
+        font-size: px-to-rem(24);
+        line-height: px-to-rem(32);
         font-weight: 600;
-        line-height: px-to-rem(48);
         color: $dark;
         letter-spacing: 0.03em;
+
+        @include media-breakpoint-up(md) {
+            font-size: px-to-rem(36);
+            line-height: px-to-rem(48);
+        }
     }
 
     h4 {
-        font-size: px-to-rem(24);
+        font-size: px-to-rem(20);
+        line-height: px-to-rem(28);
         font-weight: 600;
-        line-height: px-to-rem(32);
         color: $dark;
         letter-spacing: 0.03em;
+
+        @include media-breakpoint-up(md) {
+            font-size: px-to-rem(24);
+            line-height: px-to-rem(32);
+        }
     }
 
     h5 {
-        font-size: px-to-rem(20);
+        font-size: px-to-rem(18);
+        line-height: px-to-rem(24);
         font-weight: 500;
-        line-height: px-to-rem(28);
         color: $dark;
         letter-spacing: 0.03em;
+
+        @include media-breakpoint-up(md) {
+            font-size: px-to-rem(20);
+            line-height: px-to-rem(28);
+        }
     }
 
     h6 {
@@ -194,43 +220,69 @@ body {
 }
 
 h1 {
-    font-size: px-to-rem(60);
-    font-weight: 600;
-    line-height: 120%;
-    color: $dark;
-    letter-spacing: 0.03em;
-}
-
-h2 {
     font-size: px-to-rem(48);
-    font-weight: 500;
+    font-weight: 600;
     line-height: px-to-rem(64);
     color: $dark;
     letter-spacing: 0.03em;
+
+    @include media-breakpoint-up(md) {
+        font-size: px-to-rem(60);
+        line-height: 120%;
+
+    }
+}
+
+h2 {
+    font-size: px-to-rem(36);
+    line-height: px-to-rem(48);
+    font-weight: 500;
+    color: $dark;
+    letter-spacing: 0.03em;
+
+    @include media-breakpoint-up(md) {
+        font-size: px-to-rem(48);
+        line-height: px-to-rem(64);
+    }
 }
 
 h3 {
-    font-size: px-to-rem(36);
+    font-size: px-to-rem(24);
+    line-height: px-to-rem(32);
     font-weight: 600;
-    line-height: px-to-rem(48);
     color: $dark;
     letter-spacing: 0.03em;
+
+    @include media-breakpoint-up(md) {
+        font-size: px-to-rem(36);
+        line-height: px-to-rem(48);
+    }
 }
 
 h4 {
-    font-size: px-to-rem(24);
+    font-size: px-to-rem(20);
+    line-height: px-to-rem(28);
     font-weight: 600;
-    line-height: px-to-rem(32);
     color: $dark;
     letter-spacing: 0.03em;
+
+    @include media-breakpoint-up(md) {
+        font-size: px-to-rem(24);
+        line-height: px-to-rem(32);
+    }
 }
 
 h5 {
-    font-size: px-to-rem(20);
+    font-size: px-to-rem(18);
+    line-height: px-to-rem(24);
     font-weight: 500;
-    line-height: px-to-rem(28);
     color: $dark;
     letter-spacing: 0.03em;
+
+    @include media-breakpoint-up(md) {
+        font-size: px-to-rem(20);
+        line-height: px-to-rem(28);
+    }
 }
 
 h6 {
