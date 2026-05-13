@@ -40,6 +40,20 @@
       margin-bottom: 0;
     }
 
+    h2 {
+      margin-bottom: px-to-rem(24);
+      font-size: px-to-rem(16);
+      font-weight: 500;
+      line-height: px-to-rem(24);
+      color: $dark;
+      letter-spacing: 0.02em;
+
+      @include media-breakpoint-up(lg) {
+        font-size: px-to-rem(20);
+        line-height: px-to-rem(28);
+      }
+
+    }
 
     p {
       padding: 0;
@@ -1108,7 +1122,7 @@
       margin-top: px-to-rem(60);
       padding-left: var(--section-left, var(--s-padding-x));
       padding-right: var(--section-right, var(--s-padding-x));
-      max-width: px-to-rem(960);
+      max-width: px-to-rem(992);
       margin: 0 auto;
 
       @include media-breakpoint-up(md) {
@@ -1117,13 +1131,20 @@
     }
 
     .product-page__breadcrumb-wrap {
-      max-width: px-to-rem(960);
+      max-width: px-to-rem(992);
       margin: px-to-rem(40) auto 0;
       padding-left: var(--section-left, var(--s-padding-x));
       padding-right: var(--section-right, var(--s-padding-x));
     }
 
     .product-page__wysiwyg {
+      li {
+        font-size: px-to-rem(16);
+        line-height: px-to-rem(28);
+        font-weight: 400;
+        color: $dark;
+        letter-spacing: 0.02em;
+      }
 
       .info-box {
         margin: 0 0 px-to-rem(40);
@@ -1131,12 +1152,16 @@
 
       p {
         padding: 0;
-        margin-bottom: px-to-rem(40);
         font-weight: 400;
+        margin-bottom: px-to-rem(20);
         color: $dark;
         letter-spacing: 0.02em;
         line-height: px-to-rem(28);
         font-size: px-to-rem(16);
+
+        &:last-child {
+          margin-bottom: px-to-rem(40);
+        }
       }
     }
   }
