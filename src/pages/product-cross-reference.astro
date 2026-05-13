@@ -44,6 +44,7 @@ const breadcrumbs = [
             <div class="cross-ref-page__grid cross-ref-page__grid--top">
               <div class="cross-ref-page__field">
                 <span class="cross-ref-page__label">Brand</span>
+                <div class="cross-ref-page__control-wrap">
                 <div
                   class="cross-ref-page__custom-select"
                   data-custom-select-root
@@ -104,10 +105,41 @@ const breadcrumbs = [
                   >
                     <option value="" selected>Choose a brand</option>
                   </select>
+                <button
+                  type="button"
+                  class="cross-ref-page__field-clear"
+                  aria-label="Clear brand"
+                  hidden
+                  data-cross-ref-field-clear
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M12 4L4 12"
+                      stroke="#9C9C9C"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"></path>
+                    <path
+                      d="M4 4L12 12"
+                      stroke="#9C9C9C"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"></path>
+                  </svg>
+                </button>
+                </div>
                 </div>
               </div>
               <div class="cross-ref-page__field">
                 <span class="cross-ref-page__label">Model</span>
+                <div class="cross-ref-page__control-wrap">
                 <div
                   class="cross-ref-page__custom-select"
                   data-custom-select-root
@@ -168,6 +200,36 @@ const breadcrumbs = [
                   >
                     <option value="" selected>Choose a model</option>
                   </select>
+                <button
+                  type="button"
+                  class="cross-ref-page__field-clear"
+                  aria-label="Clear model"
+                  hidden
+                  data-cross-ref-field-clear
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M12 4L4 12"
+                      stroke="#9C9C9C"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"></path>
+                    <path
+                      d="M4 4L12 12"
+                      stroke="#9C9C9C"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"></path>
+                  </svg>
+                </button>
+                </div>
                 </div>
               </div>
             </div>
@@ -177,6 +239,7 @@ const breadcrumbs = [
                 class="cross-ref-page__field cross-ref-page__field--autocomplete"
               >
                 <span class="cross-ref-page__label">Part Number</span>
+                <div class="cross-ref-page__control-wrap">
                 <input
                   id="cross-ref-part-number"
                   name="part_number"
@@ -184,6 +247,36 @@ const breadcrumbs = [
                   placeholder="For example, PD-140"
                   autocomplete="off"
                 />
+                <button
+                  type="button"
+                  class="cross-ref-page__field-clear"
+                  aria-label="Clear part number"
+                  hidden
+                  data-cross-ref-field-clear
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M12 4L4 12"
+                      stroke="#9C9C9C"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"></path>
+                    <path
+                      d="M4 4L12 12"
+                      stroke="#9C9C9C"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"></path>
+                  </svg>
+                </button>
+                </div>
                 <ul
                   id="cross-ref-part-suggest"
                   class="cross-ref-page__suggest-list"
@@ -196,6 +289,7 @@ const breadcrumbs = [
                 class="cross-ref-page__field cross-ref-page__field--autocomplete"
               >
                 <span class="cross-ref-page__label">Motor Number</span>
+                <div class="cross-ref-page__control-wrap">
                 <input
                   id="cross-ref-motor-number"
                   name="motor_number"
@@ -203,6 +297,36 @@ const breadcrumbs = [
                   placeholder="For example, PD-140"
                   autocomplete="off"
                 />
+                <button
+                  type="button"
+                  class="cross-ref-page__field-clear"
+                  aria-label="Clear motor number"
+                  hidden
+                  data-cross-ref-field-clear
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M12 4L4 12"
+                      stroke="#9C9C9C"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"></path>
+                    <path
+                      d="M4 4L12 12"
+                      stroke="#9C9C9C"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"></path>
+                  </svg>
+                </button>
+                </div>
                 <ul
                   id="cross-ref-motor-suggest"
                   class="cross-ref-page__suggest-list"
@@ -215,6 +339,7 @@ const breadcrumbs = [
                 class="cross-ref-page__field cross-ref-page__field--autocomplete"
               >
                 <span class="cross-ref-page__label">HP</span>
+                <div class="cross-ref-page__control-wrap">
                 <input
                   id="cross-ref-hp"
                   name="hp"
@@ -222,6 +347,36 @@ const breadcrumbs = [
                   placeholder="For example, 2.2"
                   autocomplete="off"
                 />
+                <button
+                  type="button"
+                  class="cross-ref-page__field-clear"
+                  aria-label="Clear HP"
+                  hidden
+                  data-cross-ref-field-clear
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M12 4L4 12"
+                      stroke="#9C9C9C"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"></path>
+                    <path
+                      d="M4 4L12 12"
+                      stroke="#9C9C9C"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"></path>
+                  </svg>
+                </button>
+                </div>
                 <ul
                   id="cross-ref-hp-suggest"
                   class="cross-ref-page__suggest-list"

@@ -128,6 +128,51 @@
     }
   }
 
+  &__field &__control-wrap input {
+    padding-right: px-to-rem(40);
+  }
+
+  &__field &__control-wrap &__custom-select &__custom-select-trigger {
+    padding-right: px-to-rem(44);
+  }
+
+  &__control-wrap {
+    position: relative;
+    width: 100%;
+  }
+
+  &__field-clear {
+    position: absolute;
+    right: px-to-rem(10);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: px-to-rem(28);
+    height: px-to-rem(28);
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    border-radius: 50%;
+    cursor: pointer;
+
+    &[hidden] {
+      display: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $dark-teal;
+      outline-offset: 2px;
+    }
+
+    &:hover path {
+      stroke: $dark-medium;
+    }
+  }
+
   &__field--autocomplete {
     .cross-ref-page__suggest-list {
       position: absolute;

@@ -56,6 +56,13 @@ export function initFormCustomSelects(form: HTMLFormElement): void {
   }
 
   document.addEventListener("click", (e) => closeIfOutside(e.target));
+  document.addEventListener("focusin", (e) => {
+    const target = e.target;
+    if (!(target instanceof Node)) return;
+    roots.forEach((root) => {
+      if (!root.contains(target)) setCustomSelectOpen(root, false);
+    });
+  });
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
     roots.forEach((root) => setCustomSelectOpen(root, false));

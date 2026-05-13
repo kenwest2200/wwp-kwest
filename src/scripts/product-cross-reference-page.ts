@@ -409,6 +409,7 @@ function syncSelectOptions(
 
 function wireAutocomplete(control: AutocompleteControl): () => void {
   const { input, list, getOptions, onPick, isLoading } = control;
+  const wrap = input.closest(".cross-ref-page__control-wrap");
 
   /** Keeps focus on the input while choosing an item (avoids blur closing the list). */
   list.addEventListener("mousedown", (e) => {
@@ -446,6 +447,13 @@ function wireAutocomplete(control: AutocompleteControl): () => void {
       close();
       return;
     }
+
+    const rawVal = text(input.value);
+    if (rawVal.length === 0 && document.activeElement !== input) {
+      close();
+      return;
+    }
+
     list.replaceChildren();
     for (const option of options) {
       const li = document.createElement("li");
@@ -455,6 +463,8 @@ function wireAutocomplete(control: AutocompleteControl): () => void {
       li.addEventListener("mousedown", (e) => {
         e.preventDefault();
         input.value = option;
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        input.dispatchEvent(new Event("change", { bubbles: true }));
         onPick?.(option);
         close();
       });
@@ -470,9 +480,84 @@ function wireAutocomplete(control: AutocompleteControl): () => void {
     window.setTimeout(close, 200);
   });
 
+  const focusStillInThisAutocomplete = (t: EventTarget | null): boolean => {
+    if (!(t instanceof Node)) return false;
+    if (t === input || input.contains(t)) return true;
+    if (list.contains(t)) return true;
+    if (wrap?.contains(t)) return true;
+    return false;
+  };
+
+  const onDocFocusIn = (e: FocusEvent) => {
+    if (focusStillInThisAutocomplete(e.target)) return;
+    close();
+  };
+  document.addEventListener("focusin", onDocFocusIn);
+
   return () => {
     if (!list.hidden) render();
   };
+}
+
+function wireCrossRefFieldClears(form: HTMLFormElement): () => void {
+  const wraps = form.querySelectorAll<HTMLElement>(".cross-ref-page__control-wrap");
+  const syncFns: Array<() => void> = [];
+
+  for (const wrap of wraps) {
+    const btnEl = wrap.querySelector("[data-cross-ref-field-clear]");
+    const btn = btnEl instanceof HTMLButtonElement ? btnEl : null;
+    const inputEl = wrap.querySelector("input");
+    const input = inputEl instanceof HTMLInputElement ? inputEl : null;
+    const nativeEl = wrap.querySelector("select[data-custom-select-native]");
+    const native =
+      nativeEl instanceof HTMLSelectElement ? nativeEl : null;
+    if (!btn) continue;
+
+    const sync = () => {
+      const has = native
+        ? text(native.value).length > 0
+        : input
+          ? text(input.value).length > 0
+          : false;
+      btn.hidden = !has;
+    };
+    syncFns.push(sync);
+
+    if (input) {
+      input.addEventListener("input", sync);
+      input.addEventListener("change", sync);
+    }
+    if (native) {
+      native.addEventListener("change", sync);
+    }
+
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (native) {
+        native.value = "";
+        native.dispatchEvent(new Event("change", { bubbles: true }));
+        const selectRoot = wrap.querySelector<HTMLElement>("[data-custom-select-root]");
+        if (selectRoot) {
+          syncCustomSelectFromNative(selectRoot);
+        }
+      } else if (input) {
+        input.value = "";
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      sync();
+    });
+  }
+
+  const syncAll = () => {
+    for (const fn of syncFns) fn();
+  };
+  form.addEventListener("reset", () => {
+    queueMicrotask(syncAll);
+  });
+  queueMicrotask(syncAll);
+  return syncAll;
 }
 
 async function fetchFilters(brand: string, model: string): Promise<FilterLists> {
@@ -535,6 +620,7 @@ export function initProductCrossReferencePage(): void {
 
   installPageErrorToast(errorEl);
   initFormCustomSelects(form);
+  const syncFieldClears = wireCrossRefFieldClears(form);
 
   const clearMessagesOnEdit = () => {
     clearCrossRefMessages(errorEl, inlineErrorEl, form);
@@ -628,6 +714,7 @@ export function initProductCrossReferencePage(): void {
       filtersInflight = Math.max(0, filtersInflight - 1);
       filtersReady = true;
       rerenderOpenSuggests();
+      syncFieldClears();
     }
   };
 
@@ -658,6 +745,7 @@ export function initProductCrossReferencePage(): void {
       hpInput.value = "";
     }
     scheduleRefresh();
+    syncFieldClears();
   });
 
   modelInput.addEventListener("change", () => {
@@ -670,6 +758,7 @@ export function initProductCrossReferencePage(): void {
       hpInput.value = "";
     }
     scheduleRefresh();
+    syncFieldClears();
   });
 
   suggestRerenderIfOpen.push(
