@@ -284,6 +284,58 @@
   &__accordion {
     border-bottom: 1px solid $gray-middle;
 
+    & .product-page__spec {
+      scrollbar-width: none;
+    }
+
+    table {
+      margin-bottom: px-to-rem(54) !important;
+      margin-top: px-to-rem(24) !important;
+      max-width: px-to-rem(617) !important;
+      min-width: unset !important;
+      width: 100% !important;
+
+      & tr {
+        td {
+          border-bottom: 1px solid $gray-middle !important;
+
+          span {
+            opacity: 0;
+            pointer-events: none;
+          }
+
+          &:first-child {
+            color: $dark-medium !important;
+            font-weight: 400 !important;
+            font-size: px-to-rem(16) !important;
+            line-height: px-to-rem(28) !important;
+            letter-spacing: 0.02em !important;
+            border-right: none !important;
+          }
+
+          &:last-child {
+            color: $dark !important;
+            font-weight: 400 !important;
+            font-size: px-to-rem(16) !important;
+            line-height: px-to-rem(28) !important;
+            letter-spacing: 0.02em !important;
+            border-right: none !important;
+          }
+        }
+
+        &:last-child {
+          td {
+            border-bottom: none !important;
+
+          }
+        }
+      }
+
+      & tr:nth-child(odd) {
+        background: none !important;
+      }
+    }
+
     &:last-child {
       border-bottom: none;
     }
@@ -336,11 +388,11 @@
   }
 
   &__accordion-title {
-    font-size: px-to-rem(16);
+    font-size: px-to-rem(24);
     font-weight: 600;
     color: $dark;
-    line-height: px-to-rem(24);
-    letter-spacing: 0.02em;
+    line-height: px-to-rem(32);
+    letter-spacing: 0.03em;
   }
 
   &__accordion-chevron {
@@ -734,7 +786,7 @@
 
     table {
       box-sizing: border-box;
-      width: max-content !important;
+      width: max-content;
       min-width: 100%;
       border-collapse: separate !important;
       border-spacing: 0;
