@@ -268,10 +268,10 @@
 
   &__locator-geolocate-tooltip {
     position: absolute;
-    bottom: -320%;
+    bottom: 160%;
     right: px-to-rem(-6);
-    width: px-to-rem(340);
-    padding: px-to-rem(24);
+    width: max-content;
+    padding: px-to-rem(16);
     margin-top: px-to-rem(40);
     border-radius: px-to-rem(6);
     background: $white;
@@ -285,6 +285,13 @@
     pointer-events: none;
     transition: opacity 0.15s ease;
     z-index: 10;
+
+    @include media-breakpoint-up(md) {
+      padding: px-to-rem(24);
+      width: px-to-rem(340);
+
+      bottom: -320%;
+    }
   }
 
   &__locator-geolocate:hover &__locator-geolocate-tooltip,
