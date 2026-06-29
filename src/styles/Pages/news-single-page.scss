@@ -58,6 +58,11 @@
     ol {
       margin: 0 0 px-to-rem(16);
       padding-left: px-to-rem(24);
+      font-size: px-to-rem(16);
+
+      strong {
+        font-weight: 700;
+      }
     }
 
     li {
