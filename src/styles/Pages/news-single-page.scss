@@ -1,0 +1,114 @@
+@use "../variables" as *;
+@use "../functions" as *;
+@use "../breakpoints" as *;
+
+.news-single-page {
+  padding-top: var(--page-header-offset, #{px-to-rem(112)});
+  padding-bottom: px-to-rem(80);
+
+  &__breadcrumb-wrap {
+    max-width: px-to-rem(1152);
+    margin: px-to-rem(40) auto 0;
+    padding-left: var(--section-left, var(--s-padding-x));
+    padding-right: var(--section-right, var(--s-padding-x));
+  }
+
+  &__body {
+    padding-top: px-to-rem(40);
+
+    @include media-breakpoint-up(md) {
+      padding-top: px-to-rem(60);
+    }
+  }
+
+  &__body-inner {
+    max-width: px-to-rem(1152);
+    margin: 0 auto;
+    padding-left: var(--section-left, var(--s-padding-x));
+    padding-right: var(--section-right, var(--s-padding-x));
+  }
+
+  &__content {
+    font-size: px-to-rem(14);
+    line-height: px-to-rem(24);
+    color: $dark;
+    letter-spacing: 0.02em;
+
+    >*:first-child {
+      margin-top: 0;
+    }
+
+    >*:last-child {
+      margin-bottom: 0;
+    }
+
+
+    p {
+      margin: 0 0 px-to-rem(16);
+    }
+
+    ul,
+    ol {
+      margin: 0 0 px-to-rem(16);
+      padding-left: px-to-rem(24);
+    }
+
+    li {
+      margin-bottom: px-to-rem(8);
+    }
+
+    a {
+      color: $dark-teal;
+      text-decoration: underline;
+      text-underline-offset: px-to-rem(2);
+
+      &:hover {
+        text-decoration-thickness: px-to-rem(2);
+      }
+    }
+
+    h2,
+    h3,
+    h4 {
+      margin: px-to-rem(28) 0 px-to-rem(12);
+      font-weight: 500;
+      color: $dark;
+      line-height: 1.25;
+    }
+
+    h2 {
+      font-size: px-to-rem(20);
+
+      @include media-breakpoint-up(lg) {
+        font-size: px-to-rem(24);
+      }
+    }
+
+    h3 {
+      font-size: px-to-rem(18);
+    }
+
+    h4 {
+      font-size: px-to-rem(16);
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: px-to-rem(40) 0;
+      padding: px-to-rem(32);
+      border: 1px solid;
+      border-radius: px-to-rem(8);
+      border-color: $gray-middle;
+    }
+
+    & .wp-block-image {
+      a {
+        display: block !important;
+        width: max-content !important;
+      }
+    }
+
+  }
+}

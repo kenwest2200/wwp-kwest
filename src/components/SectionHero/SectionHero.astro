@@ -1,12 +1,19 @@
 ---
 interface Props {
   title: string;
+  titleIsHtml?: boolean;
   intro?: string;
   introIsHtml?: boolean;
   customClass?: string;
 }
 
-const { title, intro, introIsHtml = false, customClass = "" } = Astro.props;
+const {
+  title,
+  titleIsHtml = false,
+  intro,
+  introIsHtml = false,
+  customClass = "",
+} = Astro.props;
 ---
 
 <section
@@ -14,11 +21,17 @@ const { title, intro, introIsHtml = false, customClass = "" } = Astro.props;
 >
   <div class="container section-hero__container">
     <div class="section-hero__content">
-      <h1 class="section-hero__title">{title}</h1>
+      {
+        titleIsHtml ? (
+          <h1 class="section-hero__title" set:html={title} />
+        ) : (
+          <h1 class="section-hero__title">{title}</h1>
+        )
+      }
       {
         intro &&
           (introIsHtml ? (
-            <p class="section-hero__description" set:html={intro} />
+            <div class="section-hero__description" set:html={intro} />
           ) : (
             <p class="section-hero__description">{intro}</p>
           ))

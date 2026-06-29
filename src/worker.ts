@@ -1611,10 +1611,48 @@ async function purgeCache(env: Env): Promise<PurgeCacheResponse> {
   return data;
 }
 
+let newsRedirectsCache: Record<string, string> | null = null;
+
+async function resolveNewsRedirect(
+  pathname: string,
+  env: Env,
+): Promise<string | null> {
+  if (!newsRedirectsCache) {
+    try {
+      const res = await env.ASSETS.fetch(
+        new Request("https://assets.local/data/news-redirects.json"),
+      );
+      if (!res.ok) {
+        newsRedirectsCache = {};
+      } else {
+        const data = (await res.json()) as Record<string, string>;
+        newsRedirectsCache =
+          data && typeof data === "object" && !Array.isArray(data) ? data : {};
+      }
+    } catch {
+      newsRedirectsCache = {};
+    }
+  }
+
+  const withSlash = pathname.endsWith("/") ? pathname : `${pathname}/`;
+  const withoutSlash = withSlash.replace(/\/$/, "");
+  return (
+    newsRedirectsCache[withSlash] ??
+    newsRedirectsCache[withoutSlash] ??
+    newsRedirectsCache[pathname] ??
+    null
+  );
+}
+
 async function handleFrontend(request: Request, env: Env): Promise<Response> {
   const response = await env.ASSETS.fetch(request);
   if (response.status === 404) {
     const url = new URL(request.url);
+    const redirectTarget = await resolveNewsRedirect(url.pathname, env);
+    if (redirectTarget) {
+      return Response.redirect(`${url.origin}${redirectTarget}`, 301);
+    }
+
     const errorResponse = await env.ASSETS.fetch(
       new Request(`${url.origin}/404.html`),
     );

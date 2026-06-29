@@ -27,6 +27,7 @@ const RESERVED_PATHS = new Set([
   "/company",
   "/for-homeowners",
   "/contact",
+  "/news",
 ]);
 
 function normalizeMatchPath(uri: string): string {
@@ -47,6 +48,7 @@ function isReservedWpUri(uri: string): boolean {
   const key = normalizeMatchPath(uri);
   if (key === "/") return true;
   if (RESERVED_PATHS.has(key)) return true;
+  if (key === "/news" || key.startsWith("/news/")) return true;
   if (key === "/product" || key.startsWith("/product/")) return true;
   return false;
 }

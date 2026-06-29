@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-12T14:58:57.708Z",
+  "generatedAt": "2026-06-29T08:59:12.484Z",
   "catalogRootCategorySlugs": [
     "pool",
     "spa",
@@ -411,8 +411,94 @@
         "slug": "amp",
         "values": [
           {
+            "label": "0.4",
+            "slug": "amp-0-4"
+          },
+          {
+            "label": "0.8",
+            "slug": "amp-0-8"
+          },
+          {
             "label": "1",
             "slug": "amp-1"
+          },
+          {
+            "label": "11.0",
+            "slug": "amp-11-0"
+          },
+          {
+            "label": "12.0",
+            "slug": "amp-12-0"
+          },
+          {
+            "label": "16.4",
+            "slug": "amp-16-4"
+          },
+          {
+            "label": "17.0",
+            "slug": "amp-17-0"
+          },
+          {
+            "label": "2.6",
+            "slug": "amp-2-6"
+          },
+          {
+            "label": "2.9",
+            "slug": "amp-2-9"
+          },
+          {
+            "label": "20.10",
+            "slug": "amp-20-10"
+          },
+          {
+            "label": "3.6",
+            "slug": "amp-3-6"
+          },
+          {
+            "label": "4.4",
+            "slug": "amp-4-4"
+          },
+          {
+            "label": "8.0",
+            "slug": "amp-8-0"
+          },
+          {
+            "label": "8.4",
+            "slug": "amp-8-4"
+          }
+        ]
+      },
+      {
+        "name": "Amps",
+        "slug": "amps",
+        "values": [
+          {
+            "label": "10",
+            "slug": "amps-10"
+          },
+          {
+            "label": "10/3.5",
+            "slug": "amps-10-3-5"
+          },
+          {
+            "label": "12",
+            "slug": "amps-12"
+          },
+          {
+            "label": "16.4",
+            "slug": "amps-16-4"
+          },
+          {
+            "label": "3.4",
+            "slug": "amps-3-4"
+          },
+          {
+            "label": "4.4",
+            "slug": "amps-4-4"
+          },
+          {
+            "label": "4.8",
+            "slug": "amps-4-8"
           }
         ]
       },
@@ -427,6 +513,20 @@
           {
             "label": "Smooth",
             "slug": "barb-type-smooth"
+          }
+        ]
+      },
+      {
+        "name": "Base Thickness",
+        "slug": "base-thickness",
+        "values": [
+          {
+            "label": "1/2\"",
+            "slug": "base-thickness-1-2"
+          },
+          {
+            "label": "3/4\"",
+            "slug": "base-thickness-3-4"
           }
         ]
       },
@@ -535,6 +635,26 @@
         ]
       },
       {
+        "name": "Filter Type",
+        "slug": "filter-type",
+        "values": [
+          {
+            "label": "Top-Load Cartridge",
+            "slug": "filter-type-top-load-cartridge"
+          }
+        ]
+      },
+      {
+        "name": "Frame",
+        "slug": "frame",
+        "values": [
+          {
+            "label": "48 Frame",
+            "slug": "frame-48-frame"
+          }
+        ]
+      },
+      {
         "name": "Handle Style",
         "slug": "handle-style",
         "values": [
@@ -559,6 +679,76 @@
           {
             "label": "60",
             "slug": "hertz-60"
+          }
+        ]
+      },
+      {
+        "name": "HP",
+        "slug": "hp",
+        "values": [
+          {
+            "label": "1",
+            "slug": "hp-1"
+          },
+          {
+            "label": "1 1/2",
+            "slug": "hp-1-1-2"
+          },
+          {
+            "label": "1.0",
+            "slug": "hp-1-0"
+          },
+          {
+            "label": "1.5",
+            "slug": "hp-1-5"
+          },
+          {
+            "label": "1/16",
+            "slug": "hp-1-16"
+          },
+          {
+            "label": "1/2",
+            "slug": "hp-1-2"
+          },
+          {
+            "label": "1/8",
+            "slug": "hp-1-8"
+          },
+          {
+            "label": "2",
+            "slug": "hp-2"
+          },
+          {
+            "label": "2 1/2",
+            "slug": "hp-2-1-2"
+          },
+          {
+            "label": "2.0",
+            "slug": "hp-2-0"
+          },
+          {
+            "label": "2.5",
+            "slug": "hp-2-5"
+          },
+          {
+            "label": "3",
+            "slug": "hp-3"
+          },
+          {
+            "label": "3/4",
+            "slug": "hp-3-4"
+          },
+          {
+            "label": "4",
+            "slug": "hp-4"
+          },
+          {
+            "label": "4 1/2",
+            "slug": "hp-4-1-2"
+          },
+          {
+            "label": "5",
+            "slug": "hp-5"
           }
         ]
       },
@@ -743,6 +933,20 @@
         ]
       },
       {
+        "name": "Speed",
+        "slug": "speed",
+        "values": [
+          {
+            "label": "1",
+            "slug": "speed-1"
+          },
+          {
+            "label": "2",
+            "slug": "speed-2"
+          }
+        ]
+      },
+      {
         "name": "Spigot",
         "slug": "spigot",
         "values": [
@@ -789,6 +993,64 @@
         ]
       },
       {
+        "name": "Sq. Ft.",
+        "slug": "sq-ft",
+        "values": [
+          {
+            "label": "10",
+            "slug": "sq-ft-10"
+          },
+          {
+            "label": "100",
+            "slug": "sq-ft-100"
+          },
+          {
+            "label": "106.90",
+            "slug": "sq-ft-106-90"
+          },
+          {
+            "label": "125",
+            "slug": "sq-ft-125"
+          },
+          {
+            "label": "150",
+            "slug": "sq-ft-150"
+          },
+          {
+            "label": "175",
+            "slug": "sq-ft-175"
+          },
+          {
+            "label": "25",
+            "slug": "sq-ft-25"
+          },
+          {
+            "label": "35",
+            "slug": "sq-ft-35"
+          },
+          {
+            "label": "50",
+            "slug": "sq-ft-50"
+          },
+          {
+            "label": "75",
+            "slug": "sq-ft-75"
+          },
+          {
+            "label": "81.56",
+            "slug": "sq-ft-81-56"
+          },
+          {
+            "label": "131.51",
+            "slug": "sq-ft-131-51"
+          },
+          {
+            "label": "200",
+            "slug": "sq-ft-200"
+          }
+        ]
+      },
+      {
         "name": "Type",
         "slug": "type",
         "values": [
@@ -817,6 +1079,20 @@
         ]
       },
       {
+        "name": "Volt",
+        "slug": "volt",
+        "values": [
+          {
+            "label": "115",
+            "slug": "volt-115"
+          },
+          {
+            "label": "230",
+            "slug": "volt-230"
+          }
+        ]
+      },
+      {
         "name": "Voltage",
         "slug": "voltage",
         "values": [
@@ -831,8 +1107,20 @@
         "slug": "volts",
         "values": [
           {
+            "label": "115",
+            "slug": "volts-115"
+          },
+          {
+            "label": "115/230",
+            "slug": "volts-115-230"
+          },
+          {
             "label": "115v/230v",
             "slug": "volts-115v-230v"
+          },
+          {
+            "label": "230",
+            "slug": "volts-230"
           }
         ]
       },
@@ -1312,7 +1600,220 @@
       }
     ],
     "pool-miscellaneous-accessories": [],
-    "spa-pumps-spa": [],
+    "spa-pumps-spa": [
+      {
+        "name": "Amp",
+        "slug": "amp",
+        "values": [
+          {
+            "label": "0.4",
+            "slug": "amp-0-4"
+          },
+          {
+            "label": "0.8",
+            "slug": "amp-0-8"
+          },
+          {
+            "label": "11.0",
+            "slug": "amp-11-0"
+          },
+          {
+            "label": "12.0",
+            "slug": "amp-12-0"
+          },
+          {
+            "label": "16.4",
+            "slug": "amp-16-4"
+          },
+          {
+            "label": "17.0",
+            "slug": "amp-17-0"
+          },
+          {
+            "label": "2.6",
+            "slug": "amp-2-6"
+          },
+          {
+            "label": "2.9",
+            "slug": "amp-2-9"
+          },
+          {
+            "label": "20.10",
+            "slug": "amp-20-10"
+          },
+          {
+            "label": "3.6",
+            "slug": "amp-3-6"
+          },
+          {
+            "label": "4.4",
+            "slug": "amp-4-4"
+          },
+          {
+            "label": "8.0",
+            "slug": "amp-8-0"
+          },
+          {
+            "label": "8.4",
+            "slug": "amp-8-4"
+          }
+        ]
+      },
+      {
+        "name": "Amps",
+        "slug": "amps",
+        "values": [
+          {
+            "label": "10",
+            "slug": "amps-10"
+          },
+          {
+            "label": "10/3.5",
+            "slug": "amps-10-3-5"
+          },
+          {
+            "label": "12",
+            "slug": "amps-12"
+          },
+          {
+            "label": "16.4",
+            "slug": "amps-16-4"
+          },
+          {
+            "label": "3.4",
+            "slug": "amps-3-4"
+          },
+          {
+            "label": "4.4",
+            "slug": "amps-4-4"
+          },
+          {
+            "label": "4.8",
+            "slug": "amps-4-8"
+          }
+        ]
+      },
+      {
+        "name": "Frame",
+        "slug": "frame",
+        "values": [
+          {
+            "label": "48 Frame",
+            "slug": "frame-48-frame"
+          }
+        ]
+      },
+      {
+        "name": "Hertz",
+        "slug": "hertz",
+        "values": [
+          {
+            "label": "50/60",
+            "slug": "hertz-50-60"
+          },
+          {
+            "label": "60",
+            "slug": "hertz-60"
+          }
+        ]
+      },
+      {
+        "name": "HP",
+        "slug": "hp",
+        "values": [
+          {
+            "label": "1",
+            "slug": "hp-1"
+          },
+          {
+            "label": "1 1/2",
+            "slug": "hp-1-1-2"
+          },
+          {
+            "label": "1.0",
+            "slug": "hp-1-0"
+          },
+          {
+            "label": "1.5",
+            "slug": "hp-1-5"
+          },
+          {
+            "label": "1/16",
+            "slug": "hp-1-16"
+          },
+          {
+            "label": "2",
+            "slug": "hp-2"
+          },
+          {
+            "label": "2.0",
+            "slug": "hp-2-0"
+          },
+          {
+            "label": "2.5",
+            "slug": "hp-2-5"
+          },
+          {
+            "label": "3",
+            "slug": "hp-3"
+          },
+          {
+            "label": "4",
+            "slug": "hp-4"
+          },
+          {
+            "label": "5",
+            "slug": "hp-5"
+          }
+        ]
+      },
+      {
+        "name": "Speed",
+        "slug": "speed",
+        "values": [
+          {
+            "label": "1",
+            "slug": "speed-1"
+          },
+          {
+            "label": "2",
+            "slug": "speed-2"
+          }
+        ]
+      },
+      {
+        "name": "Volt",
+        "slug": "volt",
+        "values": [
+          {
+            "label": "115",
+            "slug": "volt-115"
+          },
+          {
+            "label": "230",
+            "slug": "volt-230"
+          }
+        ]
+      },
+      {
+        "name": "Volts",
+        "slug": "volts",
+        "values": [
+          {
+            "label": "115",
+            "slug": "volts-115"
+          },
+          {
+            "label": "115/230",
+            "slug": "volts-115-230"
+          },
+          {
+            "label": "230",
+            "slug": "volts-230"
+          }
+        ]
+      }
+    ],
     "hose-and-tubing": [],
     "spa-jets": [
       {
@@ -1672,7 +2173,76 @@
         ]
       }
     ],
-    "spa-skimmers-and-filters": [],
+    "spa-skimmers-and-filters": [
+      {
+        "name": "Filter Type",
+        "slug": "filter-type",
+        "values": [
+          {
+            "label": "Top-Load Cartridge",
+            "slug": "filter-type-top-load-cartridge"
+          }
+        ]
+      },
+      {
+        "name": "Sq. Ft.",
+        "slug": "sq-ft",
+        "values": [
+          {
+            "label": "10",
+            "slug": "sq-ft-10"
+          },
+          {
+            "label": "100",
+            "slug": "sq-ft-100"
+          },
+          {
+            "label": "106.90",
+            "slug": "sq-ft-106-90"
+          },
+          {
+            "label": "125",
+            "slug": "sq-ft-125"
+          },
+          {
+            "label": "150",
+            "slug": "sq-ft-150"
+          },
+          {
+            "label": "175",
+            "slug": "sq-ft-175"
+          },
+          {
+            "label": "25",
+            "slug": "sq-ft-25"
+          },
+          {
+            "label": "35",
+            "slug": "sq-ft-35"
+          },
+          {
+            "label": "50",
+            "slug": "sq-ft-50"
+          },
+          {
+            "label": "75",
+            "slug": "sq-ft-75"
+          },
+          {
+            "label": "81.56",
+            "slug": "sq-ft-81-56"
+          },
+          {
+            "label": "131.51",
+            "slug": "sq-ft-131-51"
+          },
+          {
+            "label": "200",
+            "slug": "sq-ft-200"
+          }
+        ]
+      }
+    ],
     "spa-unions": [
       {
         "name": "Color",
@@ -1853,6 +2423,20 @@
     ],
     "spa-miscellaneous-accessories": [
       {
+        "name": "Base Thickness",
+        "slug": "base-thickness",
+        "values": [
+          {
+            "label": "1/2\"",
+            "slug": "base-thickness-1-2"
+          },
+          {
+            "label": "3/4\"",
+            "slug": "base-thickness-3-4"
+          }
+        ]
+      },
+      {
         "name": "Color",
         "slug": "color",
         "values": [
@@ -1909,6 +2493,56 @@
         ]
       },
       {
+        "name": "HP",
+        "slug": "hp",
+        "values": [
+          {
+            "label": "1",
+            "slug": "hp-1"
+          },
+          {
+            "label": "1 1/2",
+            "slug": "hp-1-1-2"
+          },
+          {
+            "label": "1/2",
+            "slug": "hp-1-2"
+          },
+          {
+            "label": "1/8",
+            "slug": "hp-1-8"
+          },
+          {
+            "label": "2",
+            "slug": "hp-2"
+          },
+          {
+            "label": "2 1/2",
+            "slug": "hp-2-1-2"
+          },
+          {
+            "label": "3",
+            "slug": "hp-3"
+          },
+          {
+            "label": "3/4",
+            "slug": "hp-3-4"
+          },
+          {
+            "label": "4",
+            "slug": "hp-4"
+          },
+          {
+            "label": "4 1/2",
+            "slug": "hp-4-1-2"
+          },
+          {
+            "label": "5",
+            "slug": "hp-5"
+          }
+        ]
+      },
+      {
         "name": "KW",
         "slug": "kw",
         "values": [
@@ -1953,6 +2587,14 @@
           {
             "label": "18\"",
             "slug": "size-18"
+          },
+          {
+            "label": "2 1/2\"",
+            "slug": "size-2-1-2"
+          },
+          {
+            "label": "2\"",
+            "slug": "size-2"
           },
           {
             "label": "20\"",
@@ -3798,6 +4440,68 @@
   },
   "products": [
     {
+      "title": "Service Logic Soak Tanks",
+      "slug": "service-logic-soak-tanks",
+      "databaseId": 41005,
+      "date": "2026-06-10T23:03:41",
+      "modified": "2026-06-10T23:03:41",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/550-0030-0050-0060-0070_Soak-Tank_All_sil_flat.png",
+      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/550-0030-0050-0060-0070_Soak-Tank_All_sil_flat-300x220.png",
+      "imageAlt": null,
+      "imageWidth": 1920,
+      "imageHeight": 1405,
+      "categorySlugs": [
+        "spa-skimmers-and-filters"
+      ],
+      "attributeSlugs": [
+        "sq-ft-100",
+        "sq-ft-175",
+        "sq-ft-35",
+        "sq-ft-50"
+      ]
+    },
+    {
+      "title": "Weirs",
+      "slug": "weirs",
+      "databaseId": 40994,
+      "date": "2026-06-08T20:57:59",
+      "modified": "2026-06-08T20:57:59",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/550-6119.png",
+      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/550-6119-300x244.png",
+      "imageAlt": null,
+      "imageWidth": 1477,
+      "imageHeight": 1200,
+      "categorySlugs": [],
+      "attributeSlugs": [
+        "color-dsg",
+        "height-13-1-2",
+        "height-13-1-8",
+        "height-13",
+        "width-20-3-4",
+        "width-21-1-8",
+        "width-23-1-4"
+      ]
+    },
+    {
+      "title": "Spa Bases",
+      "slug": "spa-bases",
+      "databaseId": 40962,
+      "date": "2026-05-12T18:53:11",
+      "modified": "2026-05-12T18:53:11",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-1060.png",
+      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-1060-300x94.png",
+      "imageAlt": null,
+      "imageWidth": 1800,
+      "imageHeight": 561,
+      "categorySlugs": [
+        "spa-miscellaneous-accessories"
+      ],
+      "attributeSlugs": [
+        "base-thickness-1-2",
+        "base-thickness-3-4"
+      ]
+    },
+    {
       "title": "2-4-6 Air Manifold Systems",
       "slug": "2-4-6-air-manifold-systems",
       "databaseId": 40688,
@@ -3822,7 +4526,7 @@
       "slug": "check-valves",
       "databaseId": 40681,
       "date": "2026-04-27T22:30:16",
-      "modified": "2026-05-08T21:35:44",
+      "modified": "2026-05-15T11:33:06",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/600-8140-1.png",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/600-8140-1-300x225.png",
       "imageAlt": null,
@@ -3981,7 +4685,7 @@
       "slug": "2-spa-pump-union-assemblies",
       "databaseId": 40628,
       "date": "2026-04-24T18:45:39",
-      "modified": "2026-05-08T20:58:09",
+      "modified": "2026-05-12T15:01:59",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-4300.png",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-4300-300x225.png",
       "imageAlt": null,
@@ -4769,7 +5473,7 @@
       "slug": "3-4-ribbed-barb-manifolds",
       "databaseId": 31644,
       "date": "2023-06-01T12:36:49",
-      "modified": "2026-04-24T15:15:44",
+      "modified": "2026-05-12T15:54:06",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-4980.png",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-4980-300x221.png",
       "imageAlt": null,
@@ -4789,7 +5493,7 @@
       "slug": "carefree-top-mount-sand-standard-system",
       "databaseId": 31622,
       "date": "2023-06-01T12:36:49",
-      "modified": "2026-04-23T23:19:43",
+      "modified": "2026-05-12T15:53:11",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Carefree_26in_Sand-Standard-System_HiFloII_sil_xsm_flat_IMG_6453.png",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Carefree_26in_Sand-Standard-System_HiFloII_sil_xsm_flat_IMG_6453-190x300.png",
       "imageAlt": null,
@@ -4811,7 +5515,7 @@
       "slug": "3-4-barb-adapters",
       "databaseId": 31615,
       "date": "2023-06-01T12:36:49",
-      "modified": "2026-04-23T22:50:57",
+      "modified": "2026-05-12T15:49:49",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/413-1860.png",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/413-1860-300x208.png",
       "imageAlt": null,
@@ -4834,7 +5538,7 @@
       "slug": "3-8-barb-manifolds-pancake-manifolds",
       "databaseId": 31574,
       "date": "2023-06-01T12:36:49",
-      "modified": "2026-04-21T22:29:22",
+      "modified": "2026-05-12T15:28:14",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-4100.png",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-4100-300x289.png",
       "imageAlt": null,
@@ -4853,7 +5557,7 @@
       "slug": "3-8-barb-manifolds",
       "databaseId": 31563,
       "date": "2023-06-01T12:36:49",
-      "modified": "2026-04-21T21:49:58",
+      "modified": "2026-05-12T15:16:45",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-4370.png",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-4370-300x124.png",
       "imageAlt": null,
@@ -4896,7 +5600,7 @@
       "slug": "wyes-manifold-wyes",
       "databaseId": 38600,
       "date": "2023-05-31T22:31:00",
-      "modified": "2026-04-24T15:35:14",
+      "modified": "2026-05-12T15:57:54",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/413-4100.png",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/413-4100-300x279.png",
       "imageAlt": null,
@@ -4919,7 +5623,7 @@
       "slug": "spa-sweep-ells-u-bends",
       "databaseId": 38576,
       "date": "2023-05-31T18:48:43",
-      "modified": "2026-04-24T16:23:06",
+      "modified": "2026-05-12T16:00:31",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/411-9130.png",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/411-9130-300x225.png",
       "imageAlt": null,
@@ -4944,7 +5648,7 @@
       "slug": "spa-pump-union-assembies",
       "databaseId": 38543,
       "date": "2023-05-31T17:30:15",
-      "modified": "2026-04-24T16:58:54",
+      "modified": "2026-05-12T16:02:06",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-1990.png",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-1990-300x225.png",
       "imageAlt": null,
@@ -4962,7 +5666,7 @@
       "slug": "slice-valves-gate-valves",
       "databaseId": 33524,
       "date": "2023-05-31T12:37:06",
-      "modified": "2026-04-27T22:02:29",
+      "modified": "2026-05-12T16:11:20",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/slice-vlaves.png",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/slice-vlaves-300x188.png",
       "imageAlt": null,
@@ -4983,7 +5687,7 @@
       "slug": "sanitary-tee-cross-tee-and-tee-assemblies",
       "databaseId": 33440,
       "date": "2023-05-31T12:37:05",
-      "modified": "2026-04-27T15:56:51",
+      "modified": "2026-05-12T16:29:28",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/413-2030.png",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/413-2030-300x288.png",
       "imageAlt": null,
@@ -5006,7 +5710,7 @@
       "slug": "heater-union-components",
       "databaseId": 32238,
       "date": "2023-05-31T12:36:55",
-      "modified": "2026-04-27T16:25:55",
+      "modified": "2026-05-12T16:32:08",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-5491-5161.png",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-5491-5161-300x225.png",
       "imageAlt": null,
@@ -5024,7 +5728,7 @@
       "slug": "45-and-90-ells-2",
       "databaseId": 31900,
       "date": "2023-05-31T12:36:52",
-      "modified": "2026-04-27T23:15:51",
+      "modified": "2026-05-12T16:44:27",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/411-2120.png",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/411-2120-286x300.png",
       "imageAlt": null,
@@ -5045,7 +5749,7 @@
       "slug": "2-2-1-2-union-components",
       "databaseId": 31775,
       "date": "2023-05-31T12:36:50",
-      "modified": "2026-04-28T17:06:01",
+      "modified": "2026-05-12T16:48:46",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/415-5000.png",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/415-5000-300x225.png",
       "imageAlt": null,
@@ -5066,7 +5770,7 @@
       "slug": "1-manifolds-and-2-4-6-air-manifold-systems",
       "databaseId": 31733,
       "date": "2023-05-31T12:36:50",
-      "modified": "2026-04-28T15:44:25",
+      "modified": "2026-05-12T16:47:41",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-4390.png",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-4390-300x271.png",
       "imageAlt": null,
@@ -5086,7 +5790,7 @@
       "slug": "1-1-2-union-components",
       "databaseId": 31680,
       "date": "2023-05-31T12:36:50",
-      "modified": "2026-04-27T23:43:37",
+      "modified": "2026-05-12T16:46:12",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/415-4000.png",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/415-4000-300x225.png",
       "imageAlt": null,
@@ -5104,174 +5808,263 @@
       "slug": "3-4-manifolds",
       "databaseId": 31630,
       "date": "2023-05-31T12:36:49",
-      "modified": "2023-06-30T23:38:10",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-05-12T17:27:11",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-4640.png",
+      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-4640-300x237.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1519,
+      "imageHeight": 1200,
       "categorySlugs": [
         "spa-manifolds"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "socket-1-1-2",
+        "socket-2",
+        "spigot-1-1-2",
+        "spigot-2"
+      ]
     },
     {
       "title": "1/2″ Manifolds",
       "slug": "1-2-manifolds",
       "databaseId": 31596,
       "date": "2023-05-31T12:36:49",
-      "modified": "2023-06-30T23:36:55",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-05-12T16:59:49",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-7900.png",
+      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-7900-300x238.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1512,
+      "imageHeight": 1200,
       "categorySlugs": [
         "spa-manifolds"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "socket-1-1-2",
+        "socket-1",
+        "socket-2",
+        "spigot-1-1-2",
+        "spigot-2"
+      ]
     },
     {
-      "title": "Spa Wet Ends & Bases",
+      "title": "Spa Wet Ends",
       "slug": "spa-wet-ends",
       "databaseId": 38507,
       "date": "2023-05-30T23:58:17",
-      "modified": "2023-06-08T16:09:13",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-05-12T18:25:42",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/310-7800.png",
+      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/310-7800-246x300.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1200,
+      "imageHeight": 1465,
       "categorySlugs": [
         "spa-miscellaneous-accessories"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "hp-1",
+        "hp-1-1-2",
+        "hp-1-2",
+        "hp-1-8",
+        "hp-2",
+        "hp-2-1-2",
+        "hp-3",
+        "hp-3-4",
+        "hp-4",
+        "hp-4-1-2"
+      ]
     },
     {
       "title": "Tiny Might Pump",
       "slug": "tiny-might-pump",
       "databaseId": 38501,
       "date": "2023-05-30T23:19:50",
-      "modified": "2024-07-03T20:33:05",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-06-02T22:44:33",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Tiny-Might.png",
+      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Tiny-Might-300x198.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1920,
+      "imageHeight": 1265,
       "categorySlugs": [
         "spa-pumps-spa"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "amp-0-4",
+        "amp-0-8",
+        "hertz-50-60",
+        "hertz-60",
+        "hp-1-16",
+        "volt-115",
+        "volt-230"
+      ]
     },
     {
       "title": "Hi-Flo II Side Discharge – 48-Frame Spa Pump",
       "slug": "hi-flo-ii-side-discharge-48-frame-spa-pump",
       "databaseId": 38474,
       "date": "2023-05-30T22:26:00",
-      "modified": "2023-08-16T23:02:01",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-06-01T22:03:11",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Hi-Flo-II-1.png",
+      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Hi-Flo-II-1-300x265.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1800,
+      "imageHeight": 1591,
       "categorySlugs": [
         "spa-pumps-spa"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "amp-11-0",
+        "amp-12-0",
+        "amp-16-4",
+        "amp-17-0",
+        "amp-2-6",
+        "amp-2-9",
+        "amp-20-10",
+        "amp-3-6",
+        "amp-4-4",
+        "amp-8-0"
+      ]
     },
     {
       "title": "EX2 Pump",
       "slug": "ex2-pump",
       "databaseId": 38469,
       "date": "2023-05-30T21:59:47",
-      "modified": "2025-06-04T22:44:48",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-06-08T11:07:36",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/EX2.png",
+      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/EX2-300x279.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1920,
+      "imageHeight": 1788,
       "categorySlugs": [
         "spa-pumps-spa"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "hertz-60",
+        "hp-2",
+        "hp-2-5",
+        "hp-3",
+        "volts-230"
+      ]
     },
     {
       "title": "Viper Pump",
       "slug": "viper",
       "databaseId": 38442,
       "date": "2023-05-30T20:31:57",
-      "modified": "2025-06-04T22:31:49",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-06-05T18:25:52",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/viper-pump.png",
+      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/viper-pump-300x262.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1920,
+      "imageHeight": 1679,
       "categorySlugs": [
         "spa-pumps-spa"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "amps-10",
+        "amps-10-3-5",
+        "amps-12",
+        "amps-16-4",
+        "amps-3-4",
+        "amps-4-4",
+        "amps-4-8",
+        "hertz-60",
+        "hp-3",
+        "hp-4"
+      ]
     },
     {
-      "title": "Standard Return Fittings, SGMS Return Fittings & Weirs",
+      "title": "Standard  & SGMS Return Fittings",
       "slug": "standard-return-fittings-sgms-return-fittings-weirs",
       "databaseId": 38423,
       "date": "2023-05-30T18:43:09",
-      "modified": "2025-06-04T22:24:38",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-06-05T23:03:09",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/212-1831.png",
+      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/212-1831-300x253.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1920,
+      "imageHeight": 1620,
       "categorySlugs": [],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "size-1-2-2",
+        "size-3-4"
+      ]
     },
     {
       "title": "Top-Load Filters",
       "slug": "top-load-filters",
       "databaseId": 38400,
       "date": "2023-05-30T16:58:35",
-      "modified": "2023-06-30T23:11:24",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-06-09T16:28:36",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/500-7500.png",
+      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/500-7500-89x300.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 532,
+      "imageHeight": 1800,
       "categorySlugs": [
         "spa-skimmers-and-filters"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "filter-type-top-load-cartridge",
+        "sq-ft-100",
+        "sq-ft-25",
+        "sq-ft-50",
+        "sq-ft-75"
+      ]
     },
     {
       "title": "Spa Flo II – 48-Frame Pump",
       "slug": "spa-flo-ii-48-frame-2",
       "databaseId": 33593,
       "date": "2023-05-30T12:37:06",
-      "modified": "2024-07-03T20:02:41",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-06-09T20:31:20",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/SpaFlo-II.png",
+      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/SpaFlo-II-300x234.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1920,
+      "imageHeight": 1500,
       "categorySlugs": [
         "spa-pumps-spa"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "frame-48-frame",
+        "hertz-60",
+        "hp-1",
+        "hp-1-1-2",
+        "hp-2",
+        "speed-1",
+        "speed-2",
+        "volts-115",
+        "volts-115-230",
+        "volts-230"
+      ]
     },
     {
-      "title": "Service Logic Replacement Filters & Soak Tanks",
+      "title": "Service Logic Replacement Filters",
       "slug": "skimmer-and-skim-filter-options",
       "databaseId": 33498,
       "date": "2023-05-30T12:37:05",
-      "modified": "2025-06-04T22:08:59",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-06-10T17:13:17",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/817-2500-1.png",
+      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/817-2500-1-178x300.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1136,
+      "imageHeight": 1920,
       "categorySlugs": [
         "spa-skimmers-and-filters"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "sq-ft-10",
+        "sq-ft-100",
+        "sq-ft-106-90",
+        "sq-ft-125",
+        "sq-ft-150",
+        "sq-ft-25",
+        "sq-ft-35",
+        "sq-ft-50",
+        "sq-ft-75",
+        "sq-ft-81-56"
+      ]
     },
     {
       "title": "Power Defender EX2 2 Speed",
@@ -5854,7 +6647,7 @@
       "slug": "stealth-ii-spa-blowers-ozone-injector",
       "databaseId": 38156,
       "date": "2023-05-24T20:36:28",
-      "modified": "2023-06-07T17:07:28",
+      "modified": "2026-05-13T15:05:38",
       "imageUrl": null,
       "imageMedium": null,
       "imageAlt": null,
@@ -7321,7 +8114,7 @@
       "slug": "stealth-ii-air-blowers",
       "databaseId": 37444,
       "date": "2023-03-27T23:30:24",
-      "modified": "2026-04-09T15:07:40",
+      "modified": "2026-05-13T08:33:31",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Stealth-II-1.png",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Stealth-II-1-300x183.png",
       "imageAlt": null,
@@ -7491,7 +8284,7 @@
       "slug": "information",
       "databaseId": 32386,
       "date": "2020-01-27T12:36:56",
-      "modified": "2026-05-12T05:24:01",
+      "modified": "2026-05-13T16:11:18",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/ecd291d72357c9c78db1098bccee8e7b690b7a91.jpg",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/ecd291d72357c9c78db1098bccee8e7b690b7a91-300x175.jpg",
       "imageAlt": null,

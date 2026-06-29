@@ -1,0 +1,63 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PageHeaderOffset from "../../components/PageHeaderOffset.astro";
+import SectionHero from "../../components/SectionHero/SectionHero.astro";
+import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs.astro";
+import ScrollToTopButton from "../../components/ScrollToTopButton/ScrollToTopButton.astro";
+import type { NewsPostPageProps } from "../../lib/news-static-paths";
+import { visibleText } from "../../lib/queries/news-post";
+
+export { getStaticPaths } from "../../lib/news-static-paths";
+
+export const prerender = true;
+
+const { post, archiveTitle } = Astro.props as NewsPostPageProps;
+
+const pageTitlePlain = visibleText(post.titleHtml);
+const descriptionPlain =
+  visibleText(post.excerptHtml) || visibleText(post.contentHtml).slice(0, 160);
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Company", href: "/company/" },
+  { label: archiveTitle, href: "/news/" },
+  { label: pageTitlePlain || "News article" },
+];
+---
+
+<Layout
+  headerType="white"
+  bodyClass="is-news"
+  pageTitle={pageTitlePlain || "News"}
+  description={descriptionPlain}
+>
+  <main class="news-single-page" data-page-header-offset>
+    <SectionHero
+      title={post.titleHtml}
+      titleIsHtml
+      intro={post.excerptHtml || undefined}
+      introIsHtml={Boolean(post.excerptHtml)}
+      customClass="news"
+    />
+    <div class="news-single-page__breadcrumb-wrap">
+      <Breadcrumbs items={breadcrumbs} />
+    </div>
+
+    {
+      post.contentHtml ? (
+        <div class="news-single-page__body">
+          <div class="news-single-page__body-inner">
+            <div
+              class="news-single-page__content wysiwyg"
+              set:html={post.contentHtml}
+            />
+          </div>
+        </div>
+      ) : null
+    }
+
+    <ScrollToTopButton />
+  </main>
+</Layout>
+
+<PageHeaderOffset />

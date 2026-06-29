@@ -4,30 +4,33 @@ import PageHeaderOffset from "../../components/PageHeaderOffset.astro";
 import SectionHero from "../../components/SectionHero/SectionHero.astro";
 import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs.astro";
 import ScrollToTopButton from "../../components/ScrollToTopButton/ScrollToTopButton.astro";
-import { fetchNewsInstagramPosts } from "../../lib/queries/news-instagram";
+import { getGraphQLClient } from "../../lib/graphql";
+import { fetchNewsPage } from "../../lib/queries/news-page";
 
 export const prerender = true;
 
-const pageTitle = "News";
+const graphqlConfigured = Boolean(getGraphQLClient());
+const pageData = await fetchNewsPage();
+
 const introDefault =
   "Catch up on what’s new at Waterway — from product releases and events to industry news and helpful updates.";
+
+const pageTitle = pageData?.title?.trim() || "News";
+const posts = pageData?.posts ?? [];
+const hasPosts = posts.length > 0;
+
 const breadcrumbs = [
   { label: "Home", href: "/" },
   { label: "Company", href: "/company/" },
   { label: pageTitle },
 ];
 
-const posts = await fetchNewsInstagramPosts();
-const hasPosts = posts.length > 0;
-
-function formatPostTimestamp(iso: string): string {
+function formatPostDate(iso: string | null): string {
+  if (!iso) return "";
   try {
     const d = new Date(iso);
     if (Number.isNaN(d.getTime())) return iso;
-    return new Intl.DateTimeFormat("en-US", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    }).format(d);
+    return new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(d);
   } catch {
     return iso;
   }
@@ -40,57 +43,56 @@ function formatPostTimestamp(iso: string): string {
   pageTitle={pageTitle}
   description={introDefault}
 >
-  <main class="news-page" data-page-header-offset data-news-page>
+  <main class="news-page" data-page-header-offset>
     <SectionHero title={pageTitle} intro={introDefault} customClass="news" />
     <div class="news-page__breadcrumb-wrap">
       <Breadcrumbs items={breadcrumbs} />
     </div>
 
-    <section class="news-page__body" aria-label="Instagram feed">
+    <section class="news-page__body" aria-label="News">
       <div class="news-page__body-inner">
+        {
+          !graphqlConfigured && (
+            <p class="news-page__notice">
+              GraphQL is not configured. Set <code>PUBLIC_GRAPHQL_URL</code> in{" "}
+              <code>.env</code>.
+            </p>
+          )
+        }
+        {
+          graphqlConfigured && !pageData && (
+            <p class="news-page__notice">
+              Page not loaded for <code>/news/</code>.
+            </p>
+          )
+        }
+
         {
           hasPosts ? (
             <ul class="news-page__grid">
               {posts.map((post) => (
-                <li class="news-page__card" data-news-card>
-                  <a
-                    class="news-page__card-link"
-                    href={post.permalink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <div class="news-page__card-media">
-                      <img
-                        class="news-page__card-img"
-                        src={post.mediaUrl}
-                        alt={post.caption?.trim() || "Instagram post"}
-                        width="640"
-                        height="640"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </div>
+                <li class="news-page__card">
+                  <a class="news-page__card-link" href={post.href}>
                     <div class="news-page__card-body">
-                      <p class="news-page__card-meta">
-                        {formatPostTimestamp(post.timestamp)}
-                      </p>
-                      {post.caption?.trim() ? (
-                        <p class="news-page__card-caption news-page__card-caption--truncate">
-                          {post.caption.trim()}
+                      {post.date ? (
+                        <p class="news-page__card-meta">
+                          <time datetime={post.date}>
+                            {formatPostDate(post.date)}
+                          </time>
                         </p>
-                      ) : (
-                        <p class="news-page__card-caption news-page__card-caption--truncate">
-                          View on Instagram
-                        </p>
-                      )}
+                      ) : null}
+                      <div
+                        class="news-page__card-caption"
+                        set:html={post.titleHtml}
+                      />
                     </div>
                   </a>
                 </li>
               ))}
             </ul>
-          ) : (
-            <p class="news-page__empty">No Instagram posts to show right now.</p>
-          )
+          ) : graphqlConfigured && pageData ? (
+            <p class="news-page__empty">No news to show right now.</p>
+          ) : null
         }
       </div>
     </section>
@@ -100,8 +102,3 @@ function formatPostTimestamp(iso: string): string {
 </Layout>
 
 <PageHeaderOffset />
-
-<script>
-  import { initNewsPage } from "../../scripts/news-page.ts";
-  initNewsPage();
-</script>
