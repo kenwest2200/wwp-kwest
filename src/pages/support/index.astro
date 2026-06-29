@@ -51,16 +51,7 @@ const breadcrumbs = [{ label: "Home", href: "/" }, { label: pageTitle }];
         cards.length > 0 && (
           <div class="support-page__grid">
             {cards.map((card) => (
-              <a
-                class="support-page__card"
-                href={card.linkUrl}
-                target={card.linkTarget}
-                rel={
-                  card.linkTarget === "_blank"
-                    ? "noopener noreferrer"
-                    : undefined
-                }
-              >
+              <a class="support-page__card" href={card.linkUrl}>
                 {card.iconUrl ? (
                   <div class="support-page__card-icon-wrap">
                     <img

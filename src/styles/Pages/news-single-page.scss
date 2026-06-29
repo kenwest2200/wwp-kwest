@@ -6,6 +6,13 @@
   padding-top: var(--page-header-offset, #{px-to-rem(112)});
   padding-bottom: px-to-rem(80);
 
+  .section-hero__title,
+  .section-hero__description,
+  .section-hero__description :where(p, span, div, li, strong, em, a) {
+    color: $white;
+    background: transparent;
+  }
+
   &__breadcrumb-wrap {
     max-width: px-to-rem(1152);
     margin: px-to-rem(40) auto 0;
