@@ -1,6 +1,7 @@
 import {
   hidePageErrorToast,
   installPageErrorToast,
+  PAGE_ERROR_TOAST_GENERIC,
   showPageErrorToast,
 } from "../lib/page-error-toast";
 
@@ -90,8 +91,8 @@ function showSalesRepsFieldError(
   inputWrap?.classList.add("is-invalid");
 }
 
-function showSalesRepsToast(host: HTMLElement | null, text: string): void {
-  showPageErrorToast(host, text);
+function showSalesRepsToast(host: HTMLElement | null): void {
+  showPageErrorToast(host, PAGE_ERROR_TOAST_GENERIC);
 }
 
 function compareByName(a: SalesRepRow, b: SalesRepRow, dir: SortDir): number {
@@ -324,7 +325,7 @@ export function initSalesRepresentativesPage(): void {
         if (isSalesRepsFieldValidationError(err)) {
           showSalesRepsFieldError(zipField, inlineErrorEl, inputWrap, err);
         } else {
-          showSalesRepsToast(msgEl, err);
+          showSalesRepsToast(msgEl);
         }
         renderStatusRow(tbody, "Could not load representatives.");
         return;
@@ -340,10 +341,7 @@ export function initSalesRepresentativesPage(): void {
       renderRows(tbody, cachedReps);
       clearSalesRepsFieldError(zipField, inlineErrorEl, inputWrap);
     } catch (err) {
-      showSalesRepsToast(
-        msgEl,
-        err instanceof Error ? err.message : String(err),
-      );
+      showSalesRepsToast(msgEl);
       renderStatusRow(tbody, "Could not load representatives.");
     }
     finally {
@@ -386,7 +384,7 @@ export function initSalesRepresentativesPage(): void {
     void (async () => {
       if (searchInFlight) return;
       if (!navigator.geolocation) {
-        showSalesRepsToast(msgEl, "Geolocation is not supported in this browser.");
+        showSalesRepsToast(msgEl);
         return;
       }
       setRequestLocked(true);
@@ -402,25 +400,14 @@ export function initSalesRepresentativesPage(): void {
         const lng = pos.coords.longitude;
         const zip = await reverseGeocodeToZip(lat, lng);
         if (!zip) {
-          showSalesRepsToast(
-            msgEl,
-            "Could not determine a U.S. ZIP code from your location.",
-          );
+          showSalesRepsToast(msgEl);
           return;
         }
         zipField.value = zip;
         syncSrZipAccessoryButtons();
         await performSearch(zip);
       } catch (err) {
-        const denied =
-          err instanceof GeolocationPositionError &&
-          err.code === err.PERMISSION_DENIED;
-        showSalesRepsToast(
-          msgEl,
-          denied
-            ? "Location access was denied. Allow location for this site in browser settings."
-            : "Could not get your location. Try entering a ZIP code.",
-        );
+        showSalesRepsToast(msgEl);
       } finally {
         setRequestLocked(false);
       }

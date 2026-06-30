@@ -1,6 +1,7 @@
 import {
   hidePageErrorToast,
   installPageErrorToast,
+  PAGE_ERROR_TOAST_GENERIC,
   showPageErrorToast,
   showPageToast,
 } from "../lib/page-error-toast";
@@ -8,9 +9,6 @@ import {
   initFormCustomSelects,
   syncAllCustomSelectsFromNative,
 } from "./custom-select";
-
-const NETWORK_ERROR_TOAST =
-  "Network error. Check your connection and try again.";
 
 const CONTACT_FORM_GRAPHQL_PATH = "/api/contact-graphql";
 
@@ -170,18 +168,10 @@ async function init(): Promise<void> {
         message?: string;
       };
 
-      const gqlErr =
-        json.errors
-          ?.map((e) => e.message)
-          .filter(Boolean)
-          .join(" ") ?? "";
-
       if (!res.ok) {
         showPageErrorToast(
           pageToast instanceof HTMLElement ? pageToast : null,
-          gqlErr ||
-            json.message ||
-            `Request failed (${res.status}). Please try again later.`,
+          PAGE_ERROR_TOAST_GENERIC,
         );
         return;
       }
@@ -189,7 +179,7 @@ async function init(): Promise<void> {
       if (json.errors?.length) {
         showPageErrorToast(
           pageToast instanceof HTMLElement ? pageToast : null,
-          gqlErr || "Something went wrong. Please try again later.",
+          PAGE_ERROR_TOAST_GENERIC,
         );
         return;
       }
@@ -224,13 +214,12 @@ async function init(): Promise<void> {
 
       showPageErrorToast(
         pageToast instanceof HTMLElement ? pageToast : null,
-        (result?.message && result.message.trim()) ||
-          "Could not send the message. Please try again.",
+        PAGE_ERROR_TOAST_GENERIC,
       );
     } catch {
       showPageErrorToast(
         pageToast instanceof HTMLElement ? pageToast : null,
-        NETWORK_ERROR_TOAST,
+        PAGE_ERROR_TOAST_GENERIC,
       );
     } finally {
       submitBtn.disabled = false;

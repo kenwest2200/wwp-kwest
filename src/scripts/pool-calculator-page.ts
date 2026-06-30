@@ -6,6 +6,7 @@ import {
   formatGpm,
   gpmFromVolume,
 } from "../lib/pool-calculator";
+import { PUBLIC_API_ERROR_MESSAGE } from "../lib/public-api-error-message";
 
 const MAX_FT_DIGITS = 4;
 const MAX_IN_DIGITS = 2;
@@ -258,7 +259,7 @@ async function loadCategoryProductsIfNeeded(
     );
     const json = (await res.json()) as ProductCategoryProductsApiResponse;
     if (!res.ok || json.error) {
-      setPanelMessage(panel, json.error ?? "Could not load products.", "error");
+      setPanelMessage(panel, PUBLIC_API_ERROR_MESSAGE, "error");
       return;
     }
     const items = (json.items ?? []).filter((x) => x.title && x.uri);
@@ -269,7 +270,7 @@ async function loadCategoryProductsIfNeeded(
     }
     panel.dataset.partsLoaded = PARTS_LOADED;
   } catch (e) {
-    setPanelMessage(panel, e instanceof Error ? e.message : String(e), "error");
+    setPanelMessage(panel, PUBLIC_API_ERROR_MESSAGE, "error");
   } finally {
     panel.dataset.partsLoading = "";
   }

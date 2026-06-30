@@ -4,6 +4,7 @@ import "leaflet/dist/leaflet.css";
 import {
   hidePageErrorToast,
   installPageErrorToast,
+  PAGE_ERROR_TOAST_GENERIC,
   showPageErrorToast,
 } from "../lib/page-error-toast";
 
@@ -567,7 +568,7 @@ async function init(): Promise<void> {
         msg.classList.remove("is-loading", "is-error");
         msg.removeAttribute("aria-busy");
       }
-      showPageErrorToast(errorToast, text);
+      showPageErrorToast(errorToast, PAGE_ERROR_TOAST_GENERIC);
       return;
     }
 

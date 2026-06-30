@@ -2,6 +2,7 @@ import {
   getSalesRepsOAuthBearer,
   invalidateSalesRepsOpsOAuth,
 } from "./sales-reps-ops-oauth";
+import { PUBLIC_API_ERROR_MESSAGE } from "./lib/public-api-error-message";
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -236,7 +237,7 @@ async function handleContactGraphqlApi(
   const endpoint = env.PUBLIC_GRAPHQL_URL?.trim();
   if (!endpoint) {
     return jsonResponse(
-      { errors: [{ message: "PUBLIC_GRAPHQL_URL is not configured" }] },
+      { errors: [{ message: PUBLIC_API_ERROR_MESSAGE }] },
       { status: 500, origin },
     );
   }
@@ -282,13 +283,11 @@ async function handleContactGraphqlApi(
       headers: outHeaders,
     });
   } catch (error) {
+    const technical =
+      error instanceof Error ? error.message : String(error);
     return jsonResponse(
       {
-        errors: [
-          {
-            message: error instanceof Error ? error.message : String(error),
-          },
-        ],
+        errors: [{ message: publicApiError("contact-graphql", technical) }],
       },
       { status: 502, origin },
     );
@@ -330,7 +329,7 @@ async function handleSearchApi(request: Request, env: Env): Promise<Response> {
   }
   if (request.method !== "GET") {
     return jsonResponse(
-      { total: 0, items: [], error: "Method Not Allowed" },
+      { total: 0, items: [], error: publicApiError("search", "Method Not Allowed") },
       {
         status: 405,
         origin,
@@ -360,7 +359,11 @@ async function handleSearchApi(request: Request, env: Env): Promise<Response> {
   const endpoint = env.PUBLIC_GRAPHQL_URL;
   if (!endpoint) {
     return jsonResponse(
-      { total: 0, items: [], error: "PUBLIC_GRAPHQL_URL is not configured" },
+      {
+        total: 0,
+        items: [],
+        error: publicApiError("search", "GraphQL endpoint not configured"),
+      },
       { status: 500, origin },
     );
   }
@@ -387,7 +390,11 @@ async function handleSearchApi(request: Request, env: Env): Promise<Response> {
           payload.errors?.[0]?.message ||
           `GraphQL search failed with status ${gqlRes.status}`;
         return jsonResponse(
-          { total: 0, items: [], error: message },
+          {
+            total: 0,
+            items: [],
+            error: publicApiError("search", message),
+          },
           { status: 502, origin },
         );
       }
@@ -427,7 +434,11 @@ async function handleSearchApi(request: Request, env: Env): Promise<Response> {
           payload.errors?.[0]?.message ||
           `GraphQL search failed with status ${gqlRes.status}`;
         return jsonResponse(
-          { total: 0, items: [], error: message },
+          {
+            total: 0,
+            items: [],
+            error: publicApiError("search", message),
+          },
           { status: 502, origin },
         );
       }
@@ -449,11 +460,13 @@ async function handleSearchApi(request: Request, env: Env): Promise<Response> {
     const sliced = filtered.slice(offset, offset + limit);
     return jsonResponse({ total, items: sliced }, { origin });
   } catch (error) {
+    const technical =
+      error instanceof Error ? error.message : String(error);
     return jsonResponse(
       {
         total: 0,
         items: [],
-        error: error instanceof Error ? error.message : String(error),
+        error: publicApiError("search", technical),
       },
       { status: 500, origin },
     );
@@ -483,7 +496,10 @@ async function handleProductCategoryProductsApi(
   }
   if (request.method !== "GET") {
     return jsonResponse(
-      { items: [], error: "Method Not Allowed" },
+      {
+        items: [],
+        error: publicApiError("product-category-products", "Method Not Allowed"),
+      },
       {
         status: 405,
         origin,
@@ -495,7 +511,13 @@ async function handleProductCategoryProductsApi(
   const slug = (url.searchParams.get("slug") ?? "").trim();
   if (!slug || !PRODUCT_CATEGORY_PRODUCTS_ALLOWED_SLUGS.has(slug)) {
     return jsonResponse(
-      { items: [], error: "Unknown or missing category slug" },
+      {
+        items: [],
+        error: publicApiError(
+          "product-category-products",
+          "Unknown or missing category slug",
+        ),
+      },
       { status: 400, origin },
     );
   }
@@ -503,7 +525,13 @@ async function handleProductCategoryProductsApi(
   const endpoint = env.PUBLIC_GRAPHQL_URL;
   if (!endpoint) {
     return jsonResponse(
-      { items: [], error: "PUBLIC_GRAPHQL_URL is not configured" },
+      {
+        items: [],
+        error: publicApiError(
+          "product-category-products",
+          "GraphQL endpoint not configured",
+        ),
+      },
       { status: 500, origin },
     );
   }
@@ -529,7 +557,10 @@ async function handleProductCategoryProductsApi(
         payload.errors?.[0]?.message ||
         `GraphQL productCategory failed with status ${gqlRes.status}`;
       return jsonResponse(
-        { items: [], error: message },
+        {
+          items: [],
+          error: publicApiError("product-category-products", message),
+        },
         { status: 502, origin },
       );
     }
@@ -558,10 +589,12 @@ async function handleProductCategoryProductsApi(
       { origin, cacheControl: "public, max-age=120" },
     );
   } catch (error) {
+    const technical =
+      error instanceof Error ? error.message : String(error);
     return jsonResponse(
       {
         items: [],
-        error: error instanceof Error ? error.message : String(error),
+        error: publicApiError("product-category-products", technical),
       },
       { status: 500, origin },
     );
@@ -619,6 +652,72 @@ function extractUsZip5FromGeocodeRow(
     }
   }
   return null;
+}
+
+function normalizeSalesRepsFieldMessage(message: string): string {
+  return message.trim().replace(/\u2019/g, "'").replace(/\u2018/g, "'");
+}
+
+function isSalesRepsFieldValidationError(message: string): boolean {
+  const m = normalizeSalesRepsFieldMessage(message);
+  return (
+    m === "ZIP code is required." ||
+    m === "Enter a valid U.S. ZIP code (5 digits or ZIP+4)."
+  );
+}
+
+/** ZIP field hints stay specific; infrastructure/upstream errors are generic for clients. */
+function salesRepsPublicError(technicalError: string): string {
+  if (isSalesRepsFieldValidationError(technicalError)) {
+    return normalizeSalesRepsFieldMessage(technicalError);
+  }
+  return publicApiError("sales-reps", technicalError);
+}
+
+function isCrossRefFieldValidationError(message: string): boolean {
+  const m = message.trim().replace(/\u2019/g, "'").replace(/\u2018/g, "'");
+  return (
+    m === "Please fill in at least one field before searching." ||
+    m === "Set at least one filter before searching." ||
+    m === "At least one filter is required for /find."
+  );
+}
+
+function crossRefPublicError(technicalError: string): string {
+  if (isCrossRefFieldValidationError(technicalError)) {
+    return technicalError.trim().replace(/\u2019/g, "'").replace(/\u2018/g, "'");
+  }
+  return publicApiError("cross-ref", technicalError);
+}
+
+function normalizeDistributorZipInlineMessage(message: string): string {
+  return message.trim().replace(/\u2019/g, "'").replace(/\u2018/g, "'");
+}
+
+function isDistributorZipInlineUserError(message: string): boolean {
+  const m = normalizeDistributorZipInlineMessage(message);
+  return (
+    m ===
+      "That didn't resolve to a U.S. ZIP. Enter a valid 5-digit ZIP code." ||
+    m ===
+      "Could not match that to a U.S. ZIP. Enter a valid 5-digit ZIP code." ||
+    m === "No match for that ZIP. Check the 5-digit code and try again." ||
+    m ===
+      "That search is too broad. Enter a U.S. ZIP code (5 digits or ZIP+4)."
+  );
+}
+
+/** ZIP field hints stay specific; infrastructure/upstream errors are generic for clients. */
+function publicApiError(logScope: string, logMessage: string): string {
+  console.error(`[${logScope}]`, logMessage);
+  return PUBLIC_API_ERROR_MESSAGE;
+}
+
+function distributorLocatorPublicError(technicalError: string): string {
+  if (isDistributorZipInlineUserError(technicalError)) {
+    return normalizeDistributorZipInlineMessage(technicalError);
+  }
+  return publicApiError("distributor-locations", technicalError);
 }
 
 /**
@@ -762,7 +861,7 @@ async function handleSalesRepsApi(
   }
   if (request.method !== "GET") {
     return jsonResponse(
-      { reps: [], error: "Method Not Allowed" },
+      { reps: [], error: salesRepsPublicError("Method Not Allowed") },
       {
         status: 405,
         origin,
@@ -793,8 +892,7 @@ async function handleSalesRepsApi(
     return jsonResponse(
       {
         reps: [],
-        error:
-          "Sales representatives: set worker secret SALES_REPS_OAUTH_PASSWORD (ERP API user password for /connect). Short-lived access_token is issued inside the worker, not stored in secrets.",
+        error: publicApiError("sales-reps", "ERP OAuth bearer unavailable"),
       },
       { status: 503, origin },
     );
@@ -839,10 +937,9 @@ async function handleSalesRepsApi(
       return jsonResponse(
         {
           reps: [],
-          error:
-            upstream.status === 401
-              ? "Sales representatives service rejected credentials."
-              : `Sales representatives service error (${upstream.status}). ${detail}`.trim(),
+          error: salesRepsPublicError(
+            `Sales representatives service error (${upstream.status}). ${detail}`.trim(),
+          ),
         },
         { status: 502, origin },
       );
@@ -855,7 +952,9 @@ async function handleSalesRepsApi(
       return jsonResponse(
         {
           reps: [],
-          error: "Invalid response from sales representatives service.",
+          error: salesRepsPublicError(
+            "Invalid response from sales representatives service.",
+          ),
         },
         { status: 502, origin },
       );
@@ -865,7 +964,9 @@ async function handleSalesRepsApi(
       return jsonResponse(
         {
           reps: [],
-          error: "Unexpected response from sales representatives service.",
+          error: salesRepsPublicError(
+            "Unexpected response from sales representatives service.",
+          ),
         },
         { status: 502, origin },
       );
@@ -876,10 +977,12 @@ async function handleSalesRepsApi(
       .filter((r) => r.name || r.phone || r.email);
     return jsonResponse({ reps }, { origin });
   } catch (error) {
+    const technical =
+      error instanceof Error ? error.message : String(error);
     return jsonResponse(
       {
         reps: [],
-        error: error instanceof Error ? error.message : String(error),
+        error: salesRepsPublicError(technical),
       },
       { status: 502, origin },
     );
@@ -992,7 +1095,7 @@ async function handleDistributorLocationsInRadiusApi(
   }
   if (request.method !== "GET") {
     return jsonResponse(
-      { locations: [], error: "Method Not Allowed" },
+      { locations: [], error: PUBLIC_API_ERROR_MESSAGE },
       { status: 405, origin },
     );
   }
@@ -1003,7 +1106,7 @@ async function handleDistributorLocationsInRadiusApi(
   );
   if (!rawLocation) {
     return jsonResponse(
-      { locations: [], error: "Enter a U.S. ZIP code." },
+      { locations: [], error: PUBLIC_API_ERROR_MESSAGE },
       { status: 400, origin },
     );
   }
@@ -1019,8 +1122,9 @@ async function handleDistributorLocationsInRadiusApi(
       return jsonResponse(
         {
           locations: [],
-          error:
-            "Enter a valid U.S. ZIP code (5 digits or ZIP+4). Geocoding is not configured on this server.",
+          error: distributorLocatorPublicError(
+            "Geocoding is not configured",
+          ),
         },
         { status: 400, origin },
       );
@@ -1028,7 +1132,7 @@ async function handleDistributorLocationsInRadiusApi(
     const geo = await geocodeUsLocationQuery(rawLocation, geoKey);
     if (!geo.ok) {
       return jsonResponse(
-        { locations: [], error: geo.error },
+        { locations: [], error: distributorLocatorPublicError(geo.error) },
         { status: 400, origin },
       );
     }
@@ -1061,8 +1165,10 @@ async function handleDistributorLocationsInRadiusApi(
     return jsonResponse(
       {
         locations: [],
-        error:
-          "Distributor locator: set worker secret SALES_REPS_OAUTH_PASSWORD (ERP token, same as sales reps).",
+        error: publicApiError(
+          "distributor-locations",
+          "ERP OAuth bearer unavailable",
+        ),
       },
       { status: 503, origin },
     );
@@ -1110,7 +1216,9 @@ async function handleDistributorLocationsInRadiusApi(
       return jsonResponse(
         {
           locations: [],
-          error: `Locator service error (${upstream.status}). ${detail}`.trim(),
+          error: distributorLocatorPublicError(
+            `Locator service error (${upstream.status}). ${detail}`.trim(),
+          ),
         },
         { status: 502, origin },
       );
@@ -1121,14 +1229,22 @@ async function handleDistributorLocationsInRadiusApi(
       parsed = JSON.parse(text) as unknown;
     } catch {
       return jsonResponse(
-        { locations: [], error: "Invalid JSON from locator service." },
+        {
+          locations: [],
+          error: distributorLocatorPublicError(
+            "Invalid JSON from locator service.",
+          ),
+        },
         { status: 502, origin },
       );
     }
 
     if (!Array.isArray(parsed)) {
       return jsonResponse(
-        { locations: [], error: "Unexpected locator response." },
+        {
+          locations: [],
+          error: distributorLocatorPublicError("Unexpected locator response."),
+        },
         { status: 502, origin },
       );
     }
@@ -1144,10 +1260,12 @@ async function handleDistributorLocationsInRadiusApi(
     if (searchCenter) body.searchCenter = searchCenter;
     return jsonResponse(body, { origin });
   } catch (error) {
+    const technical =
+      error instanceof Error ? error.message : String(error);
     return jsonResponse(
       {
         locations: [],
-        error: error instanceof Error ? error.message : String(error),
+        error: distributorLocatorPublicError(technical),
       },
       { status: 502, origin },
     );
@@ -1169,7 +1287,7 @@ async function handleGeocodeZipApi(
   }
   if (request.method !== "GET") {
     return jsonResponse(
-      { lat: null, lng: null, error: "Method Not Allowed" },
+      { lat: null, lng: null, error: publicApiError("geocode-zip", "Method Not Allowed") },
       { status: 405, origin },
     );
   }
@@ -1208,11 +1326,13 @@ async function handleGeocodeZipApi(
       { origin },
     );
   } catch (error) {
+    const technical =
+      error instanceof Error ? error.message : String(error);
     return jsonResponse(
       {
         lat: null,
         lng: null,
-        error: error instanceof Error ? error.message : String(error),
+        error: publicApiError("geocode-zip", technical),
       },
       { status: 502, origin },
     );
@@ -1339,7 +1459,7 @@ async function handleCrossRefProxyApi(
   }
   if (request.method !== "GET") {
     return jsonResponse(
-      { error: "Method Not Allowed" },
+      { error: crossRefPublicError("Method Not Allowed") },
       {
         status: 405,
         origin,
@@ -1395,7 +1515,10 @@ async function handleCrossRefProxyApi(
       ) {
         message = String((parsed as Record<string, unknown>).message);
       }
-      return jsonResponse({ error: message }, { status: 502, origin });
+      return jsonResponse(
+        { error: crossRefPublicError(message) },
+        { status: 502, origin },
+      );
     }
     if (parsed !== null) {
       return jsonResponse(parsed, {
@@ -1405,14 +1528,16 @@ async function handleCrossRefProxyApi(
     }
     return jsonResponse(
       {
-        error: "Invalid JSON from Cross Reference API.",
+        error: crossRefPublicError("Invalid JSON from Cross Reference API."),
       },
       { status: 502, origin },
     );
   } catch (error) {
+    const technical =
+      error instanceof Error ? error.message : String(error);
     return jsonResponse(
       {
-        error: error instanceof Error ? error.message : String(error),
+        error: crossRefPublicError(technical),
       },
       { status: 502, origin },
     );
@@ -1448,7 +1573,10 @@ async function handleSearchAutocompleteApi(
   }
   if (request.method !== "GET") {
     return jsonResponse(
-      { items: [], error: "Method Not Allowed" },
+      {
+        items: [],
+        error: publicApiError("search-autocomplete", "Method Not Allowed"),
+      },
       {
         status: 405,
         origin,
@@ -1470,7 +1598,13 @@ async function handleSearchAutocompleteApi(
   const endpoint = env.PUBLIC_GRAPHQL_URL;
   if (!endpoint) {
     return jsonResponse(
-      { items: [], error: "PUBLIC_GRAPHQL_URL is not configured" },
+      {
+        items: [],
+        error: publicApiError(
+          "search-autocomplete",
+          "GraphQL endpoint not configured",
+        ),
+      },
       { status: 500, origin },
     );
   }
@@ -1496,7 +1630,10 @@ async function handleSearchAutocompleteApi(
         payload.errors?.[0]?.message ||
         `GraphQL searchAutocomplete failed with status ${gqlRes.status}`;
       return jsonResponse(
-        { items: [], error: message },
+        {
+          items: [],
+          error: publicApiError("search-autocomplete", message),
+        },
         { status: 502, origin },
       );
     }
@@ -1508,10 +1645,12 @@ async function handleSearchAutocompleteApi(
       }));
     return jsonResponse({ items }, { origin });
   } catch (error) {
+    const technical =
+      error instanceof Error ? error.message : String(error);
     return jsonResponse(
       {
         items: [],
-        error: error instanceof Error ? error.message : String(error),
+        error: publicApiError("search-autocomplete", technical),
       },
       { status: 500, origin },
     );
@@ -1533,7 +1672,7 @@ async function handleStoreLocationsApi(
   }
   if (request.method !== "GET") {
     return jsonResponse(
-      { error: "Method Not Allowed" },
+      { error: publicApiError("store-locations", "Method Not Allowed") },
       {
         status: 405,
         origin,
@@ -1544,7 +1683,12 @@ async function handleStoreLocationsApi(
   const wpOrigin = env.PUBLIC_WORDPRESS_ORIGIN;
   if (!wpOrigin?.trim()) {
     return jsonResponse(
-      { error: "PUBLIC_WORDPRESS_ORIGIN is not configured" },
+      {
+        error: publicApiError(
+          "store-locations",
+          "WordPress origin not configured",
+        ),
+      },
       { status: 500, origin },
     );
   }
@@ -1575,9 +1719,11 @@ async function handleStoreLocationsApi(
     }
     return new Response(text, { status: res.status, headers });
   } catch (error) {
+    const technical =
+      error instanceof Error ? error.message : String(error);
     return jsonResponse(
       {
-        error: error instanceof Error ? error.message : String(error),
+        error: publicApiError("store-locations", technical),
       },
       { status: 502, origin },
     );

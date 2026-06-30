@@ -1,6 +1,7 @@
 import {
   hidePageErrorToast,
   installPageErrorToast,
+  PAGE_ERROR_TOAST_GENERIC,
   showPageErrorToast,
 } from "../lib/page-error-toast";
 import {
@@ -332,7 +333,7 @@ function setCrossRefMessage(
     inlineEl.setAttribute("hidden", "");
   }
   formEl.classList.remove("cross-ref-page__form--inline-error");
-  showPageErrorToast(toastEl, msg);
+  showPageErrorToast(toastEl, PAGE_ERROR_TOAST_GENERIC);
 }
 
 function buildFindQuery(values: ReferenceValues): URLSearchParams {

@@ -21,6 +21,9 @@ function clearPageToastAutoHide(host: HTMLElement): void {
 /** Fallback when no specific message is passed (English). */
 export const PAGE_ERROR_TOAST_UNKNOWN = "An error occurred.";
 
+/** Generic user-facing message for unexpected/server errors (English). */
+export { PUBLIC_API_ERROR_MESSAGE as PAGE_ERROR_TOAST_GENERIC } from "./public-api-error-message";
+
 export type PageToastVariant = "error" | "success";
 
 export function installPageErrorToast(host: HTMLElement | null): void {

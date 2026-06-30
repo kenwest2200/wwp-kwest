@@ -1,6 +1,7 @@
 export {};
 
 import { decodeHtmlEntities } from "../lib/decode-html-entities";
+import { PUBLIC_API_ERROR_MESSAGE } from "../lib/public-api-error-message";
 
 const PER_PAGE_STORAGE_KEY = "wwp-search-per-page";
 
@@ -789,7 +790,7 @@ async function fetchAndRender(
     lastTotalProducts = 0;
     lastTotalPages = 0;
     mobileAccumulatedProducts = 0;
-    setError(e instanceof Error ? e.message : String(e));
+    setError(PUBLIC_API_ERROR_MESSAGE);
     tabsWrapEl?.setAttribute("hidden", "");
     syncPagerUi();
     setPanelLoading("products", false);
@@ -867,7 +868,7 @@ async function runSearch() {
     setMainSearchLoading(false);
     setSummary("");
     setGlobalEmptyVisible(false);
-    setError(e instanceof Error ? e.message : String(e));
+    setError(PUBLIC_API_ERROR_MESSAGE);
     tabsWrapEl?.setAttribute("hidden", "");
   }
 }
