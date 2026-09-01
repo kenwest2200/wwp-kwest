@@ -91,6 +91,20 @@
     }
 
     &__column {
+        &-item {
+            border-radius: px-to-rem(8);
+            overflow: hidden;
+
+            &--app-first {
+                border: px-to-rem(2) solid rgba(255, 255, 255, 0.4);
+
+                .footer__column-icon--app {
+                    width: px-to-rem(32);
+                    height: px-to-rem(32);
+                }
+            }
+        }
+
         &-icon {
 
 

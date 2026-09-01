@@ -5,7 +5,7 @@ import {
 } from "../../lib/queries/layout-footer";
 import FooterLogo from "../icons/footerLogo.astro";
 import CallIcon from "../icons/callIcon.astro";
-import AndroidAppIcon from "../../assets/images/androidapp.png";
+import AndroidAppIcon from "../../assets/images/android512x512.png";
 import IosAppIcon from "../../assets/images/iosapp.png";
 import FacebookIcon from "../icons/facebook.astro";
 import InstagramIcon from "../icons/instagram.astro";
@@ -136,9 +136,19 @@ function footerLinkLabelByHref(label: string, href: string): string {
             <div class={`footer__column footer__column--${index + 1}`}>
               <h3 class="footer__column-title">{column.label}</h3>
               <ul class={`footer__column-list ${listIconModifier}`}>
-                {column.links.map((link, linkIndex) => (
+                {column.links.map((link, linkIndex) => {
+                  const isAppIcon =
+                    "icon" in link &&
+                    typeof link.icon === "object" &&
+                    Boolean(link.icon?.url);
+                  const appItemClass = isAppIcon
+                    ? ` footer__column-item--app${
+                        linkIndex === 0 ? " footer__column-item--app-first" : ""
+                      }`
+                    : "";
+                  return (
                   <li
-                    class={`footer__column-item footer__column-item--${linkIndex + 1}`}
+                    class={`footer__column-item footer__column-item--${linkIndex + 1}${appItemClass}`}
                   >
                     <a
                       href={link.href}
@@ -187,7 +197,8 @@ function footerLinkLabelByHref(label: string, href: string): string {
                         : null}
                     </a>
                   </li>
-                ))}
+                  );
+                })}
               </ul>
             </div>
           );
