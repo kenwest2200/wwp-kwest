@@ -3,6 +3,7 @@ import {
   SHAPE_LABELS,
   dimensionFieldsForShape,
   estimateVolumeGallons,
+  formatGallons,
   formatGpm,
   gpmFromVolume,
 } from "../lib/pool-calculator";
@@ -395,8 +396,8 @@ function updateVolumeDisplays(): void {
   const v2 = $("#pool-calc-final-volume");
   const g = $("#pool-calc-final-gpm");
   const t = $("#pool-calc-final-turnover");
-  if (v1) v1.textContent = String(cachedVolumeGallons);
-  if (v2) v2.textContent = String(cachedVolumeGallons);
+  if (v1) v1.textContent = formatGallons(cachedVolumeGallons);
+  if (v2) v2.textContent = formatGallons(cachedVolumeGallons);
   if (g) g.textContent = formatGpm(cachedGpm);
   if (t) {
     const turnoverVal = t.querySelector<HTMLElement>(

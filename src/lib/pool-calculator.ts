@@ -102,8 +102,15 @@ export function gpmFromVolume(
   return (g * t) / MINUTES_PER_DAY;
 }
 
+export function formatGallons(value: number): string {
+  return Math.max(0, Math.floor(value)).toLocaleString("en-US");
+}
+
 export function formatGpm(value: number): string {
-  return value.toFixed(1);
+  return value.toLocaleString("en-US", {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  });
 }
 
 export interface DimensionField {
