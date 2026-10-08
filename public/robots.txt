@@ -27,16 +27,5 @@ User-agent: *
 Content-signal: search=yes, ai-train=no, ai-input=no, use=reference
 Allow: /
 
-# Internal / paid upstream proxies — not for crawlers
-Disallow: /api/
+# Paid Zip/radius proxy — not for crawlers
 Disallow: /api/distributor-locations
-Disallow: /api/geocode-zip
-Disallow: /api/sales-reps
-Disallow: /api/store-locations
-Disallow: /api/search
-Disallow: /api/search-autocomplete
-Disallow: /api/product-category-products
-Disallow: /api/cross-ref-find
-Disallow: /api/cross-ref-filters
-Disallow: /api/contact-graphql
-Disallow: /api/maps-browser-key

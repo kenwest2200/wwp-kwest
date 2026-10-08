@@ -549,7 +549,8 @@ async function init(): Promise<void> {
     }
   };
 
-  const waitForTurnstileToken = (timeoutMs = 12000): Promise<string> => {
+  /** Long enough for Managed + interaction-only: CF may show the widget mid-wait. */
+  const waitForTurnstileToken = (timeoutMs = 90000): Promise<string> => {
     const existing =
       turnstileToken ||
       (turnstileApi && turnstileWidgetId
@@ -561,6 +562,7 @@ async function init(): Promise<void> {
     }
     return new Promise((resolve, reject) => {
       const started = Date.now();
+      let prompted = false;
       const tick = () => {
         const t =
           turnstileToken ||
@@ -571,6 +573,15 @@ async function init(): Promise<void> {
           turnstileToken = t;
           resolve(t);
           return;
+        }
+        // After a short beat, ask the user to complete the check instead of failing early.
+        if (!prompted && Date.now() - started >= 1500) {
+          prompted = true;
+          setMessage(
+            "Please complete the security check if it appears, then wait…",
+            true,
+            "loading",
+          );
         }
         if (Date.now() - started >= timeoutMs) {
           reject(
