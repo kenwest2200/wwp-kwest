@@ -1105,20 +1105,35 @@ function readDistributorLocationsRoot(env: Env): string {
 type TurnstileSiteverifyResult = {
   success?: boolean;
   hostname?: string;
+  action?: string;
+  challenge_ts?: string;
   "error-codes"?: string[];
 };
 
+/** Must match `action` passed to `turnstile.render` in distributor-locator-page.ts. */
+const DL_TURNSTILE_ACTION = "distributor-search";
+/** Turnstile tokens are at most 2048 chars. */
+const TURNSTILE_TOKEN_MAX = 2048;
+const TURNSTILE_SITEVERIFY_TIMEOUT_MS = 10000;
+
+function isLocalHostname(hostname: string): boolean {
+  return hostname === "localhost" || hostname === "127.0.0.1";
+}
+
 /**
- * Validate Cloudflare Turnstile token via Siteverify.
+ * Validate Cloudflare Turnstile token via Siteverify, then check that it was issued
+ * for this action and for the hostname serving the API (skipped on localhost so
+ * Cloudflare test keys work in local dev).
  * @see https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
  */
 async function verifyTurnstileToken(
   token: string,
   secret: string,
   remoteip: string | null,
+  expected: { action: string; hostname: string },
 ): Promise<{ ok: true } | { ok: false; errorCodes: string[] }> {
   const trimmed = token.trim();
-  if (!trimmed || trimmed.length > 2048) {
+  if (!trimmed || trimmed.length > TURNSTILE_TOKEN_MAX) {
     console.error("[distributor-locations] turnstile token missing/invalid length", {
       length: trimmed.length,
     });
@@ -1128,25 +1143,47 @@ async function verifyTurnstileToken(
     };
   }
   try {
-    const body = new FormData();
-    body.append("secret", secret);
-    body.append("response", trimmed);
-    if (remoteip) body.append("remoteip", remoteip);
-
     const res = await fetch(
       "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-      { method: "POST", body },
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          secret,
+          response: trimmed,
+          ...(remoteip ? { remoteip } : {}),
+        }),
+        signal: AbortSignal.timeout(TURNSTILE_SITEVERIFY_TIMEOUT_MS),
+      },
     );
     const data = (await res.json()) as TurnstileSiteverifyResult;
-    if (data.success === true) return { ok: true };
-    const errorCodes = data["error-codes"] ?? ["unknown-error"];
-    console.error("[distributor-locations] turnstile siteverify rejected", {
-      status: res.status,
-      hostname: data.hostname,
-      errorCodes,
-      tokenLength: trimmed.length,
-    });
-    return { ok: false, errorCodes };
+    if (data.success !== true) {
+      const errorCodes = data["error-codes"] ?? ["unknown-error"];
+      console.error("[distributor-locations] turnstile siteverify rejected", {
+        status: res.status,
+        hostname: data.hostname,
+        errorCodes,
+        tokenLength: trimmed.length,
+      });
+      return { ok: false, errorCodes };
+    }
+    if (!isLocalHostname(expected.hostname)) {
+      if (data.action !== expected.action) {
+        console.error("[distributor-locations] turnstile action mismatch", {
+          action: data.action,
+          expected: expected.action,
+        });
+        return { ok: false, errorCodes: ["action-mismatch"] };
+      }
+      if (data.hostname !== expected.hostname) {
+        console.error("[distributor-locations] turnstile hostname mismatch", {
+          hostname: data.hostname,
+          expected: expected.hostname,
+        });
+        return { ok: false, errorCodes: ["hostname-mismatch"] };
+      }
+    }
+    return { ok: true };
   } catch (error) {
     console.error(
       "[distributor-locations] turnstile siteverify failed",
@@ -1174,9 +1211,9 @@ async function verifyTurnstileToken(
  * **This worker** forwards those query params (after normalising zip) and adds the bearer.
  * For non–ZIP-shaped search text, it may geocode to a 5-digit zip when `GOOGLE_GEOCODING_KEY`
  * is set, and may attach `searchCenter` for the locator map when geocoding was used.
- * Requires `TURNSTILE_SECRET` and a valid Turnstile token in the POST JSON body
- * (`turnstileToken`) before ERP. Token is not sent as a header/query — long values
- * there often trip Cloudflare WAF ("Sorry, you have been blocked").
+ * Requires `TURNSTILE_SECRET`; the body must carry the widget token as `turnstileToken`.
+ * The token is ~2KB of base64-like text, so zone WAF managed rules need a skip/exception
+ * for this path, otherwise Cloudflare blocks the request before it reaches the Worker.
  */
 async function handleDistributorLocationsInRadiusApi(
   request: Request,
@@ -1232,10 +1269,15 @@ async function handleDistributorLocationsInRadiusApi(
     );
   }
   {
-    const token =
-      typeof body.turnstileToken === "string" ? body.turnstileToken.trim() : "";
-    const remoteip = request.headers.get("CF-Connecting-IP");
-    const verified = await verifyTurnstileToken(token, turnstileSecret, remoteip);
+    const verified = await verifyTurnstileToken(
+      typeof body.turnstileToken === "string" ? body.turnstileToken : "",
+      turnstileSecret,
+      request.headers.get("CF-Connecting-IP"),
+      {
+        action: DL_TURNSTILE_ACTION,
+        hostname: new URL(request.url).hostname,
+      },
+    );
     if (!verified.ok) {
       return jsonResponse(
         {
@@ -1243,7 +1285,6 @@ async function handleDistributorLocationsInRadiusApi(
           error: distributorLocatorPublicError("Turnstile verification failed"),
           // Safe diagnostics for Network tab (no secrets).
           turnstileCodes: verified.errorCodes,
-          turnstileTokenPresent: token.length > 0,
         },
         { status: 403, origin },
       );

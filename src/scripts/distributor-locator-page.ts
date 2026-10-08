@@ -20,6 +20,8 @@ const DISTRIBUTOR_LOCATOR_USE_GOOGLE_MAP =
   import.meta.env.PUBLIC_DISTRIBUTOR_LOCATOR_USE_GOOGLE_MAPS === "true";
 
 const TURNSTILE_ONLOAD_CB = "__dlTurnstileOnLoad";
+/** Must match `DL_TURNSTILE_ACTION` in worker.ts (checked against Siteverify `action`). */
+const TURNSTILE_ACTION = "distributor-search";
 const TURNSTILE_SCRIPT_SRC =
   `https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=${TURNSTILE_ONLOAD_CB}`;
 
@@ -113,7 +115,6 @@ type ApiResponse = {
   error?: string;
   searchCenter?: { lat: number; lng: number };
   turnstileCodes?: string[];
-  turnstileTokenPresent?: boolean;
 };
 
 /** Worker `geocodeUsLocationQuery` ZIP / query errors — show inline under the field, not as toast. */
@@ -574,7 +575,7 @@ async function init(): Promise<void> {
         if (Date.now() - started >= timeoutMs) {
           reject(
             new Error(
-              "Verification is still loading. Please wait a moment and try again.",
+              "Please complete the security check above and try again.",
             ),
           );
           return;
@@ -590,6 +591,7 @@ async function init(): Promise<void> {
       turnstileApi = await loadTurnstileScript();
       turnstileWidgetId = turnstileApi.render(turnstileHost, {
         sitekey: turnstileSiteKey,
+        action: TURNSTILE_ACTION,
         theme: "light",
         size: "normal",
         callback: (token: string) => {
@@ -1092,7 +1094,7 @@ async function init(): Promise<void> {
       } catch {
         if (looksLikeCfWafBlock) {
           console.error(
-            "[distributor-locator] Cloudflare WAF blocked /api/distributor-locations (HTML challenge page, not Worker JSON)",
+            "[distributor-locator] Cloudflare WAF blocked /api/distributor-locations (HTML challenge page, not Worker JSON). Add WAF Skip for this path.",
           );
           setMessage(
             "Search was blocked by site security. Please try again in a moment.",
@@ -1108,7 +1110,6 @@ async function init(): Promise<void> {
         if (res.status === 403) {
           console.error("[distributor-locator] Turnstile rejected by Worker", {
             turnstileCodes: data.turnstileCodes,
-            turnstileTokenPresent: data.turnstileTokenPresent,
           });
         }
         const errText =
