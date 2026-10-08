@@ -119,6 +119,11 @@
     margin-bottom: px-to-rem(40);
   }
 
+  &__turnstile {
+    margin-top: px-to-rem(24);
+    max-width: px-to-rem(420);
+  }
+
   &__locator-label {
     display: block;
     margin-bottom: px-to-rem(16);

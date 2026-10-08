@@ -19,8 +19,70 @@ const DISTRIBUTOR_LOCATOR_USE_GOOGLE_MAP =
   DL_MAP_PREFER_GOOGLE ||
   import.meta.env.PUBLIC_DISTRIBUTOR_LOCATOR_USE_GOOGLE_MAPS === "true";
 
+const TURNSTILE_SCRIPT_SRC =
+  "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+
+type TurnstileApi = {
+  ready: (cb: () => void) => void;
+  render: (
+    container: string | HTMLElement,
+    params: Record<string, unknown>,
+  ) => string;
+  reset: (widgetId?: string) => void;
+  getResponse: (widgetId?: string) => string;
+  remove: (widgetId?: string) => void;
+};
+
+declare global {
+  interface Window {
+    turnstile?: TurnstileApi;
+  }
+}
+
 type RawLocation = Record<string, unknown>;
 const DISTRIBUTOR_LOCATOR_MAX_DISTANCE_MI = 149;
+
+function loadTurnstileScript(): Promise<TurnstileApi> {
+  if (window.turnstile) {
+    return new Promise((resolve) => {
+      window.turnstile!.ready(() => resolve(window.turnstile!));
+    });
+  }
+  const existing = document.querySelector<HTMLScriptElement>(
+    `script[src="${TURNSTILE_SCRIPT_SRC}"]`,
+  );
+  return new Promise((resolve, reject) => {
+    const onReady = () => {
+      const api = window.turnstile;
+      if (!api) {
+        reject(new Error("Turnstile failed to load."));
+        return;
+      }
+      api.ready(() => resolve(api));
+    };
+    if (existing) {
+      if (window.turnstile) onReady();
+      else existing.addEventListener("load", onReady, { once: true });
+      existing.addEventListener(
+        "error",
+        () => reject(new Error("Turnstile failed to load.")),
+        { once: true },
+      );
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = TURNSTILE_SCRIPT_SRC;
+    script.async = true;
+    script.defer = true;
+    script.addEventListener("load", onReady, { once: true });
+    script.addEventListener(
+      "error",
+      () => reject(new Error("Turnstile failed to load.")),
+      { once: true },
+    );
+    document.head.appendChild(script);
+  });
+}
 
 type DistributorLocation = {
   id: number;
@@ -458,6 +520,91 @@ async function init(): Promise<void> {
   const dlMapWrap = mapWrap;
   const dlBusinessSel = businessSel;
 
+  const turnstileSiteKey = (root.dataset.dlTurnstileSitekey ?? "").trim();
+  const turnstileHost = root.querySelector<HTMLElement>("[data-dl-turnstile]");
+  let turnstileApi: TurnstileApi | null = null;
+  let turnstileWidgetId: string | null = null;
+  let turnstileToken = "";
+
+  const resetTurnstile = () => {
+    turnstileToken = "";
+    if (turnstileApi && turnstileWidgetId) {
+      try {
+        turnstileApi.reset(turnstileWidgetId);
+      } catch {
+        /* ignore */
+      }
+    }
+  };
+
+  const waitForTurnstileToken = (timeoutMs = 12000): Promise<string> => {
+    const existing =
+      turnstileToken ||
+      (turnstileApi && turnstileWidgetId
+        ? turnstileApi.getResponse(turnstileWidgetId)
+        : "");
+    if (existing) {
+      turnstileToken = existing;
+      return Promise.resolve(existing);
+    }
+    return new Promise((resolve, reject) => {
+      const started = Date.now();
+      const tick = () => {
+        const t =
+          turnstileToken ||
+          (turnstileApi && turnstileWidgetId
+            ? turnstileApi.getResponse(turnstileWidgetId)
+            : "");
+        if (t) {
+          turnstileToken = t;
+          resolve(t);
+          return;
+        }
+        if (Date.now() - started >= timeoutMs) {
+          reject(
+            new Error(
+              "Verification is still loading. Please wait a moment and try again.",
+            ),
+          );
+          return;
+        }
+        window.setTimeout(tick, 150);
+      };
+      tick();
+    });
+  };
+
+  if (turnstileSiteKey && turnstileHost) {
+    try {
+      turnstileApi = await loadTurnstileScript();
+      turnstileWidgetId = turnstileApi.render(turnstileHost, {
+        sitekey: turnstileSiteKey,
+        theme: "light",
+        size: "flexible",
+        callback: (token: string) => {
+          turnstileToken = token;
+        },
+        "expired-callback": () => {
+          turnstileToken = "";
+        },
+        "error-callback": () => {
+          turnstileToken = "";
+        },
+      });
+    } catch (error) {
+      console.error(
+        "[distributor-locator] Turnstile init failed",
+        error instanceof Error ? error.message : String(error),
+      );
+      turnstileApi = null;
+      turnstileWidgetId = null;
+    }
+  } else if (!turnstileSiteKey) {
+    console.error(
+      "[distributor-locator] Missing Turnstile site key (data-dl-turnstile-sitekey)",
+    );
+  }
+
   let mapsKey = "";
   if (DISTRIBUTOR_LOCATOR_USE_GOOGLE_MAP) {
     mapsKey = (root.dataset.dlMapsKey ?? "").trim();
@@ -887,16 +1034,39 @@ async function init(): Promise<void> {
     setMessage("Loading…", true, "loading");
 
     try {
+      let turnstileHeader: Record<string, string> = {};
+      if (turnstileSiteKey) {
+        if (!turnstileApi || !turnstileWidgetId) {
+          setMessage(
+            "Verification failed. Please refresh the page and try again.",
+            true,
+            "error-toast",
+          );
+          return;
+        }
+        const token = await waitForTurnstileToken();
+        turnstileHeader = { "X-Turnstile-Token": token };
+      }
+
       const userLL = opts?.userLatLng;
       const strictZip = /^\d{5}(-\d{4})?$/.test(query.replace(/\s/g, ""));
       const [centerZip, res] = await Promise.all([
         userLL || !strictZip ? Promise.resolve(null) : zipCenterUs(query),
-        fetch(`/api/distributor-locations?${params.toString()}`),
+        fetch(`/api/distributor-locations?${params.toString()}`, {
+          headers: turnstileHeader,
+        }),
       ]);
       const data = (await res.json()) as ApiResponse;
 
       if (!res.ok || data.error) {
-        const errText = data.error ?? "Could not load locations.";
+        const errText =
+          res.status === 403
+            ? "Verification failed. Please refresh the page and try again."
+            : res.status === 429
+              ? "Too many requests. Please try again later."
+              : res.status === 503
+                ? "Search is temporarily unavailable. Please try again later."
+                : (data.error ?? "Could not load locations.");
         if (distributorLocationsZipUserErrorVariant(errText) === "error-inline") {
           setMessage("", false);
           showZipInlineError(errText);
@@ -1019,6 +1189,7 @@ async function init(): Promise<void> {
         "error-toast",
       );
     } finally {
+      resetTurnstile();
       if (!externalLock) {
         locatorSearchInFlight = false;
         setLocatorSearchUiLocked(false);

@@ -1061,6 +1061,46 @@ function readDistributorLocationsRoot(env: Env): string {
   return raw.replace(/\/+$/, "");
 }
 
+type TurnstileSiteverifyResult = {
+  success?: boolean;
+  "error-codes"?: string[];
+};
+
+/**
+ * Validate Cloudflare Turnstile token via Siteverify.
+ * @see https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
+ */
+async function verifyTurnstileToken(
+  token: string,
+  secret: string,
+  remoteip: string | null,
+): Promise<boolean> {
+  const trimmed = token.trim();
+  if (!trimmed || trimmed.length > 2048) return false;
+  try {
+    const res = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          secret,
+          response: trimmed,
+          ...(remoteip ? { remoteip } : {}),
+        }),
+      },
+    );
+    const data = (await res.json()) as TurnstileSiteverifyResult;
+    return data.success === true;
+  } catch (error) {
+    console.error(
+      "[distributor-locations] turnstile siteverify failed",
+      error instanceof Error ? error.message : String(error),
+    );
+    return false;
+  }
+}
+
 /**
  * GET /api/distributor-locations — proxies ERP `…/in-radius` (Waterway Operations API).
  *
@@ -1079,6 +1119,7 @@ function readDistributorLocationsRoot(env: Env): string {
  * **This worker** forwards those query params (after normalising zip) and adds the bearer.
  * For non–ZIP-shaped search text, it may geocode to a 5-digit zip when `GOOGLE_GEOCODING_KEY`
  * is set, and may attach `searchCenter` for the locator map when geocoding was used.
+ * Requires `TURNSTILE_SECRET` and a valid `X-Turnstile-Token` (Siteverify) before ERP.
  */
 async function handleDistributorLocationsInRadiusApi(
   request: Request,
@@ -1088,7 +1129,10 @@ async function handleDistributorLocationsInRadiusApi(
   if (request.method === "OPTIONS") {
     const headers = new Headers();
     headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
-    headers.set("Access-Control-Allow-Headers", "Content-Type");
+    headers.set(
+      "Access-Control-Allow-Headers",
+      "Content-Type, X-Turnstile-Token",
+    );
     headers.set("Access-Control-Max-Age", "86400");
     if (origin) headers.set("Access-Control-Allow-Origin", origin);
     return new Response(null, { status: 204, headers });
@@ -1098,6 +1142,35 @@ async function handleDistributorLocationsInRadiusApi(
       { locations: [], error: PUBLIC_API_ERROR_MESSAGE },
       { status: 405, origin },
     );
+  }
+
+  const turnstileSecret = (
+    env as Env & { TURNSTILE_SECRET?: string }
+  ).TURNSTILE_SECRET?.trim();
+  if (!turnstileSecret) {
+    return jsonResponse(
+      {
+        locations: [],
+        error: distributorLocatorPublicError(
+          "TURNSTILE_SECRET is not configured",
+        ),
+      },
+      { status: 503, origin },
+    );
+  }
+  {
+    const token = request.headers.get("X-Turnstile-Token") ?? "";
+    const remoteip = request.headers.get("CF-Connecting-IP");
+    const ok = await verifyTurnstileToken(token, turnstileSecret, remoteip);
+    if (!ok) {
+      return jsonResponse(
+        {
+          locations: [],
+          error: distributorLocatorPublicError("Turnstile verification failed"),
+        },
+        { status: 403, origin },
+      );
+    }
   }
 
   const url = new URL(request.url);

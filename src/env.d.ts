@@ -11,6 +11,8 @@ interface ImportMetaEnv {
   readonly PUBLIC_DISTRIBUTOR_LOCATOR_DEFAULT_ZIP?: string;
   /** When `"true"`, distributor locator uses Google Maps if a browser key exists (otherwise Leaflet/OSM). */
   readonly PUBLIC_DISTRIBUTOR_LOCATOR_USE_GOOGLE_MAPS?: string;
+  /** Cloudflare Turnstile site key (public) for distributor locator. */
+  readonly PUBLIC_TURNSTILE_SITE_KEY?: string;
   readonly GRAPHQL_BASIC_USER?: string;
   readonly GRAPHQL_BASIC_PASSWORD?: string;
 }
@@ -38,5 +40,7 @@ declare namespace Cloudflare {
     GOOGLE_GEOCODING_KEY?: string;
     /** Maps JS browser key; optional GET /api/maps-browser-key when not embedded at build. */
     GOOGLE_MAPS_BROWSER_KEY?: string;
+    /** Cloudflare Turnstile secret for /api/distributor-locations siteverify. */
+    TURNSTILE_SECRET?: string;
   }
 }

@@ -9,6 +9,9 @@ export const prerender = true;
 
 const mapsBrowserKey =
   import.meta.env.PUBLIC_GOOGLE_MAPS_BROWSER_KEY?.trim() ?? "";
+const turnstileSiteKey =
+  import.meta.env.PUBLIC_TURNSTILE_SITE_KEY?.trim() ||
+  "0x4AAAAAAFRPpRKu35YP_tLR";
 
 const pageTitle = "Dealer Locator";
 const introDefault =
@@ -31,6 +34,7 @@ const breadcrumbs = [
     data-page-header-offset
     data-dl-locator
     data-dl-maps-key={mapsBrowserKey}
+    data-dl-turnstile-sitekey={turnstileSiteKey}
   >
     <SectionHero title={pageTitle} intro={introDefault} />
     <div class="dl-page__breadcrumb-wrap">
@@ -313,6 +317,13 @@ const breadcrumbs = [
                       <option value="Spa">Spa</option>
                     </select>
                   </div>
+                </div>
+
+                <div
+                  id="dl-turnstile"
+                  class="dl-page__turnstile"
+                  data-dl-turnstile
+                >
                 </div>
               </div>
             </div>
