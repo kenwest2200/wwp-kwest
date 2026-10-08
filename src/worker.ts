@@ -1157,7 +1157,7 @@ async function verifyTurnstileToken(
 }
 
 /**
- * GET /api/distributor-locations — proxies ERP `…/in-radius` (Waterway Operations API).
+ * POST /api/distributor-locations — proxies ERP `…/in-radius` (Waterway Operations API).
  *
  * **Upstream documented behaviour** (`in-radius`):
  * - Returns customer locations within the defined radius around a **Zip** (required). Empty or
@@ -1174,7 +1174,9 @@ async function verifyTurnstileToken(
  * **This worker** forwards those query params (after normalising zip) and adds the bearer.
  * For non–ZIP-shaped search text, it may geocode to a 5-digit zip when `GOOGLE_GEOCODING_KEY`
  * is set, and may attach `searchCenter` for the locator map when geocoding was used.
- * Requires `TURNSTILE_SECRET` and a valid `X-Turnstile-Token` (Siteverify) before ERP.
+ * Requires `TURNSTILE_SECRET` and a valid Turnstile token in the POST JSON body
+ * (`turnstileToken`) before ERP. Token is not sent as a header/query — long values
+ * there often trip Cloudflare WAF ("Sorry, you have been blocked").
  */
 async function handleDistributorLocationsInRadiusApi(
   request: Request,
@@ -1183,23 +1185,37 @@ async function handleDistributorLocationsInRadiusApi(
   const origin = request.headers.get("Origin");
   if (request.method === "OPTIONS") {
     const headers = new Headers();
-    headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
-    headers.set(
-      "Access-Control-Allow-Headers",
-      "Content-Type, X-Turnstile-Token",
-    );
+    headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
+    headers.set("Access-Control-Allow-Headers", "Content-Type");
     headers.set("Access-Control-Max-Age", "86400");
     if (origin) headers.set("Access-Control-Allow-Origin", origin);
     return new Response(null, { status: 204, headers });
   }
-  if (request.method !== "GET") {
+  if (request.method !== "POST") {
     return jsonResponse(
       { locations: [], error: PUBLIC_API_ERROR_MESSAGE },
       { status: 405, origin },
     );
   }
 
-  const url = new URL(request.url);
+  type LocatorBody = {
+    zip?: unknown;
+    country?: unknown;
+    distance?: unknown;
+    unit?: unknown;
+    businessType?: unknown;
+    turnstileToken?: unknown;
+  };
+  let body: LocatorBody = {};
+  try {
+    const parsed: unknown = await request.json();
+    if (parsed && typeof parsed === "object") body = parsed as LocatorBody;
+  } catch {
+    return jsonResponse(
+      { locations: [], error: PUBLIC_API_ERROR_MESSAGE },
+      { status: 400, origin },
+    );
+  }
 
   const turnstileSecret = (
     env as Env & { TURNSTILE_SECRET?: string }
@@ -1216,7 +1232,8 @@ async function handleDistributorLocationsInRadiusApi(
     );
   }
   {
-    const token = request.headers.get("X-Turnstile-Token")?.trim() || "";
+    const token =
+      typeof body.turnstileToken === "string" ? body.turnstileToken.trim() : "";
     const remoteip = request.headers.get("CF-Connecting-IP");
     const verified = await verifyTurnstileToken(token, turnstileSecret, remoteip);
     if (!verified.ok) {
@@ -1234,7 +1251,7 @@ async function handleDistributorLocationsInRadiusApi(
   }
 
   const rawLocation = normalizeSalesRepsZipParam(
-    url.searchParams.get("zip") ?? "",
+    typeof body.zip === "string" ? body.zip : "",
   );
   if (!rawLocation) {
     return jsonResponse(
@@ -1273,13 +1290,16 @@ async function handleDistributorLocationsInRadiusApi(
   }
 
   const country =
-    (url.searchParams.get("country") ?? "US")
+    (typeof body.country === "string" ? body.country : "US")
       .trim()
       .slice(0, 2)
       .toUpperCase() || "US";
-  const distRaw = url.searchParams.get("distance");
+  const distRaw =
+    body.distance != null && body.distance !== ""
+      ? String(body.distance)
+      : "";
   let distance = 20;
-  if (distRaw != null && distRaw !== "") {
+  if (distRaw !== "") {
     const n = Number(distRaw);
     if (Number.isFinite(n))
       distance = Math.min(
@@ -1287,9 +1307,13 @@ async function handleDistributorLocationsInRadiusApi(
         Math.max(1, Math.floor(n)),
       );
   }
-  const unitRaw = (url.searchParams.get("unit") ?? "mi").toLowerCase();
+  const unitRaw = (
+    typeof body.unit === "string" ? body.unit : "mi"
+  ).toLowerCase();
   const unit = ["m", "km", "mi", "ft"].includes(unitRaw) ? unitRaw : "mi";
-  const btRaw = (url.searchParams.get("businessType") ?? "All").trim();
+  const btRaw = (
+    typeof body.businessType === "string" ? body.businessType : "All"
+  ).trim();
   const businessType = ["Pool", "Spa", "All"].includes(btRaw) ? btRaw : "All";
 
   let bearer = await getSalesRepsOAuthBearer(env);

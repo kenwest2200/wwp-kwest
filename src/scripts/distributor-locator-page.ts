@@ -1049,7 +1049,7 @@ async function init(): Promise<void> {
     setMessage("Loading…", true, "loading");
 
     try {
-      let turnstileHeader: Record<string, string> = {};
+      let turnstileTokenForBody = "";
       if (turnstileSiteKey) {
         if (!turnstileApi || !turnstileWidgetId) {
           setMessage(
@@ -1059,20 +1059,50 @@ async function init(): Promise<void> {
           );
           return;
         }
-        const token = await waitForTurnstileToken();
-        // Header only — a long token in the query string can trip Cloudflare WAF.
-        turnstileHeader = { "X-Turnstile-Token": token };
+        // Token in POST JSON body only — query/header with ~2KB token trips CF WAF.
+        turnstileTokenForBody = await waitForTurnstileToken();
       }
 
       const userLL = opts?.userLatLng;
       const strictZip = /^\d{5}(-\d{4})?$/.test(query.replace(/\s/g, ""));
       const [centerZip, res] = await Promise.all([
         userLL || !strictZip ? Promise.resolve(null) : zipCenterUs(query),
-        fetch(`/api/distributor-locations?${params.toString()}`, {
-          headers: turnstileHeader,
+        fetch("/api/distributor-locations", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            zip: params.get("zip"),
+            country: params.get("country"),
+            distance: params.get("distance"),
+            unit: params.get("unit"),
+            businessType: params.get("businessType"),
+            ...(turnstileTokenForBody
+              ? { turnstileToken: turnstileTokenForBody }
+              : {}),
+          }),
         }),
       ]);
-      const data = (await res.json()) as ApiResponse;
+      const rawText = await res.text();
+      const looksLikeCfWafBlock =
+        rawText.includes("Sorry, you have been blocked") ||
+        rawText.includes("cf-error-details");
+      let data: ApiResponse = {};
+      try {
+        data = JSON.parse(rawText) as ApiResponse;
+      } catch {
+        if (looksLikeCfWafBlock) {
+          console.error(
+            "[distributor-locator] Cloudflare WAF blocked /api/distributor-locations (HTML challenge page, not Worker JSON)",
+          );
+          setMessage(
+            "Search was blocked by site security. Please try again in a moment.",
+            true,
+            "error-toast",
+          );
+          return;
+        }
+        throw new Error("Invalid API response");
+      }
 
       if (!res.ok || data.error) {
         if (res.status === 403) {
