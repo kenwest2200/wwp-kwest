@@ -594,6 +594,8 @@ async function init(): Promise<void> {
         action: TURNSTILE_ACTION,
         theme: "light",
         size: "normal",
+        // Hide widget unless CF needs a challenge (Managed widget in dashboard).
+        appearance: "interaction-only",
         callback: (token: string) => {
           turnstileToken = token;
         },
