@@ -112,6 +112,8 @@ type ApiResponse = {
   locations?: RawLocation[];
   error?: string;
   searchCenter?: { lat: number; lng: number };
+  turnstileCodes?: string[];
+  turnstileTokenPresent?: boolean;
 };
 
 /** Worker `geocodeUsLocationQuery` ZIP / query errors — show inline under the field, not as toast. */
@@ -589,17 +591,19 @@ async function init(): Promise<void> {
       turnstileWidgetId = turnstileApi.render(turnstileHost, {
         sitekey: turnstileSiteKey,
         theme: "light",
-        size: "flexible",
-        appearance: "interaction-only",
+        size: "normal",
         callback: (token: string) => {
           turnstileToken = token;
         },
         "expired-callback": () => {
           turnstileToken = "";
         },
+        // Must return true — otherwise Turnstile throws TurnstileError and DevTools
+        // "Pause on exceptions" jumps into api.js (see CF client-side docs / api.js fail handler).
         "error-callback": (code: string) => {
           console.warn("[distributor-locator] Turnstile error-callback", code);
           turnstileToken = "";
+          return true;
         },
       });
     } catch (error) {
@@ -1071,6 +1075,12 @@ async function init(): Promise<void> {
       const data = (await res.json()) as ApiResponse;
 
       if (!res.ok || data.error) {
+        if (res.status === 403) {
+          console.error("[distributor-locator] Turnstile rejected by Worker", {
+            turnstileCodes: data.turnstileCodes,
+            turnstileTokenPresent: data.turnstileTokenPresent,
+          });
+        }
         const errText =
           res.status === 403
             ? "Verification failed. Please refresh the page and try again."

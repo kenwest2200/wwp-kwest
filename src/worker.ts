@@ -1116,11 +1116,16 @@ async function verifyTurnstileToken(
   token: string,
   secret: string,
   remoteip: string | null,
-): Promise<boolean> {
+): Promise<{ ok: true } | { ok: false; errorCodes: string[] }> {
   const trimmed = token.trim();
   if (!trimmed || trimmed.length > 2048) {
-    console.error("[distributor-locations] turnstile token missing/invalid length");
-    return false;
+    console.error("[distributor-locations] turnstile token missing/invalid length", {
+      length: trimmed.length,
+    });
+    return {
+      ok: false,
+      errorCodes: trimmed ? ["invalid-input-response"] : ["missing-input-response"],
+    };
   }
   try {
     const body = new FormData();
@@ -1133,19 +1138,21 @@ async function verifyTurnstileToken(
       { method: "POST", body },
     );
     const data = (await res.json()) as TurnstileSiteverifyResult;
-    if (data.success === true) return true;
+    if (data.success === true) return { ok: true };
+    const errorCodes = data["error-codes"] ?? ["unknown-error"];
     console.error("[distributor-locations] turnstile siteverify rejected", {
       status: res.status,
       hostname: data.hostname,
-      errorCodes: data["error-codes"] ?? [],
+      errorCodes,
+      tokenLength: trimmed.length,
     });
-    return false;
+    return { ok: false, errorCodes };
   } catch (error) {
     console.error(
       "[distributor-locations] turnstile siteverify failed",
       error instanceof Error ? error.message : String(error),
     );
-    return false;
+    return { ok: false, errorCodes: ["internal-error"] };
   }
 }
 
@@ -1211,12 +1218,15 @@ async function handleDistributorLocationsInRadiusApi(
   {
     const token = request.headers.get("X-Turnstile-Token")?.trim() || "";
     const remoteip = request.headers.get("CF-Connecting-IP");
-    const ok = await verifyTurnstileToken(token, turnstileSecret, remoteip);
-    if (!ok) {
+    const verified = await verifyTurnstileToken(token, turnstileSecret, remoteip);
+    if (!verified.ok) {
       return jsonResponse(
         {
           locations: [],
           error: distributorLocatorPublicError("Turnstile verification failed"),
+          // Safe diagnostics for Network tab (no secrets).
+          turnstileCodes: verified.errorCodes,
+          turnstileTokenPresent: token.length > 0,
         },
         { status: 403, origin },
       );
