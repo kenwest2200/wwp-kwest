@@ -4,13 +4,54 @@ import {
 } from "./sales-reps-ops-oauth";
 import { PUBLIC_API_ERROR_MESSAGE } from "./lib/public-api-error-message";
 
+/**
+ * Dev-only site lock. When both BASIC_AUTH_USER and BASIC_AUTH_PASSWORD are set
+ * (e.g. Cloudflare Worker env on dev), require HTTP Basic Auth. Prod leaves them
+ * unset → no challenge.
+ */
+function basicAuthGate(request: Request, env: Env): Response | null {
+  const user = (
+    env as Env & { BASIC_AUTH_USER?: string }
+  ).BASIC_AUTH_USER?.trim();
+  const password = (
+    env as Env & { BASIC_AUTH_PASSWORD?: string }
+  ).BASIC_AUTH_PASSWORD?.trim();
+  if (!user || !password) return null;
+
+  // CORS preflight must not require credentials (browser won't send Authorization).
+  if (request.method === "OPTIONS") return null;
+
+  const header = request.headers.get("Authorization") ?? "";
+  let expected = "";
+  try {
+    expected = `Basic ${btoa(`${user}:${password}`)}`;
+  } catch {
+    console.error("[basic-auth] failed to encode credentials");
+    return new Response("Authentication misconfigured", { status: 500 });
+  }
+  if (header === expected) return null;
+
+  return new Response("Authentication required", {
+    status: 401,
+    headers: {
+      "WWW-Authenticate": 'Basic realm="dev", charset="UTF-8"',
+      "X-Robots-Tag": "noindex, nofollow",
+    },
+  });
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
 
+    // Own auth (WEBHOOK_SECRET); do not wrap in site Basic Auth.
     if (url.pathname === "/webhook/rebuild") {
       return handleWebhook(request, env);
     }
+
+    const basicDenied = basicAuthGate(request, env);
+    if (basicDenied) return basicDenied;
+
     if (url.pathname === "/api/search") {
       return handleSearchApi(request, env);
     }

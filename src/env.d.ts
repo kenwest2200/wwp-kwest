@@ -42,5 +42,8 @@ declare namespace Cloudflare {
     GOOGLE_MAPS_BROWSER_KEY?: string;
     /** Cloudflare Turnstile secret for /api/distributor-locations siteverify. */
     TURNSTILE_SECRET?: string;
+    /** Optional HTTP Basic Auth for the whole Worker (dev). Unset on prod. */
+    BASIC_AUTH_USER?: string;
+    BASIC_AUTH_PASSWORD?: string;
   }
 }
