@@ -1056,9 +1056,8 @@ async function init(): Promise<void> {
           return;
         }
         const token = await waitForTurnstileToken();
+        // Header only — a long token in the query string can trip Cloudflare WAF.
         turnstileHeader = { "X-Turnstile-Token": token };
-        // Also pass as query — survives header stripping and is visible in Network.
-        params.set("cf-turnstile-response", token);
       }
 
       const userLL = opts?.userLatLng;

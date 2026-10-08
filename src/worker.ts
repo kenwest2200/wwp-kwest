@@ -1209,10 +1209,7 @@ async function handleDistributorLocationsInRadiusApi(
     );
   }
   {
-    const token =
-      request.headers.get("X-Turnstile-Token")?.trim() ||
-      url.searchParams.get("cf-turnstile-response")?.trim() ||
-      "";
+    const token = request.headers.get("X-Turnstile-Token")?.trim() || "";
     const remoteip = request.headers.get("CF-Connecting-IP");
     const ok = await verifyTurnstileToken(token, turnstileSecret, remoteip);
     if (!ok) {
