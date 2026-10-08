@@ -44,25 +44,27 @@ const DISTRIBUTOR_LOCATOR_MAX_DISTANCE_MI = 149;
 
 function loadTurnstileScript(): Promise<TurnstileApi> {
   if (window.turnstile) {
-    return new Promise((resolve) => {
-      window.turnstile!.ready(() => resolve(window.turnstile!));
-    });
+    return Promise.resolve(window.turnstile);
   }
   const existing = document.querySelector<HTMLScriptElement>(
     `script[src="${TURNSTILE_SCRIPT_SRC}"]`,
   );
   return new Promise((resolve, reject) => {
-    const onReady = () => {
+    const onLoaded = () => {
       const api = window.turnstile;
       if (!api) {
         reject(new Error("Turnstile failed to load."));
         return;
       }
-      api.ready(() => resolve(api));
+      // Do not call turnstile.ready() with async/defer scripts — CF throws.
+      resolve(api);
     };
     if (existing) {
-      if (window.turnstile) onReady();
-      else existing.addEventListener("load", onReady, { once: true });
+      if (window.turnstile) {
+        onLoaded();
+        return;
+      }
+      existing.addEventListener("load", onLoaded, { once: true });
       existing.addEventListener(
         "error",
         () => reject(new Error("Turnstile failed to load.")),
@@ -72,9 +74,8 @@ function loadTurnstileScript(): Promise<TurnstileApi> {
     }
     const script = document.createElement("script");
     script.src = TURNSTILE_SCRIPT_SRC;
-    script.async = true;
-    script.defer = true;
-    script.addEventListener("load", onReady, { once: true });
+    // No async/defer: required if we ever use turnstile.ready(); onload is enough here.
+    script.addEventListener("load", onLoaded, { once: true });
     script.addEventListener(
       "error",
       () => reject(new Error("Turnstile failed to load.")),
