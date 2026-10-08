@@ -19,11 +19,11 @@ const DISTRIBUTOR_LOCATOR_USE_GOOGLE_MAP =
   DL_MAP_PREFER_GOOGLE ||
   import.meta.env.PUBLIC_DISTRIBUTOR_LOCATOR_USE_GOOGLE_MAPS === "true";
 
+const TURNSTILE_ONLOAD_CB = "__dlTurnstileOnLoad";
 const TURNSTILE_SCRIPT_SRC =
-  "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+  `https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=${TURNSTILE_ONLOAD_CB}`;
 
 type TurnstileApi = {
-  ready: (cb: () => void) => void;
   render: (
     container: string | HTMLElement,
     params: Record<string, unknown>,
@@ -31,11 +31,13 @@ type TurnstileApi = {
   reset: (widgetId?: string) => void;
   getResponse: (widgetId?: string) => string;
   remove: (widgetId?: string) => void;
+  execute?: (container: string | HTMLElement, params?: Record<string, unknown>) => void;
 };
 
 declare global {
   interface Window {
     turnstile?: TurnstileApi;
+    __dlTurnstileOnLoad?: () => void;
   }
 }
 
@@ -46,25 +48,30 @@ function loadTurnstileScript(): Promise<TurnstileApi> {
   if (window.turnstile) {
     return Promise.resolve(window.turnstile);
   }
-  const existing = document.querySelector<HTMLScriptElement>(
-    `script[src="${TURNSTILE_SCRIPT_SRC}"]`,
-  );
   return new Promise((resolve, reject) => {
-    const onLoaded = () => {
+    const prev = window.__dlTurnstileOnLoad;
+    window.__dlTurnstileOnLoad = () => {
+      try {
+        prev?.();
+      } catch {
+        /* ignore */
+      }
       const api = window.turnstile;
       if (!api) {
         reject(new Error("Turnstile failed to load."));
         return;
       }
-      // Do not call turnstile.ready() with async/defer scripts — CF throws.
       resolve(api);
     };
+
+    const existing = document.querySelector<HTMLScriptElement>(
+      `script[src*="challenges.cloudflare.com/turnstile/v0/api.js"]`,
+    );
     if (existing) {
       if (window.turnstile) {
-        onLoaded();
+        window.__dlTurnstileOnLoad();
         return;
       }
-      existing.addEventListener("load", onLoaded, { once: true });
       existing.addEventListener(
         "error",
         () => reject(new Error("Turnstile failed to load.")),
@@ -72,10 +79,11 @@ function loadTurnstileScript(): Promise<TurnstileApi> {
       );
       return;
     }
+
     const script = document.createElement("script");
     script.src = TURNSTILE_SCRIPT_SRC;
-    // No async/defer: required if we ever use turnstile.ready(); onload is enough here.
-    script.addEventListener("load", onLoaded, { once: true });
+    script.async = true;
+    script.defer = true;
     script.addEventListener(
       "error",
       () => reject(new Error("Turnstile failed to load.")),
@@ -582,13 +590,15 @@ async function init(): Promise<void> {
         sitekey: turnstileSiteKey,
         theme: "light",
         size: "flexible",
+        appearance: "interaction-only",
         callback: (token: string) => {
           turnstileToken = token;
         },
         "expired-callback": () => {
           turnstileToken = "";
         },
-        "error-callback": () => {
+        "error-callback": (code: string) => {
+          console.warn("[distributor-locator] Turnstile error-callback", code);
           turnstileToken = "";
         },
       });
@@ -1047,6 +1057,8 @@ async function init(): Promise<void> {
         }
         const token = await waitForTurnstileToken();
         turnstileHeader = { "X-Turnstile-Token": token };
+        // Also pass as query — survives header stripping and is visible in Network.
+        params.set("cf-turnstile-response", token);
       }
 
       const userLL = opts?.userLatLng;

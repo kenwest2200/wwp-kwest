@@ -1063,6 +1063,7 @@ function readDistributorLocationsRoot(env: Env): string {
 
 type TurnstileSiteverifyResult = {
   success?: boolean;
+  hostname?: string;
   "error-codes"?: string[];
 };
 
@@ -1076,22 +1077,28 @@ async function verifyTurnstileToken(
   remoteip: string | null,
 ): Promise<boolean> {
   const trimmed = token.trim();
-  if (!trimmed || trimmed.length > 2048) return false;
+  if (!trimmed || trimmed.length > 2048) {
+    console.error("[distributor-locations] turnstile token missing/invalid length");
+    return false;
+  }
   try {
+    const body = new FormData();
+    body.append("secret", secret);
+    body.append("response", trimmed);
+    if (remoteip) body.append("remoteip", remoteip);
+
     const res = await fetch(
       "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          secret,
-          response: trimmed,
-          ...(remoteip ? { remoteip } : {}),
-        }),
-      },
+      { method: "POST", body },
     );
     const data = (await res.json()) as TurnstileSiteverifyResult;
-    return data.success === true;
+    if (data.success === true) return true;
+    console.error("[distributor-locations] turnstile siteverify rejected", {
+      status: res.status,
+      hostname: data.hostname,
+      errorCodes: data["error-codes"] ?? [],
+    });
+    return false;
   } catch (error) {
     console.error(
       "[distributor-locations] turnstile siteverify failed",
@@ -1144,6 +1151,8 @@ async function handleDistributorLocationsInRadiusApi(
     );
   }
 
+  const url = new URL(request.url);
+
   const turnstileSecret = (
     env as Env & { TURNSTILE_SECRET?: string }
   ).TURNSTILE_SECRET?.trim();
@@ -1159,7 +1168,10 @@ async function handleDistributorLocationsInRadiusApi(
     );
   }
   {
-    const token = request.headers.get("X-Turnstile-Token") ?? "";
+    const token =
+      request.headers.get("X-Turnstile-Token")?.trim() ||
+      url.searchParams.get("cf-turnstile-response")?.trim() ||
+      "";
     const remoteip = request.headers.get("CF-Connecting-IP");
     const ok = await verifyTurnstileToken(token, turnstileSecret, remoteip);
     if (!ok) {
@@ -1173,7 +1185,6 @@ async function handleDistributorLocationsInRadiusApi(
     }
   }
 
-  const url = new URL(request.url);
   const rawLocation = normalizeSalesRepsZipParam(
     url.searchParams.get("zip") ?? "",
   );
