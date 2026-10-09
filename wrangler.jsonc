@@ -9,7 +9,14 @@
 	},
 	"env": {
 	  "dev": {
-		"name": "waterway-frontend-dev"
+		"name": "waterway-frontend-dev",
+		// Route every request (incl. static files) through the worker so the
+		// Basic Auth gate in src/worker.ts also protects pages, not only /api/*.
+		"assets": {
+		  "directory": "./dist",
+		  "binding": "ASSETS",
+		  "run_worker_first": true
+		}
 	  },
 	  "stage": {
 		"name": "waterway-frontend-stage"

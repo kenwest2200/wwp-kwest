@@ -24,8 +24,5 @@
 # AND RELATED RIGHTS IN THE DIGITAL SINGLE MARKET.
 
 User-agent: *
-Content-signal: search=yes, ai-train=no, ai-input=no, use=reference
-Allow: /
-
-# Paid Zip/radius proxy — not for crawlers
-Disallow: /api/distributor-locations
+Content-signal: search=no, ai-train=no, ai-input=no, use=reference
+Disallow: /
