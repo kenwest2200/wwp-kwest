@@ -30,6 +30,8 @@ jobs:
           GRAPHQL_BASIC_USER: ${{ secrets.GRAPHQL_BASIC_USER }}
           GRAPHQL_BASIC_PASSWORD: ${{ secrets.GRAPHQL_BASIC_PASSWORD }}
           PUBLIC_GOOGLE_MAPS_BROWSER_KEY: ${{ secrets.PUBLIC_GOOGLE_MAPS_BROWSER_KEY || vars.PUBLIC_GOOGLE_MAPS_BROWSER_KEY }}
+          # Omit indexing on non-prod (robots Disallow `/` + meta noindex)
+          PUBLIC_ALLOW_SEARCH_INDEXING: "false"
 
       - name: Deploy (DEV)
         run: npx wrangler deploy --env dev

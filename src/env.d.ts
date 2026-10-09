@@ -13,6 +13,11 @@ interface ImportMetaEnv {
   readonly PUBLIC_DISTRIBUTOR_LOCATOR_USE_GOOGLE_MAPS?: string;
   /** Cloudflare Turnstile site key (public) for distributor locator. */
   readonly PUBLIC_TURNSTILE_SITE_KEY?: string;
+  /**
+   * When `"true"` (prod build only): robots.txt Allow + pages indexable.
+   * Unset/false on dev/stage: Disallow `/` and meta noindex.
+   */
+  readonly PUBLIC_ALLOW_SEARCH_INDEXING?: string;
   readonly GRAPHQL_BASIC_USER?: string;
   readonly GRAPHQL_BASIC_PASSWORD?: string;
 }

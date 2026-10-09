@@ -1,4 +1,9 @@
-# As a condition of accessing this website, you agree to abide by the following
+/**
+ * Built per environment via PUBLIC_ALLOW_SEARCH_INDEXING.
+ * Prod (true): allow crawl, block paid Zip proxy only.
+ * Dev/stage (unset/false): Disallow entire site.
+ */
+const CONTENT_SIGNALS_PREAMBLE = `# As a condition of accessing this website, you agree to abide by the following
 # content signals:
 
 # (a)  If a content-signal = yes, you may collect content for the corresponding
@@ -22,7 +27,33 @@
 # ANY RESTRICTIONS EXPRESSED VIA CONTENT SIGNALS ARE EXPRESS RESERVATIONS OF
 # RIGHTS UNDER ARTICLE 4 OF THE EUROPEAN UNION DIRECTIVE 2019/790 ON COPYRIGHT
 # AND RELATED RIGHTS IN THE DIGITAL SINGLE MARKET.
+`;
 
+const allowSearchIndexing =
+  import.meta.env.PUBLIC_ALLOW_SEARCH_INDEXING === "true";
+
+const body = allowSearchIndexing
+  ? `${CONTENT_SIGNALS_PREAMBLE}
+User-agent: *
+Content-signal: search=yes, ai-train=no, ai-input=no, use=reference
+Allow: /
+
+# Paid Zip/radius proxy — not for crawlers
+Disallow: /api/distributor-locations
+`
+  : `${CONTENT_SIGNALS_PREAMBLE}
 User-agent: *
 Content-signal: search=no, ai-train=no, ai-input=no, use=reference
 Disallow: /
+`;
+
+export const prerender = true;
+
+export function GET(): Response {
+  return new Response(body, {
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "public, max-age=3600",
+    },
+  });
+}

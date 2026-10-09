@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-08T12:20:56.445Z",
+  "generatedAt": "2026-10-09T09:31:25.815Z",
   "catalogRootCategorySlugs": [
     "pool",
     "spa",
@@ -795,6 +795,20 @@
         ]
       },
       {
+        "name": "Filter",
+        "slug": "filter",
+        "values": [
+          {
+            "label": "FC1007",
+            "slug": "filter-fc1007"
+          },
+          {
+            "label": "FC1507",
+            "slug": "filter-fc1507"
+          }
+        ]
+      },
+      {
         "name": "Filtration Area",
         "slug": "filtration-area",
         "values": [
@@ -859,6 +873,28 @@
           {
             "label": "96 GPM",
             "slug": "flow-rate-96-gpm"
+          }
+        ]
+      },
+      {
+        "name": "Ft./Roll",
+        "slug": "ft-roll",
+        "values": [
+          {
+            "label": "100",
+            "slug": "ft-roll-100"
+          },
+          {
+            "label": "150",
+            "slug": "ft-roll-150"
+          },
+          {
+            "label": "50",
+            "slug": "ft-roll-50"
+          },
+          {
+            "label": "500",
+            "slug": "ft-roll-500"
           }
         ]
       },
@@ -1301,6 +1337,10 @@
             "slug": "pump-phc1100-25"
           },
           {
+            "label": "PHC1100-25R",
+            "slug": "pump-phc1100-25r"
+          },
+          {
             "label": "PNC1150-25",
             "slug": "pump-pnc1150-25"
           },
@@ -1439,8 +1479,16 @@
             "slug": "size-3-4"
           },
           {
+            "label": "3/4\" x 1\"",
+            "slug": "size-3-4-x-1"
+          },
+          {
             "label": "3/4\" x 14 1/2\" x 15\"",
             "slug": "size-3-4-x-14-1-2-x-15"
+          },
+          {
+            "label": "3/8\" x 9/16\"",
+            "slug": "size-3-8-x-9-16"
           },
           {
             "label": "32\"",
@@ -1785,6 +1833,10 @@
             "slug": "type-flange"
           },
           {
+            "label": "Flex",
+            "slug": "type-flex"
+          },
+          {
             "label": "Flush Mount",
             "slug": "type-flush-mount"
           },
@@ -1903,6 +1955,10 @@
           {
             "label": "Venturi Tee",
             "slug": "type-venturi-tee"
+          },
+          {
+            "label": "Vinyl",
+            "slug": "type-vinyl"
           },
           {
             "label": "Vinyl Liner Return",
@@ -3767,7 +3823,104 @@
         ]
       }
     ],
-    "hose-tubing-pool": [],
+    "hose-tubing-pool": [
+      {
+        "name": "Color",
+        "slug": "color",
+        "values": [
+          {
+            "label": "Black",
+            "slug": "color-black"
+          },
+          {
+            "label": "Clear",
+            "slug": "color-clear"
+          },
+          {
+            "label": "Gray",
+            "slug": "color-gray"
+          },
+          {
+            "label": "White",
+            "slug": "color-white"
+          }
+        ]
+      },
+      {
+        "name": "Ft./Roll",
+        "slug": "ft-roll",
+        "values": [
+          {
+            "label": "100",
+            "slug": "ft-roll-100"
+          },
+          {
+            "label": "150",
+            "slug": "ft-roll-150"
+          },
+          {
+            "label": "50",
+            "slug": "ft-roll-50"
+          },
+          {
+            "label": "500",
+            "slug": "ft-roll-500"
+          }
+        ]
+      },
+      {
+        "name": "Size",
+        "slug": "size",
+        "values": [
+          {
+            "label": "1 1/2\"",
+            "slug": "size-1-1-2"
+          },
+          {
+            "label": "1\"",
+            "slug": "size-1"
+          },
+          {
+            "label": "1/2\"",
+            "slug": "size-1-2"
+          },
+          {
+            "label": "2 1/2\"",
+            "slug": "size-2-1-2"
+          },
+          {
+            "label": "2\"",
+            "slug": "size-2"
+          },
+          {
+            "label": "3/4\"",
+            "slug": "size-3-4"
+          },
+          {
+            "label": "3/4\" x 1\"",
+            "slug": "size-3-4-x-1"
+          },
+          {
+            "label": "3/8\" x 9/16\"",
+            "slug": "size-3-8-x-9-16"
+          }
+        ]
+      },
+      {
+        "name": "Type",
+        "slug": "type",
+        "values": [
+          {
+            "label": "Flex",
+            "slug": "type-flex"
+          },
+          {
+            "label": "Vinyl",
+            "slug": "type-vinyl"
+          }
+        ]
+      }
+    ],
     "pool-filters-in-ground-above-ground": [
       {
         "name": "Cord Type",
@@ -4250,6 +4403,34 @@
         ]
       },
       {
+        "name": "Filter",
+        "slug": "filter",
+        "values": [
+          {
+            "label": "FC1007",
+            "slug": "filter-fc1007"
+          },
+          {
+            "label": "FC1507",
+            "slug": "filter-fc1507"
+          }
+        ]
+      },
+      {
+        "name": "Filtration Area",
+        "slug": "filtration-area",
+        "values": [
+          {
+            "label": "100 sq. ft.",
+            "slug": "filtration-area-100-sq-ft-2"
+          },
+          {
+            "label": "150 sq. ft.",
+            "slug": "filtration-area-150-sq-ft"
+          }
+        ]
+      },
+      {
         "name": "HP",
         "slug": "hp",
         "values": [
@@ -4288,6 +4469,10 @@
           {
             "label": "PHC1100-25",
             "slug": "pump-phc1100-25"
+          },
+          {
+            "label": "PHC1100-25R",
+            "slug": "pump-phc1100-25r"
           },
           {
             "label": "PNC1150-25",
@@ -15532,23 +15717,31 @@
       "slug": "csa-clearwater-ii-d-e-and-cartridge-filter-deluxe-systems",
       "databaseId": 31523,
       "date": "2023-05-02T12:36:48",
-      "modified": "2026-04-02T09:54:12",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-10-08T15:34:21",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/520-5167-C25S_ClearWaterII_StdSys_Hi-FloII_CSA_wcord_sil_xsm_flat_New2025.png",
+      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/520-5167-C25S_ClearWaterII_StdSys_Hi-FloII_CSA_wcord_sil_xsm_flat_New2025-163x300.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 653,
+      "imageHeight": 1200,
       "categorySlugs": [
         "international"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "filter-fc1007",
+        "filter-fc1507",
+        "filtration-area-100-sq-ft-2",
+        "filtration-area-150-sq-ft",
+        "hp-1-0",
+        "pump-phc1100-25r",
+        "volts-115"
+      ]
     },
     {
       "title": "Power Defender Booster Pump",
       "slug": "power-defender-booster",
       "databaseId": 36938,
       "date": "2023-05-01T15:07:16",
-      "modified": "2026-10-01T16:16:03",
+      "modified": "2026-10-08T15:39:51",
       "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Power-Defender-Booster.png",
       "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Power-Defender-Booster-300x220.png",
       "imageAlt": null,
@@ -15589,16 +15782,27 @@
       "slug": "hose-tubing",
       "databaseId": 32315,
       "date": "2023-05-01T12:36:55",
-      "modified": "2025-06-04T20:22:57",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-10-08T15:59:25",
+      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Shur-Flex-Hose-Tubing.png",
+      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Shur-Flex-Hose-Tubing-277x300.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1144,
+      "imageHeight": 1241,
       "categorySlugs": [
         "hose-tubing-pool"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "color-black",
+        "color-clear",
+        "color-gray",
+        "color-white",
+        "ft-roll-100",
+        "ft-roll-150",
+        "ft-roll-50",
+        "ft-roll-500",
+        "size-1-1-2",
+        "size-1"
+      ]
     },
     {
       "title": "SGMS Micro Air Injector",

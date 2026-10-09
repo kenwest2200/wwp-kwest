@@ -29,6 +29,11 @@ const titleDefault = "Waterway Plastics - Pool & Spa Supplies";
 const documentTitle = hasPageTitle
   ? `${shortTitle} | Waterway Plastics`
   : titleDefault;
+/** Prod sets PUBLIC_ALLOW_SEARCH_INDEXING=true at build; dev/stage omit → noindex. */
+const allowSearchIndexing =
+  import.meta.env.PUBLIC_ALLOW_SEARCH_INDEXING === "true";
+const effectiveNoIndex =
+  Boolean(robotsNoIndex) || !allowSearchIndexing;
 
 const PUBLIC_SITE_URL = "https://waterwayplastics.com";
 const siteOrigin = PUBLIC_SITE_URL.replace(/\/+$/, "") ?? "";
@@ -70,8 +75,8 @@ if (getGraphQLClient()) {
       titleDefault={titleDefault}
       description={metaDescription}
       canonical={canonicalHref}
-      noindex={Boolean(robotsNoIndex)}
-      nofollow={Boolean(robotsNoIndex)}
+      noindex={effectiveNoIndex}
+      nofollow={effectiveNoIndex}
       openGraph={{
         basic: {
           title: documentTitle,
