@@ -656,8 +656,8 @@ const DEFAULT_DISTRIBUTOR_LOCATIONS_ROOT =
   "https://wwoperations.waterwayplastics.com/WaterwayAPI/locations";
 /** ERP `in-radius` responds with empty results when `distance >= 150` (mi). */
 const DISTRIBUTOR_LOCATOR_MAX_DISTANCE = 149;
-/** Server-side Cache API TTL for successful ERP `in-radius` payloads (default 30 min). */
-const DISTRIBUTOR_LOCATIONS_CACHE_TTL_SECONDS = 1800;
+/** Server-side Cache API TTL for successful ERP `in-radius` payloads (default 24 h). */
+const DISTRIBUTOR_LOCATIONS_CACHE_TTL_SECONDS = 86400;
 /** Shorter TTL for empty radius results (reduces stampede after bad ZIP / sparse areas). */
 const DISTRIBUTOR_LOCATIONS_CACHE_EMPTY_TTL_SECONDS = 300;
 

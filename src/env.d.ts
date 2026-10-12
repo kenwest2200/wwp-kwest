@@ -49,7 +49,7 @@ declare namespace Cloudflare {
     TURNSTILE_SECRET?: string;
     /**
      * Optional TTL (seconds, 60–86400) for Cache API entries of ERP `in-radius`
-     * results. Default: 1800 (non-empty) / 300 (empty).
+     * results. Default: 86400 / 24h (non-empty) / 300 (empty).
      */
     DISTRIBUTOR_LOCATIONS_CACHE_TTL_SECONDS?: string;
     /** Optional HTTP Basic Auth for the whole Worker (dev). Unset on prod. */
