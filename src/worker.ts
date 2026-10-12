@@ -342,6 +342,7 @@ function jsonResponse(
     origin?: string | null;
     /** When set, replaces default `Cache-Control: no-store`. */
     cacheControl?: string | null;
+    extraHeaders?: Record<string, string>;
   },
 ): Response {
   const headers = new Headers({
@@ -351,6 +352,11 @@ function jsonResponse(
   if (init?.origin) {
     headers.set("Access-Control-Allow-Origin", init.origin);
     headers.set("Vary", "Origin");
+  }
+  if (init?.extraHeaders) {
+    for (const [k, v] of Object.entries(init.extraHeaders)) {
+      headers.set(k, v);
+    }
   }
   return new Response(JSON.stringify(body), {
     status: init?.status ?? 200,
@@ -650,6 +656,92 @@ const DEFAULT_DISTRIBUTOR_LOCATIONS_ROOT =
   "https://wwoperations.waterwayplastics.com/WaterwayAPI/locations";
 /** ERP `in-radius` responds with empty results when `distance >= 150` (mi). */
 const DISTRIBUTOR_LOCATOR_MAX_DISTANCE = 149;
+/** Server-side Cache API TTL for successful ERP `in-radius` payloads (default 30 min). */
+const DISTRIBUTOR_LOCATIONS_CACHE_TTL_SECONDS = 1800;
+/** Shorter TTL for empty radius results (reduces stampede after bad ZIP / sparse areas). */
+const DISTRIBUTOR_LOCATIONS_CACHE_EMPTY_TTL_SECONDS = 300;
+
+/**
+ * Cloudflare Workers exposes `caches.default`; standard DOM `CacheStorage` typings
+ * (pulled in via Astro) omit that property, so we narrow explicitly.
+ */
+function workersDefaultCache(): Cache {
+  return (caches as unknown as { default: Cache }).default;
+}
+
+function distributorLocationsCacheRequest(
+  params: URLSearchParams,
+): Request {
+  // Synthetic URL — Cache API key only; never fetched. Sorted for stable keys.
+  const sorted = new URLSearchParams(
+    [...params.entries()].sort(([a], [b]) => a.localeCompare(b)),
+  );
+  return new Request(
+    `https://dl-locations-cache.internal/in-radius?${sorted.toString()}`,
+    { method: "GET" },
+  );
+}
+
+function distributorLocationsCacheTtlSeconds(
+  env: Env,
+  locationCount: number,
+): number {
+  if (locationCount === 0) {
+    return DISTRIBUTOR_LOCATIONS_CACHE_EMPTY_TTL_SECONDS;
+  }
+  const raw = (
+    env as Env & { DISTRIBUTOR_LOCATIONS_CACHE_TTL_SECONDS?: string }
+  ).DISTRIBUTOR_LOCATIONS_CACHE_TTL_SECONDS?.trim();
+  if (raw) {
+    const n = Number(raw);
+    if (Number.isFinite(n) && n >= 60 && n <= 86400) return Math.floor(n);
+  }
+  return DISTRIBUTOR_LOCATIONS_CACHE_TTL_SECONDS;
+}
+
+async function matchDistributorLocationsCache(
+  params: URLSearchParams,
+): Promise<unknown[] | null> {
+  try {
+    const hit = await workersDefaultCache().match(
+      distributorLocationsCacheRequest(params),
+    );
+    if (!hit || !hit.ok) return null;
+    const data: unknown = await hit.json();
+    return Array.isArray(data) ? data : null;
+  } catch (error) {
+    console.error(
+      "[distributor-locations] cache match failed",
+      error instanceof Error ? error.message : String(error),
+    );
+    return null;
+  }
+}
+
+async function putDistributorLocationsCache(
+  params: URLSearchParams,
+  locations: unknown[],
+  env: Env,
+): Promise<void> {
+  const ttl = distributorLocationsCacheTtlSeconds(env, locations.length);
+  try {
+    await workersDefaultCache().put(
+      distributorLocationsCacheRequest(params),
+      new Response(JSON.stringify(locations), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          "Cache-Control": `public, max-age=${ttl}`,
+        },
+      }),
+    );
+  } catch (error) {
+    console.error(
+      "[distributor-locations] cache put failed",
+      error instanceof Error ? error.message : String(error),
+    );
+  }
+}
 
 const DEFAULT_CROSS_REF_API_ROOT = "https://api.waterwayplastics.com";
 const CROSS_REF_FIND_PATH = "/wp-json/waterway-cross-ref/v1/find";
@@ -1214,6 +1306,10 @@ async function verifyTurnstileToken(
  * Requires `TURNSTILE_SECRET`; the body must carry the widget token as `turnstileToken`.
  * The token is ~2KB of base64-like text, so zone WAF managed rules need a skip/exception
  * for this path, otherwise Cloudflare blocks the request before it reaches the Worker.
+ *
+ * After Turnstile, successful ERP `in-radius` arrays are cached in the Workers Cache API
+ * (keyed by zip/country/distance/unit/businessType). Client responses stay `no-store`;
+ * `X-Cache: HIT|MISS` is set for ops.
  */
 async function handleDistributorLocationsInRadiusApi(
   request: Request,
@@ -1357,21 +1453,6 @@ async function handleDistributorLocationsInRadiusApi(
   ).trim();
   const businessType = ["Pool", "Spa", "All"].includes(btRaw) ? btRaw : "All";
 
-  let bearer = await getSalesRepsOAuthBearer(env);
-  if (!bearer) {
-    return jsonResponse(
-      {
-        locations: [],
-        error: publicApiError(
-          "distributor-locations",
-          "ERP OAuth bearer unavailable",
-        ),
-      },
-      { status: 503, origin },
-    );
-  }
-
-  const root = readDistributorLocationsRoot(env);
   const params = new URLSearchParams({
     zip,
     country,
@@ -1379,83 +1460,124 @@ async function handleDistributorLocationsInRadiusApi(
     unit,
     businessType,
   });
-  const upstreamUrl = `${root}/in-radius?${params.toString()}`;
 
   try {
-    const runFetch = (auth: string) =>
-      fetch(upstreamUrl, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${auth}`,
-        },
-      });
+    let parsed = await matchDistributorLocationsCache(params);
+    const cacheStatus = parsed ? "HIT" : "MISS";
 
-    let upstream = await runFetch(bearer);
-    if (upstream.status === 401) {
-      invalidateSalesRepsOpsOAuth();
-      const again = await getSalesRepsOAuthBearer(env);
-      if (again) {
-        bearer = again;
-        upstream = await runFetch(bearer);
+    if (!parsed) {
+      let bearer = await getSalesRepsOAuthBearer(env);
+      if (!bearer) {
+        return jsonResponse(
+          {
+            locations: [],
+            error: publicApiError(
+              "distributor-locations",
+              "ERP OAuth bearer unavailable",
+            ),
+          },
+          { status: 503, origin },
+        );
       }
-    }
 
-    const text = await upstream.text();
-    if (!upstream.ok) {
-      let detail = text.slice(0, 200);
+      const root = readDistributorLocationsRoot(env);
+      const upstreamUrl = `${root}/in-radius?${params.toString()}`;
+      const runFetch = (auth: string) =>
+        fetch(upstreamUrl, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${auth}`,
+          },
+        });
+
+      let upstream = await runFetch(bearer);
+      if (upstream.status === 401) {
+        invalidateSalesRepsOpsOAuth();
+        const again = await getSalesRepsOAuthBearer(env);
+        if (again) {
+          bearer = again;
+          upstream = await runFetch(bearer);
+        }
+      }
+
+      const text = await upstream.text();
+      if (!upstream.ok) {
+        let detail = text.slice(0, 200);
+        try {
+          const j = JSON.parse(text) as { message?: string };
+          if (j?.message) detail = String(j.message);
+        } catch {
+          /* keep slice */
+        }
+        return jsonResponse(
+          {
+            locations: [],
+            error: distributorLocatorPublicError(
+              `Locator service error (${upstream.status}). ${detail}`.trim(),
+            ),
+          },
+          {
+            status: 502,
+            origin,
+            extraHeaders: { "X-Cache": "MISS" },
+          },
+        );
+      }
+
+      let upstreamJson: unknown;
       try {
-        const j = JSON.parse(text) as { message?: string };
-        if (j?.message) detail = String(j.message);
+        upstreamJson = JSON.parse(text) as unknown;
       } catch {
-        /* keep slice */
+        return jsonResponse(
+          {
+            locations: [],
+            error: distributorLocatorPublicError(
+              "Invalid JSON from locator service.",
+            ),
+          },
+          {
+            status: 502,
+            origin,
+            extraHeaders: { "X-Cache": "MISS" },
+          },
+        );
       }
-      return jsonResponse(
-        {
-          locations: [],
-          error: distributorLocatorPublicError(
-            `Locator service error (${upstream.status}). ${detail}`.trim(),
-          ),
-        },
-        { status: 502, origin },
-      );
-    }
 
-    let parsed: unknown;
-    try {
-      parsed = JSON.parse(text) as unknown;
-    } catch {
-      return jsonResponse(
-        {
-          locations: [],
-          error: distributorLocatorPublicError(
-            "Invalid JSON from locator service.",
-          ),
-        },
-        { status: 502, origin },
-      );
-    }
+      if (!Array.isArray(upstreamJson)) {
+        return jsonResponse(
+          {
+            locations: [],
+            error: distributorLocatorPublicError(
+              "Unexpected locator response.",
+            ),
+          },
+          {
+            status: 502,
+            origin,
+            extraHeaders: { "X-Cache": "MISS" },
+          },
+        );
+      }
 
-    if (!Array.isArray(parsed)) {
-      return jsonResponse(
-        {
-          locations: [],
-          error: distributorLocatorPublicError("Unexpected locator response."),
-        },
-        { status: 502, origin },
-      );
+      parsed = upstreamJson;
+      // Await so a quick retry in the same colo can HIT (void put races past match).
+      await putDistributorLocationsCache(params, parsed, env);
     }
 
     const locationsOut = isValidSalesRepsZip(rawLocation)
       ? parsed
       : filterDistributorLocationsByAddressQuery(parsed, rawLocation);
 
-    const body: {
+    const responseBody: {
       locations: unknown[];
       searchCenter?: { lat: number; lng: number };
     } = { locations: locationsOut };
-    if (searchCenter) body.searchCenter = searchCenter;
-    return jsonResponse(body, { origin });
+    if (searchCenter) responseBody.searchCenter = searchCenter;
+    return jsonResponse(responseBody, {
+      origin,
+      extraHeaders: { "X-Cache": cacheStatus },
+    });
   } catch (error) {
     const technical =
       error instanceof Error ? error.message : String(error);
