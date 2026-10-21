@@ -99,34 +99,27 @@ function text(v: unknown): string {
   return "";
 }
 
-function readGraphqlOrigin(): string | undefined {
-  try {
-    const raw = import.meta.env.PUBLIC_GRAPHQL_URL;
-    if (typeof raw !== "string" || !raw.trim()) return undefined;
-    return new URL(raw.trim()).origin;
-  } catch {
-    return undefined;
-  }
-}
+const MEDIA_CDN_ORIGIN = "https://media.waterwayplastics.com";
 
 /**
- * WP often returns `/wp-content/...` — on the Astro site that resolves to the frontend host (404).
- * Prefix API origin (same as GraphQL) so PDFs open on the public backend, like direct media URLs.
+ * Absolute URLs (`http(s)://…`) — leave as-is.
+ * Protocol-relative (`//…`) → force https.
+ * Any other relative path → prefix media CDN origin.
  */
 export function resolveCatalogAssetUrl(href: string): string {
   const h = href.trim();
   if (!h) return "";
   if (/^https?:\/\//i.test(h)) return h;
   if (h.startsWith("//")) return `https:${h}`;
-  const origin = readGraphqlOrigin();
-  if (!origin) return h;
   const path = h.startsWith("/") ? h : `/${h}`;
-  return `${origin}${path}`;
+  return `${MEDIA_CDN_ORIGIN}${path}`;
 }
 
-export function normalizeCatalogChoices(
-  page: CatalogChoicesPageData["page"],
-): { catalogs: CatalogChoiceCard[]; brochuresTitle: string; brochures: BrochureChoiceCard[] } {
+export function normalizeCatalogChoices(page: CatalogChoicesPageData["page"]): {
+  catalogs: CatalogChoiceCard[];
+  brochuresTitle: string;
+  brochures: BrochureChoiceCard[];
+} {
   const settings = page?.catalogsBrochuresSettings;
   const catalogs: CatalogChoiceCard[] = [];
   const brochures: BrochureChoiceCard[] = [];

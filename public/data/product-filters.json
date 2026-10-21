@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-09T09:31:25.815Z",
+  "generatedAt": "2026-10-21T13:12:13.885Z",
   "catalogRootCategorySlugs": [
     "pool",
     "spa",
@@ -89,36 +89,12 @@
             "slug": "amps-4"
           },
           {
-            "label": "4.0",
-            "slug": "amps-4-0"
-          },
-          {
-            "label": "4.2",
-            "slug": "amps-4-2"
-          },
-          {
-            "label": "5.8",
-            "slug": "amps-5-8"
-          },
-          {
             "label": "6",
             "slug": "amps-6"
           },
           {
-            "label": "6.7",
-            "slug": "amps-6-7"
-          },
-          {
-            "label": "7.6",
-            "slug": "amps-7-6"
-          },
-          {
             "label": "8",
             "slug": "amps-8"
-          },
-          {
-            "label": "8.8",
-            "slug": "amps-8-8"
           },
           {
             "label": "9",
@@ -809,6 +785,20 @@
         ]
       },
       {
+        "name": "Filtration Area (sq. ft.)",
+        "slug": "filtration-area-sq-ft",
+        "values": [
+          {
+            "label": "12",
+            "slug": "filtration-area-sq-ft-12"
+          },
+          {
+            "label": "18",
+            "slug": "filtration-area-sq-ft-18"
+          }
+        ]
+      },
+      {
         "name": "Filtration Area",
         "slug": "filtration-area",
         "values": [
@@ -911,12 +901,20 @@
             "slug": "gpm-35"
           },
           {
+            "label": "44",
+            "slug": "gpm-44"
+          },
+          {
             "label": "45",
             "slug": "gpm-45"
           },
           {
             "label": "55",
             "slug": "gpm-55"
+          },
+          {
+            "label": "67",
+            "slug": "gpm-67"
           },
           {
             "label": "70",
@@ -1205,12 +1203,20 @@
         "slug": "pallet",
         "values": [
           {
+            "label": "12",
+            "slug": "pallet-12"
+          },
+          {
             "label": "16",
             "slug": "pallet-16"
           },
           {
             "label": "20",
             "slug": "pallet-20"
+          },
+          {
+            "label": "25",
+            "slug": "pallet-25"
           },
           {
             "label": "63",
@@ -1324,6 +1330,10 @@
         "name": "Pump",
         "slug": "pump",
         "values": [
+          {
+            "label": "1/2 HP",
+            "slug": "pump-1-2-hp"
+          },
           {
             "label": "HI-Flo II",
             "slug": "pump-hi-flo-ii"
@@ -1439,8 +1449,16 @@
             "slug": "size-10"
           },
           {
+            "label": "100 sq. ft.",
+            "slug": "size-100-sq-ft"
+          },
+          {
             "label": "12\" x 12\"",
             "slug": "size-12-x-12"
+          },
+          {
+            "label": "16\"",
+            "slug": "size-16"
           },
           {
             "label": "18\"",
@@ -1469,6 +1487,10 @@
           {
             "label": "24\"",
             "slug": "size-24"
+          },
+          {
+            "label": "25 sq. ft.",
+            "slug": "size-25-sq-ft"
           },
           {
             "label": "3\"",
@@ -1513,6 +1535,10 @@
           {
             "label": "5/16\"",
             "slug": "size-5-16"
+          },
+          {
+            "label": "50 sq. ft.",
+            "slug": "size-50-sq-ft"
           },
           {
             "label": "525 Sq. Ft.",
@@ -1857,6 +1883,10 @@
             "slug": "type-hydro-gunite"
           },
           {
+            "label": "In-Ground",
+            "slug": "type-in-ground"
+          },
+          {
             "label": "Long Throat",
             "slug": "type-long-throat"
           },
@@ -1953,6 +1983,10 @@
             "slug": "type-union-nut"
           },
           {
+            "label": "Variable Speed",
+            "slug": "type-variable-speed"
+          },
+          {
             "label": "Venturi Tee",
             "slug": "type-venturi-tee"
           },
@@ -2027,6 +2061,10 @@
             "slug": "volts-115"
           },
           {
+            "label": "115/208-230",
+            "slug": "volts-115-208-230"
+          },
+          {
             "label": "220",
             "slug": "volts-220"
           },
@@ -2079,6 +2117,38 @@
           {
             "label": "28",
             "slug": "weight-lbs-28"
+          },
+          {
+            "label": "30",
+            "slug": "weight-lbs-30"
+          },
+          {
+            "label": "34",
+            "slug": "weight-lbs-34"
+          },
+          {
+            "label": "38",
+            "slug": "weight-lbs-38"
+          },
+          {
+            "label": "39",
+            "slug": "weight-lbs-39"
+          },
+          {
+            "label": "43",
+            "slug": "weight-lbs-43"
+          },
+          {
+            "label": "47",
+            "slug": "weight-lbs-47"
+          },
+          {
+            "label": "48",
+            "slug": "weight-lbs-48"
+          },
+          {
+            "label": "56",
+            "slug": "weight-lbs-56"
           },
           {
             "label": "6",
@@ -2307,6 +2377,20 @@
         ]
       },
       {
+        "name": "Assy Material",
+        "slug": "assy-material",
+        "values": [
+          {
+            "label": "Metal",
+            "slug": "assy-material-metal"
+          },
+          {
+            "label": "Plastic",
+            "slug": "assy-material-plastic"
+          }
+        ]
+      },
+      {
         "name": "Barb Type",
         "slug": "barb-type",
         "values": [
@@ -2383,6 +2467,10 @@
           {
             "label": "1",
             "slug": "case-quantity-1"
+          },
+          {
+            "label": "1,100",
+            "slug": "case-quantity-1100-2"
           },
           {
             "label": "10",
@@ -3079,6 +3167,24 @@
         ]
       },
       {
+        "name": "Micro Water Feature",
+        "slug": "micro-water-feature",
+        "values": [
+          {
+            "label": "Fan",
+            "slug": "micro-water-feature-fan"
+          },
+          {
+            "label": "Thick Rope",
+            "slug": "micro-water-feature-thick-rope"
+          },
+          {
+            "label": "Thin Rope",
+            "slug": "micro-water-feature-thin-rope"
+          }
+        ]
+      },
+      {
         "name": "NPT",
         "slug": "npt",
         "values": [
@@ -3167,6 +3273,10 @@
             "slug": "size-1-1-2"
           },
           {
+            "label": "1 1/4\"",
+            "slug": "size-1-1-4"
+          },
+          {
             "label": "1 3/8\"",
             "slug": "size-1-3-8"
           },
@@ -3229,6 +3339,10 @@
           {
             "label": "2.4\"",
             "slug": "size-2-4"
+          },
+          {
+            "label": "2.5\"",
+            "slug": "size-2-5"
           },
           {
             "label": "20\"",
@@ -3519,9 +3633,31 @@
         ]
       },
       {
+        "name": "Suction Type",
+        "slug": "suction-type",
+        "values": [
+          {
+            "label": "Super Hi-Flo",
+            "slug": "suction-type-super-hi-flo"
+          }
+        ]
+      },
+      {
         "name": "Type",
         "slug": "type",
         "values": [
+          {
+            "label": "1500",
+            "slug": "type-1500"
+          },
+          {
+            "label": "2100",
+            "slug": "type-2100"
+          },
+          {
+            "label": "90°",
+            "slug": "type-90"
+          },
           {
             "label": "Adj. Directional",
             "slug": "type-adj-directional"
@@ -3559,6 +3695,10 @@
             "slug": "type-micro-water-feature"
           },
           {
+            "label": "Multi",
+            "slug": "type-multi"
+          },
+          {
             "label": "Petal",
             "slug": "type-petal"
           },
@@ -3569,6 +3709,10 @@
           {
             "label": "Ripple",
             "slug": "type-ripple"
+          },
+          {
+            "label": "Rope",
+            "slug": "type-rope"
           },
           {
             "label": "Straight",
@@ -3589,6 +3733,24 @@
           {
             "label": "Valve",
             "slug": "type-valve"
+          },
+          {
+            "label": "Wye",
+            "slug": "type-wye"
+          }
+        ]
+      },
+      {
+        "name": "Version",
+        "slug": "version",
+        "values": [
+          {
+            "label": "1-2 Speed",
+            "slug": "version-1-2-speed"
+          },
+          {
+            "label": "2-2 Speed",
+            "slug": "version-2-2-speed"
           }
         ]
       },
@@ -3773,6 +3935,20 @@
         ]
       },
       {
+        "name": "Type",
+        "slug": "type",
+        "values": [
+          {
+            "label": "In-Ground",
+            "slug": "type-in-ground"
+          },
+          {
+            "label": "Variable Speed",
+            "slug": "type-variable-speed"
+          }
+        ]
+      },
+      {
         "name": "Volts",
         "slug": "volts",
         "values": [
@@ -3951,6 +4127,20 @@
         ]
       },
       {
+        "name": "Filtration Area (sq. ft.)",
+        "slug": "filtration-area-sq-ft",
+        "values": [
+          {
+            "label": "12",
+            "slug": "filtration-area-sq-ft-12"
+          },
+          {
+            "label": "18",
+            "slug": "filtration-area-sq-ft-18"
+          }
+        ]
+      },
+      {
         "name": "Filtration Area",
         "slug": "filtration-area",
         "values": [
@@ -4027,12 +4217,20 @@
             "slug": "gpm-35"
           },
           {
+            "label": "44",
+            "slug": "gpm-44"
+          },
+          {
             "label": "45",
             "slug": "gpm-45"
           },
           {
             "label": "55",
             "slug": "gpm-55"
+          },
+          {
+            "label": "67",
+            "slug": "gpm-67"
           },
           {
             "label": "70",
@@ -4083,6 +4281,20 @@
         ]
       },
       {
+        "name": "Pallet",
+        "slug": "pallet",
+        "values": [
+          {
+            "label": "12",
+            "slug": "pallet-12"
+          },
+          {
+            "label": "25",
+            "slug": "pallet-25"
+          }
+        ]
+      },
+      {
         "name": "Pool Turnover (6hr-8hr-10hr)",
         "slug": "pool-turnover-6hr-8hr-10hr",
         "values": [
@@ -4128,6 +4340,10 @@
         "name": "Pump",
         "slug": "pump",
         "values": [
+          {
+            "label": "1/2 HP",
+            "slug": "pump-1-2-hp"
+          },
           {
             "label": "HI-Flo II",
             "slug": "pump-hi-flo-ii"
@@ -4179,6 +4395,18 @@
         "slug": "size",
         "values": [
           {
+            "label": "100 sq. ft.",
+            "slug": "size-100-sq-ft"
+          },
+          {
+            "label": "16\"",
+            "slug": "size-16"
+          },
+          {
+            "label": "25 sq. ft.",
+            "slug": "size-25-sq-ft"
+          },
+          {
             "label": "325 Sq. Ft.",
             "slug": "size-325-sq-ft"
           },
@@ -4193,6 +4421,10 @@
           {
             "label": "48 Sq. Ft.",
             "slug": "size-48-sq-ft"
+          },
+          {
+            "label": "50 sq. ft.",
+            "slug": "size-50-sq-ft"
           },
           {
             "label": "525 Sq. Ft.",
@@ -4281,9 +4513,45 @@
         ]
       },
       {
+        "name": "Type",
+        "slug": "type",
+        "values": [
+          {
+            "label": "Above Ground",
+            "slug": "type-above-ground"
+          }
+        ]
+      },
+      {
+        "name": "Volts",
+        "slug": "volts",
+        "values": [
+          {
+            "label": "115",
+            "slug": "volts-115"
+          }
+        ]
+      },
+      {
         "name": "Weight (lbs.)",
         "slug": "weight-lbs",
         "values": [
+          {
+            "label": "30",
+            "slug": "weight-lbs-30"
+          },
+          {
+            "label": "34",
+            "slug": "weight-lbs-34"
+          },
+          {
+            "label": "39",
+            "slug": "weight-lbs-39"
+          },
+          {
+            "label": "56",
+            "slug": "weight-lbs-56"
+          },
           {
             "label": "70",
             "slug": "weight-lbs-70"
@@ -4447,8 +4715,16 @@
             "slug": "hp-1-5"
           },
           {
+            "label": "2.0",
+            "slug": "hp-2-0"
+          },
+          {
             "label": "2.70",
             "slug": "hp-2-70"
+          },
+          {
+            "label": "3/4",
+            "slug": "hp-3-4"
           }
         ]
       },
@@ -4495,12 +4771,26 @@
         ]
       },
       {
+        "name": "Speed",
+        "slug": "speed",
+        "values": [
+          {
+            "label": "1",
+            "slug": "speed-1"
+          }
+        ]
+      },
+      {
         "name": "Volts",
         "slug": "volts",
         "values": [
           {
             "label": "115",
             "slug": "volts-115"
+          },
+          {
+            "label": "115/208-230",
+            "slug": "volts-115-208-230"
           }
         ]
       },
@@ -4511,6 +4801,22 @@
           {
             "label": "28",
             "slug": "weight-lbs-28"
+          },
+          {
+            "label": "38",
+            "slug": "weight-lbs-38"
+          },
+          {
+            "label": "43",
+            "slug": "weight-lbs-43"
+          },
+          {
+            "label": "47",
+            "slug": "weight-lbs-47"
+          },
+          {
+            "label": "48",
+            "slug": "weight-lbs-48"
           },
           {
             "label": "88",
@@ -5131,40 +5437,36 @@
             "slug": "amps-4"
           },
           {
-            "label": "4.0",
-            "slug": "amps-4-0"
-          },
-          {
-            "label": "4.2",
-            "slug": "amps-4-2"
-          },
-          {
-            "label": "5.8",
-            "slug": "amps-5-8"
-          },
-          {
             "label": "6",
             "slug": "amps-6"
-          },
-          {
-            "label": "6.7",
-            "slug": "amps-6-7"
-          },
-          {
-            "label": "7.6",
-            "slug": "amps-7-6"
           },
           {
             "label": "8",
             "slug": "amps-8"
           },
           {
-            "label": "8.8",
-            "slug": "amps-8-8"
-          },
-          {
             "label": "9",
             "slug": "amps-9"
+          }
+        ]
+      },
+      {
+        "name": "Case Quantity",
+        "slug": "case-quantity",
+        "values": [
+          {
+            "label": "6",
+            "slug": "case-quantity-6"
+          }
+        ]
+      },
+      {
+        "name": "Color",
+        "slug": "color",
+        "values": [
+          {
+            "label": "Black",
+            "slug": "color-black"
           }
         ]
       },
@@ -7380,7 +7682,46 @@
         ]
       }
     ],
-    "spa-control-system": [],
+    "spa-control-system": [
+      {
+        "name": "Color",
+        "slug": "color",
+        "values": [
+          {
+            "label": "Gray",
+            "slug": "color-gray"
+          }
+        ]
+      },
+      {
+        "name": "Type",
+        "slug": "type",
+        "values": [
+          {
+            "label": "1500",
+            "slug": "type-1500"
+          },
+          {
+            "label": "2100",
+            "slug": "type-2100"
+          }
+        ]
+      },
+      {
+        "name": "Version",
+        "slug": "version",
+        "values": [
+          {
+            "label": "1-2 Speed",
+            "slug": "version-1-2-speed"
+          },
+          {
+            "label": "2-2 Speed",
+            "slug": "version-2-2-speed"
+          }
+        ]
+      }
+    ],
     "spa-drains-suctions": [
       {
         "name": "Case Quantity / Stainless Steel",
@@ -7461,6 +7802,14 @@
             "slug": "size-1-2"
           },
           {
+            "label": "2\"",
+            "slug": "size-2"
+          },
+          {
+            "label": "2.5\"",
+            "slug": "size-2-5"
+          },
+          {
             "label": "3.5\"",
             "slug": "size-3-5"
           },
@@ -7471,6 +7820,16 @@
           {
             "label": "5\"",
             "slug": "size-5"
+          }
+        ]
+      },
+      {
+        "name": "Suction Type",
+        "slug": "suction-type",
+        "values": [
+          {
+            "label": "Super Hi-Flo",
+            "slug": "suction-type-super-hi-flo"
           }
         ]
       }
@@ -7941,6 +8300,20 @@
     "fittings-spa": [],
     "water-features": [
       {
+        "name": "Assy Material",
+        "slug": "assy-material",
+        "values": [
+          {
+            "label": "Metal",
+            "slug": "assy-material-metal"
+          },
+          {
+            "label": "Plastic",
+            "slug": "assy-material-plastic"
+          }
+        ]
+      },
+      {
         "name": "Case Quantity",
         "slug": "case-quantity",
         "values": [
@@ -8017,9 +8390,31 @@
         ]
       },
       {
+        "name": "Micro Water Feature",
+        "slug": "micro-water-feature",
+        "values": [
+          {
+            "label": "Fan",
+            "slug": "micro-water-feature-fan"
+          },
+          {
+            "label": "Thick Rope",
+            "slug": "micro-water-feature-thick-rope"
+          },
+          {
+            "label": "Thin Rope",
+            "slug": "micro-water-feature-thin-rope"
+          }
+        ]
+      },
+      {
         "name": "Size",
         "slug": "size",
         "values": [
+          {
+            "label": "1 1/4\"",
+            "slug": "size-1-1-4"
+          },
           {
             "label": "24\"",
             "slug": "size-24"
@@ -8069,6 +8464,10 @@
         "slug": "case-quantity",
         "values": [
           {
+            "label": "1,100",
+            "slug": "case-quantity-1100-2"
+          },
+          {
             "label": "100",
             "slug": "case-quantity-100"
           },
@@ -8087,6 +8486,10 @@
           {
             "label": "200",
             "slug": "case-quantity-200"
+          },
+          {
+            "label": "300",
+            "slug": "case-quantity-300"
           },
           {
             "label": "500",
@@ -8131,6 +8534,32 @@
           {
             "label": "3/8\"",
             "slug": "size-3-8"
+          }
+        ]
+      },
+      {
+        "name": "Type",
+        "slug": "type",
+        "values": [
+          {
+            "label": "90°",
+            "slug": "type-90"
+          },
+          {
+            "label": "Multi",
+            "slug": "type-multi"
+          },
+          {
+            "label": "Rope",
+            "slug": "type-rope"
+          },
+          {
+            "label": "Straight",
+            "slug": "type-straight"
+          },
+          {
+            "label": "Wye",
+            "slug": "type-wye"
           }
         ]
       }
@@ -10980,13 +11409,34 @@
   },
   "products": [
     {
+      "title": "7 Degree Fiberglass Skimmer",
+      "slug": "7-degree-fiberglass-skimmer",
+      "databaseId": 41885,
+      "date": "2026-10-20T20:24:11",
+      "modified": "2026-10-20T20:29:49",
+      "imageUrl": "https://media.waterwayplastics.com/540-8900WW_7-Degree-Skimmer_sil_xsm.jpg",
+      "imageMedium": "https://media.waterwayplastics.com/540-8900WW_7-Degree-Skimmer_sil_xsm-278x300.jpg",
+      "imageAlt": null,
+      "imageWidth": 1113,
+      "imageHeight": 1200,
+      "categorySlugs": [
+        "pool-skimmers-skim-filters"
+      ],
+      "attributeSlugs": [
+        "color-gray",
+        "color-white",
+        "lid-round",
+        "lid-square"
+      ]
+    },
+    {
       "title": "AquaShapes Deck Jets",
       "slug": "deck-jets",
       "databaseId": 41597,
       "date": "2026-10-01T20:31:47",
       "modified": "2026-10-01T20:32:05",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Deck-Jet_Water.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Deck-Jet_Water-260x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/Deck-Jet_Water.png",
+      "imageMedium": "https://media.waterwayplastics.com/Deck-Jet_Water-260x300.png",
       "imageAlt": null,
       "imageWidth": 1662,
       "imageHeight": 1920,
@@ -11003,12 +11453,12 @@
       "slug": "7-degree-fiberglass-builders-packs",
       "databaseId": 41573,
       "date": "2026-09-25T18:15:39",
-      "modified": "2026-09-25T18:15:39",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/7-Degree-Skimmer-builders-pack_sil.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/7-Degree-Skimmer-builders-pack_sil-298x300.png",
+      "modified": "2026-10-20T20:05:42",
+      "imageUrl": "https://media.waterwayplastics.com/7-Degree-Skimmer_Builder-Pack_gray_FK_2_sil_xxsm_flat-2.png",
+      "imageMedium": "https://media.waterwayplastics.com/7-Degree-Skimmer_Builder-Pack_gray_FK_2_sil_xxsm_flat-2-289x300.png",
       "imageAlt": null,
-      "imageWidth": 1907,
-      "imageHeight": 1920,
+      "imageWidth": 1156,
+      "imageHeight": 1200,
       "categorySlugs": [
         "pool-skimmers-skim-filters"
       ],
@@ -11027,8 +11477,8 @@
       "databaseId": 41218,
       "date": "2026-09-09T20:21:20",
       "modified": "2026-10-01T18:17:07",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/600-0111.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/600-0111-300x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/600-0111.png",
+      "imageMedium": "https://media.waterwayplastics.com/600-0111-300x300.png",
       "imageAlt": null,
       "imageWidth": 1205,
       "imageHeight": 1200,
@@ -11050,8 +11500,8 @@
       "databaseId": 41117,
       "date": "2026-08-14T16:51:11",
       "modified": "2026-09-10T14:29:21",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/212-4150.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/212-4150-300x208.png",
+      "imageUrl": "https://media.waterwayplastics.com/212-4150.png",
+      "imageMedium": "https://media.waterwayplastics.com/212-4150-300x208.png",
       "imageAlt": null,
       "imageWidth": 995,
       "imageHeight": 691,
@@ -11068,8 +11518,8 @@
       "databaseId": 41106,
       "date": "2026-08-14T15:20:25",
       "modified": "2026-09-10T14:35:17",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-3000.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-3000-300x155.png",
+      "imageUrl": "https://media.waterwayplastics.com/672-3000.png",
+      "imageMedium": "https://media.waterwayplastics.com/672-3000-300x155.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 991,
@@ -11086,8 +11536,8 @@
       "databaseId": 41102,
       "date": "2026-08-14T14:38:18",
       "modified": "2026-09-25T15:17:12",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/640-3497-VP.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/640-3497-VP-276x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/640-3497-VP.png",
+      "imageMedium": "https://media.waterwayplastics.com/640-3497-VP-276x300.png",
       "imageAlt": null,
       "imageWidth": 1161,
       "imageHeight": 1260,
@@ -11104,8 +11554,8 @@
       "databaseId": 41093,
       "date": "2026-08-13T15:39:46",
       "modified": "2026-09-25T15:24:37",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/640-3797-V.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/640-3797-V-300x264.png",
+      "imageUrl": "https://media.waterwayplastics.com/640-3797-V.png",
+      "imageMedium": "https://media.waterwayplastics.com/640-3797-V-300x264.png",
       "imageAlt": null,
       "imageWidth": 1500,
       "imageHeight": 1321,
@@ -11122,8 +11572,8 @@
       "databaseId": 41087,
       "date": "2026-08-11T15:58:27",
       "modified": "2026-09-10T16:47:04",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/212-1800.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/212-1800-300x259.png",
+      "imageUrl": "https://media.waterwayplastics.com/212-1800.png",
+      "imageMedium": "https://media.waterwayplastics.com/212-1800-300x259.png",
       "imageAlt": null,
       "imageWidth": 1121,
       "imageHeight": 968,
@@ -11140,8 +11590,8 @@
       "databaseId": 41088,
       "date": "2026-08-11T15:54:39",
       "modified": "2026-09-10T16:58:01",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/711-4600.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/711-4600-300x130.png",
+      "imageUrl": "https://media.waterwayplastics.com/711-4600.png",
+      "imageMedium": "https://media.waterwayplastics.com/711-4600-300x130.png",
       "imageAlt": null,
       "imageWidth": 1800,
       "imageHeight": 781,
@@ -11158,8 +11608,8 @@
       "databaseId": 41082,
       "date": "2026-08-07T19:47:04",
       "modified": "2026-09-10T17:05:58",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/sgms_button_sconce.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/sgms_button_sconce-293x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/sgms_button_sconce.png",
+      "imageMedium": "https://media.waterwayplastics.com/sgms_button_sconce-293x300.png",
       "imageAlt": null,
       "imageWidth": 1402,
       "imageHeight": 1434,
@@ -11177,8 +11627,8 @@
       "databaseId": 41078,
       "date": "2026-08-07T18:11:57",
       "modified": "2026-09-22T14:23:18",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/675-2058LS.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/675-2058LS-300x248.png",
+      "imageUrl": "https://media.waterwayplastics.com/675-2058LS.png",
+      "imageMedium": "https://media.waterwayplastics.com/675-2058LS-300x248.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1585,
@@ -11196,8 +11646,8 @@
       "databaseId": 41072,
       "date": "2026-08-06T16:47:39",
       "modified": "2026-09-22T14:24:02",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/510-6909-DSG-TT.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/510-6909-DSG-TT-161x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/510-6909-DSG-TT.png",
+      "imageMedium": "https://media.waterwayplastics.com/510-6909-DSG-TT-161x300.png",
       "imageAlt": null,
       "imageWidth": 1032,
       "imageHeight": 1920,
@@ -11214,8 +11664,8 @@
       "databaseId": 41056,
       "date": "2026-08-05T21:26:50",
       "modified": "2026-09-22T14:24:39",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/514-6550.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/514-6550-92x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/514-6550.png",
+      "imageMedium": "https://media.waterwayplastics.com/514-6550-92x300.png",
       "imageAlt": null,
       "imageWidth": 551,
       "imageHeight": 1800,
@@ -11233,8 +11683,8 @@
       "databaseId": 41063,
       "date": "2026-08-05T20:30:50",
       "modified": "2026-09-10T19:23:24",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/210-5100S.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/210-5100S-300x231.png",
+      "imageUrl": "https://media.waterwayplastics.com/210-5100S.png",
+      "imageMedium": "https://media.waterwayplastics.com/210-5100S-300x231.png",
       "imageAlt": null,
       "imageWidth": 1558,
       "imageHeight": 1200,
@@ -11255,8 +11705,8 @@
       "databaseId": 41005,
       "date": "2026-06-10T23:03:41",
       "modified": "2026-09-22T14:25:26",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/550-0030-0050-0060-0070_Soak-Tank_All_sil_flat.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/550-0030-0050-0060-0070_Soak-Tank_All_sil_flat-300x220.png",
+      "imageUrl": "https://media.waterwayplastics.com/550-0030-0050-0060-0070_Soak-Tank_All_sil_flat.png",
+      "imageMedium": "https://media.waterwayplastics.com/550-0030-0050-0060-0070_Soak-Tank_All_sil_flat-300x220.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1405,
@@ -11276,8 +11726,8 @@
       "databaseId": 40994,
       "date": "2026-06-08T20:57:59",
       "modified": "2026-09-10T19:33:44",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/550-6119.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/550-6119-300x244.png",
+      "imageUrl": "https://media.waterwayplastics.com/550-6119.png",
+      "imageMedium": "https://media.waterwayplastics.com/550-6119-300x244.png",
       "imageAlt": null,
       "imageWidth": 1477,
       "imageHeight": 1200,
@@ -11301,8 +11751,8 @@
       "databaseId": 40962,
       "date": "2026-05-12T18:53:11",
       "modified": "2026-09-10T19:43:00",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-1060.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-1060-300x94.png",
+      "imageUrl": "https://media.waterwayplastics.com/672-1060.png",
+      "imageMedium": "https://media.waterwayplastics.com/672-1060-300x94.png",
       "imageAlt": null,
       "imageWidth": 1800,
       "imageHeight": 561,
@@ -11328,8 +11778,8 @@
       "databaseId": 40688,
       "date": "2026-04-28T16:39:53",
       "modified": "2026-09-10T19:48:18",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-7190.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-7190-300x189.png",
+      "imageUrl": "https://media.waterwayplastics.com/672-7190.png",
+      "imageMedium": "https://media.waterwayplastics.com/672-7190-300x189.png",
       "imageAlt": null,
       "imageWidth": 1689,
       "imageHeight": 1064,
@@ -11349,8 +11799,8 @@
       "databaseId": 40681,
       "date": "2026-04-27T22:30:16",
       "modified": "2026-09-10T19:57:35",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/600-8140-1.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/600-8140-1-300x225.png",
+      "imageUrl": "https://media.waterwayplastics.com/600-8140-1.png",
+      "imageMedium": "https://media.waterwayplastics.com/600-8140-1-300x225.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1440,
@@ -11376,8 +11826,8 @@
       "databaseId": 40675,
       "date": "2026-04-27T18:53:42",
       "modified": "2026-09-10T20:02:44",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/711-4030-4050-1.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/711-4030-4050-1-300x199.png",
+      "imageUrl": "https://media.waterwayplastics.com/711-4030-4050-1.png",
+      "imageMedium": "https://media.waterwayplastics.com/711-4030-4050-1-300x199.png",
       "imageAlt": null,
       "imageWidth": 1716,
       "imageHeight": 1138,
@@ -11399,8 +11849,8 @@
       "databaseId": 40673,
       "date": "2026-04-27T18:31:57",
       "modified": "2026-09-10T20:06:41",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/413-2160.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/413-2160-300x219.png",
+      "imageUrl": "https://media.waterwayplastics.com/413-2160.png",
+      "imageMedium": "https://media.waterwayplastics.com/413-2160-300x219.png",
       "imageAlt": null,
       "imageWidth": 1671,
       "imageHeight": 1221,
@@ -11425,8 +11875,8 @@
       "databaseId": 40671,
       "date": "2026-04-27T17:54:05",
       "modified": "2026-09-22T14:27:50",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-5491-5161.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-5491-5161-300x225.png",
+      "imageUrl": "https://media.waterwayplastics.com/400-5491-5161.png",
+      "imageMedium": "https://media.waterwayplastics.com/400-5491-5161-300x225.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1440,
@@ -11445,8 +11895,8 @@
       "databaseId": 40668,
       "date": "2026-04-27T17:40:57",
       "modified": "2026-09-10T20:15:18",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/711-4030-4050.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/711-4030-4050-300x199.png",
+      "imageUrl": "https://media.waterwayplastics.com/711-4030-4050.png",
+      "imageMedium": "https://media.waterwayplastics.com/711-4030-4050-300x199.png",
       "imageAlt": null,
       "imageWidth": 1716,
       "imageHeight": 1138,
@@ -11465,8 +11915,8 @@
       "databaseId": 40666,
       "date": "2026-04-27T17:05:00",
       "modified": "2026-09-10T20:19:39",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/417-4090.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/417-4090-281x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/417-4090.png",
+      "imageMedium": "https://media.waterwayplastics.com/417-4090-281x300.png",
       "imageAlt": null,
       "imageWidth": 996,
       "imageHeight": 1063,
@@ -11487,8 +11937,8 @@
       "databaseId": 40632,
       "date": "2026-04-24T22:40:42",
       "modified": "2026-10-05T19:05:52",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-5530.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-5530-300x291.png",
+      "imageUrl": "https://media.waterwayplastics.com/400-5530.png",
+      "imageMedium": "https://media.waterwayplastics.com/400-5530-300x291.png",
       "imageAlt": null,
       "imageWidth": 323,
       "imageHeight": 313,
@@ -11514,8 +11964,8 @@
       "databaseId": 40630,
       "date": "2026-04-24T21:29:33",
       "modified": "2026-09-10T20:44:57",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-6010.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-6010-238x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/400-6010.png",
+      "imageMedium": "https://media.waterwayplastics.com/400-6010-238x300.png",
       "imageAlt": null,
       "imageWidth": 1522,
       "imageHeight": 1920,
@@ -11534,8 +11984,8 @@
       "databaseId": 40628,
       "date": "2026-04-24T18:45:39",
       "modified": "2026-09-10T20:37:05",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-4300.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-4300-300x225.png",
+      "imageUrl": "https://media.waterwayplastics.com/400-4300.png",
+      "imageMedium": "https://media.waterwayplastics.com/400-4300-300x225.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1440,
@@ -11558,8 +12008,8 @@
       "databaseId": 40626,
       "date": "2026-04-24T17:58:03",
       "modified": "2026-09-22T14:29:51",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-4060.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-4060-300x242.png",
+      "imageUrl": "https://media.waterwayplastics.com/400-4060.png",
+      "imageMedium": "https://media.waterwayplastics.com/400-4060-300x242.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1547,
@@ -11576,8 +12026,8 @@
       "databaseId": 40621,
       "date": "2026-04-24T16:29:35",
       "modified": "2026-09-10T20:42:15",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-4130.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-4130-300x215.png",
+      "imageUrl": "https://media.waterwayplastics.com/400-4130.png",
+      "imageMedium": "https://media.waterwayplastics.com/400-4130-300x215.png",
       "imageAlt": null,
       "imageWidth": 1676,
       "imageHeight": 1200,
@@ -11597,8 +12047,8 @@
       "databaseId": 40617,
       "date": "2026-04-24T15:51:00",
       "modified": "2026-09-22T14:30:39",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-8000.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-8000-300x245.png",
+      "imageUrl": "https://media.waterwayplastics.com/672-8000.png",
+      "imageMedium": "https://media.waterwayplastics.com/672-8000-300x245.png",
       "imageAlt": null,
       "imageWidth": 1472,
       "imageHeight": 1200,
@@ -11624,8 +12074,8 @@
       "databaseId": 40554,
       "date": "2026-04-23T16:12:17",
       "modified": "2026-09-22T14:31:14",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/413-1960.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/413-1960-281x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/413-1960.png",
+      "imageMedium": "https://media.waterwayplastics.com/413-1960-281x300.png",
       "imageAlt": null,
       "imageWidth": 1007,
       "imageHeight": 1076,
@@ -11649,8 +12099,8 @@
       "databaseId": 40549,
       "date": "2026-04-21T23:53:00",
       "modified": "2026-09-11T18:53:53",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-5960.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-5960-300x292.png",
+      "imageUrl": "https://media.waterwayplastics.com/672-5960.png",
+      "imageMedium": "https://media.waterwayplastics.com/672-5960-300x292.png",
       "imageAlt": null,
       "imageWidth": 631,
       "imageHeight": 614,
@@ -11674,8 +12124,8 @@
       "databaseId": 40540,
       "date": "2026-04-21T21:18:29",
       "modified": "2026-09-22T14:32:10",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-0410.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-0410-300x185.png",
+      "imageUrl": "https://media.waterwayplastics.com/672-0410.png",
+      "imageMedium": "https://media.waterwayplastics.com/672-0410-300x185.png",
       "imageAlt": null,
       "imageWidth": 555,
       "imageHeight": 342,
@@ -11700,8 +12150,8 @@
       "databaseId": 40530,
       "date": "2026-04-21T16:40:05",
       "modified": "2026-09-11T19:56:59",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/421-4020.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/421-4020-300x280.png",
+      "imageUrl": "https://media.waterwayplastics.com/421-4020.png",
+      "imageMedium": "https://media.waterwayplastics.com/421-4020-300x280.png",
       "imageAlt": null,
       "imageWidth": 1322,
       "imageHeight": 1235,
@@ -11727,8 +12177,8 @@
       "databaseId": 40525,
       "date": "2026-04-21T15:25:37",
       "modified": "2026-09-22T14:33:18",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/775-6001.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/775-6001-300x220.png",
+      "imageUrl": "https://media.waterwayplastics.com/775-6001.png",
+      "imageMedium": "https://media.waterwayplastics.com/775-6001-300x220.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1405,
@@ -11747,8 +12197,8 @@
       "databaseId": 40523,
       "date": "2026-04-20T23:54:35",
       "modified": "2026-09-14T16:57:06",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/675-6501-6507-6509.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/675-6501-6507-6509-300x231.png",
+      "imageUrl": "https://media.waterwayplastics.com/675-6501-6507-6509.png",
+      "imageMedium": "https://media.waterwayplastics.com/675-6501-6507-6509-300x231.png",
       "imageAlt": null,
       "imageWidth": 1482,
       "imageHeight": 1140,
@@ -11767,8 +12217,8 @@
       "databaseId": 40518,
       "date": "2026-04-20T23:15:47",
       "modified": "2026-09-14T17:00:11",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-0600.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-0600-300x130.png",
+      "imageUrl": "https://media.waterwayplastics.com/672-0600.png",
+      "imageMedium": "https://media.waterwayplastics.com/672-0600-300x130.png",
       "imageAlt": null,
       "imageWidth": 1800,
       "imageHeight": 780,
@@ -11787,8 +12237,8 @@
       "databaseId": 40514,
       "date": "2026-04-20T22:15:13",
       "modified": "2026-09-22T14:34:22",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/675-6531_BackandFront.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/675-6531_BackandFront-300x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/675-6531_BackandFront.png",
+      "imageMedium": "https://media.waterwayplastics.com/675-6531_BackandFront-300x300.png",
       "imageAlt": null,
       "imageWidth": 1138,
       "imageHeight": 1140,
@@ -11807,8 +12257,8 @@
       "databaseId": 40512,
       "date": "2026-04-20T21:25:58",
       "modified": "2026-09-14T17:07:12",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/LEDspavent.jpg",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/LEDspavent-232x300.jpg",
+      "imageUrl": "https://media.waterwayplastics.com/LEDspavent.jpg",
+      "imageMedium": "https://media.waterwayplastics.com/LEDspavent-232x300.jpg",
       "imageAlt": null,
       "imageWidth": 1484,
       "imageHeight": 1920,
@@ -11827,8 +12277,8 @@
       "databaseId": 40511,
       "date": "2026-04-20T20:05:18",
       "modified": "2026-09-14T17:10:55",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/675-6511.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/675-6511-235x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/675-6511.png",
+      "imageMedium": "https://media.waterwayplastics.com/675-6511-235x300.png",
       "imageAlt": null,
       "imageWidth": 1507,
       "imageHeight": 1920,
@@ -11847,8 +12297,8 @@
       "databaseId": 40507,
       "date": "2026-04-20T18:39:12",
       "modified": "2026-09-22T14:35:42",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Cabinet_Latch_Installed.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Cabinet_Latch_Installed-300x200.png",
+      "imageUrl": "https://media.waterwayplastics.com/Cabinet_Latch_Installed.png",
+      "imageMedium": "https://media.waterwayplastics.com/Cabinet_Latch_Installed-300x200.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1280,
@@ -11866,8 +12316,8 @@
       "databaseId": 40504,
       "date": "2026-04-20T15:54:57",
       "modified": "2026-09-14T17:21:20",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/616-1800.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/616-1800-300x201.png",
+      "imageUrl": "https://media.waterwayplastics.com/616-1800.png",
+      "imageMedium": "https://media.waterwayplastics.com/616-1800-300x201.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1284,
@@ -11890,8 +12340,8 @@
       "databaseId": 40497,
       "date": "2026-04-20T15:17:07",
       "modified": "2026-09-14T17:27:52",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-2100.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-2100-300x186.png",
+      "imageUrl": "https://media.waterwayplastics.com/400-2100.png",
+      "imageMedium": "https://media.waterwayplastics.com/400-2100-300x186.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1189,
@@ -11914,8 +12364,8 @@
       "databaseId": 40494,
       "date": "2026-04-17T23:57:21",
       "modified": "2026-09-14T17:29:33",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-3031.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-3031-300x270.png",
+      "imageUrl": "https://media.waterwayplastics.com/400-3031.png",
+      "imageMedium": "https://media.waterwayplastics.com/400-3031-300x270.png",
       "imageAlt": null,
       "imageWidth": 1331,
       "imageHeight": 1200,
@@ -11936,8 +12386,8 @@
       "databaseId": 40481,
       "date": "2026-04-17T22:17:27",
       "modified": "2026-09-14T17:38:20",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/413-4180.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/413-4180-300x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/413-4180.png",
+      "imageMedium": "https://media.waterwayplastics.com/413-4180-300x300.png",
       "imageAlt": null,
       "imageWidth": 1167,
       "imageHeight": 1169,
@@ -11959,8 +12409,8 @@
       "databaseId": 40472,
       "date": "2026-04-17T21:55:20",
       "modified": "2026-09-14T19:01:13",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/AIR-CONTROL-ORION.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/AIR-CONTROL-ORION-200x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/AIR-CONTROL-ORION.png",
+      "imageMedium": "https://media.waterwayplastics.com/AIR-CONTROL-ORION-200x300.png",
       "imageAlt": null,
       "imageWidth": 1283,
       "imageHeight": 1920,
@@ -11984,8 +12434,8 @@
       "databaseId": 40463,
       "date": "2026-04-17T17:04:44",
       "modified": "2026-09-22T14:38:09",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/210-9840.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/210-9840-271x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/210-9840.png",
+      "imageMedium": "https://media.waterwayplastics.com/210-9840-271x300.png",
       "imageAlt": null,
       "imageWidth": 1734,
       "imageHeight": 1920,
@@ -12004,8 +12454,8 @@
       "databaseId": 40265,
       "date": "2025-08-14T15:28:33",
       "modified": "2026-09-22T14:39:03",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/210-7350.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/210-7350-300x206.png",
+      "imageUrl": "https://media.waterwayplastics.com/210-7350.png",
+      "imageMedium": "https://media.waterwayplastics.com/210-7350-300x206.png",
       "imageAlt": null,
       "imageWidth": 1783,
       "imageHeight": 1224,
@@ -12031,8 +12481,8 @@
       "databaseId": 40169,
       "date": "2025-06-02T17:08:07",
       "modified": "2026-09-22T14:40:46",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/520-5187-3S_ClearWaterII-DE_StandSys_Hi-FloII_newplug_sil_xsm_flat_2025.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/520-5187-3S_ClearWaterII-DE_StandSys_Hi-FloII_newplug_sil_xsm_flat_2025-172x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/520-5187-3S_ClearWaterII-DE_StandSys_Hi-FloII_newplug_sil_xsm_flat_2025.png",
+      "imageMedium": "https://media.waterwayplastics.com/520-5187-3S_ClearWaterII-DE_StandSys_Hi-FloII_newplug_sil_xsm_flat_2025-172x300.png",
       "imageAlt": null,
       "imageWidth": 689,
       "imageHeight": 1200,
@@ -12058,8 +12508,8 @@
       "databaseId": 39535,
       "date": "2023-11-30T14:30:19",
       "modified": "2026-09-22T14:42:21",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Carefree_Sand-Filter2025_sil_xsm_flat.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Carefree_Sand-Filter2025_sil_xsm_flat-158x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/Carefree_Sand-Filter2025_sil_xsm_flat.png",
+      "imageMedium": "https://media.waterwayplastics.com/Carefree_Sand-Filter2025_sil_xsm_flat-158x300.png",
       "imageAlt": null,
       "imageWidth": 633,
       "imageHeight": 1200,
@@ -12085,8 +12535,8 @@
       "databaseId": 38111,
       "date": "2023-11-22T17:47:04",
       "modified": "2026-09-22T14:43:22",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/210-9850.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/210-9850-300x298.png",
+      "imageUrl": "https://media.waterwayplastics.com/210-9850.png",
+      "imageMedium": "https://media.waterwayplastics.com/210-9850-300x298.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1908,
@@ -12105,8 +12555,8 @@
       "databaseId": 37826,
       "date": "2023-09-06T20:29:58",
       "modified": "2026-09-22T14:44:44",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/210-3410G-w_jet.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/210-3410G-w_jet-300x288.png",
+      "imageUrl": "https://media.waterwayplastics.com/210-3410G-w_jet.png",
+      "imageMedium": "https://media.waterwayplastics.com/210-3410G-w_jet-300x288.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1846,
@@ -12130,8 +12580,8 @@
       "databaseId": 38197,
       "date": "2023-06-07T16:55:57",
       "modified": "2026-09-14T22:04:44",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/660-4459DSG-PS.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/660-4459DSG-PS-246x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/660-4459DSG-PS.png",
+      "imageMedium": "https://media.waterwayplastics.com/660-4459DSG-PS-246x300.png",
       "imageAlt": null,
       "imageWidth": 483,
       "imageHeight": 588,
@@ -12157,8 +12607,8 @@
       "databaseId": 36895,
       "date": "2023-06-01T23:22:01",
       "modified": "2026-09-22T14:46:35",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/540-7800.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/540-7800-300x201.png",
+      "imageUrl": "https://media.waterwayplastics.com/540-7800.png",
+      "imageMedium": "https://media.waterwayplastics.com/540-7800-300x201.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1284,
@@ -12184,8 +12634,8 @@
       "databaseId": 38736,
       "date": "2023-06-01T17:36:58",
       "modified": "2026-09-22T14:47:51",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Sp-Steps_Mocha_sil.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Sp-Steps_Mocha_sil-300x213.png",
+      "imageUrl": "https://media.waterwayplastics.com/Sp-Steps_Mocha_sil.png",
+      "imageMedium": "https://media.waterwayplastics.com/Sp-Steps_Mocha_sil-300x213.png",
       "imageAlt": null,
       "imageWidth": 1433,
       "imageHeight": 1018,
@@ -12208,8 +12658,8 @@
       "databaseId": 38715,
       "date": "2023-06-01T17:14:07",
       "modified": "2026-09-14T22:37:04",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-4360.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-4360-300x253.png",
+      "imageUrl": "https://media.waterwayplastics.com/400-4360.png",
+      "imageMedium": "https://media.waterwayplastics.com/400-4360-300x253.png",
       "imageAlt": null,
       "imageWidth": 1356,
       "imageHeight": 1144,
@@ -12228,8 +12678,8 @@
       "databaseId": 33545,
       "date": "2023-06-01T12:37:06",
       "modified": "2026-09-14T22:41:43",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/600-9101_600-9167.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/600-9101_600-9167-199x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/600-9101_600-9167.png",
+      "imageMedium": "https://media.waterwayplastics.com/600-9101_600-9167-199x300.png",
       "imageAlt": null,
       "imageWidth": 331,
       "imageHeight": 498,
@@ -12249,8 +12699,8 @@
       "databaseId": 33470,
       "date": "2023-06-01T12:37:05",
       "modified": "2026-09-14T22:50:27",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-4940.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-4940-300x254.png",
+      "imageUrl": "https://media.waterwayplastics.com/672-4940.png",
+      "imageMedium": "https://media.waterwayplastics.com/672-4940-300x254.png",
       "imageAlt": null,
       "imageWidth": 1416,
       "imageHeight": 1200,
@@ -12276,8 +12726,8 @@
       "databaseId": 33167,
       "date": "2023-06-01T12:37:03",
       "modified": "2026-09-14T22:58:23",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/715-0000_715-9890_715-2000_715-9880-1.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/715-0000_715-9890_715-2000_715-9880-1-300x225.png",
+      "imageUrl": "https://media.waterwayplastics.com/715-0000_715-9890_715-2000_715-9880-1.png",
+      "imageMedium": "https://media.waterwayplastics.com/715-0000_715-9890_715-2000_715-9880-1-300x225.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1440,
@@ -12335,8 +12785,8 @@
       "databaseId": 31957,
       "date": "2023-06-01T12:36:52",
       "modified": "2026-09-15T15:59:03",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/630-0005.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/630-0005-300x173.png",
+      "imageUrl": "https://media.waterwayplastics.com/630-0005.png",
+      "imageMedium": "https://media.waterwayplastics.com/630-0005-300x173.png",
       "imageAlt": null,
       "imageWidth": 1031,
       "imageHeight": 595,
@@ -12377,8 +12827,8 @@
       "databaseId": 31644,
       "date": "2023-06-01T12:36:49",
       "modified": "2026-05-12T15:54:06",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-4980.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-4980-300x221.png",
+      "imageUrl": "https://media.waterwayplastics.com/672-4980.png",
+      "imageMedium": "https://media.waterwayplastics.com/672-4980-300x221.png",
       "imageAlt": null,
       "imageWidth": 1180,
       "imageHeight": 869,
@@ -12397,8 +12847,8 @@
       "databaseId": 31622,
       "date": "2023-06-01T12:36:49",
       "modified": "2026-09-22T14:58:15",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Carefree_26in_Sand-Standard-System_HiFloII_sil_xsm_flat_IMG_6453.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Carefree_26in_Sand-Standard-System_HiFloII_sil_xsm_flat_IMG_6453-190x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/Carefree_26in_Sand-Standard-System_HiFloII_sil_xsm_flat_IMG_6453.png",
+      "imageMedium": "https://media.waterwayplastics.com/Carefree_26in_Sand-Standard-System_HiFloII_sil_xsm_flat_IMG_6453-190x300.png",
       "imageAlt": null,
       "imageWidth": 758,
       "imageHeight": 1200,
@@ -12419,8 +12869,8 @@
       "databaseId": 31615,
       "date": "2023-06-01T12:36:49",
       "modified": "2026-05-12T15:49:49",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/413-1860.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/413-1860-300x208.png",
+      "imageUrl": "https://media.waterwayplastics.com/413-1860.png",
+      "imageMedium": "https://media.waterwayplastics.com/413-1860-300x208.png",
       "imageAlt": null,
       "imageWidth": 513,
       "imageHeight": 355,
@@ -12442,8 +12892,8 @@
       "databaseId": 31574,
       "date": "2023-06-01T12:36:49",
       "modified": "2026-09-22T14:52:36",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-4100.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-4100-300x289.png",
+      "imageUrl": "https://media.waterwayplastics.com/672-4100.png",
+      "imageMedium": "https://media.waterwayplastics.com/672-4100-300x289.png",
       "imageAlt": null,
       "imageWidth": 418,
       "imageHeight": 403,
@@ -12461,8 +12911,8 @@
       "databaseId": 31563,
       "date": "2023-06-01T12:36:49",
       "modified": "2026-05-12T15:16:45",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-4370.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-4370-300x124.png",
+      "imageUrl": "https://media.waterwayplastics.com/672-4370.png",
+      "imageMedium": "https://media.waterwayplastics.com/672-4370-300x124.png",
       "imageAlt": null,
       "imageWidth": 569,
       "imageHeight": 236,
@@ -12484,8 +12934,8 @@
       "databaseId": 31544,
       "date": "2023-06-01T12:36:49",
       "modified": "2026-09-15T16:23:27",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/419-1000.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/419-1000-300x152.png",
+      "imageUrl": "https://media.waterwayplastics.com/419-1000.png",
+      "imageMedium": "https://media.waterwayplastics.com/419-1000-300x152.png",
       "imageAlt": null,
       "imageWidth": 541,
       "imageHeight": 275,
@@ -12504,8 +12954,8 @@
       "databaseId": 38600,
       "date": "2023-05-31T22:31:00",
       "modified": "2026-05-12T15:57:54",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/413-4100.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/413-4100-300x279.png",
+      "imageUrl": "https://media.waterwayplastics.com/413-4100.png",
+      "imageMedium": "https://media.waterwayplastics.com/413-4100-300x279.png",
       "imageAlt": null,
       "imageWidth": 1292,
       "imageHeight": 1200,
@@ -12527,8 +12977,8 @@
       "databaseId": 38576,
       "date": "2023-05-31T18:48:43",
       "modified": "2026-05-12T16:00:31",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/411-9130.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/411-9130-300x225.png",
+      "imageUrl": "https://media.waterwayplastics.com/411-9130.png",
+      "imageMedium": "https://media.waterwayplastics.com/411-9130-300x225.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1440,
@@ -12552,8 +13002,8 @@
       "databaseId": 38543,
       "date": "2023-05-31T17:30:15",
       "modified": "2026-05-12T16:02:06",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-1990.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-1990-300x225.png",
+      "imageUrl": "https://media.waterwayplastics.com/400-1990.png",
+      "imageMedium": "https://media.waterwayplastics.com/400-1990-300x225.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1440,
@@ -12570,8 +13020,8 @@
       "databaseId": 33524,
       "date": "2023-05-31T12:37:06",
       "modified": "2026-05-12T16:11:20",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/slice-vlaves.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/slice-vlaves-300x188.png",
+      "imageUrl": "https://media.waterwayplastics.com/slice-vlaves.png",
+      "imageMedium": "https://media.waterwayplastics.com/slice-vlaves-300x188.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1206,
@@ -12591,8 +13041,8 @@
       "databaseId": 33440,
       "date": "2023-05-31T12:37:05",
       "modified": "2026-05-12T16:29:28",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/413-2030.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/413-2030-300x288.png",
+      "imageUrl": "https://media.waterwayplastics.com/413-2030.png",
+      "imageMedium": "https://media.waterwayplastics.com/413-2030-300x288.png",
       "imageAlt": null,
       "imageWidth": 1248,
       "imageHeight": 1200,
@@ -12614,8 +13064,8 @@
       "databaseId": 32238,
       "date": "2023-05-31T12:36:55",
       "modified": "2026-05-12T16:32:08",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-5491-5161.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-5491-5161-300x225.png",
+      "imageUrl": "https://media.waterwayplastics.com/400-5491-5161.png",
+      "imageMedium": "https://media.waterwayplastics.com/400-5491-5161-300x225.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1440,
@@ -12632,8 +13082,8 @@
       "databaseId": 31900,
       "date": "2023-05-31T12:36:52",
       "modified": "2026-05-12T16:44:27",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/411-2120.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/411-2120-286x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/411-2120.png",
+      "imageMedium": "https://media.waterwayplastics.com/411-2120-286x300.png",
       "imageAlt": null,
       "imageWidth": 863,
       "imageHeight": 904,
@@ -12653,8 +13103,8 @@
       "databaseId": 31775,
       "date": "2023-05-31T12:36:50",
       "modified": "2026-05-12T16:48:46",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/415-5000.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/415-5000-300x225.png",
+      "imageUrl": "https://media.waterwayplastics.com/415-5000.png",
+      "imageMedium": "https://media.waterwayplastics.com/415-5000-300x225.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1440,
@@ -12674,8 +13124,8 @@
       "databaseId": 31733,
       "date": "2023-05-31T12:36:50",
       "modified": "2026-05-12T16:47:41",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-4390.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-4390-300x271.png",
+      "imageUrl": "https://media.waterwayplastics.com/672-4390.png",
+      "imageMedium": "https://media.waterwayplastics.com/672-4390-300x271.png",
       "imageAlt": null,
       "imageWidth": 1330,
       "imageHeight": 1200,
@@ -12694,8 +13144,8 @@
       "databaseId": 31680,
       "date": "2023-05-31T12:36:50",
       "modified": "2026-05-12T16:46:12",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/415-4000.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/415-4000-300x225.png",
+      "imageUrl": "https://media.waterwayplastics.com/415-4000.png",
+      "imageMedium": "https://media.waterwayplastics.com/415-4000-300x225.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1440,
@@ -12712,8 +13162,8 @@
       "databaseId": 31630,
       "date": "2023-05-31T12:36:49",
       "modified": "2026-05-12T17:27:11",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-4640.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-4640-300x237.png",
+      "imageUrl": "https://media.waterwayplastics.com/672-4640.png",
+      "imageMedium": "https://media.waterwayplastics.com/672-4640-300x237.png",
       "imageAlt": null,
       "imageWidth": 1519,
       "imageHeight": 1200,
@@ -12733,8 +13183,8 @@
       "databaseId": 31596,
       "date": "2023-05-31T12:36:49",
       "modified": "2026-05-12T16:59:49",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-7900.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-7900-300x238.png",
+      "imageUrl": "https://media.waterwayplastics.com/672-7900.png",
+      "imageMedium": "https://media.waterwayplastics.com/672-7900-300x238.png",
       "imageAlt": null,
       "imageWidth": 1512,
       "imageHeight": 1200,
@@ -12755,8 +13205,8 @@
       "databaseId": 38507,
       "date": "2023-05-30T23:58:17",
       "modified": "2026-05-12T18:25:42",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/310-7800.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/310-7800-246x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/310-7800.png",
+      "imageMedium": "https://media.waterwayplastics.com/310-7800-246x300.png",
       "imageAlt": null,
       "imageWidth": 1200,
       "imageHeight": 1465,
@@ -12782,8 +13232,8 @@
       "databaseId": 38501,
       "date": "2023-05-30T23:19:50",
       "modified": "2026-09-22T15:04:08",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Tiny-Might.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Tiny-Might-300x198.png",
+      "imageUrl": "https://media.waterwayplastics.com/Tiny-Might.png",
+      "imageMedium": "https://media.waterwayplastics.com/Tiny-Might-300x198.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1265,
@@ -12806,8 +13256,8 @@
       "databaseId": 38474,
       "date": "2023-05-30T22:26:00",
       "modified": "2026-06-01T22:03:11",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Hi-Flo-II-1.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Hi-Flo-II-1-300x265.png",
+      "imageUrl": "https://media.waterwayplastics.com/Hi-Flo-II-1.png",
+      "imageMedium": "https://media.waterwayplastics.com/Hi-Flo-II-1-300x265.png",
       "imageAlt": null,
       "imageWidth": 1800,
       "imageHeight": 1591,
@@ -12833,8 +13283,8 @@
       "databaseId": 38469,
       "date": "2023-05-30T21:59:47",
       "modified": "2026-09-22T15:19:36",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/EX2.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/EX2-300x279.png",
+      "imageUrl": "https://media.waterwayplastics.com/EX2.png",
+      "imageMedium": "https://media.waterwayplastics.com/EX2-300x279.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1788,
@@ -12855,8 +13305,8 @@
       "databaseId": 38442,
       "date": "2023-05-30T20:31:57",
       "modified": "2026-09-22T15:23:51",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/viper-pump.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/viper-pump-300x262.png",
+      "imageUrl": "https://media.waterwayplastics.com/viper-pump.png",
+      "imageMedium": "https://media.waterwayplastics.com/viper-pump-300x262.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1679,
@@ -12882,8 +13332,8 @@
       "databaseId": 38423,
       "date": "2023-05-30T18:43:09",
       "modified": "2026-06-05T23:03:09",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/212-1831.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/212-1831-300x253.png",
+      "imageUrl": "https://media.waterwayplastics.com/212-1831.png",
+      "imageMedium": "https://media.waterwayplastics.com/212-1831-300x253.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1620,
@@ -12899,8 +13349,8 @@
       "databaseId": 38400,
       "date": "2023-05-30T16:58:35",
       "modified": "2026-06-09T16:28:36",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/500-7500.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/500-7500-89x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/500-7500.png",
+      "imageMedium": "https://media.waterwayplastics.com/500-7500-89x300.png",
       "imageAlt": null,
       "imageWidth": 532,
       "imageHeight": 1800,
@@ -12920,9 +13370,9 @@
       "slug": "spa-flo-ii-48-frame-2",
       "databaseId": 33593,
       "date": "2023-05-30T12:37:06",
-      "modified": "2026-09-22T15:26:33",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/SpaFlo-II.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/SpaFlo-II-300x234.png",
+      "modified": "2026-10-16T17:52:57",
+      "imageUrl": "https://media.waterwayplastics.com/SpaFlo-II.png",
+      "imageMedium": "https://media.waterwayplastics.com/SpaFlo-II-300x234.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1500,
@@ -12948,8 +13398,8 @@
       "databaseId": 33498,
       "date": "2023-05-30T12:37:05",
       "modified": "2026-09-22T15:30:41",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/817-2500-1.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/817-2500-1-178x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/817-2500-1.png",
+      "imageMedium": "https://media.waterwayplastics.com/817-2500-1-178x300.png",
       "imageAlt": null,
       "imageWidth": 1136,
       "imageHeight": 1920,
@@ -12975,8 +13425,8 @@
       "databaseId": 32979,
       "date": "2023-05-30T12:37:01",
       "modified": "2026-09-22T15:37:40",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Power-Defender-EX2.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Power-Defender-EX2-300x231.png",
+      "imageUrl": "https://media.waterwayplastics.com/Power-Defender-EX2.png",
+      "imageMedium": "https://media.waterwayplastics.com/Power-Defender-EX2-300x231.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1477,
@@ -12995,8 +13445,8 @@
       "databaseId": 32396,
       "date": "2023-05-30T12:36:56",
       "modified": "2026-09-22T15:42:04",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Iron-Might.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Iron-Might-300x264.png",
+      "imageUrl": "https://media.waterwayplastics.com/Iron-Might.png",
+      "imageMedium": "https://media.waterwayplastics.com/Iron-Might-300x264.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1692,
@@ -13014,8 +13464,8 @@
       "databaseId": 32142,
       "date": "2023-05-30T12:36:54",
       "modified": "2026-07-21T17:48:22",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/640-3170.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/640-3170-277x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/640-3170.png",
+      "imageMedium": "https://media.waterwayplastics.com/640-3170-277x300.png",
       "imageAlt": null,
       "imageWidth": 1107,
       "imageHeight": 1200,
@@ -13036,8 +13486,8 @@
       "databaseId": 32101,
       "date": "2023-05-30T12:36:53",
       "modified": "2026-09-22T17:50:11",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Executive_56.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Executive_56-300x274.png",
+      "imageUrl": "https://media.waterwayplastics.com/Executive_56.png",
+      "imageMedium": "https://media.waterwayplastics.com/Executive_56-300x274.png",
       "imageAlt": null,
       "imageWidth": 1500,
       "imageHeight": 1371,
@@ -13052,8 +13502,8 @@
       "databaseId": 32094,
       "date": "2023-05-30T12:36:53",
       "modified": "2026-09-22T16:14:07",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Executive_48.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Executive_48-300x253.png",
+      "imageUrl": "https://media.waterwayplastics.com/Executive_48.png",
+      "imageMedium": "https://media.waterwayplastics.com/Executive_48-300x253.png",
       "imageAlt": null,
       "imageWidth": 1500,
       "imageHeight": 1265,
@@ -13075,8 +13525,8 @@
       "databaseId": 32083,
       "date": "2023-05-30T12:36:53",
       "modified": "2026-09-22T16:00:56",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Viper-Euro.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Viper-Euro-300x270.png",
+      "imageUrl": "https://media.waterwayplastics.com/Viper-Euro.png",
+      "imageMedium": "https://media.waterwayplastics.com/Viper-Euro-300x270.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1731,
@@ -13097,8 +13547,8 @@
       "databaseId": 32007,
       "date": "2023-05-30T12:36:53",
       "modified": "2026-09-22T15:48:59",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/e-Series-Pump.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/e-Series-Pump-300x191.png",
+      "imageUrl": "https://media.waterwayplastics.com/e-Series-Pump.png",
+      "imageMedium": "https://media.waterwayplastics.com/e-Series-Pump-300x191.png",
       "imageAlt": null,
       "imageWidth": 1293,
       "imageHeight": 824,
@@ -13118,8 +13568,8 @@
       "databaseId": 32000,
       "date": "2023-05-30T12:36:52",
       "modified": "2026-09-22T18:08:03",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/512-0270.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/512-0270-226x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/512-0270.png",
+      "imageMedium": "https://media.waterwayplastics.com/512-0270-226x300.png",
       "imageAlt": null,
       "imageWidth": 1447,
       "imageHeight": 1920,
@@ -13140,8 +13590,8 @@
       "databaseId": 33332,
       "date": "2023-05-27T12:37:04",
       "modified": "2026-09-22T18:17:48",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/rip-current-swim-jet.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/rip-current-swim-jet-300x240.png",
+      "imageUrl": "https://media.waterwayplastics.com/rip-current-swim-jet.png",
+      "imageMedium": "https://media.waterwayplastics.com/rip-current-swim-jet-300x240.png",
       "imageAlt": null,
       "imageWidth": 1280,
       "imageHeight": 1024,
@@ -13161,8 +13611,8 @@
       "databaseId": 33106,
       "date": "2023-05-27T12:37:02",
       "modified": "2026-09-22T18:34:15",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Self-Aligning-Pump-Union_GRAY-2024.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Self-Aligning-Pump-Union_GRAY-2024-300x200.png",
+      "imageUrl": "https://media.waterwayplastics.com/Self-Aligning-Pump-Union_GRAY-2024.png",
+      "imageMedium": "https://media.waterwayplastics.com/Self-Aligning-Pump-Union_GRAY-2024-300x200.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1280,
@@ -13188,8 +13638,8 @@
       "databaseId": 38381,
       "date": "2023-05-26T23:26:11",
       "modified": "2026-09-22T19:04:46",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/510-4600.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/510-4600-103x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/510-4600.png",
+      "imageMedium": "https://media.waterwayplastics.com/510-4600-103x300.png",
       "imageAlt": null,
       "imageWidth": 656,
       "imageHeight": 1920,
@@ -13212,8 +13662,8 @@
       "databaseId": 38359,
       "date": "2023-05-26T21:37:03",
       "modified": "2026-08-06T16:06:46",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/640-6607.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/640-6607-159x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/640-6607.png",
+      "imageMedium": "https://media.waterwayplastics.com/640-6607-159x300.png",
       "imageAlt": null,
       "imageWidth": 951,
       "imageHeight": 1800,
@@ -13231,8 +13681,8 @@
       "databaseId": 38330,
       "date": "2023-05-26T19:59:38",
       "modified": "2026-09-22T19:49:42",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/660-6300.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/660-6300-300x263.png",
+      "imageUrl": "https://media.waterwayplastics.com/660-6300.png",
+      "imageMedium": "https://media.waterwayplastics.com/660-6300-300x263.png",
       "imageAlt": null,
       "imageWidth": 914,
       "imageHeight": 800,
@@ -13252,8 +13702,8 @@
       "databaseId": 36990,
       "date": "2023-05-26T15:56:35",
       "modified": "2026-09-22T19:53:21",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/633-9008S_sil_xsm_flat.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/633-9008S_sil_xsm_flat-300x207.png",
+      "imageUrl": "https://media.waterwayplastics.com/633-9008S_sil_xsm_flat.png",
+      "imageMedium": "https://media.waterwayplastics.com/633-9008S_sil_xsm_flat-300x207.png",
       "imageAlt": null,
       "imageWidth": 1200,
       "imageHeight": 827,
@@ -13274,8 +13724,8 @@
       "databaseId": 38274,
       "date": "2023-05-26T15:36:51",
       "modified": "2026-09-22T19:57:46",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/210-9318S-9278S-9288S.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/210-9318S-9278S-9288S-300x277.png",
+      "imageUrl": "https://media.waterwayplastics.com/210-9318S-9278S-9288S.png",
+      "imageMedium": "https://media.waterwayplastics.com/210-9318S-9278S-9288S-300x277.png",
       "imageAlt": null,
       "imageWidth": 618,
       "imageHeight": 571,
@@ -13296,8 +13746,8 @@
       "databaseId": 36930,
       "date": "2023-05-26T15:25:47",
       "modified": "2026-09-22T20:02:39",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/SGMS-Cupholder_single_angle_blue_work.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/SGMS-Cupholder_single_angle_blue_work-269x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/SGMS-Cupholder_single_angle_blue_work.png",
+      "imageMedium": "https://media.waterwayplastics.com/SGMS-Cupholder_single_angle_blue_work-269x300.png",
       "imageAlt": null,
       "imageWidth": 1723,
       "imageHeight": 1920,
@@ -13317,8 +13767,8 @@
       "databaseId": 33370,
       "date": "2023-05-26T12:37:04",
       "modified": "2026-09-22T20:10:34",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/pin-lights-1.jpg",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/pin-lights-1-300x232.jpg",
+      "imageUrl": "https://media.waterwayplastics.com/pin-lights-1.jpg",
+      "imageMedium": "https://media.waterwayplastics.com/pin-lights-1-300x232.jpg",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1487,
@@ -13340,8 +13790,8 @@
       "databaseId": 32847,
       "date": "2023-05-26T12:37:00",
       "modified": "2026-09-22T20:12:53",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/675-2088.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/675-2088-197x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/675-2088.png",
+      "imageMedium": "https://media.waterwayplastics.com/675-2088-197x300.png",
       "imageAlt": null,
       "imageWidth": 1258,
       "imageHeight": 1920,
@@ -13359,8 +13809,8 @@
       "databaseId": 32565,
       "date": "2023-05-26T12:36:58",
       "modified": "2026-09-22T20:17:40",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/510-3550-full.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/510-3550-full-117x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/510-3550-full.png",
+      "imageMedium": "https://media.waterwayplastics.com/510-3550-full-117x300.png",
       "imageAlt": null,
       "imageWidth": 331,
       "imageHeight": 852,
@@ -13378,8 +13828,8 @@
       "databaseId": 32419,
       "date": "2023-05-26T12:36:57",
       "modified": "2026-09-22T20:21:45",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/633-7078.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/633-7078-300x204.png",
+      "imageUrl": "https://media.waterwayplastics.com/633-7078.png",
+      "imageMedium": "https://media.waterwayplastics.com/633-7078-300x204.png",
       "imageAlt": null,
       "imageWidth": 1236,
       "imageHeight": 839,
@@ -13405,8 +13855,8 @@
       "databaseId": 32407,
       "date": "2023-05-26T12:36:56",
       "modified": "2026-09-22T21:59:30",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/led_hourglass_button_sconce.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/led_hourglass_button_sconce-186x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/led_hourglass_button_sconce.png",
+      "imageMedium": "https://media.waterwayplastics.com/led_hourglass_button_sconce-186x300.png",
       "imageAlt": null,
       "imageWidth": 998,
       "imageHeight": 1612,
@@ -13424,8 +13874,8 @@
       "databaseId": 32138,
       "date": "2023-05-26T12:36:54",
       "modified": "2026-09-22T22:09:17",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/675-4900-Aqua-Fall.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/675-4900-Aqua-Fall-300x225.png",
+      "imageUrl": "https://media.waterwayplastics.com/675-4900-Aqua-Fall.png",
+      "imageMedium": "https://media.waterwayplastics.com/675-4900-Aqua-Fall-300x225.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1440,
@@ -13443,9 +13893,9 @@
       "slug": "100-sq-ft-roadster-skim-filter",
       "databaseId": 31755,
       "date": "2023-05-26T12:36:50",
-      "modified": "2026-09-22T22:22:19",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/510-6689DSG-PS.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/510-6689DSG-PS-300x300.png",
+      "modified": "2026-10-14T18:16:00",
+      "imageUrl": "https://media.waterwayplastics.com/510-6689DSG-PS.png",
+      "imageMedium": "https://media.waterwayplastics.com/510-6689DSG-PS-300x300.png",
       "imageAlt": null,
       "imageWidth": 691,
       "imageHeight": 694,
@@ -13464,8 +13914,8 @@
       "databaseId": 32831,
       "date": "2023-05-26T08:37:00",
       "modified": "2026-09-22T22:25:49",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/675-0707.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/675-0707-106x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/675-0707.png",
+      "imageMedium": "https://media.waterwayplastics.com/675-0707-106x300.png",
       "imageAlt": null,
       "imageWidth": 537,
       "imageHeight": 1516,
@@ -13485,8 +13935,8 @@
       "databaseId": 36960,
       "date": "2023-05-26T08:04:39",
       "modified": "2026-09-22T22:28:36",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/sgms-led-waterfeatures-rendering.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/sgms-led-waterfeatures-rendering-300x240.png",
+      "imageUrl": "https://media.waterwayplastics.com/sgms-led-waterfeatures-rendering.png",
+      "imageMedium": "https://media.waterwayplastics.com/sgms-led-waterfeatures-rendering-300x240.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1536,
@@ -13507,8 +13957,8 @@
       "databaseId": 38265,
       "date": "2023-05-25T23:23:37",
       "modified": "2026-09-22T22:33:34",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/675-4100S.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/675-4100S-300x220.png",
+      "imageUrl": "https://media.waterwayplastics.com/675-4100S.png",
+      "imageMedium": "https://media.waterwayplastics.com/675-4100S-300x220.png",
       "imageAlt": null,
       "imageWidth": 1800,
       "imageHeight": 1317,
@@ -13528,8 +13978,8 @@
       "databaseId": 38254,
       "date": "2023-05-25T22:26:34",
       "modified": "2026-09-22T22:37:17",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/675-5708-1.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/675-5708-1-300x73.png",
+      "imageUrl": "https://media.waterwayplastics.com/675-5708-1.png",
+      "imageMedium": "https://media.waterwayplastics.com/675-5708-1-300x73.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 465,
@@ -13547,8 +13997,8 @@
       "databaseId": 38247,
       "date": "2023-05-25T22:14:21",
       "modified": "2026-09-22T22:40:02",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/218-9230.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/218-9230-300x225.png",
+      "imageUrl": "https://media.waterwayplastics.com/218-9230.png",
+      "imageMedium": "https://media.waterwayplastics.com/218-9230-300x225.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1440,
@@ -13565,8 +14015,8 @@
       "databaseId": 38176,
       "date": "2023-05-25T16:28:46",
       "modified": "2026-09-25T15:28:47",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/640-5301-V.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/640-5301-V-300x228.png",
+      "imageUrl": "https://media.waterwayplastics.com/640-5301-V.png",
+      "imageMedium": "https://media.waterwayplastics.com/640-5301-V-300x228.png",
       "imageAlt": null,
       "imageWidth": 748,
       "imageHeight": 568,
@@ -13587,8 +14037,8 @@
       "databaseId": 38168,
       "date": "2023-05-25T15:57:52",
       "modified": "2026-09-25T15:29:56",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/640-3250-VP.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/640-3250-VP-300x287.png",
+      "imageUrl": "https://media.waterwayplastics.com/640-3250-VP.png",
+      "imageMedium": "https://media.waterwayplastics.com/640-3250-VP-300x287.png",
       "imageAlt": null,
       "imageWidth": 863,
       "imageHeight": 825,
@@ -13606,8 +14056,8 @@
       "databaseId": 33379,
       "date": "2023-05-25T12:37:05",
       "modified": "2026-09-23T14:35:01",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/SGMS-topsides_eclipse.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/SGMS-topsides_eclipse-300x260.png",
+      "imageUrl": "https://media.waterwayplastics.com/SGMS-topsides_eclipse.png",
+      "imageMedium": "https://media.waterwayplastics.com/SGMS-topsides_eclipse-300x260.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1663,
@@ -13627,8 +14077,8 @@
       "databaseId": 32683,
       "date": "2023-05-25T12:36:59",
       "modified": "2026-09-23T14:39:08",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/ECLIPSE.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/ECLIPSE-300x169.png",
+      "imageUrl": "https://media.waterwayplastics.com/ECLIPSE.png",
+      "imageMedium": "https://media.waterwayplastics.com/ECLIPSE-300x169.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1080,
@@ -13654,8 +14104,8 @@
       "databaseId": 32440,
       "date": "2023-05-25T12:36:57",
       "modified": "2026-09-23T14:53:17",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/675-5330.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/675-5330-300x153.png",
+      "imageUrl": "https://media.waterwayplastics.com/675-5330.png",
+      "imageMedium": "https://media.waterwayplastics.com/675-5330-300x153.png",
       "imageAlt": null,
       "imageWidth": 1800,
       "imageHeight": 915,
@@ -13675,8 +14125,8 @@
       "databaseId": 31969,
       "date": "2023-05-25T12:36:52",
       "modified": "2026-09-25T15:31:37",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/640-3937-V.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/640-3937-V-300x298.png",
+      "imageUrl": "https://media.waterwayplastics.com/640-3937-V.png",
+      "imageMedium": "https://media.waterwayplastics.com/640-3937-V-300x298.png",
       "imageAlt": null,
       "imageWidth": 1125,
       "imageHeight": 1117,
@@ -13705,13 +14155,13 @@
       "attributeSlugs": []
     },
     {
-      "title": "Stealth II Spa Blowers",
+      "title": "Stealth II Pool Blowers",
       "slug": "stealth-ii-spa-blowers-ozone-injector",
       "databaseId": 38156,
       "date": "2023-05-24T20:36:28",
-      "modified": "2026-09-23T15:12:40",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Stealth-II.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Stealth-II-300x183.png",
+      "modified": "2026-10-09T19:48:51",
+      "imageUrl": "https://media.waterwayplastics.com/Stealth-II.png",
+      "imageMedium": "https://media.waterwayplastics.com/Stealth-II-300x183.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1173,
@@ -13731,8 +14181,8 @@
       "databaseId": 36999,
       "date": "2023-05-24T17:01:50",
       "modified": "2026-09-23T15:25:59",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/670-2739.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/670-2739-300x240.png",
+      "imageUrl": "https://media.waterwayplastics.com/670-2739.png",
+      "imageMedium": "https://media.waterwayplastics.com/670-2739-300x240.png",
       "imageAlt": null,
       "imageWidth": 1280,
       "imageHeight": 1024,
@@ -13757,8 +14207,8 @@
       "databaseId": 38115,
       "date": "2023-05-24T16:03:50",
       "modified": "2026-09-23T15:46:57",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/210-4390S.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/210-4390S-300x262.png",
+      "imageUrl": "https://media.waterwayplastics.com/210-4390S.png",
+      "imageMedium": "https://media.waterwayplastics.com/210-4390S-300x262.png",
       "imageAlt": null,
       "imageWidth": 1800,
       "imageHeight": 1573,
@@ -13776,8 +14226,8 @@
       "databaseId": 33052,
       "date": "2023-05-24T12:37:02",
       "modified": "2026-09-23T15:59:33",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Power-Stream-Jet_sil.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Power-Stream-Jet_sil-300x271.png",
+      "imageUrl": "https://media.waterwayplastics.com/Power-Stream-Jet_sil.png",
+      "imageMedium": "https://media.waterwayplastics.com/Power-Stream-Jet_sil-300x271.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1733,
@@ -13795,8 +14245,8 @@
       "databaseId": 32667,
       "date": "2023-05-24T12:36:59",
       "modified": "2026-09-23T17:29:59",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/210-7267S.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/210-7267S-300x229.png",
+      "imageUrl": "https://media.waterwayplastics.com/210-7267S.png",
+      "imageMedium": "https://media.waterwayplastics.com/210-7267S-300x229.png",
       "imageAlt": null,
       "imageWidth": 1572,
       "imageHeight": 1200,
@@ -13811,8 +14261,8 @@
       "databaseId": 32460,
       "date": "2023-05-24T12:36:57",
       "modified": "2026-09-23T17:47:26",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/640-0427.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/640-0427-300x282.png",
+      "imageUrl": "https://media.waterwayplastics.com/640-0427.png",
+      "imageMedium": "https://media.waterwayplastics.com/640-0427-300x282.png",
       "imageAlt": null,
       "imageWidth": 1064,
       "imageHeight": 1001,
@@ -13836,8 +14286,8 @@
       "databaseId": 32118,
       "date": "2023-05-24T12:36:54",
       "modified": "2026-09-23T17:54:51",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/670-2300.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/670-2300-300x218.png",
+      "imageUrl": "https://media.waterwayplastics.com/670-2300.png",
+      "imageMedium": "https://media.waterwayplastics.com/670-2300-300x218.png",
       "imageAlt": null,
       "imageWidth": 1529,
       "imageHeight": 1113,
@@ -13858,8 +14308,8 @@
       "databaseId": 38106,
       "date": "2023-05-23T22:34:58",
       "modified": "2026-09-23T18:04:50",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Air-Max.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Air-Max-300x130.png",
+      "imageUrl": "https://media.waterwayplastics.com/Air-Max.png",
+      "imageMedium": "https://media.waterwayplastics.com/Air-Max-300x130.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 832,
@@ -13880,8 +14330,8 @@
       "databaseId": 38096,
       "date": "2023-05-23T22:08:01",
       "modified": "2026-09-23T18:30:34",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Omni_StormJet_Fam_Orion.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Omni_StormJet_Fam_Orion-300x176.png",
+      "imageUrl": "https://media.waterwayplastics.com/Omni_StormJet_Fam_Orion.png",
+      "imageMedium": "https://media.waterwayplastics.com/Omni_StormJet_Fam_Orion-300x176.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1128,
@@ -13902,8 +14352,8 @@
       "databaseId": 36981,
       "date": "2023-05-23T21:53:33",
       "modified": "2026-09-23T22:23:46",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/sgms-storm-jet-bodies.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/sgms-storm-jet-bodies-300x240.png",
+      "imageUrl": "https://media.waterwayplastics.com/sgms-storm-jet-bodies.png",
+      "imageMedium": "https://media.waterwayplastics.com/sgms-storm-jet-bodies-300x240.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1536,
@@ -13924,8 +14374,8 @@
       "databaseId": 38090,
       "date": "2023-05-23T20:46:32",
       "modified": "2026-09-23T22:39:36",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/223-6808.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/223-6808-300x220.png",
+      "imageUrl": "https://media.waterwayplastics.com/223-6808.png",
+      "imageMedium": "https://media.waterwayplastics.com/223-6808-300x220.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1405,
@@ -13944,8 +14394,8 @@
       "databaseId": 38078,
       "date": "2023-05-23T18:34:37",
       "modified": "2026-09-23T22:51:25",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/806-0011.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/806-0011-300x224.png",
+      "imageUrl": "https://media.waterwayplastics.com/806-0011.png",
+      "imageMedium": "https://media.waterwayplastics.com/806-0011-300x224.png",
       "imageAlt": null,
       "imageWidth": 829,
       "imageHeight": 619,
@@ -13971,8 +14421,8 @@
       "databaseId": 38067,
       "date": "2023-05-23T17:40:54",
       "modified": "2026-09-23T23:09:06",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/228-1570G.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/228-1570G-300x261.png",
+      "imageUrl": "https://media.waterwayplastics.com/228-1570G.png",
+      "imageMedium": "https://media.waterwayplastics.com/228-1570G-300x261.png",
       "imageAlt": null,
       "imageWidth": 1230,
       "imageHeight": 1070,
@@ -13996,8 +14446,8 @@
       "databaseId": 32741,
       "date": "2023-05-23T12:36:59",
       "modified": "2026-09-24T15:43:11",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/210-6040.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/210-6040-300x259.png",
+      "imageUrl": "https://media.waterwayplastics.com/210-6040.png",
+      "imageMedium": "https://media.waterwayplastics.com/210-6040-300x259.png",
       "imageAlt": null,
       "imageWidth": 1419,
       "imageHeight": 1224,
@@ -14023,8 +14473,8 @@
       "databaseId": 32701,
       "date": "2023-05-23T12:36:59",
       "modified": "2026-09-24T15:14:23",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/211-0380.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/211-0380-300x259.png",
+      "imageUrl": "https://media.waterwayplastics.com/211-0380.png",
+      "imageMedium": "https://media.waterwayplastics.com/211-0380-300x259.png",
       "imageAlt": null,
       "imageWidth": 772,
       "imageHeight": 667,
@@ -14046,8 +14496,8 @@
       "databaseId": 32478,
       "date": "2023-05-23T12:36:57",
       "modified": "2026-09-24T16:00:14",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/master-massage-jet.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/master-massage-jet-300x201.png",
+      "imageUrl": "https://media.waterwayplastics.com/master-massage-jet.png",
+      "imageMedium": "https://media.waterwayplastics.com/master-massage-jet-300x201.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1285,
@@ -14069,8 +14519,8 @@
       "databaseId": 32196,
       "date": "2023-05-23T12:36:54",
       "modified": "2026-09-24T16:10:56",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/510-1500.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/510-1500-220x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/510-1500.png",
+      "imageMedium": "https://media.waterwayplastics.com/510-1500-220x300.png",
       "imageAlt": null,
       "imageWidth": 1200,
       "imageHeight": 1636,
@@ -14093,8 +14543,8 @@
       "databaseId": 31856,
       "date": "2023-05-23T12:36:51",
       "modified": "2026-09-24T16:28:40",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/212-8837.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/212-8837-267x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/212-8837.png",
+      "imageMedium": "https://media.waterwayplastics.com/212-8837-267x300.png",
       "imageAlt": null,
       "imageWidth": 939,
       "imageHeight": 1056,
@@ -14120,8 +14570,8 @@
       "databaseId": 37973,
       "date": "2023-05-22T20:12:51",
       "modified": "2026-09-24T18:13:50",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/540-8500.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/540-8500-290x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/540-8500.png",
+      "imageMedium": "https://media.waterwayplastics.com/540-8500-290x300.png",
       "imageAlt": null,
       "imageWidth": 1200,
       "imageHeight": 1243,
@@ -14136,8 +14586,8 @@
       "databaseId": 36636,
       "date": "2023-05-22T16:38:33",
       "modified": "2026-09-25T16:42:47",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/541-6410.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/541-6410-300x220.png",
+      "imageUrl": "https://media.waterwayplastics.com/541-6410.png",
+      "imageMedium": "https://media.waterwayplastics.com/541-6410-300x220.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1405,
@@ -14161,8 +14611,8 @@
       "databaseId": 36995,
       "date": "2023-05-22T16:21:24",
       "modified": "2026-09-24T19:32:10",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/SGMS-Ozone-Cluster-Jets.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/SGMS-Ozone-Cluster-Jets-300x232.png",
+      "imageUrl": "https://media.waterwayplastics.com/SGMS-Ozone-Cluster-Jets.png",
+      "imageMedium": "https://media.waterwayplastics.com/SGMS-Ozone-Cluster-Jets-300x232.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1483,
@@ -14199,8 +14649,8 @@
       "databaseId": 33237,
       "date": "2023-05-22T12:37:03",
       "modified": "2026-09-25T16:37:00",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Waterway_RenegadeVenturiSkimmer_2022.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Waterway_RenegadeVenturiSkimmer_2022-250x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/Waterway_RenegadeVenturiSkimmer_2022.png",
+      "imageMedium": "https://media.waterwayplastics.com/Waterway_RenegadeVenturiSkimmer_2022-250x300.png",
       "imageAlt": null,
       "imageWidth": 1334,
       "imageHeight": 1598,
@@ -14226,8 +14676,8 @@
       "databaseId": 33199,
       "date": "2023-05-22T12:37:03",
       "modified": "2026-09-24T20:24:27",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/519-6480-R1.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/519-6480-R1-300x223.png",
+      "imageUrl": "https://media.waterwayplastics.com/519-6480-R1.png",
+      "imageMedium": "https://media.waterwayplastics.com/519-6480-R1-300x223.png",
       "imageAlt": null,
       "imageWidth": 1645,
       "imageHeight": 1221,
@@ -14253,8 +14703,8 @@
       "databaseId": 32802,
       "date": "2023-05-22T12:37:00",
       "modified": "2026-09-25T18:33:19",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/660-3400.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/660-3400-256x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/660-3400.png",
+      "imageMedium": "https://media.waterwayplastics.com/660-3400-256x300.png",
       "imageAlt": null,
       "imageWidth": 1480,
       "imageHeight": 1733,
@@ -14280,8 +14730,8 @@
       "databaseId": 32767,
       "date": "2023-05-22T12:36:59",
       "modified": "2026-09-25T22:33:59",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/560-C0A60S.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/560-C0A60S-225x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/560-C0A60S.png",
+      "imageMedium": "https://media.waterwayplastics.com/560-C0A60S-225x300.png",
       "imageAlt": null,
       "imageWidth": 1440,
       "imageHeight": 1920,
@@ -14302,8 +14752,8 @@
       "databaseId": 32733,
       "date": "2023-05-22T12:36:59",
       "modified": "2026-09-25T21:58:23",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/540-6700.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/540-6700-300x195.png",
+      "imageUrl": "https://media.waterwayplastics.com/540-6700.png",
+      "imageMedium": "https://media.waterwayplastics.com/540-6700-300x195.png",
       "imageAlt": null,
       "imageWidth": 1725,
       "imageHeight": 1121,
@@ -14318,8 +14768,8 @@
       "databaseId": 32487,
       "date": "2023-05-22T12:36:57",
       "modified": "2026-09-25T22:54:10",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/425-6048-4.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/425-6048-4-300x186.png",
+      "imageUrl": "https://media.waterwayplastics.com/425-6048-4.png",
+      "imageMedium": "https://media.waterwayplastics.com/425-6048-4-300x186.png",
       "imageAlt": null,
       "imageWidth": 1476,
       "imageHeight": 913,
@@ -14345,8 +14795,8 @@
       "databaseId": 32325,
       "date": "2023-05-22T12:36:55",
       "modified": "2026-09-28T16:05:52",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Shur-Flex-Hose-Tubing.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Shur-Flex-Hose-Tubing-277x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/Shur-Flex-Hose-Tubing.png",
+      "imageMedium": "https://media.waterwayplastics.com/Shur-Flex-Hose-Tubing-277x300.png",
       "imageAlt": null,
       "imageWidth": 1144,
       "imageHeight": 1241,
@@ -14361,8 +14811,8 @@
       "databaseId": 31881,
       "date": "2023-05-22T12:36:51",
       "modified": "2026-09-28T16:46:26",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/skimmer_commren_540-6610.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/skimmer_commren_540-6610-225x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/skimmer_commren_540-6610.png",
+      "imageMedium": "https://media.waterwayplastics.com/skimmer_commren_540-6610-225x300.png",
       "imageAlt": null,
       "imageWidth": 1440,
       "imageHeight": 1920,
@@ -14383,8 +14833,8 @@
       "databaseId": 37921,
       "date": "2023-05-17T18:46:13",
       "modified": "2026-09-28T17:01:43",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/674-2430.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/674-2430-300x257.png",
+      "imageUrl": "https://media.waterwayplastics.com/674-2430.png",
+      "imageMedium": "https://media.waterwayplastics.com/674-2430-300x257.png",
       "imageAlt": null,
       "imageWidth": 1210,
       "imageHeight": 1035,
@@ -14406,8 +14856,8 @@
       "databaseId": 37895,
       "date": "2023-05-17T16:56:52",
       "modified": "2026-09-28T17:36:47",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/WVS003.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/WVS003-193x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/WVS003.png",
+      "imageMedium": "https://media.waterwayplastics.com/WVS003-193x300.png",
       "imageAlt": null,
       "imageWidth": 1234,
       "imageHeight": 1920,
@@ -14433,8 +14883,8 @@
       "databaseId": 37884,
       "date": "2023-05-17T16:25:50",
       "modified": "2026-09-28T17:49:17",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/600-0401.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/600-0401-300x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/600-0401.png",
+      "imageMedium": "https://media.waterwayplastics.com/600-0401-300x300.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1920,
@@ -14455,8 +14905,8 @@
       "databaseId": 32099,
       "date": "2023-05-17T12:36:53",
       "modified": "2026-09-25T15:36:51",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/642-2240.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/642-2240-300x206.png",
+      "imageUrl": "https://media.waterwayplastics.com/642-2240.png",
+      "imageMedium": "https://media.waterwayplastics.com/642-2240-300x206.png",
       "imageAlt": null,
       "imageWidth": 1429,
       "imageHeight": 981,
@@ -14475,8 +14925,8 @@
       "databaseId": 32069,
       "date": "2023-05-17T12:36:53",
       "modified": "2026-09-25T15:04:54",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/640-4790.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/640-4790-300x201.png",
+      "imageUrl": "https://media.waterwayplastics.com/640-4790.png",
+      "imageMedium": "https://media.waterwayplastics.com/640-4790-300x201.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1286,
@@ -14496,8 +14946,8 @@
       "databaseId": 32053,
       "date": "2023-05-17T12:36:53",
       "modified": "2026-09-25T15:35:50",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/640-2310-V.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/640-2310-V-300x200.png",
+      "imageUrl": "https://media.waterwayplastics.com/640-2310-V.png",
+      "imageMedium": "https://media.waterwayplastics.com/640-2310-V-300x200.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1278,
@@ -14516,8 +14966,8 @@
       "databaseId": 32037,
       "date": "2023-05-17T12:36:53",
       "modified": "2026-09-25T15:35:04",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/640-1800-V.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/640-1800-V-300x213.png",
+      "imageUrl": "https://media.waterwayplastics.com/640-1800-V.png",
+      "imageMedium": "https://media.waterwayplastics.com/640-1800-V-300x213.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1362,
@@ -14537,8 +14987,8 @@
       "databaseId": 32010,
       "date": "2023-05-17T12:36:53",
       "modified": "2026-09-25T15:33:56",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/640-8290-V.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/640-8290-V-300x153.png",
+      "imageUrl": "https://media.waterwayplastics.com/640-8290-V.png",
+      "imageMedium": "https://media.waterwayplastics.com/640-8290-V-300x153.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 982,
@@ -14560,8 +15010,8 @@
       "databaseId": 31888,
       "date": "2023-05-17T12:36:52",
       "modified": "2026-09-25T15:37:38",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/674-2410.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/674-2410-300x257.png",
+      "imageUrl": "https://media.waterwayplastics.com/674-2410.png",
+      "imageMedium": "https://media.waterwayplastics.com/674-2410-300x257.png",
       "imageAlt": null,
       "imageWidth": 1211,
       "imageHeight": 1037,
@@ -14582,8 +15032,8 @@
       "databaseId": 31823,
       "date": "2023-05-17T12:36:51",
       "modified": "2026-10-02T20:17:40",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/640-1360-V.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/640-1360-V-300x186.png",
+      "imageUrl": "https://media.waterwayplastics.com/640-1360-V.png",
+      "imageMedium": "https://media.waterwayplastics.com/640-1360-V-300x186.png",
       "imageAlt": null,
       "imageWidth": 1798,
       "imageHeight": 1113,
@@ -14601,8 +15051,8 @@
       "databaseId": 31763,
       "date": "2023-05-17T12:36:50",
       "modified": "2026-09-25T15:14:03",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/640-4770-V.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/640-4770-V-300x188.png",
+      "imageUrl": "https://media.waterwayplastics.com/640-4770-V.png",
+      "imageMedium": "https://media.waterwayplastics.com/640-4770-V-300x188.png",
       "imageAlt": null,
       "imageWidth": 1800,
       "imageHeight": 1126,
@@ -14621,8 +15071,8 @@
       "databaseId": 31744,
       "date": "2023-05-17T12:36:50",
       "modified": "2026-09-25T15:40:38",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/640-2130-V.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/640-2130-V-300x191.png",
+      "imageUrl": "https://media.waterwayplastics.com/640-2130-V.png",
+      "imageMedium": "https://media.waterwayplastics.com/640-2130-V-300x191.png",
       "imageAlt": null,
       "imageWidth": 1655,
       "imageHeight": 1055,
@@ -14642,8 +15092,8 @@
       "databaseId": 37880,
       "date": "2023-05-16T23:39:36",
       "modified": "2026-09-28T18:13:51",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/545-9100.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/545-9100-300x231.png",
+      "imageUrl": "https://media.waterwayplastics.com/545-9100.png",
+      "imageMedium": "https://media.waterwayplastics.com/545-9100-300x231.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1478,
@@ -14664,8 +15114,8 @@
       "databaseId": 37831,
       "date": "2023-05-16T18:56:32",
       "modified": "2026-09-28T18:52:16",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/229-1800.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/229-1800-256x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/229-1800.png",
+      "imageMedium": "https://media.waterwayplastics.com/229-1800-256x300.png",
       "imageAlt": null,
       "imageWidth": 1640,
       "imageHeight": 1920,
@@ -14691,8 +15141,8 @@
       "databaseId": 33035,
       "date": "2023-05-16T12:37:02",
       "modified": "2026-10-01T19:03:19",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/2020/01/612_Pasted-80.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/2020/01/612_Pasted-80.png",
+      "imageUrl": "https://media.waterwayplastics.com/2020/01/612_Pasted-80.png",
+      "imageMedium": "https://media.waterwayplastics.com/2020/01/612_Pasted-80.png",
       "imageAlt": null,
       "imageWidth": 554,
       "imageHeight": 267,
@@ -14718,8 +15168,8 @@
       "databaseId": 32528,
       "date": "2023-05-16T12:36:57",
       "modified": "2026-09-28T22:06:15",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-4140.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-4140-300x225.png",
+      "imageUrl": "https://media.waterwayplastics.com/400-4140.png",
+      "imageMedium": "https://media.waterwayplastics.com/400-4140-300x225.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1440,
@@ -14734,8 +15184,8 @@
       "databaseId": 32355,
       "date": "2023-05-16T12:36:56",
       "modified": "2026-09-28T22:14:32",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/210-4100.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/210-4100-294x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/210-4100.png",
+      "imageMedium": "https://media.waterwayplastics.com/210-4100-294x300.png",
       "imageAlt": null,
       "imageWidth": 1199,
       "imageHeight": 1224,
@@ -14759,8 +15209,8 @@
       "databaseId": 32212,
       "date": "2023-05-16T12:36:54",
       "modified": "2026-09-28T22:28:50",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/212-3330.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/212-3330-300x177.png",
+      "imageUrl": "https://media.waterwayplastics.com/212-3330.png",
+      "imageMedium": "https://media.waterwayplastics.com/212-3330-300x177.png",
       "imageAlt": null,
       "imageWidth": 1739,
       "imageHeight": 1025,
@@ -14786,8 +15236,8 @@
       "databaseId": 32770,
       "date": "2023-05-09T12:36:59",
       "modified": "2026-10-01T19:02:32",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/2020/01/608_Pasted-71.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/2020/01/608_Pasted-71.png",
+      "imageUrl": "https://media.waterwayplastics.com/2020/01/608_Pasted-71.png",
+      "imageMedium": "https://media.waterwayplastics.com/2020/01/608_Pasted-71.png",
       "imageAlt": null,
       "imageWidth": 518,
       "imageHeight": 260,
@@ -14813,8 +15263,8 @@
       "databaseId": 37761,
       "date": "2023-05-05T21:15:24",
       "modified": "2026-09-28T23:06:50",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-9160B.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-9160B-300x288.png",
+      "imageUrl": "https://media.waterwayplastics.com/400-9160B.png",
+      "imageMedium": "https://media.waterwayplastics.com/400-9160B-300x288.png",
       "imageAlt": null,
       "imageWidth": 1255,
       "imageHeight": 1206,
@@ -14840,8 +15290,8 @@
       "databaseId": 37742,
       "date": "2023-05-05T19:01:16",
       "modified": "2026-09-29T16:22:10",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-1410A.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-1410A-255x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/400-1410A.png",
+      "imageMedium": "https://media.waterwayplastics.com/400-1410A-255x300.png",
       "imageAlt": null,
       "imageWidth": 1039,
       "imageHeight": 1221,
@@ -14867,8 +15317,8 @@
       "databaseId": 37703,
       "date": "2023-05-05T17:31:39",
       "modified": "2026-09-29T16:35:10",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/411-9110.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/411-9110-300x225.png",
+      "imageUrl": "https://media.waterwayplastics.com/411-9110.png",
+      "imageMedium": "https://media.waterwayplastics.com/411-9110-300x225.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1440,
@@ -14894,8 +15344,8 @@
       "databaseId": 37686,
       "date": "2023-05-05T17:01:37",
       "modified": "2026-09-29T17:15:37",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/CLCS012-W.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/CLCS012-W-167x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/CLCS012-W.png",
+      "imageMedium": "https://media.waterwayplastics.com/CLCS012-W-167x300.png",
       "imageAlt": null,
       "imageWidth": 1071,
       "imageHeight": 1920,
@@ -14935,8 +15385,8 @@
       "databaseId": 33303,
       "date": "2023-05-05T12:37:04",
       "modified": "2026-09-29T17:26:35",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/215-9170B.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/215-9170B-254x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/215-9170B.png",
+      "imageMedium": "https://media.waterwayplastics.com/215-9170B-254x300.png",
       "imageAlt": null,
       "imageWidth": 1032,
       "imageHeight": 1221,
@@ -14962,8 +15412,8 @@
       "databaseId": 33294,
       "date": "2023-05-05T12:37:04",
       "modified": "2026-09-29T17:44:53",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-9190.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-9190-300x263.png",
+      "imageUrl": "https://media.waterwayplastics.com/400-9190.png",
+      "imageMedium": "https://media.waterwayplastics.com/400-9190-300x263.png",
       "imageAlt": null,
       "imageWidth": 1392,
       "imageHeight": 1221,
@@ -14989,8 +15439,8 @@
       "databaseId": 32493,
       "date": "2023-05-05T12:36:57",
       "modified": "2026-10-01T18:57:34",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/2020/01/633_Pasted-73.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/2020/01/633_Pasted-73.png",
+      "imageUrl": "https://media.waterwayplastics.com/2020/01/633_Pasted-73.png",
+      "imageMedium": "https://media.waterwayplastics.com/2020/01/633_Pasted-73.png",
       "imageAlt": null,
       "imageWidth": 496,
       "imageHeight": 302,
@@ -15016,8 +15466,8 @@
       "databaseId": 32390,
       "date": "2023-05-05T12:36:56",
       "modified": "2026-10-01T22:24:41",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/2020/01/541_P72_-Insert-Inlet-Eyeball-Fitting-In-Floor-Return-400-1420E.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/2020/01/541_P72_-Insert-Inlet-Eyeball-Fitting-In-Floor-Return-400-1420E.png",
+      "imageUrl": "https://media.waterwayplastics.com/2020/01/541_P72_-Insert-Inlet-Eyeball-Fitting-In-Floor-Return-400-1420E.png",
+      "imageMedium": "https://media.waterwayplastics.com/2020/01/541_P72_-Insert-Inlet-Eyeball-Fitting-In-Floor-Return-400-1420E.png",
       "imageAlt": null,
       "imageWidth": 427,
       "imageHeight": 328,
@@ -15041,8 +15491,8 @@
       "databaseId": 32331,
       "date": "2023-05-05T12:36:56",
       "modified": "2026-10-01T22:13:18",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/411-6540.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/411-6540-300x138.png",
+      "imageUrl": "https://media.waterwayplastics.com/411-6540.png",
+      "imageMedium": "https://media.waterwayplastics.com/411-6540-300x138.png",
       "imageAlt": null,
       "imageWidth": 1776,
       "imageHeight": 819,
@@ -15068,8 +15518,8 @@
       "databaseId": 32122,
       "date": "2023-05-05T12:36:54",
       "modified": "2026-10-02T15:26:52",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-8300.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-8300-300x222.png",
+      "imageUrl": "https://media.waterwayplastics.com/400-8300.png",
+      "imageMedium": "https://media.waterwayplastics.com/400-8300-300x222.png",
       "imageAlt": null,
       "imageWidth": 1414,
       "imageHeight": 1045,
@@ -15095,8 +15545,8 @@
       "databaseId": 31922,
       "date": "2023-05-05T12:36:52",
       "modified": "2026-10-02T16:22:13",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/411-2020.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/411-2020-300x242.png",
+      "imageUrl": "https://media.waterwayplastics.com/411-2020.png",
+      "imageMedium": "https://media.waterwayplastics.com/411-2020-300x242.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1548,
@@ -15122,8 +15572,8 @@
       "databaseId": 31907,
       "date": "2023-05-05T12:36:52",
       "modified": "2026-10-02T15:54:03",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/419-4100.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/419-4100-300x251.png",
+      "imageUrl": "https://media.waterwayplastics.com/419-4100.png",
+      "imageMedium": "https://media.waterwayplastics.com/419-4100-300x251.png",
       "imageAlt": null,
       "imageWidth": 1079,
       "imageHeight": 903,
@@ -15149,8 +15599,8 @@
       "databaseId": 31792,
       "date": "2023-05-05T12:36:51",
       "modified": "2026-10-02T16:47:22",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/415-5000.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/415-5000-300x225.png",
+      "imageUrl": "https://media.waterwayplastics.com/415-5000.png",
+      "imageMedium": "https://media.waterwayplastics.com/415-5000-300x225.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1440,
@@ -15176,8 +15626,8 @@
       "databaseId": 31706,
       "date": "2023-05-05T12:36:50",
       "modified": "2026-10-02T17:50:26",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/CAG004-W.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/CAG004-W-255x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/CAG004-W.png",
+      "imageMedium": "https://media.waterwayplastics.com/CAG004-W-255x300.png",
       "imageAlt": null,
       "imageWidth": 766,
       "imageHeight": 900,
@@ -15201,8 +15651,8 @@
       "databaseId": 37633,
       "date": "2023-05-04T23:30:10",
       "modified": "2026-10-05T19:10:32",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-4030tech.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-4030tech-300x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/400-4030tech.png",
+      "imageMedium": "https://media.waterwayplastics.com/400-4030tech-300x300.png",
       "imageAlt": null,
       "imageWidth": 360,
       "imageHeight": 360,
@@ -15227,8 +15677,8 @@
       "databaseId": 37620,
       "date": "2023-05-04T23:12:59",
       "modified": "2026-10-05T22:16:02",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/400-1940.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/400-1940-300x225.png",
+      "imageUrl": "https://media.waterwayplastics.com/400-1940.png",
+      "imageMedium": "https://media.waterwayplastics.com/400-1940-300x225.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1440,
@@ -15254,8 +15704,8 @@
       "databaseId": 32627,
       "date": "2023-05-04T12:36:58",
       "modified": "2026-09-30T20:56:12",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Pool-Pack-oasis.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Pool-Pack-oasis-300x186.png",
+      "imageUrl": "https://media.waterwayplastics.com/Pool-Pack-oasis.png",
+      "imageMedium": "https://media.waterwayplastics.com/Pool-Pack-oasis-300x186.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1189,
@@ -15279,8 +15729,8 @@
       "databaseId": 31705,
       "date": "2023-05-04T12:36:50",
       "modified": "2026-10-05T22:25:43",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/415-4000.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/415-4000-300x225.png",
+      "imageUrl": "https://media.waterwayplastics.com/415-4000.png",
+      "imageMedium": "https://media.waterwayplastics.com/415-4000-300x225.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1440,
@@ -15305,9 +15755,9 @@
       "slug": "proclean-plus-single-cartridge-1-speed-system",
       "databaseId": 33088,
       "date": "2023-05-03T12:37:02",
-      "modified": "2026-10-02T22:09:43",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/PCCF-200.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/PCCF-200-113x300.png",
+      "modified": "2026-10-14T18:18:54",
+      "imageUrl": "https://media.waterwayplastics.com/PCCF-200.png",
+      "imageMedium": "https://media.waterwayplastics.com/PCCF-200-113x300.png",
       "imageAlt": null,
       "imageWidth": 451,
       "imageHeight": 1200,
@@ -15322,8 +15772,8 @@
       "databaseId": 32889,
       "date": "2023-05-03T12:37:00",
       "modified": "2026-09-30T15:36:33",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Power-Defender-165_PD-165_NEON_DK-GRAY_UNION_sil_flat_1124.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Power-Defender-165_PD-165_NEON_DK-GRAY_UNION_sil_flat_1124-300x197.png",
+      "imageUrl": "https://media.waterwayplastics.com/Power-Defender-165_PD-165_NEON_DK-GRAY_UNION_sil_flat_1124.png",
+      "imageMedium": "https://media.waterwayplastics.com/Power-Defender-165_PD-165_NEON_DK-GRAY_UNION_sil_flat_1124-300x197.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1261,
@@ -15343,8 +15793,8 @@
       "databaseId": 32382,
       "date": "2023-05-03T12:36:56",
       "modified": "2026-10-06T17:02:40",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/FC2007_Clearwater_Cartridge_newplug_sil_flat_2025.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/FC2007_Clearwater_Cartridge_newplug_sil_flat_2025-163x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/FC2007_Clearwater_Cartridge_newplug_sil_flat_2025.png",
+      "imageMedium": "https://media.waterwayplastics.com/FC2007_Clearwater_Cartridge_newplug_sil_flat_2025-163x300.png",
       "imageAlt": null,
       "imageWidth": 1041,
       "imageHeight": 1920,
@@ -15369,8 +15819,8 @@
       "databaseId": 32085,
       "date": "2023-05-03T12:36:53",
       "modified": "2026-10-06T17:56:55",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/310-8200-1.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/310-8200-1-300x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/310-8200-1.png",
+      "imageMedium": "https://media.waterwayplastics.com/310-8200-1-300x300.png",
       "imageAlt": null,
       "imageWidth": 1107,
       "imageHeight": 1107,
@@ -15396,8 +15846,8 @@
       "databaseId": 32046,
       "date": "2023-05-03T12:36:53",
       "modified": "2026-10-06T17:59:18",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/672-7401.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/672-7401-300x201.png",
+      "imageUrl": "https://media.waterwayplastics.com/672-7401.png",
+      "imageMedium": "https://media.waterwayplastics.com/672-7401-300x201.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1284,
@@ -15421,8 +15871,8 @@
       "databaseId": 31928,
       "date": "2023-05-03T12:36:52",
       "modified": "2026-09-30T20:07:24",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/CrystalWater_Cartridge_DE_Filter_left_digital_sil_0924-DK-GRAY_flat.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/CrystalWater_Cartridge_DE_Filter_left_digital_sil_0924-DK-GRAY_flat-300x222.png",
+      "imageUrl": "https://media.waterwayplastics.com/CrystalWater_Cartridge_DE_Filter_left_digital_sil_0924-DK-GRAY_flat.png",
+      "imageMedium": "https://media.waterwayplastics.com/CrystalWater_Cartridge_DE_Filter_left_digital_sil_0924-DK-GRAY_flat-300x222.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1420,
@@ -15462,8 +15912,8 @@
       "databaseId": 31565,
       "date": "2023-05-03T12:36:49",
       "modified": "2026-10-06T22:48:17",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Carefree-Top-Mount-HiFloII-canadian.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Carefree-Top-Mount-HiFloII-canadian-189x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/Carefree-Top-Mount-HiFloII-canadian.png",
+      "imageMedium": "https://media.waterwayplastics.com/Carefree-Top-Mount-HiFloII-canadian-189x300.png",
       "imageAlt": null,
       "imageWidth": 795,
       "imageHeight": 1263,
@@ -15487,8 +15937,8 @@
       "databaseId": 31525,
       "date": "2023-05-03T12:36:48",
       "modified": "2026-10-07T16:02:32",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Hi-FloII-Canadian-1.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Hi-FloII-Canadian-1-300x200.png",
+      "imageUrl": "https://media.waterwayplastics.com/Hi-FloII-Canadian-1.png",
+      "imageMedium": "https://media.waterwayplastics.com/Hi-FloII-Canadian-1-300x200.png",
       "imageAlt": null,
       "imageWidth": 1800,
       "imageHeight": 1200,
@@ -15503,13 +15953,13 @@
       ]
     },
     {
-      "title": "Mustang VS 270 Variable Speed Dual Voltage Pool Pump",
+      "title": "Mustang VS 270 Variable Speed Pool Pump",
       "slug": "mustang-vs-270-pool-pump",
       "databaseId": 37566,
       "date": "2023-05-02T23:18:07",
-      "modified": "2026-09-30T20:25:21",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Mustang-270_DK-GRAY_UNIONS_IMG_5830_sil_flat_1124.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Mustang-270_DK-GRAY_UNIONS_IMG_5830_sil_flat_1124-300x192.png",
+      "modified": "2026-10-13T19:09:21",
+      "imageUrl": "https://media.waterwayplastics.com/Mustang-270_DK-GRAY_UNIONS_IMG_5830_sil_flat_1124.png",
+      "imageMedium": "https://media.waterwayplastics.com/Mustang-270_DK-GRAY_UNIONS_IMG_5830_sil_flat_1124-300x192.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1231,
@@ -15528,8 +15978,8 @@
       "databaseId": 37555,
       "date": "2023-05-02T22:44:41",
       "modified": "2026-09-30T20:35:22",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Mustang-140_DK-GRAY_UNIONS_IMG_5830_sil_flat_1124.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Mustang-140_DK-GRAY_UNIONS_IMG_5830_sil_flat_1124-300x192.png",
+      "imageUrl": "https://media.waterwayplastics.com/Mustang-140_DK-GRAY_UNIONS_IMG_5830_sil_flat_1124.png",
+      "imageMedium": "https://media.waterwayplastics.com/Mustang-140_DK-GRAY_UNIONS_IMG_5830_sil_flat_1124-300x192.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1231,
@@ -15548,8 +15998,8 @@
       "databaseId": 37541,
       "date": "2023-05-02T17:40:51",
       "modified": "2026-10-07T16:13:49",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/600-6200.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/600-6200-300x201.png",
+      "imageUrl": "https://media.waterwayplastics.com/600-6200.png",
+      "imageMedium": "https://media.waterwayplastics.com/600-6200-300x201.png",
       "imageAlt": null,
       "imageWidth": 1800,
       "imageHeight": 1205,
@@ -15568,8 +16018,8 @@
       "databaseId": 33454,
       "date": "2023-05-02T12:37:05",
       "modified": "2026-10-07T16:36:57",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Santanna-II-1.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Santanna-II-1-198x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/Santanna-II-1.png",
+      "imageMedium": "https://media.waterwayplastics.com/Santanna-II-1-198x300.png",
       "imageAlt": null,
       "imageWidth": 793,
       "imageHeight": 1200,
@@ -15595,8 +16045,8 @@
       "databaseId": 32922,
       "date": "2023-05-02T12:37:01",
       "modified": "2026-09-30T15:08:53",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Power-Defender-270_PD-270_NEON_DK-GRAY_UNIONS_sil_flat_1124.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Power-Defender-270_PD-270_NEON_DK-GRAY_UNIONS_sil_flat_1124-300x197.png",
+      "imageUrl": "https://media.waterwayplastics.com/Power-Defender-270_PD-270_NEON_DK-GRAY_UNIONS_sil_flat_1124.png",
+      "imageMedium": "https://media.waterwayplastics.com/Power-Defender-270_PD-270_NEON_DK-GRAY_UNIONS_sil_flat_1124-300x197.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1261,
@@ -15617,8 +16067,8 @@
       "databaseId": 32909,
       "date": "2023-05-02T12:37:00",
       "modified": "2026-10-07T17:05:59",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/image.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/image.png",
+      "imageUrl": "https://media.waterwayplastics.com/image.png",
+      "imageMedium": "https://media.waterwayplastics.com/image.png",
       "imageAlt": null,
       "imageWidth": 300,
       "imageHeight": 203,
@@ -15644,8 +16094,8 @@
       "databaseId": 32525,
       "date": "2023-05-02T12:36:57",
       "modified": "2026-09-30T20:06:07",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/image-3.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/image-3.png",
+      "imageUrl": "https://media.waterwayplastics.com/image-3.png",
+      "imageMedium": "https://media.waterwayplastics.com/image-3.png",
       "imageAlt": null,
       "imageWidth": 300,
       "imageHeight": 222,
@@ -15718,8 +16168,8 @@
       "databaseId": 31523,
       "date": "2023-05-02T12:36:48",
       "modified": "2026-10-08T15:34:21",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/520-5167-C25S_ClearWaterII_StdSys_Hi-FloII_CSA_wcord_sil_xsm_flat_New2025.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/520-5167-C25S_ClearWaterII_StdSys_Hi-FloII_CSA_wcord_sil_xsm_flat_New2025-163x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/520-5167-C25S_ClearWaterII_StdSys_Hi-FloII_CSA_wcord_sil_xsm_flat_New2025.png",
+      "imageMedium": "https://media.waterwayplastics.com/520-5167-C25S_ClearWaterII_StdSys_Hi-FloII_CSA_wcord_sil_xsm_flat_New2025-163x300.png",
       "imageAlt": null,
       "imageWidth": 653,
       "imageHeight": 1200,
@@ -15742,8 +16192,8 @@
       "databaseId": 36938,
       "date": "2023-05-01T15:07:16",
       "modified": "2026-10-08T15:39:51",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Power-Defender-Booster.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Power-Defender-Booster-300x220.png",
+      "imageUrl": "https://media.waterwayplastics.com/Power-Defender-Booster.png",
+      "imageMedium": "https://media.waterwayplastics.com/Power-Defender-Booster-300x220.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1405,
@@ -15762,8 +16212,8 @@
       "databaseId": 33390,
       "date": "2023-05-01T12:37:05",
       "modified": "2026-09-30T17:20:46",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Power-Defender-110_PD-110_NEON_DK-GRAY_UNION_sil_flat_1124.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Power-Defender-110_PD-110_NEON_DK-GRAY_UNION_sil_flat_1124-300x185.png",
+      "imageUrl": "https://media.waterwayplastics.com/Power-Defender-110_PD-110_NEON_DK-GRAY_UNION_sil_flat_1124.png",
+      "imageMedium": "https://media.waterwayplastics.com/Power-Defender-110_PD-110_NEON_DK-GRAY_UNION_sil_flat_1124-300x185.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1184,
@@ -15783,8 +16233,8 @@
       "databaseId": 32315,
       "date": "2023-05-01T12:36:55",
       "modified": "2026-10-08T15:59:25",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Shur-Flex-Hose-Tubing.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Shur-Flex-Hose-Tubing-277x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/Shur-Flex-Hose-Tubing.png",
+      "imageMedium": "https://media.waterwayplastics.com/Shur-Flex-Hose-Tubing-277x300.png",
       "imageAlt": null,
       "imageWidth": 1144,
       "imageHeight": 1241,
@@ -15809,41 +16259,58 @@
       "slug": "sgms-micro-air-injector",
       "databaseId": 36347,
       "date": "2023-04-24T15:30:13",
-      "modified": "2023-06-30T22:26:42",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-10-09T19:14:51",
+      "imageUrl": "https://media.waterwayplastics.com/425-6048_.png",
+      "imageMedium": "https://media.waterwayplastics.com/425-6048_-300x172.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1121,
+      "imageHeight": 643,
       "categorySlugs": [
         "air-systems-spa"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "case-quantity-1100-2",
+        "case-quantity-1000",
+        "case-quantity-300",
+        "case-quantity-500",
+        "color-clear",
+        "color-stainless",
+        "color-white",
+        "type-90",
+        "type-multi",
+        "type-rope"
+      ]
     },
     {
       "title": "NEO 1500 & NEO 2100 Spa Control",
       "slug": "neo-1500-spa-control",
       "databaseId": 32552,
       "date": "2023-04-23T12:36:58",
-      "modified": "2024-01-04T15:02:04",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-10-09T19:42:19",
+      "imageUrl": "https://media.waterwayplastics.com/Spa-Pack_NEO-1500-unit_sil-gray_2020_noshad.png",
+      "imageMedium": "https://media.waterwayplastics.com/Spa-Pack_NEO-1500-unit_sil-gray_2020_noshad-300x222.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1920,
+      "imageHeight": 1419,
       "categorySlugs": [
         "spa-control-system"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "color-gray",
+        "type-1500",
+        "type-2100",
+        "version-1-2-speed",
+        "version-2-2-speed"
+      ]
     },
     {
-      "title": "Stealth II Air Blowers",
+      "title": "Stealth II Spa Air Blowers",
       "slug": "stealth-ii-air-blowers",
       "databaseId": 37444,
       "date": "2023-03-27T23:30:24",
-      "modified": "2026-05-13T08:33:31",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Stealth-II-1.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Stealth-II-1-300x183.png",
+      "modified": "2026-10-09T20:08:22",
+      "imageUrl": "https://media.waterwayplastics.com/Stealth-II-1.png",
+      "imageMedium": "https://media.waterwayplastics.com/Stealth-II-1-300x183.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1173,
@@ -15851,15 +16318,9 @@
         "air-systems"
       ],
       "attributeSlugs": [
-        "amps-4-0",
-        "amps-4-2",
-        "amps-5-8",
-        "amps-6-7",
-        "amps-7-6",
-        "amps-8-8",
-        "hp-1-0",
-        "hp-1-5",
-        "hp-2-0"
+        "case-quantity-6",
+        "color-black",
+        "hp-1-0"
       ]
     },
     {
@@ -15867,96 +16328,135 @@
       "slug": "smf-international-pool-pump",
       "databaseId": 37426,
       "date": "2023-03-23T23:17:59",
-      "modified": "2025-06-04T17:35:27",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-10-09T20:49:09",
+      "imageUrl": "https://media.waterwayplastics.com/SMF_NEON_DK-GRAY_UNION_sil_flat_1124.png",
+      "imageMedium": "https://media.waterwayplastics.com/SMF_NEON_DK-GRAY_UNION_sil_flat_1124-300x185.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1920,
+      "imageHeight": 1184,
       "categorySlugs": [
         "international"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "hp-1-0",
+        "hp-1-5",
+        "hp-2-0",
+        "hp-3-4",
+        "speed-1",
+        "volts-115-208-230",
+        "weight-lbs-38",
+        "weight-lbs-43",
+        "weight-lbs-47",
+        "weight-lbs-48"
+      ]
     },
     {
       "title": "TWM Cartridge Filter System",
       "slug": "twm-cartridge-filter-system",
       "databaseId": 37398,
       "date": "2023-03-21T18:44:36",
-      "modified": "2026-04-02T09:40:22",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-10-09T22:51:40",
+      "imageUrl": "https://media.waterwayplastics.com/TWM_Filter-1.png",
+      "imageMedium": "https://media.waterwayplastics.com/TWM_Filter-1-146x300.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 933,
+      "imageHeight": 1920,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "hp-1-0",
+        "size-100-sq-ft",
+        "size-50-sq-ft",
+        "volts-115"
+      ]
     },
     {
       "title": "TWM-30-S Sand Filter System",
       "slug": "twm-30-s-sand-filter-system",
       "databaseId": 37395,
       "date": "2023-03-21T18:18:22",
-      "modified": "2026-04-02T09:40:30",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-10-15T19:48:42",
+      "imageUrl": "https://media.waterwayplastics.com/TWM-30-S_sil_2024_work.png",
+      "imageMedium": "https://media.waterwayplastics.com/TWM-30-S_sil_2024_work-250x300.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1603,
+      "imageHeight": 1920,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "pallet-12",
+        "pump-1-2-hp",
+        "size-16",
+        "weight-lbs-56"
+      ]
     },
     {
       "title": "TWM-30 Cartridge Filter System",
       "slug": "twm-30-cartridge-filter-system",
       "databaseId": 37390,
       "date": "2023-03-21T18:06:43",
-      "modified": "2026-04-02T09:40:38",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-10-09T22:31:25",
+      "imageUrl": "https://media.waterwayplastics.com/TWM-30-1.png",
+      "imageMedium": "https://media.waterwayplastics.com/TWM-30-1-206x300.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1316,
+      "imageHeight": 1920,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "pallet-25",
+        "size-25-sq-ft",
+        "type-above-ground",
+        "weight-lbs-30"
+      ]
     },
     {
       "title": "ClearWater II – D.E. Filter",
       "slug": "clearwater-ii-d-e-filter",
       "databaseId": 37383,
       "date": "2023-03-20T23:58:47",
-      "modified": "2026-04-02T09:40:49",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-10-15T18:39:20",
+      "imageUrl": "https://media.waterwayplastics.com/FC2007_Clearwater_Cartridge_newplug_sil_flat_2025.png",
+      "imageMedium": "https://media.waterwayplastics.com/FC2007_Clearwater_Cartridge_newplug_sil_flat_2025-163x300.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1041,
+      "imageHeight": 1920,
       "categorySlugs": [
         "pool-filters-in-ground-above-ground"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "filter-type-d-e",
+        "filtration-area-sq-ft-12",
+        "filtration-area-sq-ft-18",
+        "gpm-44",
+        "gpm-67",
+        "type-above-ground",
+        "weight-lbs-34",
+        "weight-lbs-39"
+      ]
     },
     {
       "title": "Power Defender SVL270 Variable Speed Pump",
       "slug": "power-defender-svl270-variable-speed",
       "databaseId": 37349,
       "date": "2023-03-07T21:00:32",
-      "modified": "2023-05-01T17:25:59",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-10-15T20:56:52",
+      "imageUrl": "https://media.waterwayplastics.com/Power-Defender-SVL270-1.png",
+      "imageMedium": "https://media.waterwayplastics.com/Power-Defender-SVL270-1-300x220.png",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 1920,
+      "imageHeight": 1405,
       "categorySlugs": [
         "pool-pumps-in-ground"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "total-hp-2-7",
+        "type-variable-speed",
+        "volts-230"
+      ]
     },
     {
       "title": "Power Defender 350 Variable Speed Pump",
@@ -15964,8 +16464,8 @@
       "databaseId": 37345,
       "date": "2023-03-07T17:16:56",
       "modified": "2026-09-30T16:50:07",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Power-Defender-350_PD-350_NEON_DK-GRAY_UNION_sil_flat_1124.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Power-Defender-350_PD-350_NEON_DK-GRAY_UNION_sil_flat_1124-300x197.png",
+      "imageUrl": "https://media.waterwayplastics.com/Power-Defender-350_PD-350_NEON_DK-GRAY_UNION_sil_flat_1124.png",
+      "imageMedium": "https://media.waterwayplastics.com/Power-Defender-350_PD-350_NEON_DK-GRAY_UNION_sil_flat_1124-300x197.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1261,
@@ -15984,9 +16484,9 @@
       "slug": "power-defender-225-variable-speed-pool-pump",
       "databaseId": 37330,
       "date": "2023-03-07T16:10:34",
-      "modified": "2026-08-06T00:03:07",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/Power-Defender-225_PD-225_NEON_DK-GRAY_UNION_sil_flat_1124.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/Power-Defender-225_PD-225_NEON_DK-GRAY_UNION_sil_flat_1124-300x197.png",
+      "modified": "2026-10-16T15:44:26",
+      "imageUrl": "https://media.waterwayplastics.com/Power-Defender-225_PD-225_NEON_DK-GRAY_UNION_sil_flat_1124.png",
+      "imageMedium": "https://media.waterwayplastics.com/Power-Defender-225_PD-225_NEON_DK-GRAY_UNION_sil_flat_1124-300x197.png",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1261,
@@ -15996,6 +16496,7 @@
       "attributeSlugs": [
         "color-gray",
         "hp-2-25",
+        "type-in-ground",
         "volts-230"
       ]
     },
@@ -16036,32 +16537,43 @@
       "slug": "sgms-micro-water-features",
       "databaseId": 36963,
       "date": "2022-04-08T20:04:01",
-      "modified": "2026-09-23T15:57:11",
-      "imageUrl": null,
-      "imageMedium": null,
-      "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "modified": "2026-10-16T16:26:42",
+      "imageUrl": "https://media.waterwayplastics.com/425-6048-4_print.jpg",
+      "imageMedium": "https://media.waterwayplastics.com/425-6048-4_print-300x238.jpg",
+      "imageAlt": "Cabinet Latch",
+      "imageWidth": 768,
+      "imageHeight": 608,
       "categorySlugs": [
         "water-features"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "assy-material-metal",
+        "assy-material-plastic",
+        "micro-water-feature-fan",
+        "micro-water-feature-thick-rope",
+        "micro-water-feature-thin-rope",
+        "size-1-1-4"
+      ]
     },
     {
       "title": "Suction Load Washer",
       "slug": "suction-load-washer",
       "databaseId": 36299,
       "date": "2022-04-06T15:31:11",
-      "modified": "2026-09-23T15:57:54",
-      "imageUrl": null,
-      "imageMedium": null,
+      "modified": "2026-10-16T17:13:08",
+      "imageUrl": "https://media.waterwayplastics.com/cut-out.jpg",
+      "imageMedium": "https://media.waterwayplastics.com/cut-out-300x225.jpg",
       "imageAlt": null,
-      "imageWidth": null,
-      "imageHeight": null,
+      "imageWidth": 688,
+      "imageHeight": 516,
       "categorySlugs": [
         "spa-drains-suctions"
       ],
-      "attributeSlugs": []
+      "attributeSlugs": [
+        "size-2",
+        "size-2-5",
+        "suction-type-super-hi-flo"
+      ]
     },
     {
       "title": "Wedge Super Hi-Flo Suction",
@@ -16195,8 +16707,8 @@
       "databaseId": 33099,
       "date": "2020-01-27T12:37:02",
       "modified": "2026-09-29T19:59:36",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/522-6315-6S.png",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/522-6315-6S-157x300.png",
+      "imageUrl": "https://media.waterwayplastics.com/522-6315-6S.png",
+      "imageMedium": "https://media.waterwayplastics.com/522-6315-6S-157x300.png",
       "imageAlt": null,
       "imageWidth": 628,
       "imageHeight": 1200,
@@ -16446,8 +16958,8 @@
       "databaseId": 32386,
       "date": "2020-01-27T12:36:56",
       "modified": "2026-09-04T18:47:40",
-      "imageUrl": "https://api.waterwayplastics.com/wp-content/uploads/ecd291d72357c9c78db1098bccee8e7b690b7a91.jpg",
-      "imageMedium": "https://api.waterwayplastics.com/wp-content/uploads/ecd291d72357c9c78db1098bccee8e7b690b7a91-300x175.jpg",
+      "imageUrl": "https://media.waterwayplastics.com/ecd291d72357c9c78db1098bccee8e7b690b7a91.jpg",
+      "imageMedium": "https://media.waterwayplastics.com/ecd291d72357c9c78db1098bccee8e7b690b7a91-300x175.jpg",
       "imageAlt": null,
       "imageWidth": 1920,
       "imageHeight": 1118,
