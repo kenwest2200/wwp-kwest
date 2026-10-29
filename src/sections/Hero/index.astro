@@ -1,7 +1,9 @@
 ---
-import type {
-  HomeHeroData,
-  HomepageApiSectionsIntroSectionLayout,
+import {
+  normalizeHeroImageObjectFit,
+  type HomeHeroData,
+  type HeroImageObjectFit,
+  type HomepageApiSectionsIntroSectionLayout,
 } from "../../lib/queries/home-hero";
 import IconArrowRight from "../../components/icons/IconArrowRight.astro";
 import Picture from "../../components/Picture/Picture.astro";
@@ -29,13 +31,29 @@ const description = intro?.description ?? null;
 
 const fallbackImageAlt = title ?? "Hero image";
 
-const heroPictures = [
-  intro?.image1?.node,
-  intro?.image2?.node,
-  intro?.image3?.node,
-]
-  .map((n) => pictureFromWpMediaNode(n, fallbackImageAlt))
-  .filter((x): x is NonNullable<typeof x> => x !== null);
+type HeroPictureSlot = {
+  pic: NonNullable<ReturnType<typeof pictureFromWpMediaNode>>;
+  fit: HeroImageObjectFit;
+  index: number;
+};
+
+const heroPictureSlots: HeroPictureSlot[] = (
+  [
+    { node: intro?.image1?.node, fit: intro?.image1Fit },
+    { node: intro?.image2?.node, fit: intro?.image2Fit },
+    { node: intro?.image3?.node, fit: intro?.image3Fit },
+  ] as const
+)
+  .map(({ node, fit }, index) => {
+    const pic = pictureFromWpMediaNode(node, fallbackImageAlt);
+    if (!pic) return null;
+    return {
+      pic,
+      fit: normalizeHeroImageObjectFit(fit),
+      index,
+    };
+  })
+  .filter((x): x is HeroPictureSlot => x !== null);
 
 const buttonLink = intro?.buttonLink ?? null;
 const rawCtaHref = buttonLink?.url?.trim() || "#";
@@ -82,9 +100,9 @@ const fallbackDescription =
       }
     </div>
     {
-      heroPictures.length > 0 && (
+      heroPictureSlots.length > 0 && (
         <div class="hero__image-container">
-          {heroPictures.map((pic, index) => (
+          {heroPictureSlots.map(({ pic, fit, index }) => (
             <Picture
               class="hero__picture"
               alt={pic.alt}
@@ -94,7 +112,7 @@ const fallbackDescription =
                 loading: index === 0 ? "eager" : "lazy",
                 fetchpriority: index === 0 ? "high" : "low",
                 decoding: "async",
-                class: `hero__image hero__image--${index}`,
+                class: `hero__image hero__image--${index} hero__image--fit-${fit}`,
               }}
             />
           ))}

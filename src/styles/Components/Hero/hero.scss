@@ -42,6 +42,14 @@
         border-radius: px-to-rem(8);
         object-fit: cover;
 
+        &--fit-cover {
+            object-fit: cover;
+        }
+
+        &--fit-contain {
+            object-fit: contain;
+        }
+
         &--0 {
             grid-area: 1 / 1 / 2 / 2;
             max-height: px-to-rem(305);
